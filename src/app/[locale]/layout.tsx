@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "@/styles/base/globals.css";
 import QueryProvider from "@/providers/QueryProvider";
 // import ReduxProvider from "@/providers/ReduxProvider"; // To be created if needed
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 
-const inter = Inter({ subsets: ["latin"] });
+const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "AI Animated Learning Portal",
@@ -24,8 +24,8 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className="dark">
-      <body className={inter.className}>
+    <html lang={locale}>
+      <body className={outfit.className}>
         <NextIntlClientProvider messages={messages}>
           <QueryProvider>
             {children}
