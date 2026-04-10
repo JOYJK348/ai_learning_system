@@ -10,6 +10,7 @@ import {
   Wifi, Battery, Rocket, Activity, TrendingUp, Gamepad2, Quote
 } from 'lucide-react';
 import { useState } from 'react';
+import { useParams } from 'next/navigation';
 
 const C = {
   primary: '#013237',
@@ -36,6 +37,8 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 ═══════════════════════════════════════════════════════════ */
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const params = useParams();
+  const locale = params?.locale || 'en';
   const navLinks = [
     { label: 'Features', href: '#features' },
     { label: 'How it works', href: '#how-it-works' },
@@ -68,7 +71,7 @@ export default function HomePage() {
           </div>
 
           <div className="hidden md:flex items-center gap-3">
-            <a href="#contact" className="btn-primary text-sm">
+            <a href={`/${locale}/login`} className="btn-primary text-sm">
               Get Started <ArrowRight size={15} />
             </a>
           </div>
@@ -88,7 +91,7 @@ export default function HomePage() {
                 {l.label}
               </a>
             ))}
-            <a href="#contact" className="btn-primary w-full justify-center text-sm mt-2">Get Started</a>
+            <a href={`/${locale}/login`} className="btn-primary w-full justify-center text-sm mt-2">Get Started</a>
           </div>
         )}
       </nav>
@@ -130,7 +133,7 @@ export default function HomePage() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start mb-12">
-                <a href="#contact"
+                <a href={`/${locale}/login`}
                   className="px-12 py-5 rounded-full text-white font-black text-[12px] uppercase tracking-[0.2em] transition-all hover:brightness-110 active:scale-95 shadow-2xl"
                   style={{ background: C.primary, boxShadow: `0 20px 40px ${C.primary}30` }}>
                   Get Started
@@ -332,7 +335,7 @@ export default function HomePage() {
 
 
       {/* ═══════ THE ECOSYSTEM: COMPACT HUB ═══════ */}
-      <section id="portals" className="-mt-8 py-24 bg-white relative overflow-hidden">
+      <section id="portals" className="-mt-8 py-16 md:py-24 bg-white relative overflow-hidden">
         {/* Technical Grid Overlay */}
         <div className="absolute inset-0 opacity-[0.3] pointer-events-none">
           <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(#013237 0.5px, transparent 0.5px)', backgroundSize: '30px 30px' }} />
@@ -440,9 +443,9 @@ export default function HomePage() {
 
                   {/* Action */}
                   <div className="pt-6 border-t border-slate-100/60 w-full relative z-10 mt-auto">
-                    <button className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#013237] group-hover:gap-5 transition-all">
+                    <a href={`/${locale}/login?portal=${portal.id}`} className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#013237] group-hover:gap-5 transition-all w-full">
                       Open Portal <ExternalLink size={14} />
-                    </button>
+                    </a>
                   </div>
                 </div>
               </motion.div>
@@ -452,7 +455,7 @@ export default function HomePage() {
       </section>
 
       {/* ═══════ FEATURES: IMMERSIVE ═══════ */}
-      <section id="features" className="-mt-8 py-28 relative overflow-hidden bg-white">
+      <section id="features" className="-mt-8 py-16 md:py-28 relative overflow-hidden bg-white">
         <div className="max-w-7xl mx-auto px-5 sm:px-6">
           <div className="flex flex-col lg:grid lg:grid-cols-12 gap-16 lg:gap-24 items-center">
 
@@ -536,7 +539,7 @@ export default function HomePage() {
 
 
       {/* ═══════ VISION ROADMAP ═══════ */}
-      <section id="vision" className="-mt-8 py-28 bg-white">
+      <section id="vision" className="-mt-8 py-16 md:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-5 sm:px-6 text-center mb-16">
           <SectionLabel>Roadmap 2026</SectionLabel>
           <h2 className="text-3xl md:text-4xl font-extrabold mb-4" style={{ color: C.primary }}>The Future of AI Learning</h2>
@@ -563,7 +566,7 @@ export default function HomePage() {
       </section>
 
       {/* ═══════ CONTACT ═══════ */}
-      <section id="contact" className="-mt-8 py-24 bg-[#F8FAFC]">
+      <section id="contact" className="-mt-8 py-16 md:py-24 bg-[#F8FAFC]">
         <div className="max-w-7xl mx-auto px-5 sm:px-6">
           <div className="bg-white rounded-3xl shadow-2xl overflow-hidden grid lg:grid-cols-5 border border-slate-100">
             <div className="lg:col-span-2 p-10 sm:p-12 text-white relative overflow-hidden" style={{ background: C.primary }}>
@@ -589,15 +592,35 @@ export default function HomePage() {
                 {[
                   { label: 'Full Name', type: 'text', placeholder: 'David Lim', span: 1 },
                   { label: 'Email Address', type: 'email', placeholder: 'you@school.edu.sg', span: 1 },
+                  { label: 'Contact Number', type: 'tel', placeholder: '+65 9123 4567', span: 1 },
+                  { label: 'Your Role', type: 'select', options: ['Parent / Guardian', 'Student', 'Educator', 'Institution Lead'], span: 1 },
+                  { label: 'Student Grade Level', type: 'select', options: ['Primary School', 'Secondary School', 'Pre-University / JC', 'Other'], span: 1 },
+                  { label: 'School / Institution Name', type: 'text', placeholder: 'e.g. Raffles Institution', span: 1 },
                 ].map(f => (
-                  <div key={f.label} className="space-y-2">
+                  <div key={f.label} className={`space-y-2 ${f.span === 2 ? 'sm:col-span-2' : ''}`}>
                     <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{f.label}</label>
-                    <input
-                      type={f.type}
-                      placeholder={f.placeholder}
-                      suppressHydrationWarning
-                      className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm transition-all focus:border-[#013237] focus:ring-2 focus:ring-[#013237]/5"
-                    />
+                    {f.type === 'select' ? (
+                      <div className="relative">
+                        <select 
+                          defaultValue=""
+                          suppressHydrationWarning
+                          className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm transition-all focus:border-[#013237] focus:ring-2 focus:ring-[#013237]/5 text-slate-600 appearance-none"
+                        >
+                           <option value="" disabled>Select an option...</option>
+                           {f.options?.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                        </select>
+                        <div className="absolute right-4 top-1/2 -translate-y-[50%] pointer-events-none text-slate-400">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </div>
+                      </div>
+                    ) : (
+                      <input
+                        type={f.type}
+                        placeholder={f.placeholder}
+                        suppressHydrationWarning
+                        className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm transition-all focus:border-[#013237] focus:ring-2 focus:ring-[#013237]/5 placeholder:text-slate-400 text-slate-800"
+                      />
+                    )}
                   </div>
                 ))}
                 <div className="sm:col-span-2 space-y-2">
