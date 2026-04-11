@@ -186,8 +186,9 @@ export default function LoginPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
-              className="w-full max-w-[440px] mx-auto relative"
+              className="w-full max-w-[800px] mx-auto flex flex-col md:flex-row gap-6 md:gap-10 items-center md:items-start justify-center"
             >
+              <div className="w-full max-w-[440px] relative">
               {/* THE WHITE CARD: High contrast pure white on slate-50 background */}
               <div className="bg-white rounded-[2rem] p-6 sm:p-10 md:p-12 shadow-[0_30px_80px_-15px_rgba(0,0,0,0.1),_0_0_0_1px_rgba(0,0,0,0.03)] relative overflow-hidden">
                 
@@ -269,6 +270,43 @@ export default function LoginPage() {
                   </div>
                 </form>
               </div>
+              </div>
+
+              {/* Sample Credentials Sidebar */}
+              {activePortalInfo?.id === 'student' && (
+                <motion.div 
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="w-full max-w-[300px] mt-0 md:mt-12 p-6 rounded-[2rem] bg-white border border-slate-200/60 shadow-[0_15px_40px_-15px_rgba(0,0,0,0.05)]"
+                >
+                  <h4 className="text-[13px] font-extrabold text-slate-800 mb-5 flex items-center gap-2">
+                     <span className="w-2 h-2 rounded-full bg-[#00D2FF] animate-pulse"></span>
+                     Sample Logins
+                  </h4>
+                  <div className="space-y-3">
+                     {[
+                       { grade: 'Kindergarten', email: 'demo1@zhi.sg', pass: 'demo123' },
+                       { grade: 'Grade 1', email: 'demo2@zhi.sg', pass: 'demo123' },
+                     ].map((creds, i) => (
+                       <div 
+                         key={i}
+                         onClick={() => { setEmail(creds.email); setPassword(creds.pass); }}
+                         className="p-4 bg-slate-50 rounded-[1rem] border border-slate-100 cursor-pointer hover:border-[#013237] hover:bg-[#013237]/5 transition-all group"
+                       >
+                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 group-hover:text-[#013237]/70 transition-colors">{creds.grade}</p>
+                         <div className="space-y-1">
+                           <p className="text-[13px] font-bold text-slate-700 font-mono tracking-tight">{creds.email}</p>
+                           <p className="text-[11px] font-semibold text-slate-500 font-mono">pwd: <span className="text-slate-700">{creds.pass}</span></p>
+                         </div>
+                       </div>
+                     ))}
+                  </div>
+                  <p className="text-[10px] text-slate-400 mt-5 font-medium leading-relaxed italic text-center">
+                    Click any card to auto-fill the login form.
+                  </p>
+                </motion.div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
