@@ -52,12 +52,12 @@ export default function QuizArena() {
         <div className="relative z-10 w-full">
         <div className="w-full max-w-7xl mx-auto px-6">
           
-          {/* 1. HERO SECTION (GLASSMORPHIC) */}
-          <div className="py-6 mb-8">
-             <div className="relative bg-white/40 backdrop-blur-3xl rounded-[3.5rem] p-8 sm:p-16 border-2 border-white/60 shadow-2xl overflow-hidden group">
-                <div className="absolute top-0 right-0 w-[50%] h-full bg-gradient-to-l from-white/20 to-transparent skew-x-[-20deg] transform translate-x-32" />
+          {/* 1. HERO SECTION (SEAMLESS) */}
+          <div className="py-10 mb-8 w-full border-b-8 border-white/10">
+             <div className="relative w-full flex items-center">
+                <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-white/30 to-transparent skew-x-[-20deg] transform translate-x-32" />
                 
-                <div className="flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-12 relative z-10 w-full max-w-7xl mx-auto px-2 sm:px-6">
                    <div className="text-center md:text-left flex-1 space-y-6">
                       <div className="inline-flex items-center gap-2 px-6 py-2 bg-amber-400 text-indigo-950 rounded-full font-black text-xs uppercase tracking-[0.3em] shadow-xl">
                          <Trophy size={16} fill="currentColor" /> Daily Quest
@@ -68,12 +68,14 @@ export default function QuizArena() {
                       </h1>
                       <p className="text-indigo-900/60 font-bold text-lg">Win 3 questions today to earn a Magical Star! 🌟🌸</p>
                       
-                      <button 
-                        onClick={startDailyThree}
-                        className="bg-indigo-600 text-white px-10 py-5 rounded-[2rem] font-black text-lg shadow-2xl hover:bg-indigo-700 active:scale-95 transition-all flex items-center gap-3 group/btn"
-                      >
-                         ENTER ARENA <Play className="group-hover/btn:translate-x-1 transition-transform" />
-                      </button>
+                      <div className="flex justify-center md:justify-start w-full">
+                        <button 
+                          onClick={startDailyThree}
+                          className="bg-indigo-600 text-white px-10 py-5 rounded-[2rem] font-black text-lg shadow-2xl hover:bg-indigo-700 active:scale-95 transition-all flex items-center gap-3 group/btn"
+                        >
+                           ENTER ARENA <Play className="group-hover/btn:translate-x-1 transition-transform" />
+                        </button>
+                      </div>
                    </div>
 
                    <div className="relative w-64 h-64 sm:w-80 sm:h-80 select-none">

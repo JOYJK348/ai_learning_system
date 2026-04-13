@@ -81,9 +81,9 @@ export default function MyWorldProfile() {
            ═══════════════════════════════════════ */
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 py-6">
 
-          {/* 1. HERO CARD (GLASSMORPHIC) */}
-          <div className="relative w-full bg-white/40 backdrop-blur-3xl rounded-[3.5rem] p-8 sm:p-14 border-2 border-white/60 shadow-2xl mb-12 text-center overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10">
-              <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-white/20 to-transparent skew-x-[-20deg] transform translate-x-32" />
+          {/* 1. HERO (SEAMLESS) */}
+          <div className="relative w-full py-10 mb-12 text-center flex flex-col md:flex-row items-center justify-between gap-10 border-b-8 border-white/10">
+              <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-white/30 to-transparent skew-x-[-20deg] transform translate-x-32" />
               
               {/* Left Box: Avatar & Title */}
               <div className="relative z-10 flex flex-col items-center md:items-start text-center md:text-left">
@@ -91,10 +91,13 @@ export default function MyWorldProfile() {
                    initial={{ scale: 0 }} 
                    animate={{ scale: 1 }} 
                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                   className="w-40 h-40 rounded-full border-4 border-white shadow-xl mb-6 flex items-center justify-center relative overflow-hidden bg-white/60 backdrop-blur-xl"
+                   className="w-40 h-40 rounded-full border-4 border-white shadow-xl mb-6 flex items-center justify-center relative overflow-hidden bg-indigo-50"
                  >
-                    <span className="text-7xl font-black text-indigo-500 pt-2">A</span>
-                    <div className="absolute -bottom-2 -right-2 bg-amber-400 w-12 h-12 rounded-full border-4 border-white flex items-center justify-center shadow-lg">
+                    <img src="https://api.dicebear.com/9.x/micah/svg?seed=Arjun&backgroundColor=f4d160,b6e3f4" alt="Arjun Avatar" className="w-full h-full object-cover" />
+                    <div className="absolute -bottom-2 -right-2 bg-amber-400 w-12 h-12 rounded-full border-4 border-white flex items-center justify-center shadow-lg z-10 hidden">
+                      {/* Note: Kept the DOM structure, but hidden original star if needed or leave star over it */}
+                    </div>
+                    <div className="absolute bottom-0 right-2 bg-amber-400 w-12 h-12 rounded-full border-4 border-white flex items-center justify-center shadow-lg z-10">
                       <span className="text-2xl">⭐</span>
                     </div>
                  </motion.div>
@@ -202,8 +205,8 @@ export default function MyWorldProfile() {
         >
            {/* 1. CHILD BASICS (Personal Details) */}
            <div className="bg-white/40 backdrop-blur-3xl rounded-[3.5rem] p-8 sm:p-14 border-2 border-white/60 shadow-2xl mb-12 flex flex-col md:flex-row items-center gap-10">
-              <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-indigo-200 shadow-xl flex items-center justify-center flex-shrink-0 bg-white/60 backdrop-blur-xl overflow-hidden">
-                 <span className="text-6xl sm:text-7xl font-black text-indigo-500 pt-2">A</span>
+              <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-indigo-200 shadow-xl flex items-center justify-center flex-shrink-0 bg-indigo-50 overflow-hidden">
+                 <img src="https://api.dicebear.com/9.x/micah/svg?seed=Arjun&backgroundColor=f4d160,b6e3f4" alt="Avatar" className="w-full h-full object-cover" />
               </div>
               <div className="flex-1 text-center md:text-left">
                  <h2 className="text-4xl sm:text-6xl font-black text-indigo-950 tracking-tighter mb-4">Arjun V.</h2>
