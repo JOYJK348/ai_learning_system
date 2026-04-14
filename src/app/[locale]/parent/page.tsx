@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { Link } from '@/i18n/routing';
+import { useData } from '@/context/DataContext';
 
 /* ─────────── 🔢 SUBTLE ANIMATED COUNTER ─────────── */
 const AnimatedCounter = ({ value, duration = 1.5 }: { value: number; duration?: number }) => {
@@ -33,22 +34,26 @@ const AnimatedCounter = ({ value, duration = 1.5 }: { value: number; duration?: 
 };
 
 export default function ParentDashboard() {
-  // Mock data for Phase 1 Demo
-  const parentName = "Kumar";
-  const childName = "Rahul";
-  const childClass = "UKG";
-  const childAge = "5 Years";
+  const { categories, lessons: allLessons } = useData();
 
-  const progressData = [
-    { title: 'Alphabets', progress: 70, color: 'bg-orange-500', icon: '🔤' },
-    { title: 'Numbers', progress: 40, color: 'bg-blue-500', icon: '🔢' },
-    { title: 'Colors', progress: 100, color: 'bg-pink-500', icon: '🎨' },
-  ];
+  // Dynamic metrics from shared context
+  const totalLessons = Object.values(allLessons).flat().length;
+  const completedLessons = Object.values(allLessons).flat().filter(l => l.status === 'completed').length;
+  const activeTopics = categories.length;
+  
+  const parentName = "Kumar";
+  const child = { name: "Rahul", class: "UKG", age: 5 };
 
   const recentActivity = [
-    { text: 'Completed "A for Apple" lesson', time: '2 hours ago', icon: '🍏' },
-    { text: 'Attempted Numbers Quiz', time: 'Yesterday', icon: '📝', score: '2/3' },
-    { text: 'Watched "Baby Shark" rhyme', time: 'Yesterday', icon: '🦈' },
+    { text: 'Completed "A for Apple" lesson', time: '2 hours ago', icon: '🍏', score: '100%' },
+    { text: 'Attempted Numbers Quiz', time: 'Yesterday', icon: '🔢', score: '2/3' },
+    { text: 'Watched "Baby Shark" rhyme', time: 'Yesterday', icon: '🦈', score: null },
+  ];
+
+  const mainStats = [
+    { label: 'Lessons Finalized', value: completedLessons, total: `/ ${totalLessons}`, percent: (completedLessons / totalLessons) * 100 || 0, icon: BookOpen, color: 'bg-indigo-600', textColor: 'text-indigo-600', cardBg: 'bg-indigo-50/60', border: 'border-indigo-100' },
+    { label: 'Active Topics', value: activeTopics, total: ' areas', percent: 100, icon: TrendingUp, color: 'bg-slate-900', textColor: 'text-slate-900', cardBg: 'bg-slate-50/80', border: 'border-slate-100' },
+    { label: 'Neural Engagements', value: 12, total: ' actions', percent: 85, icon: CheckCircle2, color: 'bg-emerald-600', textColor: 'text-emerald-600', cardBg: 'bg-emerald-50/60', border: 'border-emerald-100' },
   ];
 
   return (
@@ -63,12 +68,12 @@ export default function ParentDashboard() {
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 block">ZHI LearnAI Ecosystem</span>
             </div>
           </div>
-          <div className="flex items-center gap-6">
-            <button className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 text-slate-600 font-bold text-xs hover:bg-slate-100 transition-all border border-slate-100">
-              <Settings size={14} /> Account Settings
+          <div className="flex items-center gap-3 sm:gap-6">
+            <button className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-slate-50 text-slate-600 font-bold text-xs hover:bg-slate-100 transition-all border border-slate-100">
+              <Settings size={14} /> <span className="hidden sm:inline">Settings</span>
             </button>
-            <Link href="/" className="flex items-center gap-2 text-xs font-black text-rose-500 bg-rose-50 px-4 py-2 rounded-xl hover:bg-rose-100 transition-all border border-rose-100 uppercase tracking-widest">
-              <LogOut size={14} /> Logout
+            <Link href="/" className="flex items-center gap-2 text-xs font-black text-rose-500 bg-rose-50 px-3 sm:px-4 py-2 rounded-xl hover:bg-rose-100 transition-all border border-rose-100 uppercase tracking-widest whitespace-nowrap">
+              <LogOut size={14} /> <span className="hidden sm:inline">Logout</span>
             </Link>
           </div>
         </div>
@@ -91,7 +96,7 @@ export default function ParentDashboard() {
                 Greetings, {parentName} <span className="text-indigo-600">.</span>
               </h1>
               <p className="text-slate-500 font-medium text-lg leading-relaxed">
-                Review <span className="text-slate-900 font-bold underline decoration-indigo-400 decoration-4 underline-offset-4">{childName}&apos;s</span> weekly performance and AI-driven learning insights.
+                Review <span className="text-slate-900 font-bold underline decoration-indigo-400 decoration-4 underline-offset-4">{child.name}&apos;s</span> weekly performance and AI-driven learning insights.
               </p>
             </div>
             
@@ -102,7 +107,7 @@ export default function ParentDashboard() {
                   </div>
                   <div>
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Student</p>
-                    <p className="text-base font-black text-slate-900">{childName}</p>
+                    <p className="text-base font-black text-slate-900">{child.name}</p>
                   </div>
                </div>
                <div className="bg-white px-6 py-4 rounded-3xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md transition-shadow">
@@ -111,7 +116,7 @@ export default function ParentDashboard() {
                   </div>
                   <div>
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Grade Level</p>
-                    <p className="text-base font-black text-slate-900">{childClass}</p>
+                    <p className="text-base font-black text-slate-900">{child.class}</p>
                   </div>
                </div>
             </div>
@@ -120,11 +125,7 @@ export default function ParentDashboard() {
 
         {/* ─── 2. NEAT & PROFESSIONAL OVERVIEW CARDS ─── */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-20">
-           {[
-             { label: 'Lessons Finalized', value: 5, total: '/ 10', percent: 50, icon: BookOpen, color: 'bg-indigo-600', textColor: 'text-indigo-600', cardBg: 'bg-indigo-50/60', border: 'border-indigo-100' },
-             { label: 'Active Topics', value: 3, total: ' topics', percent: 30, icon: TrendingUp, color: 'bg-slate-900', textColor: 'text-slate-900', cardBg: 'bg-slate-50/80', border: 'border-slate-100' },
-             { label: 'Neural Engagements', value: 12, total: ' actions', percent: 85, icon: CheckCircle2, color: 'bg-emerald-600', textColor: 'text-emerald-600', cardBg: 'bg-emerald-50/60', border: 'border-emerald-100' },
-           ].map((stat, i) => (
+           {mainStats.map((stat, i) => (
              <motion.div 
                key={i}
                initial={{ opacity: 0, y: 15 }}
@@ -173,7 +174,7 @@ export default function ParentDashboard() {
            {/* LEFT COLUMN: PROGRESS & ACTIVITIES */}
            <div className="lg:col-span-2 space-y-10">
               
-              {/* ─── 3. REFINED PROGRESS BARS ─── */}
+              {/* ─── 3. DYNAMIC PROGRESS BARS ─── */}
               <section>
                  <div className="flex items-center justify-between mb-8">
                     <div>
@@ -182,21 +183,19 @@ export default function ParentDashboard() {
                       </h2>
                       <p className="text-xs font-bold text-slate-400 mt-1 uppercase tracking-widest pl-9">Performance by category</p>
                     </div>
-                    <button className="text-[10px] font-black text-indigo-600 bg-indigo-50 px-4 py-2 rounded-xl border border-indigo-100 uppercase tracking-[0.15em] hover:bg-indigo-600 hover:text-white transition-all">
-                       Full Analytics
-                    </button>
                  </div>
                  <div className="bg-white p-10 rounded-[3rem] shadow-[0_15px_50px_-15px_rgba(0,0,0,0.05)] border border-slate-50 space-y-10">
-                    {progressData.map((item, i) => (
+                    {categories.map((item, i) => (
                       <div key={i} className="group">
                         <div className="flex justify-between items-center mb-4">
                            <div className="flex items-center gap-4">
                               <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-xl shadow-inner group-hover:scale-110 transition-transform">
-                                 {item.icon}
+                                 {/* Using a fallback emoji for icon since Category object might have component or id */}
+                                 {typeof item.icon === 'string' ? item.icon : '📚'}
                               </div>
                               <span className="font-black text-slate-800 uppercase tracking-widest text-xs">{item.title}</span>
                            </div>
-                           <div className="flex items-center gap-2">
+                           <div className="flex items-center gap-1">
                               <span className="font-black text-indigo-600 text-lg">{item.progress}</span>
                               <span className="text-[10px] font-black text-slate-300 uppercase letter-spacing-widest mt-1">%</span>
                            </div>
@@ -206,7 +205,7 @@ export default function ParentDashboard() {
                              initial={{ width: 0 }}
                              animate={{ width: `${item.progress}%` }}
                              transition={{ duration: 1.5, ease: "circOut" }}
-                             className={`h-full ${item.color} rounded-full`}
+                             className={`h-full ${item.color || 'bg-indigo-600'} rounded-full`}
                            />
                         </div>
                       </div>
@@ -226,14 +225,14 @@ export default function ParentDashboard() {
                  </div>
                  <div className="bg-white rounded-[3rem] shadow-[0_15px_50px_-15px_rgba(0,0,0,0.05)] border border-slate-50 overflow-hidden">
                     {recentActivity.map((act, i) => (
-                      <div key={i} className="flex items-center justify-between p-8 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-all cursor-pointer group">
-                         <div className="flex items-center gap-6">
-                            <div className="w-14 h-14 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-3xl shadow-sm group-hover:shadow-md transition-all group-hover:-rotate-3">
+                      <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-8 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-all cursor-pointer group gap-6">
+                         <div className="flex items-center gap-6 flex-1">
+                            <div className="w-14 h-14 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-3xl shadow-sm group-hover:shadow-md transition-all group-hover:-rotate-3 shrink-0">
                                {act.icon}
                             </div>
                             <div>
                                <p className="font-extrabold text-slate-800 text-lg leading-tight group-hover:text-indigo-600 transition-colors">{act.text}</p>
-                               <div className="flex items-center gap-4 mt-2">
+                               <div className="flex flex-wrap items-center gap-4 mt-2">
                                   <span className="text-[10px] text-slate-400 font-black flex items-center gap-1.5 bg-slate-50 px-3 py-1 rounded-full uppercase tracking-tighter">
                                      <Clock size={12} className="text-slate-300" /> {act.time}
                                   </span>
@@ -245,7 +244,7 @@ export default function ParentDashboard() {
                                </div>
                             </div>
                          </div>
-                         <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                         <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-indigo-600 group-hover:text-white transition-all ml-auto">
                             <ArrowRight size={16} />
                          </div>
                       </div>
@@ -272,7 +271,7 @@ export default function ParentDashboard() {
                        <div>
                           <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">Growth Detected</p>
                           <p className="text-sm text-slate-700 leading-relaxed font-medium">
-                             Rahul has shown exceptional growth in <span className="text-slate-900 font-bold underline decoration-emerald-200">Alphabets</span>. Mastery of complex phonetic sounds is improving.
+                             {child.name} has shown exceptional growth in <span className="text-slate-900 font-bold underline decoration-emerald-200">the ecosystem</span>. Mastery of complex lessons is improving.
                           </p>
                        </div>
                     </div>
@@ -283,7 +282,7 @@ export default function ParentDashboard() {
                        <div>
                           <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-1">Observation</p>
                           <p className="text-sm text-slate-700 leading-relaxed font-medium">
-                             Cognitive focus on <span className="text-slate-900 font-bold underline decoration-amber-200">Numbers</span> requires attention. We recommend 10 minutes of interactive counting daily.
+                             Cognitive focus on <span className="text-slate-900 font-bold underline decoration-amber-200">New Content</span> requires attention. We recommend interactive counting daily.
                           </p>
                        </div>
                     </div>
@@ -301,10 +300,10 @@ export default function ParentDashboard() {
                     <div className="absolute inset-0 bg-indigo-500 opacity-0 group-hover:opacity-10 transition-opacity" />
                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-3">Academic Roadmap</p>
                     <h3 className="text-2xl font-black mb-3 flex items-center gap-3">
-                       <span className="text-3xl grayscale group-hover:grayscale-0 transition-all">🦁</span> Animal Jungle
+                       <span className="text-3xl grayscale group-hover:grayscale-0 transition-all">🦁</span> {categories[3]?.title || "Animal Jungle"}
                     </h3>
                     <p className="text-xs text-slate-400 font-bold leading-relaxed mb-8 uppercase tracking-wide">
-                       Unlock after Alpha Mastery
+                       Unlock after {categories[0]?.title || "Initial"} Mastery
                     </p>
                     <button className="w-full py-4 bg-white text-slate-900 hover:bg-indigo-50 rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] transition-all active:scale-95">
                        Set Active Goal

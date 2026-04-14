@@ -6,6 +6,8 @@ import QueryProvider from "@/providers/QueryProvider";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 
+import { DataProvider } from "@/context/DataContext";
+
 const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -28,7 +30,9 @@ export default async function RootLayout({
       <body className={outfit.className}>
         <NextIntlClientProvider messages={messages}>
           <QueryProvider>
-            {children}
+            <DataProvider>
+              {children}
+            </DataProvider>
           </QueryProvider>
         </NextIntlClientProvider>
       </body>

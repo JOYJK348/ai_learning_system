@@ -11,11 +11,12 @@ import {
   Trophy, Target, Music, PartyPopper
 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { CATEGORIES, LESSONS } from '@/constants/dashboardData';
+import { useData } from '@/context/DataContext';
 import MediaWorld from '../_components/MediaWorld';
 import QuizEngine from '../_components/QuizEngine';
 
 export default function UltimateLearnEngine() {
+  const { categories, lessons: allLessons, updateProgress } = useData();
   const router = useRouter();
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category');
@@ -35,8 +36,8 @@ export default function UltimateLearnEngine() {
     }
   }, [categoryParam]);
 
-  const activeZone = useMemo(() => CATEGORIES.find(c => c.id === activeZoneId), [activeZoneId]);
-  const zoneLessons = useMemo(() => activeZoneId ? (LESSONS[activeZoneId] || []) : [], [activeZoneId]);
+  const activeZone = useMemo(() => categories.find(c => c.id === activeZoneId), [activeZoneId, categories]);
+  const zoneLessons = useMemo(() => activeZoneId ? (allLessons[activeZoneId] || []) : [], [activeZoneId, allLessons]);
 
   const openZone = (id: string) => router.push(`?category=${id}`, { scroll: false });
   const closeZone = () => router.push('/en/student/Learn', { scroll: false });
@@ -61,7 +62,10 @@ export default function UltimateLearnEngine() {
   };
 
   const handleQuizComplete = (lessonId: string) => {
-    console.log(`Lesson ${lessonId} completed!`);
+    if (activeZoneId) {
+      updateProgress(activeZoneId, lessonId, 'completed');
+    }
+    setActiveQuiz(null);
   };
 
   if (!mounted) return null;
@@ -199,7 +203,7 @@ export default function UltimateLearnEngine() {
                     </div>
                     
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                      {CATEGORIES.map((zone) => (
+                      {categories.map((zone) => (
                         <button
                           key={zone.id}
                           onClick={() => openZone(zone.id)}
