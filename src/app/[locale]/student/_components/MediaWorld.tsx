@@ -1,15 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Play, X, Disc, Music, Film, Pause, Sparkles, Tv, Monitor, ArrowRight, Plus, Star, Compass } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Play, X, Disc, Music, Film, Pause, Sparkles, Tv, Monitor, ArrowRight, Plus, Star, Compass, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 /* ─────────── DATA ─────────── */
 const RHYMES = [
-  { id: 1, title: 'Twinkle Star', image: '⭐', color: 'from-violet-400 to-purple-500' },
-  { id: 2, title: 'ABC Fun',     image: '🔤', color: 'from-blue-400 to-indigo-500' },
-  { id: 3, title: 'Baby Shark',  image: '🦈', color: 'from-cyan-400 to-sky-500' },
-  { id: 4, title: 'Old Farm',    image: '🐄', color: 'from-emerald-400 to-green-500' },
+  { id: 1, title: 'Twinkle Star', image: '⭐', color: 'from-violet-400 to-purple-500', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
+  { id: 2, title: 'ABC Fun',     image: '🔤', color: 'from-blue-400 to-indigo-500', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
+  { id: 3, title: 'Baby Shark',  image: '🦈', color: 'from-cyan-400 to-sky-500', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
+  { id: 4, title: 'Old Farm',    image: '🐄', color: 'from-emerald-400 to-green-500', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
+  { id: 5, title: 'Wheels Bus',  image: '🚌', color: 'from-yellow-400 to-orange-500', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3' },
+  { id: 6, title: 'Humpty Dumpty', image: '🥚', color: 'from-red-400 to-rose-500', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3' },
 ];
 
 const VIDEOS = [
@@ -31,26 +33,57 @@ const VIDEOS = [
 export default function MediaWorld() {
   const [playing, setPlaying] = useState<number | null>(null);
   const [video, setVideo] = useState<typeof VIDEOS[0] | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
 
   const speakText = (text: string) => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.rate = 1.0;
-      utterance.pitch = 1.4; // High-pitched kid friendly voice
+      utterance.pitch = 1.4;
       window.speechSynthesis.speak(utterance);
     }
   };
 
   const handleRhymePlay = (rhyme: typeof RHYMES[0]) => {
     if (playing === rhyme.id) {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
       setPlaying(null);
-      if (typeof window !== 'undefined') window.speechSynthesis.cancel();
     } else {
+      // Stop previous audio
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      
       setPlaying(rhyme.id);
-      speakText(`Let's sing ${rhyme.title}! La la la la!`);
+      speakText(`Let's sing ${rhyme.title}!`);
+      
+      // Play new audio
+      const audio = new Audio(rhyme.audio);
+      audioRef.current = audio;
+      audio.play().catch(err => console.error("Audio play failed:", err));
+      
+      audio.onended = () => {
+        setPlaying(null);
+      };
     }
   };
+
+  const filteredRhymes = RHYMES.filter(r => 
+    r.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="relative w-full overflow-hidden mb-12 pb-20 pt-10 font-sans bg-emerald-50 shadow-inner">
@@ -77,12 +110,29 @@ export default function MediaWorld() {
         
         {/* RHYME PATH */}
         <section className="relative w-full">
-          <div className="max-w-7xl mx-auto flex flex-col items-center text-center mb-10 px-4">
+          <div className="max-w-7xl mx-auto flex flex-col items-center text-center mb-6 px-4">
             <h2 className="text-2xl sm:text-3xl font-black text-slate-800 uppercase leading-none">Rhyme Adventure</h2>
-            <p className="text-slate-400 font-bold text-[9px] uppercase tracking-widest mt-2">Tap to listen</p>
+            <p className="text-slate-400 font-bold text-[9px] uppercase tracking-widest mt-2 mb-6">Tap to listen</p>
+            
+            {/* SEARCH BAR */}
+            <div className="relative w-full max-w-md group">
+               <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                  <Search size={18} className="text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
+               </div>
+               <input 
+                 type="text"
+                 placeholder="Search your favorite rhyme..."
+                 value={searchTerm}
+                 onChange={(e) => setSearchTerm(e.target.value)}
+                 className="w-full bg-white border-4 border-slate-100 rounded-3xl py-4 pl-12 pr-6 text-sm font-bold text-slate-700 placeholder:text-slate-300 focus:outline-none focus:border-indigo-400 shadow-sm transition-all"
+               />
+               <div className="absolute top-1/2 -translate-y-1/2 right-4 hidden sm:block">
+                  <span className="text-[10px] font-black text-slate-300 uppercase letter-spacing-widest">Find Magic</span>
+               </div>
+            </div>
           </div>
 
-          <div className="relative w-full py-4">
+          <div className="relative w-full py-4 min-h-[300px]">
              {/* ROADMAP PATH */}
              <div className="absolute inset-x-0 h-40 top-1/2 -translate-y-1/2 w-full opacity-20 pointer-events-none">
                 <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 1440 200" preserveAspectRatio="none">
@@ -91,25 +141,45 @@ export default function MediaWorld() {
              </div>
 
             <div className="relative z-10 flex flex-wrap items-center justify-center gap-10 px-4">
-              {RHYMES.map((r, idx) => {
-                const isOn = playing === r.id;
-                return (
-                  <div key={idx} className="flex flex-col items-center">
-                    <div className={`relative w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-white shadow-md border-4 border-white flex items-center justify-center transition-transform active:scale-95 ${isOn ? 'border-indigo-500' : ''}`}>
-                       <span className="text-4xl sm:text-6xl">{r.image}</span>
-                       <button 
-                         onClick={() => handleRhymePlay(r)} 
-                         className={`absolute -bottom-2 -right-2 w-12 h-12 rounded-full shadow-lg flex items-center justify-center text-white ${isOn ? 'bg-rose-500' : 'bg-indigo-600'}`}
-                       >
-                          {isOn ? <Pause size={20} /> : <Play size={24} fill="currentColor" />}
-                       </button>
-                    </div>
-                    <div className="mt-4 px-4 py-1.5 bg-white rounded-full shadow-sm border border-slate-100">
-                       <span className="text-[10px] font-black text-slate-800 uppercase">{r.title}</span>
-                    </div>
-                  </div>
-                );
-              })}
+              <AnimatePresence mode='popLayout'>
+                {filteredRhymes.map((r, idx) => {
+                  const isOn = playing === r.id;
+                  return (
+                    <motion.div 
+                      key={r.id} 
+                      layout
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0.8, opacity: 0 }}
+                      className="flex flex-col items-center"
+                    >
+                      <div className={`relative w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-white shadow-md border-4 border-white flex items-center justify-center transition-transform active:scale-95 ${isOn ? 'border-indigo-500' : ''}`}>
+                         <span className="text-4xl sm:text-6xl">{r.image}</span>
+                         <button 
+                           onClick={() => handleRhymePlay(r)} 
+                           className={`absolute -bottom-2 -right-2 w-12 h-12 rounded-full shadow-lg flex items-center justify-center text-white ${isOn ? 'bg-rose-500' : 'bg-indigo-600'}`}
+                         >
+                            {isOn ? <Pause size={20} /> : <Play size={24} fill="currentColor" />}
+                         </button>
+                      </div>
+                      <div className="mt-4 px-4 py-1.5 bg-white rounded-full shadow-sm border border-slate-100">
+                         <span className="text-[10px] font-black text-slate-800 uppercase">{r.title}</span>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+              
+              {filteredRhymes.length === 0 && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="flex flex-col items-center text-slate-400 py-10"
+                >
+                  <span className="text-6xl mb-4">🔍</span>
+                  <p className="font-bold uppercase text-xs tracking-widest">No rhymes found! Try another magic word.</p>
+                </motion.div>
+              )}
             </div>
           </div>
         </section>

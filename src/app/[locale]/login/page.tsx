@@ -282,7 +282,7 @@ export default function LoginPage() {
                 >
                   <h4 className="text-[13px] font-extrabold text-slate-800 mb-5 flex items-center gap-2">
                      <span className="w-2 h-2 rounded-full bg-[#00D2FF] animate-pulse"></span>
-                     Sample Logins
+                     Sample Logins (Student)
                   </h4>
                   <div className="space-y-3">
                      {[
@@ -304,6 +304,44 @@ export default function LoginPage() {
                   </div>
                   <p className="text-[10px] text-slate-400 mt-5 font-medium leading-relaxed italic text-center">
                     Click any card to auto-fill the login form.
+                  </p>
+                </motion.div>
+              )}
+
+              {activePortalInfo?.id === 'parent' && (
+                <motion.div 
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="w-full max-w-[300px] mt-0 md:mt-12 p-6 rounded-[2rem] bg-white border border-slate-200/60 shadow-[0_15px_40px_-15px_rgba(0,0,0,0.05)]"
+                >
+                  <h4 className="text-[13px] font-extrabold text-slate-800 mb-5 flex items-center gap-2">
+                     <span className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse"></span>
+                     Parent Credentials
+                  </h4>
+                  <div className="space-y-3">
+                     {[
+                       { label: 'Primary Parent', parent: 'Kumar', child: 'Rahul (UKG)', email: 'kumar@parent.sg', pass: 'parent123' },
+                     ].map((creds, i) => (
+                       <div 
+                         key={i}
+                         onClick={() => { setEmail(creds.email); setPassword(creds.pass); }}
+                         className="p-4 bg-slate-50 rounded-[1rem] border border-slate-100 cursor-pointer hover:border-[#D4AF37] hover:bg-[#D4AF37]/5 transition-all group"
+                       >
+                         <p className="text-[10px] font-black text-[#D4AF37] uppercase tracking-widest mb-1.5 transition-colors">{creds.label}</p>
+                         <div className="space-y-1">
+                           <p className="text-[13px] font-bold text-slate-700 font-mono tracking-tight">{creds.email}</p>
+                           <p className="text-[11px] font-semibold text-slate-500 font-mono">pwd: <span className="text-slate-700">{creds.pass}</span></p>
+                         </div>
+                         <div className="mt-3 pt-3 border-t border-slate-200/60">
+                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">Parent: {creds.parent}</p>
+                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">Child: {creds.child}</p>
+                         </div>
+                       </div>
+                     ))}
+                  </div>
+                  <p className="text-[10px] text-slate-400 mt-5 font-medium leading-relaxed italic text-center">
+                    Click the card to auto-fill for the demo.
                   </p>
                 </motion.div>
               )}
