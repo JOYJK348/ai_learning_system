@@ -177,18 +177,21 @@ export default function MyWorldProfile() {
              <h2 className="text-xl font-black text-indigo-950 tracking-tight mb-6 px-2 flex items-center gap-3">
                <MapPin className="text-emerald-400" size={24} /> Kingdom Mastery
              </h2>
-             <div className="bg-white/40 backdrop-blur-3xl rounded-[3.5rem] p-8 sm:p-12 border-2 border-white/60 shadow-2xl">
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
+             <div className="bg-white/50 backdrop-blur-3xl rounded-[3.5rem] p-8 sm:p-12 border-2 border-white/60 shadow-2xl">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 overflow-visible">
                    {CATEGORIES.map((cat, i) => (
                      <motion.div 
                        key={cat.id} 
+                       initial={{ opacity: 0, y: 10 }}
+                       animate={{ opacity: 1, y: 0 }}
+                       transition={{ delay: i * 0.1 }}
                        whileHover={{ scale: 1.05 }}
                        className="flex flex-col items-center"
                      >
                         <div className={`relative w-24 h-24 rounded-[2rem] border-4 flex items-center justify-center text-3xl font-black shadow-xl mb-4 transition-all ${
-                          i === 0 ? 'bg-rose-400/20 border-rose-400 text-rose-600' :
-                          i === 1 ? 'bg-blue-400/20 border-blue-400 text-blue-600' :
-                          i === 2 ? 'bg-emerald-400/20 border-emerald-400 text-emerald-600' :
+                          cat.id === 'alpha' ? 'bg-rose-400/20 border-rose-400 text-rose-600' :
+                          cat.id === 'math' ? 'bg-blue-400/20 border-blue-400 text-blue-600' :
+                          cat.id === 'color' ? 'bg-emerald-400/20 border-emerald-400 text-emerald-600' :
                           'bg-amber-400/20 border-amber-400 text-amber-600'
                         }`}>
                            {cat.progress}%

@@ -638,9 +638,15 @@ const ProfilePanel = () => (
                  <span className="text-slate-800 font-bold text-sm sm:text-base">Jan 2024</span>
               </div>
               <div className="w-[1px] h-8 bg-slate-200 hidden sm:block" />
-              <button className="w-full sm:w-auto px-6 py-3 bg-slate-50 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-200 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all mt-2 sm:mt-0 shadow-sm hover:shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-50">
-                 Edit Details
-              </button>
+               <div className="flex flex-wrap gap-3 w-full sm:w-auto mt-4 sm:mt-0">
+                  <button className="flex-1 sm:flex-none px-6 py-3 bg-slate-50 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-200 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all">
+                     Edit Details
+                  </button>
+                  <Link href="/login" className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-rose-50 text-rose-600 hover:bg-rose-100 border border-rose-100 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all group">
+                     <LogOut size={16} className="group-hover:translate-x-0.5 transition-transform" />
+                     Sign Out
+                  </Link>
+               </div>
            </div>
         </div>
      </div>
