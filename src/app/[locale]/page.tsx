@@ -60,7 +60,7 @@ export default function HomePage() {
               <span className="font-extrabold text-lg" style={{ color: C.primary }}>
                 ZHI <span style={{ color: C.gold }}>LearnAI</span>
               </span>
-              <span className="text-[9px] uppercase tracking-[0.2em] text-slate-400 font-semibold mt-0.5">Learn While Playing</span>
+              <span className="text-[9px] uppercase tracking-[0.2em] text-slate-400 font-semibold mt-0.5">AI-Powered Learning. Game-Like Experience.</span>
             </div>
           </a>
 
@@ -120,15 +120,15 @@ export default function HomePage() {
               <div className="relative mb-6">
                 <h1 className="font-extrabold tracking-[-0.05em] text-slate-900 leading-[1.1]"
                   style={{ fontSize: 'clamp(2.5rem, 6vw, 3.8rem)', fontFamily: 'Inter, sans-serif' }}>
-                  Stop Memorising. <br />
-                  <span className="italic font-light tracking-tight text-[#013237]" style={{ fontFamily: 'serif' }}>Start Exploring.</span>
+                  The Learning Experience<br />
+                  <span className="italic font-light tracking-tight text-[#013237]" style={{ fontFamily: 'serif' }}>Every Child Deserves.</span>
                 </h1>
               </div>
 
               <div className="max-w-lg lg:mx-0 mx-auto mt-6">
                 <p className="text-[15px] sm:text-[17px] text-slate-500 leading-relaxed font-medium mb-10 text-justify">
-                  <span className="text-slate-900 font-extrabold block mb-2 text-xl tracking-tight italic text-left" style={{ fontFamily: 'serif' }}>The End of Boring Learning.</span>
-                  Boring textbooks make students lose interest. We replace them with a **3D animated playground**. With live AR labs and personal AI mentors, ZHI LearnAI helps your child master tough subjects through play. Turn your curriculum into an adventure today.
+                  <span className="text-slate-900 font-extrabold block mb-2 text-xl tracking-tight italic text-left" style={{ fontFamily: 'serif' }}>An AI Learning Platform Built for Children.</span>
+                  ZHI LearnAI gives your child a structured, curriculum-aligned learning environment that feels nothing like studying. Through AI-guided game quests, animated lessons, and interactive challenges, children build genuine subject mastery — independently, confidently, and joyfully.
                 </p>
               </div>
 
@@ -158,15 +158,16 @@ export default function HomePage() {
                     <Quote size={80} className="text-[#9D7606]" />
                   </div>
 
-                  <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[#9D7606] mb-4 block">ZHI PHILOSOPHY • THE MISSION</span>
+                  <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[#9D7606] mb-4 block">ZHI LearnAI • For Singapore Parents</span>
 
                   <h3 className="text-2xl sm:text-3xl font-light italic text-slate-800 mb-4" style={{ fontFamily: 'serif' }}>
-                    The End of <span className="font-bold not-italic">Boring.</span>
+                    What exactly does this <span className="font-bold not-italic">platform do?</span>
                   </h3>
 
-                  <p className="text-[13px] sm:text-[14px] text-slate-500 leading-relaxed font-medium italic pr-12">
-                    "Traditional textbooks are where curiosity goes to die. <br className="hidden sm:block" />
-                    <span className="text-[#013237] font-bold not-italic">ZHI LearnAI is where it finds its wings."</span>
+                  <p className="text-[13px] sm:text-[14px] text-slate-500 leading-relaxed font-medium pr-12">
+                    Your child logs in and enters an <span className="text-slate-700 font-semibold not-italic">interactive game world</span> covering Maths, Science, English and more — guided by an AI companion at every step.
+                    <br className="hidden sm:block" /><br className="hidden sm:block" />
+                    <span className="text-[#013237] font-bold not-italic">No tuition fees. No nagging. Just a child who genuinely wants to learn.</span>
                   </p>
                 </div>
 
@@ -293,35 +294,35 @@ export default function HomePage() {
                         transition={{ delay: 0.7, duration: 0.8 }}
                         className="flex-1 glass-morphism p-8 rounded-[2.5rem] border-white/40 shadow-premium relative overflow-hidden group"
                       >
-                         <div className="absolute inset-0 opacity-[0.15] pointer-events-none" 
-                           style={{ backgroundImage: 'linear-gradient(90deg, #D4AF37 1px, transparent 1px), linear-gradient(#D4AF37 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-                         
-                         <div className="flex justify-between items-start mb-6 relative z-10">
-                            <div className="flex items-center gap-4">
-                              <div className="w-12 h-12 rounded-xl bg-[#013237] flex items-center justify-center text-[#D4AF37] border border-white/20 shadow-xl group-hover:scale-110 transition-transform">
-                                <Eye size={24} />
-                              </div>
-                              <div>
-                                <p className="text-[11px] font-black uppercase tracking-[0.2em] text-[#9D7606]">Active Reality Engine</p>
-                                <h4 className="text-xl font-medium italic text-slate-900 leading-none" style={{ fontFamily: 'serif' }}>See the Invisible.</h4>
-                              </div>
-                            </div>
-                         </div>
+                        <div className="absolute inset-0 opacity-[0.15] pointer-events-none"
+                          style={{ backgroundImage: 'linear-gradient(90deg, #D4AF37 1px, transparent 1px), linear-gradient(#D4AF37 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
 
-                         <div className="space-y-4 mb-8 relative z-10">
-                            <div className="flex justify-between text-[11px] font-black uppercase tracking-tighter">
-                               <span className="text-slate-700">Theory Complexity</span>
-                               <span className="text-[#013237] font-black">Simplified</span>
+                        <div className="flex justify-between items-start mb-6 relative z-10">
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-xl bg-[#013237] flex items-center justify-center text-[#D4AF37] border border-white/20 shadow-xl group-hover:scale-110 transition-transform">
+                              <Eye size={24} />
                             </div>
-                            <div className="flex justify-between text-[11px] font-black uppercase tracking-tighter">
-                               <span className="text-slate-700">Memory Retention</span>
-                               <span className="text-[#013237] font-black">100% Mastery</span>
+                            <div>
+                              <p className="text-[11px] font-black uppercase tracking-[0.2em] text-[#9D7606]">Active Reality Engine</p>
+                              <h4 className="text-xl font-medium italic text-slate-900 leading-none" style={{ fontFamily: 'serif' }}>See the Invisible.</h4>
                             </div>
-                            <div className="h-[1px] w-full bg-slate-300/50 mt-2" />
-                         </div>
+                          </div>
+                        </div>
 
-                         {/* Pulse Line Decoration */}
-                         <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent opacity-40" />
+                        <div className="space-y-4 mb-8 relative z-10">
+                          <div className="flex justify-between text-[11px] font-black uppercase tracking-tighter">
+                            <span className="text-slate-700">Theory Complexity</span>
+                            <span className="text-[#013237] font-black">Simplified</span>
+                          </div>
+                          <div className="flex justify-between text-[11px] font-black uppercase tracking-tighter">
+                            <span className="text-slate-700">Memory Retention</span>
+                            <span className="text-[#013237] font-black">100% Mastery</span>
+                          </div>
+                          <div className="h-[1px] w-full bg-slate-300/50 mt-2" />
+                        </div>
+
+                        {/* Pulse Line Decoration */}
+                        <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent opacity-40" />
                       </motion.div>
                     </div>
                   </div>
@@ -343,20 +344,20 @@ export default function HomePage() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6">
           <div className="mb-16">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }} 
-              whileInView={{ opacity: 1, y: 0 }} 
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="flex flex-col md:flex-row md:items-end justify-between gap-6"
             >
               <div className="max-w-xl">
-                 <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#9D7606] mb-4 block">The Unified Architecture</span>
-                 <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    Intelligence for <span className="italic font-light text-[#013237]" style={{ fontFamily: 'serif' }}>Everyone.</span>
-                 </h2>
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#9D7606] mb-4 block">The Unified Architecture</span>
+                <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  Intelligence for <span className="italic font-light text-[#013237]" style={{ fontFamily: 'serif' }}>Everyone.</span>
+                </h2>
               </div>
               <p className="text-slate-500 max-w-sm text-sm font-medium leading-relaxed border-l-2 border-slate-100 pl-6">
-                 A connected ecosystem bridging the gap between imagination and performance.
+                A connected ecosystem bridging the gap between imagination and performance.
               </p>
             </motion.div>
           </div>
@@ -405,27 +406,27 @@ export default function HomePage() {
               >
                 {/* Compact Glass Card */}
                 <div className="h-full glass-morphism p-8 rounded-[2rem] border-white/40 shadow-premium transition-all duration-500 hover:shadow-2xl hover:border-slate-200 bg-white/40 flex flex-col items-start overflow-hidden border">
-                  
+
                   {/* Subtle Glow */}
-                  <div className="absolute top-0 right-0 w-32 h-32 blur-[60px] rounded-full -mr-16 -mt-16 opacity-30 group-hover:opacity-50 transition-opacity" 
-                       style={{ background: portal.color }} />
+                  <div className="absolute top-0 right-0 w-32 h-32 blur-[60px] rounded-full -mr-16 -mt-16 opacity-30 group-hover:opacity-50 transition-opacity"
+                    style={{ background: portal.color }} />
 
                   {/* Icon & Status */}
                   <div className="flex justify-between items-center w-full mb-8 relative z-10">
                     <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-lg transition-transform"
-                         style={{ background: portal.color }}>
+                      style={{ background: portal.color }}>
                       {portal.icon}
                     </div>
                     <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/80 border border-slate-100">
-                       <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                       <span className="text-[9px] font-black uppercase text-slate-500 tracking-wider font-inter">{portal.status}</span>
+                      <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="text-[9px] font-black uppercase text-slate-500 tracking-wider font-inter">{portal.status}</span>
                     </div>
                   </div>
 
                   {/* Content Hub */}
                   <div className="relative z-10 flex-grow">
                     <h3 className="text-2xl font-light italic text-slate-900 mb-4" style={{ fontFamily: 'serif' }}>
-                       {portal.title}
+                      {portal.title}
                     </h3>
                     <p className="text-slate-500 text-[14px] leading-relaxed mb-8 font-medium">
                       {portal.desc}
@@ -435,7 +436,7 @@ export default function HomePage() {
                     <div className="flex flex-wrap gap-2 mb-8">
                       {portal.items.map(item => (
                         <div key={item} className="px-3 py-1.5 rounded-lg bg-slate-50/80 border border-slate-100 text-[9px] font-black uppercase tracking-tight text-slate-600 transition-colors group-hover:bg-white group-hover:border-slate-200">
-                           {item}
+                          {item}
                         </div>
                       ))}
                     </div>
@@ -468,12 +469,12 @@ export default function HomePage() {
                 className="relative z-10 rounded-[3rem] overflow-hidden group"
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/10 to-transparent z-10" />
-                <Image 
-                  src="/assets/img/achievement.png" 
-                  alt="AR Learning Feature" 
-                  width={800} 
-                  height={1000} 
-                  className="w-full object-cover transition-transform duration-1000 group-hover:scale-110" 
+                <Image
+                  src="/assets/img/achievement.png"
+                  alt="AR Learning Feature"
+                  width={800}
+                  height={1000}
+                  className="w-full object-cover transition-transform duration-1000 group-hover:scale-110"
                 />
               </motion.div>
             </div>
@@ -539,109 +540,367 @@ export default function HomePage() {
 
 
       {/* ═══════ VISION ROADMAP ═══════ */}
-      <section id="vision" className="-mt-8 py-16 md:py-28 bg-white">
-        <div className="max-w-7xl mx-auto px-5 sm:px-6 text-center mb-16">
-          <SectionLabel>Roadmap 2026</SectionLabel>
-          <h2 className="text-3xl md:text-4xl font-extrabold mb-4" style={{ color: C.primary }}>The Future of AI Learning</h2>
-          <p className="text-slate-400 max-w-xl mx-auto italic">"A Smart Nation starts with smart learners."</p>
-        </div>
-        <div className="max-w-7xl mx-auto px-5 sm:px-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {[
-            { tag: 'Phase 2', title: 'Virtual AI Tutor', desc: 'Conversational AI that mimics a human private tutor in real-time.', icon: MessageCircle, bg: `rgba(157,80,187,0.08)`, hex: C.cyberViolet },
-            { tag: 'Phase 3', title: 'AR Classrooms', desc: 'Bring science experiments home with AR visuals on any device.', icon: Eye, bg: `rgba(1,50,55,0.07)`, hex: C.primary },
-            { tag: 'Phase 3', title: 'Gamified Quests', desc: 'Turn every lesson into an adventure with badges and leaderboards.', icon: Zap, bg: `rgba(0,210,255,0.08)`, hex: C.cyberBlue },
-            { tag: 'Phase 4', title: 'Global Expansion', desc: 'Expanding curriculum to meet international school standards.', icon: Globe, bg: `rgba(212,175,55,0.08)`, hex: C.gold },
-          ].map(r => (
-            <div key={r.title} className="p-7 bg-white border border-slate-100 rounded-2xl shadow-sm hover:shadow-xl transition-shadow group">
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-transform group-hover:scale-110"
-                style={{ background: r.bg, color: r.hex }}>
-                <r.icon size={24} />
-              </div>
-              <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">{r.tag}</div>
-              <h3 className="text-lg font-extrabold mb-2" style={{ color: C.primary }}>{r.title}</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">{r.desc}</p>
-            </div>
-          ))}
+      <section id="vision" className="-mt-8 py-16 md:py-28 relative overflow-hidden"
+        style={{ background: C.primary }}>
+
+        {/* Background texture */}
+        <div className="absolute inset-0 opacity-[0.07] pointer-events-none"
+          style={{ backgroundImage: 'radial-gradient(#fff 0.5px, transparent 0.5px)', backgroundSize: '28px 28px' }} />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-cyan-400/10 blur-[120px] rounded-full pointer-events-none" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6">
+
+          {/* Header */}
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.3em] mb-6"
+              style={{ background: 'rgba(212,175,55,0.15)', color: C.goldLight, border: '1px solid rgba(212,175,55,0.25)' }}>
+              <Sparkles size={10} /> What&apos;s Coming Next
+            </span>
+            <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-4 tracking-tight" style={{ fontFamily: 'Inter, sans-serif' }}>
+              The Future of{' '}
+              <span className="italic font-light" style={{ fontFamily: 'serif', color: C.goldLight }}>Play-Based Learning.</span>
+            </h2>
+            <p className="text-white/40 max-w-lg mx-auto text-sm leading-relaxed">
+              &ldquo;The best kind of learning is the kind kids ask to do again.&rdquo;
+            </p>
+          </motion.div>
+
+          {/* Cards Grid */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 relative items-stretch">
+
+            {/* Connecting line (desktop only) */}
+            <div className="hidden lg:block absolute top-[52px] left-[12.5%] right-[12.5%] h-[1px] z-0"
+              style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.3), rgba(0,210,255,0.3), rgba(212,175,55,0.3), transparent)' }} />
+
+            {[
+              {
+                tag: 'Phase 1', num: '01',
+                title: 'Live AI Buddy',
+                desc: 'A conversational AI friend that talks, hints, and cheers your child on — just like a real tutor, without the pressure.',
+                icon: MessageCircle,
+                accent: C.cyberViolet,
+                glow: 'rgba(157,80,187,0.25)',
+              },
+              {
+                tag: 'Phase 2', num: '02',
+                title: 'AR Learning Worlds',
+                desc: 'Step inside science experiments. Explore the solar system, dissect a cell, or build a volcano — all from home.',
+                icon: Eye,
+                accent: C.cyberBlue,
+                glow: 'rgba(0,210,255,0.2)',
+              },
+              {
+                tag: 'Phase 3', num: '03',
+                title: 'Multiplayer Quests',
+                desc: 'Kids collaborate with friends to solve challenges and climb leaderboards — social learning through friendly play.',
+                icon: Gamepad2,
+                accent: C.goldLight,
+                glow: 'rgba(247,239,138,0.15)',
+              },
+              {
+                tag: 'Phase 4', num: '04',
+                title: 'Global Curriculum',
+                desc: 'Supporting school syllabuses across Singapore, Malaysia, India and beyond — same fun, local content.',
+                icon: Globe,
+                accent: C.gold,
+                glow: 'rgba(212,175,55,0.2)',
+              },
+            ].map((r, i) => (
+              <motion.div
+                key={r.title}
+                initial={{ y: 30, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.12, duration: 0.7 }}
+                whileHover={{ y: -8 }}
+                className="relative group h-full"
+              >
+                {/* Glow behind card */}
+                <div className="absolute inset-0 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{ background: r.glow }} />
+
+                <div className="relative rounded-2xl overflow-hidden border transition-all duration-500 group-hover:border-white/20 flex flex-col h-full"
+                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)' }}>
+
+                  {/* Colored top strip */}
+                  <div className="h-1 w-full flex-shrink-0" style={{ background: `linear-gradient(90deg, ${r.accent}, transparent)` }} />
+
+                  <div className="p-7 flex flex-col flex-1 relative">
+
+                    {/* Ghost number — absolute background */}
+                    <div className="absolute bottom-4 right-4 text-[7rem] font-black leading-none select-none pointer-events-none"
+                      style={{ color: 'rgba(255,255,255,0.05)', fontFamily: 'Inter, sans-serif', letterSpacing: '-0.05em', lineHeight: 1 }}>
+                      {r.num}
+                    </div>
+
+                    {/* Phase badge + icon row */}
+                    <div className="flex items-center justify-between mb-7 relative z-10">
+                      <span className="text-[9px] font-black uppercase tracking-[0.3em] px-2.5 py-1 rounded-full"
+                        style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.4)' }}>
+                        {r.tag}
+                      </span>
+                      <div className="w-11 h-11 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110 group-hover:rotate-3"
+                        style={{ background: `${r.accent}20`, color: r.accent, border: `1px solid ${r.accent}30` }}>
+                        <r.icon size={20} />
+                      </div>
+                    </div>
+
+                    {/* Title + Desc */}
+                    <div className="flex-1 relative z-10">
+                      <h3 className="text-white font-extrabold text-lg mb-3" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        {r.title}
+                      </h3>
+                      <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.45)' }}>
+                        {r.desc}
+                      </p>
+                    </div>
+
+                    {/* Bottom accent line */}
+                    <div className="mt-6 h-[1px] w-8 rounded-full transition-all duration-500 group-hover:w-full relative z-10"
+                      style={{ background: r.accent }} />
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Bottom CTA strip */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5 }}
+            className="text-center mt-16"
+          >
+            <p className="text-white/30 text-xs uppercase tracking-[0.3em]">Phase 1 is live now &mdash; Join thousands of Singapore learners today</p>
+          </motion.div>
+
         </div>
       </section>
 
+
       {/* ═══════ CONTACT ═══════ */}
-      <section id="contact" className="-mt-8 py-16 md:py-24 bg-[#F8FAFC]">
-        <div className="max-w-7xl mx-auto px-5 sm:px-6">
-          <div className="bg-white rounded-3xl shadow-2xl overflow-hidden grid lg:grid-cols-5 border border-slate-100">
-            <div className="lg:col-span-2 p-10 sm:p-12 text-white relative overflow-hidden" style={{ background: C.primary }}>
-              <div className="relative z-10">
-                <h3 className="text-3xl font-extrabold mb-4">Let's build the future together.</h3>
-                <p className="mb-10 text-sm leading-relaxed opacity-70">Book a personalised demo for your school or institution.</p>
-                <div className="space-y-5">
-                  <div className="flex items-center gap-4">
-                    <Mail size={18} style={{ color: C.goldLight }} />
-                    <span className="text-sm font-medium">hello@zhilearnai.sg</span>
+      <section id="contact" className="-mt-8 py-16 md:py-28 bg-[#F8FAFC] relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-cyan-50/50 to-transparent blur-[120px]" />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-amber-50/40 to-transparent blur-[100px]" />
+        </div>
+
+        <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-6">
+
+          {/* Section Header */}
+          <div className="text-center mb-14">
+            <SectionLabel>Get In Touch</SectionLabel>
+            <h2 className="text-3xl md:text-4xl font-extrabold mt-4 mb-3" style={{ color: C.primary, fontFamily: 'Inter, sans-serif' }}>
+              Ready to make learning <span className="italic font-light" style={{ fontFamily: 'serif' }}>joyful?</span>
+            </h2>
+            <p className="text-slate-400 text-sm max-w-md mx-auto leading-relaxed">
+              Book a personalised demo and discover why Singapore parents and schools choose ZHI LearnAI.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-5 gap-8 items-start">
+
+            {/* ── LEFT: Contact Info Panel ── */}
+            <div className="lg:col-span-2 flex flex-col gap-6">
+
+              {/* Contact Card */}
+              <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: C.primary }}>
+                    <MessageCircle size={15} className="text-white" />
                   </div>
-                  <div className="flex items-center gap-4">
-                    <Phone size={18} style={{ color: C.goldLight }} />
-                    <span className="text-sm font-medium">+65 6789 0123</span>
-                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Direct Contact</span>
+                </div>
+                <h3 className="text-xl font-extrabold mb-1 mt-3" style={{ color: C.primary }}>Ready to make learning fun?</h3>
+                <p className="text-slate-400 text-sm leading-relaxed mb-7">
+                  Book a free demo and see your child light up while they learn through play.
+                </p>
+
+                <div className="space-y-4">
+                  <a href="mailto:hello@zhilearnai.sg"
+                    className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-[#013237]/20 hover:bg-white transition-all group">
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"
+                      style={{ background: `${C.primary}12`, color: C.primary }}>
+                      <Mail size={17} />
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-0.5">Email Us</p>
+                      <p className="text-sm font-semibold text-slate-700">hello@zhilearnai.sg</p>
+                    </div>
+                  </a>
+
+                  <a href="tel:+6567890123"
+                    className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-[#013237]/20 hover:bg-white transition-all group">
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"
+                      style={{ background: `${C.gold}18`, color: C.goldDark }}>
+                      <Phone size={17} />
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-0.5">Call Us</p>
+                      <p className="text-sm font-semibold text-slate-700">+65 6789 0123</p>
+                    </div>
+                  </a>
                 </div>
               </div>
-              <Image src="/assets/img/logo.png" alt="" width={300} height={300}
-                className="absolute -bottom-20 -right-20 opacity-[0.04] scale-150 rotate-12" />
+
+              {/* Trust Badges */}
+              <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+                <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mb-5">Why Parents Trust Us</p>
+                <div className="space-y-3">
+                  {[
+                    { icon: CheckCircle2, label: 'MOE Syllabus Aligned', color: C.primary },
+                    { icon: Shield, label: 'PDPA Compliant & Secure', color: C.cyberBlue },
+                    { icon: Star, label: 'Singapore-Based Platform', color: C.goldDark },
+                  ].map(({ icon: Icon, label, color }) => (
+                    <div key={label} className="flex items-center gap-3">
+                      <Icon size={15} style={{ color }} />
+                      <span className="text-sm font-medium text-slate-600">{label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-            <div className="lg:col-span-3 p-10 sm:p-12">
-              <form className="grid sm:grid-cols-2 gap-5" onSubmit={e => e.preventDefault()}>
-                {[
-                  { label: 'Full Name', type: 'text', placeholder: 'David Lim', span: 1 },
-                  { label: 'Email Address', type: 'email', placeholder: 'you@school.edu.sg', span: 1 },
-                  { label: 'Contact Number', type: 'tel', placeholder: '+65 9123 4567', span: 1 },
-                  { label: 'Your Role', type: 'select', options: ['Parent / Guardian', 'Student', 'Educator', 'Institution Lead'], span: 1 },
-                  { label: 'Student Grade Level', type: 'select', options: ['Primary School', 'Secondary School', 'Pre-University / JC', 'Other'], span: 1 },
-                  { label: 'School / Institution Name', type: 'text', placeholder: 'e.g. Raffles Institution', span: 1 },
-                ].map(f => (
-                  <div key={f.label} className={`space-y-2 ${f.span === 2 ? 'sm:col-span-2' : ''}`}>
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{f.label}</label>
-                    {f.type === 'select' ? (
+
+            {/* ── RIGHT: Form Panel ── */}
+            <div className="lg:col-span-3">
+              <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8 sm:p-10">
+                <div className="mb-8">
+                  <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mb-2">Book a Demo</p>
+                  <h4 className="text-xl font-extrabold text-slate-900">Tell us about yourself</h4>
+                </div>
+
+                <form className="space-y-5" onSubmit={e => e.preventDefault()}>
+
+                  {/* Row 1: Name + Email */}
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Full Name</label>
                       <div className="relative">
-                        <select 
+                        <User size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" />
+                        <input
+                          type="text"
+                          placeholder="David Lim"
+                          suppressHydrationWarning
+                          className="w-full pl-9 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm transition-all focus:border-[#013237] focus:bg-white focus:ring-2 focus:ring-[#013237]/8 placeholder:text-slate-300 text-slate-800"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Email Address</label>
+                      <div className="relative">
+                        <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" />
+                        <input
+                          type="email"
+                          placeholder="you@school.edu.sg"
+                          suppressHydrationWarning
+                          className="w-full pl-9 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm transition-all focus:border-[#013237] focus:bg-white focus:ring-2 focus:ring-[#013237]/8 placeholder:text-slate-300 text-slate-800"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Row 2: Phone + Role */}
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Contact Number</label>
+                      <div className="relative">
+                        <Phone size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" />
+                        <input
+                          type="tel"
+                          placeholder="+65 9123 4567"
+                          suppressHydrationWarning
+                          className="w-full pl-9 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm transition-all focus:border-[#013237] focus:bg-white focus:ring-2 focus:ring-[#013237]/8 placeholder:text-slate-300 text-slate-800"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Your Role</label>
+                      <div className="relative">
+                        <select
                           defaultValue=""
                           suppressHydrationWarning
-                          className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm transition-all focus:border-[#013237] focus:ring-2 focus:ring-[#013237]/5 text-slate-600 appearance-none"
+                          className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm transition-all focus:border-[#013237] focus:bg-white focus:ring-2 focus:ring-[#013237]/8 text-slate-600 appearance-none"
                         >
-                           <option value="" disabled>Select an option...</option>
-                           {f.options?.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                          <option value="" disabled>Select your role...</option>
+                          {['Parent / Guardian', 'Student', 'Educator', 'Institution Lead'].map(opt => (
+                            <option key={opt} value={opt}>{opt}</option>
+                          ))}
                         </select>
-                        <div className="absolute right-4 top-1/2 -translate-y-[50%] pointer-events-none text-slate-400">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-300">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         </div>
                       </div>
-                    ) : (
-                      <input
-                        type={f.type}
-                        placeholder={f.placeholder}
-                        suppressHydrationWarning
-                        className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm transition-all focus:border-[#013237] focus:ring-2 focus:ring-[#013237]/5 placeholder:text-slate-400 text-slate-800"
-                      />
-                    )}
+                    </div>
                   </div>
-                ))}
-                <div className="sm:col-span-2 space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Message</label>
-                  <textarea
-                    rows={4}
-                    placeholder="Tell us how we can help..."
-                    suppressHydrationWarning
-                    className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm transition-all focus:border-[#013237] focus:ring-2 focus:ring-[#013237]/5 resize-none"
-                  />
-                </div>
-                <div className="sm:col-span-2">
+
+                  {/* Row 3: Grade + School */}
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Student Grade Level</label>
+                      <div className="relative">
+                        <select
+                          defaultValue=""
+                          suppressHydrationWarning
+                          className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm transition-all focus:border-[#013237] focus:bg-white focus:ring-2 focus:ring-[#013237]/8 text-slate-600 appearance-none"
+                        >
+                          <option value="" disabled>Select grade level...</option>
+                          {['Primary School', 'Secondary School', 'Pre-University / JC', 'Other'].map(opt => (
+                            <option key={opt} value={opt}>{opt}</option>
+                          ))}
+                        </select>
+                        <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-300">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">School / Institution</label>
+                      <div className="relative">
+                        <GraduationCap size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" />
+                        <input
+                          type="text"
+                          placeholder="e.g. Raffles Institution"
+                          suppressHydrationWarning
+                          className="w-full pl-9 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm transition-all focus:border-[#013237] focus:bg-white focus:ring-2 focus:ring-[#013237]/8 placeholder:text-slate-300 text-slate-800"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Message */}
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Message <span className="normal-case tracking-normal text-slate-300 font-normal">(optional)</span></label>
+                    <textarea
+                      rows={4}
+                      placeholder="Tell us how we can help your child or school..."
+                      suppressHydrationWarning
+                      className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm transition-all focus:border-[#013237] focus:bg-white focus:ring-2 focus:ring-[#013237]/8 resize-none placeholder:text-slate-300"
+                    />
+                  </div>
+
+                  {/* Submit */}
                   <button
                     suppressHydrationWarning
-                    className="btn-primary w-full justify-center py-4 uppercase tracking-widest text-sm"
+                    className="w-full py-4 rounded-xl text-white font-black text-[12px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all hover:brightness-110 active:scale-[0.98] shadow-lg"
+                    style={{ background: `linear-gradient(135deg, ${C.primary}, ${C.primLight})`, boxShadow: `0 12px 30px ${C.primary}35` }}
                   >
-                    Submit Request <ArrowRight size={16} />
+                    Book Your Free Demo <ArrowRight size={15} />
                   </button>
-                </div>
-              </form>
+
+                  <p className="text-center text-[11px] text-slate-400">
+                    No commitment required. We&apos;ll get back to you within 24 hours.
+                  </p>
+                </form>
+              </div>
             </div>
+
           </div>
         </div>
       </section>
