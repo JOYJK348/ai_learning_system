@@ -9,7 +9,7 @@ import {
   ExternalLink, Video, AtSign, CheckCircle2,
   Wifi, Battery, Rocket, Activity, TrendingUp, Gamepad2, Quote
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 
 const C = {
@@ -36,9 +36,15 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
    PAGE
 ═══════════════════════════════════════════════════════════ */
 export default function HomePage() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const params = useParams();
   const locale = params?.locale || 'en';
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const navLinks = [
     { label: 'Features', href: '#features' },
     { label: 'How it works', href: '#how-it-works' },
@@ -53,7 +59,7 @@ export default function HomePage() {
       <nav className="fixed top-0 inset-x-0 z-50 glass-nav">
         <div className="max-w-7xl mx-auto px-5 sm:px-6 h-18 flex items-center justify-between py-4">
           <a href="#" className="flex items-center gap-3 group">
-            <div className="relative w-9 h-9 transition-transform group-hover:scale-110">
+            <div className="relative w-14 h-14 transition-transform group-hover:scale-110">
               <Image src="/assets/img/logo.png" alt="Zhi Logo" fill className="object-contain" />
             </div>
             <div className="flex flex-col leading-none">
@@ -112,8 +118,8 @@ export default function HomePage() {
 
             {/* ── LEFT: Text (Visionary Editorial) ── */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ x: -20, opacity: 1 }}
+              animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               className="order-1 lg:order-1 text-center lg:text-left lg:-mt-[110px]"
             >
@@ -147,9 +153,9 @@ export default function HomePage() {
 
               {/* ── NEW: Visionary Manifesto Card (Pain -> Solution) ── */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1, duration: 1 }}
+                initial={{ y: 15, opacity: 1 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.5, duration: 1 }}
                 className="mt-8 relative group"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 to-transparent blur-xl -z-10" />
@@ -181,9 +187,9 @@ export default function HomePage() {
 
             {/* ── RIGHT: Immersive AR Laptop Visual ── */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ scale: 0.98, opacity: 1 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 1, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
               className="order-2 lg:order-2 w-full max-w-2xl mx-auto lg:max-w-none relative"
             >
               <div className="relative w-full flex items-center justify-center p-4">
@@ -247,9 +253,9 @@ export default function HomePage() {
                     <div className="flex flex-col sm:flex-row gap-6">
 
                       <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.6, duration: 0.8 }}
+                        initial={{ x: -10, opacity: 1 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.1, duration: 0.8 }}
                         className="flex-1 glass-morphism p-8 rounded-[2.5rem] border-white/40 shadow-premium relative overflow-hidden group"
                       >
                         <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 blur-2xl rounded-full -mr-10 -mt-10" />
@@ -276,9 +282,9 @@ export default function HomePage() {
                             {[...Array(10)].map((_, i) => (
                               <motion.div
                                 key={i}
-                                initial={{ opacity: 0.3 }}
+                                initial={{ opacity: 0.5 }}
                                 animate={{ opacity: i < 8 ? 1 : 0.3, backgroundColor: i < 8 ? C.primary : '#CBD5E1' }}
-                                transition={{ delay: 1 + (i * 0.1) }}
+                                transition={{ delay: 0.2 + (i * 0.1) }}
                                 className="flex-1 rounded-sm shadow-sm"
                               />
                             ))}
@@ -288,9 +294,9 @@ export default function HomePage() {
 
                       {/* ── Reality Translator Card (Side by Side) ── */}
                       <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.7, duration: 0.8 }}
+                        initial={{ x: 10, opacity: 1 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.2, duration: 0.8 }}
                         className="flex-1 glass-morphism p-8 rounded-[2.5rem] border-white/40 shadow-premium relative overflow-hidden group"
                       >
                          <div className="absolute inset-0 opacity-[0.15] pointer-events-none" 
@@ -344,8 +350,8 @@ export default function HomePage() {
         <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6">
           <div className="mb-16">
             <motion.div 
-              initial={{ opacity: 0, y: 20 }} 
-              whileInView={{ opacity: 1, y: 0 }} 
+              initial={{ y: 20, opacity: 1 }} 
+              whileInView={{ y: 0, opacity: 1 }} 
               viewport={{ once: true }}
               className="flex flex-col md:flex-row md:items-end justify-between gap-6"
             >
@@ -396,8 +402,8 @@ export default function HomePage() {
             ].map((portal, i) => (
               <motion.div
                 key={portal.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ y: 15, opacity: 1 }}
+                whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.8 }}
                 whileHover={{ y: -5 }}
@@ -462,8 +468,8 @@ export default function HomePage() {
             {/* Visual Side */}
             <div className="lg:col-span-6 relative order-1 lg:order-1">
               <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ x: -20, opacity: 1 }}
+                whileInView={{ x: 0, opacity: 1 }}
                 viewport={{ once: true }}
                 className="relative z-10 rounded-[3rem] overflow-hidden group"
               >
@@ -481,8 +487,8 @@ export default function HomePage() {
             {/* Content Side */}
             <div className="lg:col-span-6 order-2 lg:order-2">
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ y: 20, opacity: 1 }}
+                whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
               >
                 <SectionLabel>Innovation</SectionLabel>
@@ -513,8 +519,8 @@ export default function HomePage() {
                   ].map((f, i) => (
                     <motion.div
                       key={f.t}
-                      initial={{ opacity: 0, x: 20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
+                      initial={{ x: 15, opacity: 1 }}
+                      whileInView={{ x: 0, opacity: 1 }}
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.1 }}
                       className="flex gap-6 group"

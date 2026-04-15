@@ -89,10 +89,15 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const savedStudents = localStorage.getItem('zhi_students');
     const savedRegs = localStorage.getItem('zhi_regs');
 
-    if (savedCats) setCategories(JSON.parse(savedCats));
-    if (savedLessons) setLessons(JSON.parse(savedLessons));
-    if (savedStudents) setStudents(JSON.parse(savedStudents));
-    if (savedRegs) setRegistrations(JSON.parse(savedRegs));
+    try {
+      if (savedCats) setCategories(JSON.parse(savedCats));
+      if (savedLessons) setLessons(JSON.parse(savedLessons));
+      if (savedStudents) setStudents(JSON.parse(savedStudents));
+      if (savedRegs) setRegistrations(JSON.parse(savedRegs));
+    } catch (err) {
+      console.error("Failed to parse local data:", err);
+      // Fallback to initial constants already set in useState
+    }
   }, []);
 
   const saveToStorage = (newCats: Category[], newLessons: Record<string, Lesson[]>, newStudents: Student[], newRegs: RegistrationRequest[]) => {

@@ -2,48 +2,49 @@
 
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { Link } from '@/i18n/routing';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Compass, Activity, Building2, ArrowLeft, Mail, Lock, ShieldCheck, UserPlus, LogIn, Sparkles } from 'lucide-react';
+import { Compass, Activity, Building2, Mail, Lock, ShieldCheck, Sparkles, ChevronRight, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 
 const portals = [
   {
     id: 'student',
-    title: 'Student explorer',
-    desc: 'Child-safe learning sanctuary.',
+    label: 'Student',
+    desc: 'Child-safe learning environment',
     icon: Compass,
-    accent: '#00D2FF',
+    color: 'bg-sky-500',
+    ring: 'ring-sky-200',
     path: 'student',
-    creds: { email: 'demo1@zhi.sg', pass: 'demo123', label: 'Student demo' }
+    creds: { email: 'demo1@zhi.sg', pass: 'demo123' }
   },
   {
     id: 'parent',
-    title: 'Parent hub',
-    desc: 'Track metrics & enrollment.',
+    label: 'Parent',
+    desc: "Track your child's progress",
     icon: Activity,
-    accent: '#D4AF37',
+    color: 'bg-amber-500',
+    ring: 'ring-amber-200',
     path: 'parent',
-    creds: { email: 'kumar@parent.sg', pass: 'parent123', label: 'Parent demo' }
+    creds: { email: 'kumar@parent.sg', pass: 'parent123' }
   },
   {
     id: 'school',
-    title: 'Central Core',
-    desc: 'System administration & logs.',
+    label: 'Admin',
+    desc: 'System & administration hub',
     icon: Building2,
-    accent: '#9D50BB',
+    color: 'bg-violet-500',
+    ring: 'ring-violet-200',
     path: 'admin',
-    creds: { email: 'admin@zhilearn.sg', pass: 'admin123', label: 'Admin demo' }
-  }
+    creds: { email: 'admin@zhilearn.sg', pass: 'admin123' }
+  },
 ];
 
 export default function LoginPage() {
-  const [step, setStep] = useState<'selection' | 'auth'>('selection');
-  const [selectedPortal, setSelectedPortal] = useState<string | null>(null);
+  const [selectedPortal, setSelectedPortal] = useState('student');
   const [isRegister, setIsRegister] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  // Form Fields
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [parentName, setParentName] = useState('');
@@ -53,210 +54,230 @@ export default function LoginPage() {
   const router = useRouter();
   const params = useParams();
   const locale = params?.locale || 'en';
+  const portal = portals.find(p => p.id === selectedPortal)!;
 
-  const handlePortalSwitch = (id: string) => {
-    setSelectedPortal(id);
-    setStep('auth');
-    setIsRegister(false);
-  };
-
-  const handleAction = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
     setTimeout(() => {
-       if (isRegister) {
-          setIsSuccess(true);
-          setIsLoading(false);
-       } else {
-          const portal = portals.find(p => p.id === selectedPortal);
-          if (portal) router.push(`/${locale}/${portal.path}`);
-       }
-    }, 1500);
+      if (isRegister) { setIsSuccess(true); setIsLoading(false); }
+      else router.push(`/${locale}/${portal.path}`);
+    }, 1400);
   };
 
-  const activePortalInfo = portals.find(p => p.id === selectedPortal);
+  const autofill = () => {
+    setEmail(portal.creds.email);
+    setPassword(portal.creds.pass);
+  };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 flex items-center justify-center relative overflow-hidden font-sans">
+    <div className="min-h-screen flex flex-col sm:items-center sm:justify-center bg-slate-50 font-sans p-0 sm:px-6 sm:py-12 relative overflow-x-hidden">
       
-      {/* ── AMBIENT GLASS BACKGROUND ── */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-50/50 rounded-full blur-[120px] -mr-48 -mt-48" />
-         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-slate-100 rounded-full blur-[120px] -ml-48 -mb-48" />
-         <div className="absolute inset-0 opacity-[0.03] grayscale brightness-0 pointer-events-none flex items-center justify-center">
-            <Image src="/assets/img/logo.png" alt="" width={800} height={800} className="scale-150" />
-         </div>
+      {/* Back to Home Button */}
+      <Link 
+        href="/"
+        className="absolute sm:fixed top-4 left-4 sm:top-6 sm:left-6 z-50 flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 bg-white/60 hover:bg-white backdrop-blur-xl border border-slate-200 rounded-none text-slate-600 hover:text-indigo-600 font-bold text-[10px] sm:text-xs uppercase tracking-widest transition-all shadow-sm hover:shadow-md group"
+      >
+        <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform sm:w-4 sm:h-4" />
+        <span>Home</span>
+      </Link>
+
+      {/* Background decoration - hidden on mobile for pure white box feel */}
+      <div className="hidden sm:block absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-100/30 rounded-full blur-[120px] -mr-48 -mt-48" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-slate-200/50 rounded-full blur-[120px] -ml-48 -mb-48" />
       </div>
 
-      <div className="w-full max-w-7xl px-6 relative z-10 py-20 flex items-center justify-center">
-        <AnimatePresence mode="wait">
-          
-          {step === 'selection' ? (
-            <motion.div key="selection" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} className="flex flex-col items-center w-full max-w-6xl">
-               <div className="text-center mb-16">
-                  <h1 className="text-5xl font-black text-slate-900 tracking-tight mb-4">Select Portal</h1>
-                  <p className="text-slate-400 font-bold uppercase tracking-[0.3em] text-[10px]">Artificial Intelligence Learning Ecosystem</p>
-               </div>
+      <div className="w-full sm:max-w-md relative z-10 flex flex-col items-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full min-h-screen sm:min-h-0"
+        >
+          <AnimatePresence mode="wait">
+            {isSuccess ? (
+              <motion.div
+                key="success"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="bg-white p-8 sm:p-10 border-none sm:border border-slate-200 shadow-none sm:shadow-xl text-center rounded-none min-h-screen sm:min-h-0 flex flex-col justify-center"
+              >
+                <div className="w-16 h-16 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-emerald-100">
+                  <ShieldCheck size={32} />
+                </div>
+                <h2 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">Request Submitted</h2>
+                <p className="text-slate-500 text-xs leading-relaxed mb-8 px-8">
+                  Your enrolment data has been received. The admin team will review and approve your account shortly.
+                </p>
+                <button
+                  onClick={() => { setIsSuccess(false); setIsRegister(false); }}
+                  className="w-full py-4 bg-slate-900 text-white rounded-none font-semibold text-sm hover:bg-slate-800 transition-colors shadow-lg shadow-slate-900/10 uppercase"
+                >
+                  Back to Sign In
+                </button>
+              </motion.div>
+            ) : (
+              <motion.div 
+                key="form" 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }}
+                className="bg-white p-6 sm:p-10 border-none sm:border border-slate-200 shadow-none sm:shadow-2xl relative overflow-hidden rounded-none min-h-screen sm:min-h-0 flex flex-col"
+              >
+                {/* Visual Top Bar */}
+                <div className={`absolute top-0 left-0 w-full h-1.5 transition-colors duration-500 ${portal.id === 'student' ? 'bg-sky-500' : portal.id === 'parent' ? 'bg-amber-500' : 'bg-violet-500'}`} />
 
-               <div className="grid md:grid-cols-3 gap-8 w-full">
-                  {portals.map((portal) => (
-                    <div 
-                      key={portal.id} 
-                      onClick={() => handlePortalSwitch(portal.id)}
-                      className="bg-white p-10 rounded-[3rem] border border-slate-200 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all cursor-pointer group flex flex-col items-center"
-                    >
-                       <div className="w-16 h-16 rounded-2xl bg-slate-50 text-slate-400 group-hover:bg-slate-900 group-hover:text-white flex items-center justify-center transition-all mb-8 shadow-inner">
-                          <portal.icon size={28} />
-                       </div>
-                       <h3 className="text-xl font-black text-slate-900 mb-2">{portal.title}</h3>
-                       <p className="text-sm text-slate-500 font-medium mb-8 text-center px-4 leading-relaxed">{portal.desc}</p>
-                       <div className="w-10 h-1 bg-slate-100 rounded-full group-hover:w-20 group-hover:bg-indigo-500 transition-all duration-500" />
+                {/* Internal Logo Section - Mobile Centered, Desktop Row */}
+                <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 sm:gap-6 mb-6 pb-6 border-b border-slate-50 pt-12 sm:pt-0">
+                  <div className="shrink-0">
+                    <Image src="/assets/img/logo.png" alt="ZHI" width={56} height={56} className="object-contain sm:w-[72px] sm:h-[72px]" />
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="text-slate-900 font-black text-2xl sm:text-3xl leading-none tracking-tighter">ZHI <span className="text-blue-600">LearnAI</span></p>
+                    <p className="text-indigo-600/60 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] mt-2 sm:mt-2.5 whitespace-nowrap">Learn While Playing</p>
+                  </div>
+                </div>
+
+                {/* Portal Selector */}
+                <div className="flex gap-2 mb-6 bg-slate-50 p-1.5 border border-slate-100">
+                  {portals.map((p) => {
+                    const Icon = p.icon;
+                    const active = selectedPortal === p.id;
+                    return (
+                      <button
+                        key={p.id}
+                        type="button"
+                        disabled={isRegister}
+                        onClick={() => { setSelectedPortal(p.id); setEmail(''); setPassword(''); }}
+                        className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[10px] sm:text-xs font-bold transition-all duration-300 ${
+                          active
+                            ? 'bg-white text-slate-900 shadow-md ring-1 ring-slate-100'
+                            : 'text-slate-400 hover:text-slate-600'
+                        } ${isRegister && !active ? 'opacity-30' : ''}`}
+                      >
+                        <Icon size={ active ? 14 : 12 } className={active ? 'text-indigo-600' : ''} />
+                        <span>{p.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Form */}
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {isRegister && (
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Parent name and child details shown only for parent register */}
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-semibold text-slate-600">Parent Name</label>
+                        <input
+                          required type="text" value={parentName}
+                          onChange={e => setParentName(e.target.value)}
+                          placeholder="Full name"
+                          className="w-full px-4 py-3 bg-slate-50 border border-slate-100 outline-none text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all shadow-inner rounded-none"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-semibold text-slate-600">Child Name</label>
+                        <input
+                          required type="text" value={childName}
+                          onChange={e => setChildName(e.target.value)}
+                          placeholder="Full name"
+                          className="w-full px-4 py-3 bg-slate-50 border border-slate-100 outline-none text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all shadow-inner rounded-none"
+                        />
+                      </div>
+                      <div className="col-span-2 space-y-1.5">
+                        <label className="block text-xs font-semibold text-slate-600">Grade</label>
+                        <select
+                          value={childGrade} onChange={e => setChildGrade(e.target.value)}
+                          className="w-full px-4 py-3 bg-slate-50 border border-slate-100 outline-none text-sm text-slate-900 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all appearance-none shadow-inner rounded-none"
+                        >
+                          <option>LKG</option><option>UKG</option><option>Grade 1</option><option>Grade 2</option>
+                        </select>
+                      </div>
                     </div>
-                  ))}
-               </div>
-            </motion.div>
-          ) : (
-            <motion.div key="auth" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col md:flex-row items-center gap-10">
-               
-               {/* ── MAIN AUTH CARD ── */}
-               <div className="w-full max-w-[500px] bg-white rounded-[4rem] p-12 md:p-16 shadow-3xl border border-slate-100 relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-1.5" style={{ backgroundColor: activePortalInfo?.accent || '#000' }} />
-                  
-                  <button onClick={() => setStep('selection')} className="absolute top-10 left-12 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-indigo-600 transition-all">
-                     <ArrowLeft size={16} /> Exit
+                  )}
+
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-semibold text-slate-600">Email Address</label>
+                    <div className="relative">
+                      <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                      <input
+                        required type="email" value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        placeholder="you@example.com"
+                        className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-100 outline-none text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all shadow-inner rounded-none"
+                      />
+                    </div>
+                  </div>
+
+                  {!isRegister && (
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-semibold text-slate-600">Password</label>
+                      <div className="relative">
+                        <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                        <input
+                          required type="password" value={password}
+                          onChange={e => setPassword(e.target.value)}
+                          placeholder="••••••••"
+                          className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-100 outline-none text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all tracking-wider shadow-inner rounded-none"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-none font-semibold text-sm tracking-wide transition-all shadow-lg shadow-slate-900/20 hover:shadow-xl hover:shadow-slate-900/25 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed uppercase"
+                  >
+                    {isLoading
+                      ? 'Signing in...'
+                      : isRegister ? 'Create Parent Account' : `Sign in as ${portal.label}`}
                   </button>
 
-                  <div className="flex flex-col items-center mb-12 mt-4 text-center">
-                     <div className="w-16 h-16 rounded-[1.5rem] bg-slate-50 flex items-center justify-center mb-6 text-slate-900 shadow-inner">
-                        {isRegister ? <UserPlus size={28} /> : <LogIn size={28} />}
-                     </div>
-                     <h2 className="text-3xl font-black text-slate-900 mb-2">
-                        {isRegister ? 'New Student' : 'Welcome Back'}
-                     </h2>
-                     <p className="text-sm text-slate-400 font-medium leading-relaxed">
-                        {isRegister ? 'Enrol your child in our global AI sanctuary.' : 'Secure access to your learning workspace.'}
-                     </p>
-                  </div>
-
-                  {isSuccess ? (
-                    <div className="py-10 text-center">
-                       <div className="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce">
-                          <ShieldCheck size={40} />
-                       </div>
-                       <h3 className="text-2xl font-black text-slate-900 mb-2">Request Processed</h3>
-                       <p className="text-sm text-slate-500 font-medium leading-relaxed mb-10"> Administrative core is reviewing enrollment.</p>
-                       <button onClick={() => setStep('selection')} className="w-full py-5 bg-slate-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-600 shadow-xl transition-all">Finish Session</button>
-                    </div>
-                  ) : (
-                    <form onSubmit={handleAction} className="space-y-6">
-                       {isRegister && (
-                         <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
-                            <div className="grid grid-cols-2 gap-4">
-                               <div className="space-y-1">
-                                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Parent Name</label>
-                                  <input required type="text" value={parentName} onChange={(e) => setParentName(e.target.value)} placeholder="Full Name" className="w-full px-5 py-4 border-2 border-transparent focus:border-indigo-100 bg-slate-50 focus:bg-white rounded-2xl outline-none text-sm transition-all" />
-                               </div>
-                               <div className="space-y-1">
-                                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Student Name</label>
-                                  <input required type="text" value={childName} onChange={(e) => setChildName(e.target.value)} placeholder="Full Name" className="w-full px-5 py-4 border-2 border-transparent focus:border-indigo-100 bg-slate-50 focus:bg-white rounded-2xl outline-none text-sm transition-all" />
-                               </div>
-                            </div>
-                            <div className="space-y-1">
-                               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Grade Level</label>
-                               <select value={childGrade} onChange={(e) => setChildGrade(e.target.value)} className="w-full px-5 py-4 bg-slate-50 border-none outline-none rounded-2xl text-sm appearance-none">
-                                  <option>LKG</option> <option>UKG</option> <option>Class 1</option> <option>Class 2</option>
-                               </select>
-                            </div>
-                         </div>
-                       )}
-
-                       <div className="space-y-1">
-                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Communication Key (Email)</label>
-                          <div className="relative group">
-                             <Mail size={18} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-all" />
-                             <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="name@domain.com" className="w-full pl-14 pr-5 py-4 border-2 border-transparent focus:border-indigo-100 bg-slate-50 focus:bg-white rounded-2xl outline-none text-sm transition-all" />
-                          </div>
-                       </div>
-
-                       {!isRegister && (
-                         <div className="space-y-1 animate-in fade-in slide-in-from-top-4 duration-500">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Security Cipher (Password)</label>
-                            <div className="relative group">
-                               <Lock size={18} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-all" />
-                               <input required type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="w-full pl-14 pr-5 py-4 border-2 border-transparent focus:border-indigo-100 bg-slate-50 focus:bg-white rounded-2xl outline-none text-sm tracking-widest transition-all" />
-                            </div>
-                         </div>
-                       )}
-
-                       <button type="submit" disabled={isLoading} className="w-full py-5 bg-slate-900 text-white rounded-[1.5rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-xl hover:bg-indigo-600 transition-all">
-                          {isLoading ? 'Processing...' : (isRegister ? 'Submit Enrolment' : 'Authorize LogIn')}
-                       </button>
-
-                       <div className="pt-8 border-t border-slate-50 flex flex-col items-center gap-4">
-                          <div className="flex items-center gap-2">
-                             <span className="text-xs text-slate-400 font-medium">{isRegister ? 'Already an active user?' : 'Are you a new student?'}</span>
-                             <button type="button" onClick={() => setIsRegister(!isRegister)} className="text-xs font-black text-indigo-600 hover:text-indigo-800 uppercase tracking-widest transition-colors">
-                                {isRegister ? 'Sign In Now' : 'Enrol Here'}
-                             </button>
-                          </div>
-                       </div>
-                    </form>
+                  {!isRegister && (
+                    <button
+                      type="button"
+                      onClick={autofill}
+                      className="w-full py-3 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-none flex items-center justify-between border border-indigo-100 hover:border-indigo-200 transition-all group"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <Sparkles size={14} className="text-indigo-500" />
+                        <div className="text-left">
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 leading-none mb-0.5">Demo Mode</p>
+                          <p className="text-xs font-semibold text-indigo-700">Use {portal.label} credentials</p>
+                        </div>
+                      </div>
+                      <ChevronRight size={15} className="text-indigo-400 group-hover:translate-x-0.5 transition-transform" />
+                    </button>
                   )}
-               </div>
+                </form>
 
-               {/* ── SIDEBAR DEMO CREDENTIALS ── */}
-               <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} className="hidden lg:block w-[320px] space-y-6">
-                  <div className="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-xl relative overflow-hidden group">
-                     <div className="absolute top-0 left-0 w-1.5 h-full bg-slate-900" />
-                     <div className="flex items-center gap-3 mb-8">
-                        <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-indigo-600 shadow-inner">
-                           <Sparkles size={20} />
-                        </div>
-                        <div>
-                           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Demo Assistant</p>
-                           <h4 className="font-black text-slate-900">Auth Credentials</h4>
-                        </div>
-                     </div>
-                     
-                     <div className="space-y-4">
-                        <div 
-                          onClick={() => { setEmail(activePortalInfo?.creds.email || ''); setPassword(activePortalInfo?.creds.pass || ''); }}
-                          className="p-5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-indigo-500 hover:bg-indigo-50/30 cursor-pointer transition-all group/item"
-                        >
-                           <p className="text-[9px] font-black text-indigo-500 uppercase tracking-widest mb-3 leading-none">{activePortalInfo?.creds.label}</p>
-                           <div className="space-y-1.5">
-                              <div className="flex items-center justify-between">
-                                 <span className="text-xs font-bold text-slate-500">Login:</span>
-                                 <span className="text-xs font-black text-slate-900 font-mono tracking-tight">{activePortalInfo?.creds.email}</span>
-                              </div>
-                              <div className="flex items-center justify-between">
-                                 <span className="text-xs font-bold text-slate-500">Pass:</span>
-                                 <span className="text-xs font-black text-slate-900 font-mono tracking-tight">{activePortalInfo?.creds.pass}</span>
-                              </div>
-                           </div>
-                           <p className="mt-4 text-[9px] font-bold text-slate-300 uppercase italic text-center group-hover/item:text-indigo-400 transition-colors">Click to Auto-fill Form</p>
-                        </div>
+                {/* Footer Toggle */}
+                <p className="mt-6 text-center text-sm text-slate-500">
+                  {isRegister ? 'Prefer to sign in? ' : "Don't have an account? "}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newState = !isRegister;
+                      setIsRegister(newState);
+                      if (newState) setSelectedPortal('parent');
+                    }}
+                    className="font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
+                  >
+                    {isRegister ? 'Sign in' : 'Register as Parent'}
+                  </button>
+                </p>
 
-                        <div className="p-5 bg-slate-900 rounded-2xl text-white shadow-2xl relative overflow-hidden">
-                           <div className="relative z-10">
-                              <p className="text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-2 leading-none">Pro Tip</p>
-                              <p className="text-[11px] font-medium leading-relaxed opacity-80">Use the Enrol form to show how new parents are approved by the admin dashboard in real-time.</p>
-                           </div>
-                           <div className="absolute top-0 right-0 w-20 h-20 bg-white/5 rounded-full -mr-10 -mt-10" />
-                        </div>
-                     </div>
-                  </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
 
-                  <div className="flex items-center justify-center gap-2 text-slate-300 opacity-50">
-                     <ShieldCheck size={14} />
-                     <span className="text-[9px] font-black uppercase tracking-widest">Secured Demo Environment</span>
-                  </div>
-               </motion.div>
-
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Footer */}
+        <p className="mt-12 text-xs text-slate-400 text-center uppercase tracking-widest font-medium opacity-60">
+          © 2025 ZHI LearnAI · Singapore · <span className="text-indigo-600">v2.4.1</span>
+        </p>
       </div>
     </div>
   );

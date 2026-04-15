@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Users, 
   BookOpen, 
@@ -13,307 +13,666 @@ import {
   Settings,
   Trophy,
   History,
-  Lightbulb
+  Lightbulb,
+  Bell,
+  Search,
+  LayoutDashboard,
+  Calendar,
+  Activity,
+  Zap,
+  Target,
+  Sparkles,
+  ChevronRight,
+  MoreHorizontal,
+  Flame,
+  MessageSquare,
+  Award,
+  AlertCircle,
+  HelpCircle,
+  BarChart3,
+  Send,
+  DownloadCloud
 } from 'lucide-react';
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion';
 import { Link } from '@/i18n/routing';
 import { useData } from '@/context/DataContext';
+import { CATEGORIES as STATIC_CATEGORIES } from '@/constants/dashboardData';
 
-/* ─────────── 🔢 SUBTLE ANIMATED COUNTER ─────────── */
-const AnimatedCounter = ({ value, duration = 1.5 }: { value: number; duration?: number }) => {
+/* ──────────────────────────────────────────────────────────────────────────
+   ELITE HELPERS
+   ────────────────────────────────────────────────────────────────────────── */
+
+const AnimatedCounter = ({ value, duration = 2 }: { value: number; duration?: number }) => {
   const count = useMotionValue(0);
   const rounded = useTransform(count, (latest) => Math.round(latest));
-  const [displayValue, setDisplayValue] = React.useState(0);
+  const [displayValue, setDisplayValue] = useState(0);
 
-  React.useEffect(() => {
-    const controls = animate(count, value, { duration, ease: "easeOut" });
+  useEffect(() => {
+    const controls = animate(count, value, { duration, ease: [0.32, 0.72, 0, 1] });
     return rounded.on("change", (latest) => setDisplayValue(latest));
   }, [value, duration, count, rounded]);
 
-  return <span>{displayValue < 10 ? `0${displayValue}` : displayValue}</span>;
+  return <span>{displayValue}</span>;
 };
+
+/* ──────────────────────────────────────────────────────────────────────────
+   INTELLIGENT COMMAND CENTER (MULTI-TAB ARCHITECTURE)
+   ────────────────────────────────────────────────────────────────────────── */
 
 export default function ParentDashboard() {
   const { categories, lessons: allLessons } = useData();
+  const [mounted, setMounted] = useState(false);
+  const [activeTab, setActiveTab] = useState('Dashboard');
+  const [chatMessage, setChatMessage] = useState('');
 
-  // Dynamic metrics from shared context
+  useEffect(() => { setMounted(true); }, []);
+
+  // Performance calculations
   const totalLessons = Object.values(allLessons).flat().length;
   const completedLessons = Object.values(allLessons).flat().filter(l => l.status === 'completed').length;
-  const activeTopics = categories.length;
-  
-  const parentName = "Kumar";
-  const child = { name: "Rahul", class: "UKG", age: 5 };
+  const masteryPercentage = Math.round((completedLessons / totalLessons) * 100) || 0;
 
-  const recentActivity = [
-    { text: 'Completed "A for Apple" lesson', time: '2 hours ago', icon: '🍏', score: '100%' },
-    { text: 'Attempted Numbers Quiz', time: 'Yesterday', icon: '🔢', score: '2/3' },
-    { text: 'Watched "Baby Shark" rhyme', time: 'Yesterday', icon: '🦈', score: null },
-  ];
+  if (!mounted) return null;
 
-  const mainStats = [
-    { label: 'Lessons Finalized', value: completedLessons, total: `/ ${totalLessons}`, percent: (completedLessons / totalLessons) * 100 || 0, icon: BookOpen, color: 'bg-indigo-600', textColor: 'text-indigo-600', cardBg: 'bg-indigo-50/60', border: 'border-indigo-100' },
-    { label: 'Active Topics', value: activeTopics, total: ' areas', percent: 100, icon: TrendingUp, color: 'bg-slate-900', textColor: 'text-slate-900', cardBg: 'bg-slate-50/80', border: 'border-slate-100' },
-    { label: 'Neural Engagements', value: 12, total: ' actions', percent: 85, icon: CheckCircle2, color: 'bg-emerald-600', textColor: 'text-emerald-600', cardBg: 'bg-emerald-50/60', border: 'border-emerald-100' },
-  ];
+  const NavItem = ({ id, label, icon: Icon }: any) => (
+    <button 
+      onClick={() => setActiveTab(id)}
+      className={`flex flex-col items-center gap-1.5 px-4 py-2 transition-all relative ${activeTab === id ? 'text-blue-400' : 'text-slate-400 hover:text-white'}`}
+    >
+      <Icon size={22} className={activeTab === id ? 'scale-110' : ''} />
+      <span className="text-[9px] font-black uppercase tracking-widest leading-none">{label}</span>
+      {activeTab === id && <motion.div layoutId="active-nav-dot" className="absolute -bottom-1 w-1 h-1 bg-blue-500 rounded-full" />}
+    </button>
+  );
 
   return (
-    <div className="min-h-screen bg-[#FDFDFD] font-sans pb-24 text-slate-900">
-      {/* ─── PREMIUM NAVIGATION ─── */}
-      <nav className="bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-40 transition-all">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-slate-900 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-2xl rotate-3">ZI</div>
-            <div>
-              <span className="block font-black text-slate-900 tracking-tight text-lg leading-none">Parent Portal</span>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 block">ZHI LearnAI Ecosystem</span>
-            </div>
+    <div className="min-h-screen bg-[#F0F4F8] text-[#1E293B] selection:bg-blue-100 pb-32 lg:pb-0 font-['Plus_Jakarta_Sans',sans-serif]">
+      
+      {/* ─── SIDE NAVIGATION (DEEP INDIGO) ─── */}
+      <aside className="fixed left-0 top-0 h-full w-[260px] bg-[#1E1B4B] z-50 hidden xl:flex flex-col p-8 border-r border-white/5 shadow-2xl">
+        
+        {/* SIDEBAR BRANDING */}
+        <div className="flex items-center gap-4 mb-10 group cursor-default">
+          <div className="w-12 h-12 bg-white flex items-center justify-center border border-white shadow-lg shadow-black/10">
+            <img src="/assets/img/logo.png" alt="ZHI" className="w-8 h-8 object-contain" />
           </div>
-          <div className="flex items-center gap-3 sm:gap-6">
-            <button className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-slate-50 text-slate-600 font-bold text-xs hover:bg-slate-100 transition-all border border-slate-100">
-              <Settings size={14} /> <span className="hidden sm:inline">Settings</span>
-            </button>
-            <Link href="/" className="flex items-center gap-2 text-xs font-black text-rose-500 bg-rose-50 px-3 sm:px-4 py-2 rounded-xl hover:bg-rose-100 transition-all border border-rose-100 uppercase tracking-widest whitespace-nowrap">
-              <LogOut size={14} /> <span className="hidden sm:inline">Logout</span>
-            </Link>
+          <div className="flex flex-col leading-none">
+            <span className="font-black text-xl text-white tracking-tight">ZHI <span className="text-blue-400">LearnAI</span></span>
+            <span className="text-[9px] font-black uppercase tracking-[0.25em] text-white/40 mt-1.5 whitespace-nowrap">Learn While Playing</span>
           </div>
         </div>
-      </nav>
 
-      <div className="max-w-7xl mx-auto px-6 pt-10">
+        <nav className="flex-1 space-y-1.5">
+           {[
+             { id: 'Dashboard', icon: LayoutDashboard, label: 'Control Hub' },
+             { id: 'Quizzes', icon: BookOpen, label: 'Learning Logs' },
+             { id: 'Chatbot', icon: MessageSquare, label: 'AI Mentor' },
+             { id: 'Rewards', icon: Award, label: 'Achievements' },
+             { id: 'Profile', icon: Users, label: 'Master Profile' },
+           ].map((item) => (
+             <button 
+               key={item.label} 
+               onClick={() => setActiveTab(item.id)}
+               className={`w-full flex items-center gap-4 px-6 py-4 rounded-xl transition-all duration-300 group ${activeTab === item.id ? 'bg-blue-600 text-white shadow-[0_10px_30px_-5px_rgba(37,99,235,0.4)]' : 'text-slate-400 hover:bg-white/5 hover:text-white'}`}
+             >
+                <item.icon size={18} className={activeTab === item.id ? 'text-white' : 'group-hover:scale-110 transition-transform'} />
+                <span className="font-bold text-[13px] tracking-tight">{item.label}</span>
+             </button>
+           ))}
+        </nav>
+
+        <div className="mt-auto border-t border-white/5 pt-8">
+           <Link href="/login" className="flex items-center gap-4 px-6 py-4 rounded-xl text-slate-500 hover:text-rose-400 transition-all group">
+             <LogOut size={18} className="group-hover:translate-x-1 transition-transform" />
+             <span className="font-bold text-xs uppercase tracking-widest">Sign Out</span>
+           </Link>
+        </div>
+      </aside>
+
+      {/* ─── MAIN CONTENT ─── */}
+      <main className="xl:pl-[260px] min-h-screen relative overflow-hidden">
+        {/* MESH GRADIENT DECOR */}
+        <div className="absolute top-0 right-0 w-[800px] h-[600px] bg-[radial-gradient(circle_at_top_right,rgba(186,230,253,0.3),transparent_70%)] pointer-events-none" />
         
-        {/* ─── 1. REFINED PROFILE HEADER ─── */}
-        <header className="mb-12">
-          <motion.div 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 pb-10 border-b border-slate-100"
-          >
-            <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-[10px] font-black uppercase tracking-widest mb-4 border border-indigo-100">
-                <Users size={12} /> Parent Dashboard
+        {/* TOP COMMAND HEADER */}
+        <header className="h-[80px] px-6 lg:px-10 flex items-center justify-between sticky top-0 bg-white/70 backdrop-blur-2xl z-40 border-b border-slate-200/50 transition-all">
+           <div className="flex items-center gap-4">
+              {/* Mobile Brand Logo */}
+              <div className="xl:hidden flex items-center gap-3 cursor-pointer group">
+                 <div className="w-10 h-10 bg-white border border-slate-100 flex items-center justify-center shadow-sm">
+                    <img src="/assets/img/logo.png" alt="Zhi Logo" className="w-6 h-6 object-contain" />
+                 </div>
+                 <div className="flex flex-col leading-none">
+                    <span className="font-black text-[17px] tracking-tight text-slate-900 leading-none">
+                       ZHI <span className="text-blue-600">LearnAI</span>
+                    </span>
+                    <p className="text-[8px] font-black text-slate-400/80 uppercase tracking-widest mt-1">Nurturing Minds</p>
+                 </div>
               </div>
-              <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">
-                Greetings, {parentName} <span className="text-indigo-600">.</span>
-              </h1>
-              <p className="text-slate-500 font-medium text-lg leading-relaxed">
-                Review <span className="text-slate-900 font-bold underline decoration-indigo-400 decoration-4 underline-offset-4">{child.name}&apos;s</span> weekly performance and AI-driven learning insights.
-              </p>
-            </div>
-            
-            <div className="flex flex-wrap gap-4">
-               <div className="bg-white px-6 py-4 rounded-3xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md transition-shadow">
-                  <div className="w-12 h-12 bg-slate-900 rounded-2xl flex items-center justify-center text-white shadow-xl">
-                    <span className="text-xl">👦</span>
+
+              <div className="hidden sm:flex px-3 py-1.5 bg-emerald-50 rounded-lg border border-emerald-100 items-center gap-2 shadow-sm">
+                 <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.4)]" />
+                 <span className="text-[9px] font-black text-emerald-600 uppercase tracking-[0.2em] mt-0.5">Sync Active</span>
+              </div>
+           </div>
+
+           <div className="flex items-center gap-4 sm:gap-6">
+               <button className="hidden sm:flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-xl shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all group">
+                  <DownloadCloud size={14} className="text-blue-500 group-hover:scale-110 transition-transform" />
+                  <span className="text-[10px] font-black uppercase tracking-widest leading-none mt-0.5">Export</span>
+               </button>
+
+               <div className="h-5 w-[1px] bg-slate-200 hidden sm:block" />
+
+               <div className="flex items-center gap-3 cursor-pointer group">
+                  <div className="hidden sm:block text-right">
+                    <p className="text-[13px] font-black text-slate-800 leading-none group-hover:text-blue-600 transition-colors">Kumar V.</p>
+                    <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest mt-1">Lead Admin</p>
                   </div>
-                  <div>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Student</p>
-                    <p className="text-base font-black text-slate-900">{child.name}</p>
-                  </div>
-               </div>
-               <div className="bg-white px-6 py-4 rounded-3xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md transition-shadow">
-                  <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-xl">
-                    <Trophy size={20} />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Grade Level</p>
-                    <p className="text-base font-black text-slate-900">{child.class}</p>
+                  <div className="relative">
+                    <div className="w-10 h-10 bg-slate-900 rounded-[0.8rem] shadow-md flex items-center justify-center text-white font-black text-[11px] group-hover:scale-105 transition-transform border border-slate-800">KV</div>
+                    <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-white" />
                   </div>
                </div>
             </div>
-          </motion.div>
         </header>
 
-        {/* ─── 2. NEAT & PROFESSIONAL OVERVIEW CARDS ─── */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-20">
-           {mainStats.map((stat, i) => (
-             <motion.div 
-               key={i}
-               initial={{ opacity: 0, y: 15 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ delay: i * 0.1 }}
-               className={`${stat.cardBg} p-10 rounded-[2.5rem] border ${stat.border} shadow-[0_2px_10px_rgba(0,0,0,0.01)] hover:shadow-xl hover:bg-white transition-all duration-500 overflow-hidden group`}
-             >
-                <div className="flex justify-between items-start mb-10">
-                   <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${stat.textColor} bg-white shadow-sm transition-colors`}>
-                      <stat.icon size={22} />
-                   </div>
-                   <div className="text-right">
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Status</p>
-                      <div className="flex items-center gap-2 justify-end">
-                         <div className={`w-1.5 h-1.5 rounded-full ${stat.color} animate-pulse`} />
-                         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">Real-time</span>
-                      </div>
-                   </div>
-                </div>
-                
-                <div className="mb-8">
-                   <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.15em] mb-4">{stat.label}</p>
-                   <div className="flex items-baseline gap-2">
-                      <span className="text-5xl font-black text-slate-900 tracking-tighter">
-                         <AnimatedCounter value={stat.value} />
-                      </span>
-                      <span className="text-sm font-black text-slate-300 uppercase tracking-wide">{stat.total}</span>
-                   </div>
-                </div>
-
-                {/* Subtle Clean Bottom Progress */}
-                <div className="w-full bg-slate-50 h-1.5 rounded-full overflow-hidden">
-                   <motion.div 
-                     initial={{ width: 0 }}
-                     animate={{ width: `${stat.percent}%` }}
-                     transition={{ duration: 1.5, delay: 0.5 }}
-                     className={`h-full ${stat.color} rounded-full`}
-                   />
-                </div>
-             </motion.div>
-           ))}
+        <div className="p-4 sm:p-8 lg:p-10 max-w-[1400px] mx-auto min-h-[calc(100vh-80px)] pt-6 lg:pt-8 relative z-10">
+           <AnimatePresence mode="wait">
+              {activeTab === 'Dashboard' && <DashboardPanel key="dash" mP={masteryPercentage} cL={completedLessons} tL={totalLessons} categories={categories} />}
+              {activeTab === 'Quizzes' && <QuizPanel key="quiz" />}
+              {activeTab === 'Chatbot' && <ChatbotPanel key="chat" msg={chatMessage} sMsg={setChatMessage} />}
+              {activeTab === 'Rewards' && <RewardsPanel key="reward" />}
+              {activeTab === 'Profile' && <ProfilePanel key="profile" />}
+           </AnimatePresence>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-           
-           {/* LEFT COLUMN: PROGRESS & ACTIVITIES */}
-           <div className="lg:col-span-2 space-y-10">
-              
-              {/* ─── 3. DYNAMIC PROGRESS BARS ─── */}
-              <section>
-                 <div className="flex items-center justify-between mb-8">
-                    <div>
-                      <h2 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-3">
-                        <TrendingUp className="text-indigo-600" size={24} /> Learning Areas
-                      </h2>
-                      <p className="text-xs font-bold text-slate-400 mt-1 uppercase tracking-widest pl-9">Performance by category</p>
-                    </div>
-                 </div>
-                 <div className="bg-white p-10 rounded-[3rem] shadow-[0_15px_50px_-15px_rgba(0,0,0,0.05)] border border-slate-50 space-y-10">
-                    {categories.map((item, i) => (
-                      <div key={i} className="group">
-                        <div className="flex justify-between items-center mb-4">
-                           <div className="flex items-center gap-4">
-                              <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-xl shadow-inner group-hover:scale-110 transition-transform">
-                                 {/* Using a fallback emoji for icon since Category object might have component or id */}
-                                 {typeof item.icon === 'string' ? item.icon : '📚'}
-                              </div>
-                              <span className="font-black text-slate-800 uppercase tracking-widest text-xs">{item.title}</span>
-                           </div>
-                           <div className="flex items-center gap-1">
-                              <span className="font-black text-indigo-600 text-lg">{item.progress}</span>
-                              <span className="text-[10px] font-black text-slate-300 uppercase letter-spacing-widest mt-1">%</span>
-                           </div>
-                        </div>
-                        <div className="w-full bg-slate-50 h-[6px] rounded-full overflow-hidden">
-                           <motion.div 
-                             initial={{ width: 0 }}
-                             animate={{ width: `${item.progress}%` }}
-                             transition={{ duration: 1.5, ease: "circOut" }}
-                             className={`h-full ${item.color || 'bg-indigo-600'} rounded-full`}
-                           />
-                        </div>
-                      </div>
-                    ))}
-                 </div>
-              </section>
+      </main>
 
-              {/* ─── 4. REFINED RECENT ACTIVITY ─── */}
-              <section>
-                 <div className="flex items-center justify-between mb-8">
-                    <div>
-                      <h2 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-3">
-                        <History className="text-indigo-600" size={24} /> Neural Activity
-                      </h2>
-                      <p className="text-xs font-bold text-slate-400 mt-1 uppercase tracking-widest pl-9">Latest child interactions</p>
-                    </div>
-                 </div>
-                 <div className="bg-white rounded-[3rem] shadow-[0_15px_50px_-15px_rgba(0,0,0,0.05)] border border-slate-50 overflow-hidden">
-                    {recentActivity.map((act, i) => (
-                      <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-8 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-all cursor-pointer group gap-6">
-                         <div className="flex items-center gap-6 flex-1">
-                            <div className="w-14 h-14 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-3xl shadow-sm group-hover:shadow-md transition-all group-hover:-rotate-3 shrink-0">
-                               {act.icon}
-                            </div>
-                            <div>
-                               <p className="font-extrabold text-slate-800 text-lg leading-tight group-hover:text-indigo-600 transition-colors">{act.text}</p>
-                               <div className="flex flex-wrap items-center gap-4 mt-2">
-                                  <span className="text-[10px] text-slate-400 font-black flex items-center gap-1.5 bg-slate-50 px-3 py-1 rounded-full uppercase tracking-tighter">
-                                     <Clock size={12} className="text-slate-300" /> {act.time}
-                                  </span>
-                                  {act.score && (
-                                    <span className="text-[10px] bg-emerald-50 text-emerald-600 font-black px-3 py-1 rounded-full uppercase tracking-widest border border-emerald-100">
-                                       Accuracy: {act.score}
-                                    </span>
-                                  )}
-                               </div>
-                            </div>
-                         </div>
-                         <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-indigo-600 group-hover:text-white transition-all ml-auto">
-                            <ArrowRight size={16} />
-                         </div>
-                      </div>
-                    ))}
-                 </div>
-              </section>
-           </div>
+      {/* ─── MOBILE BOTTOM BAR ─── */}
+      <nav className="fixed bottom-0 inset-x-0 h-[85px] bg-[#1E1B4B] border-t border-white/5 z-[60] flex items-center justify-around px-2 xl:hidden shadow-[0_-15px_40px_rgba(0,0,0,0.4)] rounded-t-[2.5rem]">
+         <NavItem id="Dashboard" label="Hub" icon={LayoutDashboard} />
+         <NavItem id="Quizzes" label="Quizzes" icon={BookOpen} />
+         <NavItem id="Chatbot" label="Mentor" icon={MessageSquare} />
+         <NavItem id="Rewards" label="Game" icon={Award} />
+         <NavItem id="Profile" label="Profile" icon={Users} />
+      </nav>
 
-           {/* RIGHT COLUMN: INSIGHTS & NEXT STEPS */}
-           <div className="space-y-10">
-              
-              {/* ─── 5. REFINED AI INSIGHTS ─── */}
-              <section>
-                 <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-black text-slate-900 flex items-center gap-2 uppercase tracking-tight">
-                       <BrainCircuit className="text-indigo-600" /> AI Insights
-                    </h2>
-                 </div>
-                 <div className="bg-indigo-50/40 p-8 rounded-[3rem] border border-indigo-100 shadow-sm space-y-8">
-                    <div className="flex gap-5 group">
-                       <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-emerald-600 shrink-0 group-hover:scale-110 transition-transform shadow-sm">
-                          <CheckCircle2 size={20} />
-                       </div>
-                       <div>
-                          <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">Growth Detected</p>
-                          <p className="text-sm text-slate-700 leading-relaxed font-medium">
-                             {child.name} has shown exceptional growth in <span className="text-slate-900 font-bold underline decoration-emerald-200">the ecosystem</span>. Mastery of complex lessons is improving.
-                          </p>
-                       </div>
-                    </div>
-                    <div className="flex gap-5 group">
-                       <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-amber-600 shrink-0 group-hover:scale-110 transition-transform shadow-sm">
-                          <Lightbulb size={20} />
-                       </div>
-                       <div>
-                          <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-1">Observation</p>
-                          <p className="text-sm text-slate-700 leading-relaxed font-medium">
-                             Cognitive focus on <span className="text-slate-900 font-bold underline decoration-amber-200">New Content</span> requires attention. We recommend interactive counting daily.
-                          </p>
-                       </div>
-                    </div>
-                 </div>
-              </section>
-
-              {/* ─── 6. NEAT NEXT MILESTONES ─── */}
-              <section>
-                 <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-black text-slate-900 flex items-center gap-2 uppercase tracking-tight">
-                       <Trophy className="text-amber-500" /> Next Milestone
-                    </h2>
-                 </div>
-                 <div className="bg-slate-900 p-8 rounded-[3rem] shadow-2xl relative overflow-hidden text-white group">
-                    <div className="absolute inset-0 bg-indigo-500 opacity-0 group-hover:opacity-10 transition-opacity" />
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-3">Academic Roadmap</p>
-                    <h3 className="text-2xl font-black mb-3 flex items-center gap-3">
-                       <span className="text-3xl grayscale group-hover:grayscale-0 transition-all">🦁</span> {categories[3]?.title || "Animal Jungle"}
-                    </h3>
-                    <p className="text-xs text-slate-400 font-bold leading-relaxed mb-8 uppercase tracking-wide">
-                       Unlock after {categories[0]?.title || "Initial"} Mastery
-                    </p>
-                    <button className="w-full py-4 bg-white text-slate-900 hover:bg-indigo-50 rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] transition-all active:scale-95">
-                       Set Active Goal
-                    </button>
-                 </div>
-              </section>
-
-           </div>
-        </div>
-      </div>
     </div>
   );
 }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   SECTION PANELS
+   ────────────────────────────────────────────────────────────────────────── */
+
+const DashboardPanel = ({ mP, cL, tL, categories }: any) => (
+  <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="space-y-6 lg:space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8">
+         
+         {/* ─── HERO: THE COMMAND CENTER ─── */}
+         {/* ─── HERO: THE COMMAND CENTER ─── */}
+         <div className="lg:col-span-12 bg-gradient-to-br from-[#F4F7FF] via-white to-[#EEF2FF] rounded-3xl lg:rounded-[2.5rem] border border-indigo-100/60 shadow-[0_8px_30px_rgba(99,102,241,0.05)] overflow-hidden flex flex-col relative group">
+            {/* Soft Ambient Glow - Hidden on mobile to prevent overflow/overlap issues */}
+            <div className="hidden sm:block absolute top-0 left-0 w-[500px] h-[500px] bg-blue-400/5 blur-[120px] rounded-full pointer-events-none" />
+            <div className="hidden sm:block absolute bottom-0 right-0 w-[600px] h-[600px] bg-indigo-400/5 blur-[120px] rounded-full pointer-events-none" />
+            
+            <div className="flex flex-col lg:flex-row relative z-10 w-full overflow-hidden">
+               {/* Left Content Area */}
+               <div className="p-6 sm:p-8 lg:p-12 lg:pr-8 flex-1 flex flex-col justify-center">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-indigo-100 shadow-sm rounded-lg w-max mb-5 lg:mb-6">
+                     <Activity size={14} className="text-indigo-600 shrink-0" />
+                     <span className="text-[9px] lg:text-[10px] font-black uppercase tracking-widest text-indigo-700">Live Cognitive Feed</span>
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-800 tracking-tight leading-[1.15] max-w-xl">
+                     Rahul is outperforming <br className="hidden sm:block" />
+                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">82% of global peers</span>
+                  </h2>
+                  <p className="mt-4 text-slate-500 font-medium text-xs sm:text-sm lg:text-base max-w-md leading-relaxed">
+                     His vocabulary mastery and adaptive learning modules are showing exceptional compounding growth over the last 48 hours.
+                  </p>
+               </div>
+               
+               {/* Right Section - Sleek Stacked Insights */}
+               <div className="w-full lg:w-[45%] flex flex-col items-center justify-center p-8 lg:p-12 border-t lg:border-t-0 shrink-0 relative overflow-hidden bg-gradient-to-bl from-indigo-50/30 to-transparent">
+                  <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-100/40 blur-[80px] rounded-full pointer-events-none -mr-20 -mt-20" />
+                  
+                  <div className="flex flex-col gap-3 w-full max-w-[340px] relative z-10">
+                     {/* Insight Card 1 */}
+                     <div className="bg-white rounded-[1.25rem] p-4 sm:p-5 border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] flex items-center justify-between transition-transform hover:-translate-y-1">
+                        <div className="flex items-center gap-4 relative">
+                           <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                              <Zap size={18} className="sm:w-5 sm:h-5" />
+                           </div>
+                           <div>
+                              <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Focus State</p>
+                              <p className="text-sm border-b-2 border-transparent hover:border-slate-800 transition-colors sm:text-[15px] font-black text-slate-800 leading-none">Hyper-Engaged</p>
+                           </div>
+                        </div>
+                        <span className="text-[10px] sm:text-xs font-black text-emerald-600 bg-emerald-50 border border-emerald-100 px-2.5 py-1 rounded-lg">+14%</span>
+                     </div>
+
+                     {/* Insight Card 2 (Slightly offset) */}
+                     <div className="bg-white rounded-[1.25rem] p-4 sm:p-5 border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] flex items-center justify-between transition-transform hover:-translate-y-1 lg:-ml-6 relative z-10">
+                        <div className="flex items-center gap-4">
+                           <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center shrink-0">
+                              <BrainCircuit size={18} className="sm:w-5 sm:h-5" />
+                           </div>
+                           <div>
+                              <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Cognitive Load</p>
+                              <p className="text-sm border-b-2 border-transparent hover:border-slate-800 transition-colors sm:text-[15px] font-black text-slate-800 leading-none">Optimal Range</p>
+                           </div>
+                        </div>
+                        <span className="text-[10px] sm:text-xs font-black text-blue-600 bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-lg">Stable</span>
+                     </div>
+
+                     {/* Insight Card 3 (Premium Indicator) */}
+                     <div className="bg-slate-900 rounded-[1.25rem] p-4 sm:p-5 shadow-[0_8px_20px_rgba(15,23,42,0.15)] flex items-center justify-between transition-transform hover:-translate-y-1 mt-1 sm:mt-2">
+                        <div className="flex items-center gap-4">
+                           <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/10 text-white border border-white/10 flex items-center justify-center shrink-0">
+                              <TrendingUp size={18} className="sm:w-5 sm:h-5" />
+                           </div>
+                           <div>
+                              <p className="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Peer Ranking</p>
+                              <p className="text-sm sm:text-[15px] font-black text-white leading-none tracking-wide">Top 15th Percentile</p>
+                           </div>
+                        </div>
+                        <div className="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_12px_rgba(52,211,153,0.8)]" />
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            {/* Bottom Unified Stats Row */}
+            <div className="grid grid-cols-2 md:grid-cols-4 border-t border-indigo-100/50 bg-white/50 backdrop-blur-md relative z-10">
+               {[
+                 { l: 'Validated Tasks', v: '112', i: Zap, c: 'text-blue-500', bg: 'bg-blue-50 shadow-inner' },
+                 { l: 'Adaptive Level', v: '12', i: Award, c: 'text-indigo-500', bg: 'bg-indigo-50 shadow-inner' },
+                 { l: 'Deep Focus', v: '2.4h', i: Clock, c: 'text-emerald-500', bg: 'bg-emerald-50 shadow-inner' },
+                 { l: 'Mastery Index', v: `${mP}%`, i: TrendingUp, c: 'text-violet-500', bg: 'bg-violet-50 shadow-inner' },
+               ].map((s, idx) => (
+                 <div key={idx} className={`p-4 sm:p-5 lg:p-6 flex flex-col md:flex-row items-center md:items-start gap-3 md:gap-4 hover:bg-white/80 transition-colors ${idx % 2 !== 0 ? 'border-l border-indigo-50/50' : ''} ${idx >= 2 ? 'border-t md:border-t-0 border-indigo-50/50' : ''} ${idx > 0 && idx !== 1 ? 'md:border-l md:border-indigo-50/50' : ''}`}>
+                    <div className={`w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-xl ${s.bg} flex items-center justify-center`}>
+                        <s.i size={18} className={`md:w-5 md:h-5 ${s.c}`} />
+                    </div>
+                    <div className="text-center md:text-left mt-1 md:mt-0">
+                       <p className="text-xl md:text-2xl font-black text-slate-800 leading-none mb-1 md:mb-1.5">{s.v}</p>
+                       <p className="text-[8px] md:text-[9px] font-bold uppercase text-slate-500 tracking-widest leading-none text-balance">{s.l}</p>
+                    </div>
+                 </div>
+               ))}
+            </div>
+         </div>
+      </div>
+
+      {/* ─── CURRICULUM GRID: THE COLOR UNIT */}
+      <div className="bg-white/70 backdrop-blur-xl rounded-[2.5rem] border border-white/50 p-8 lg:p-12 shadow-[0_8px_30px_rgba(0,0,0,0.02)]">
+         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-4">
+            <div>
+               <h3 className="text-2xl lg:text-3xl font-black text-slate-800 tracking-tight leading-none mb-3">Intelligence Domain</h3>
+               <p className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] leading-none">Real-time mastery status monitoring</p>
+            </div>
+            <div className="inline-flex items-center gap-3 bg-white border border-slate-100 px-4 py-2.5 rounded-xl shadow-sm">
+               <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-ping" />
+               <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest">Active Sync</span>
+            </div>
+         </div>
+
+         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+            {categories.map((cat: any, i: any) => {
+              const themes = [
+                { bg: 'bg-blue-50', iconBg: 'bg-blue-600', text: 'text-blue-600', barOut: 'bg-blue-100/50' },
+                { bg: 'bg-emerald-50', iconBg: 'bg-emerald-500', text: 'text-emerald-600', barOut: 'bg-emerald-100/50' },
+                { bg: 'bg-amber-50', iconBg: 'bg-amber-500', text: 'text-amber-600', barOut: 'bg-amber-100/50' },
+                { bg: 'bg-rose-50', iconBg: 'bg-rose-500', text: 'text-rose-600', barOut: 'bg-rose-100/50' },
+              ];
+              const theme = themes[i % themes.length];
+              const staticCat = STATIC_CATEGORIES.find(sc => sc.id === cat.id);
+              const IconComp = staticCat?.icon || HelpCircle;
+
+              return (
+                <div key={i} className="bg-white p-6 lg:p-8 rounded-[2rem] border border-slate-100 shadow-sm transition-all hover:shadow-xl hover:shadow-slate-200/50 hover:-translate-y-1 relative overflow-hidden group cursor-default">
+                   {/* Decorative soft glow */}
+                   <div className={`absolute -right-8 -top-8 w-32 h-32 ${theme.bg} rounded-full opacity-60 blur-3xl transition-transform group-hover:scale-150`} />
+
+                   <div className="flex justify-between items-center mb-6 relative z-10 w-full">
+                      <div className={`w-12 h-12 lg:w-14 lg:h-14 shrink-0 ${theme.bg} ${theme.text} rounded-2xl flex items-center justify-center text-2xl lg:text-3xl shadow-sm border border-white/50 transition-transform group-hover:rotate-[8deg]`}>
+                         {typeof IconComp === 'string' ? IconComp : React.createElement(IconComp, { size: 24, strokeWidth: 2.5 })}
+                      </div>
+                      <div className="text-right flex flex-col items-end">
+                         <span className="text-3xl lg:text-4xl font-black text-slate-800 tracking-tighter leading-none">{cat.progress}<span className={`text-lg lg:text-xl align-top ${theme.text}`}>%</span></span>
+                      </div>
+                   </div>
+
+                   <div className="relative z-10">
+                      <h5 className="font-black text-slate-800 uppercase text-[11px] lg:text-xs tracking-widest mb-1.5">{cat.title}</h5>
+                      <div className="flex justify-between items-center mb-4">
+                         <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                            {cat.progress === 0 ? 'Waitlisted' : 'High Accuracy'}
+                         </p>
+                         {cat.progress > 0 && <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded-md ${theme.bg} ${theme.text}`}>Active</span>}
+                      </div>
+
+                      <div className={`h-2.5 w-full ${theme.barOut} rounded-full overflow-hidden`}>
+                         <motion.div 
+                           initial={{ width: 0 }} 
+                           whileInView={{ width: `${cat.progress}%` }} 
+                           transition={{ duration: 1.5, ease: "easeOut" }}
+                           className={`h-full ${theme.iconBg} rounded-full`} 
+                         />
+                      </div>
+                   </div>
+                </div>
+              );
+            })}
+         </div>
+      </div>
+
+      {/* ─── GROWTH UNIT: THE ELITE BANNER */}
+      <div className="bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-[2.5rem] border border-indigo-100/50 p-8 lg:p-14 text-slate-900 relative overflow-hidden shadow-sm group">
+         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/40 blur-[120px] -mr-48 -mt-48 rounded-full pointer-events-none" />
+         <div className="relative z-10 flex flex-col lg:flex-row gap-12 items-center justify-between">
+            <div className="space-y-6 lg:space-y-8 text-center lg:text-left">
+               <div className="inline-flex items-center gap-3 px-4 py-2 bg-white rounded-xl border border-indigo-100 shadow-sm">
+                  <Sparkles size={16} className="text-blue-500" />
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-600">Parental Strategy Insight</span>
+               </div>
+               <h3 className="text-3xl lg:text-5xl font-black tracking-tight leading-[1.15] mb-4 text-slate-800">
+                  Empower Rahul's curiosity <br className="hidden lg:block"/> with AI-driven evaluators.
+               </h3>
+               <p className="text-slate-500 text-sm lg:text-base font-medium max-w-sm mx-auto lg:mx-0 leading-relaxed italic">
+                  Animals recognition engagement hit an all-time high of 92% yesterday. Ready to unlock the expert module?
+               </p>
+               <button className="px-10 py-4 lg:py-5 bg-slate-900 text-white rounded-2xl font-black uppercase text-[11px] lg:text-[12px] tracking-widest hover:bg-blue-600 transition-all shadow-md flex items-center gap-4 mx-auto lg:mx-0 subgroup">
+                  Access Evaluator Kit <ArrowRight size={20} className="subgroup-hover:translate-x-2 transition-transform" />
+               </button>
+            </div>
+            <div className="grid grid-cols-2 gap-4 shrink-0 w-full lg:w-auto mt-6 lg:mt-0">
+               {[ 
+                 {v:'2.4h', l:'Avg Use', c:'bg-white'}, 
+                 {v:'+40%', l:'Surge', c:'bg-emerald-50 border-emerald-100'}, 
+                 {v:'64', l:'Tokens', c:'bg-white'}, 
+                 {v:'Elite', l:'Status', c:'bg-blue-50 border-blue-100'} 
+               ].map((s,i) => (
+                  <div key={i} className={`p-6 lg:p-8 rounded-[2rem] text-center border ${s.c.includes('border') ? s.c.split(' ')[1] : 'border-slate-100'} ${s.c.split(' ')[0]} min-w-[140px] lg:min-w-[150px] shadow-sm transition-transform hover:-translate-y-1`}>
+                     <p className="text-3xl lg:text-4xl font-black mb-1 leading-none text-slate-800">{s.v}</p>
+                     <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-2">{s.l}</p>
+                  </div>
+               ))}
+            </div>
+         </div>
+      </div>
+  </motion.div>
+);
+
+const QuizPanel = () => (
+  <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6 lg:space-y-8 text-center sm:text-left">
+      <div className="flex flex-col sm:flex-row justify-between items-center bg-white p-8 lg:p-10 rounded-[2.5rem] border border-slate-200/50 shadow-xl gap-6">
+         <div className="space-y-2">
+            <h2 className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-none mb-2 italic">Diagnostic Intelligence</h2>
+            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.3em]">Module-by-module behavioral audit logs</p>
+         </div>
+         <div className="flex items-center gap-3">
+            <div className="px-6 py-4 bg-rose-50 border border-rose-200 text-rose-600 rounded-2xl text-[11px] font-black uppercase tracking-widest flex items-center gap-3 shadow-sm ring-4 ring-rose-50/50">
+               <AlertCircle size={18} /> Critical Flags: 02
+            </div>
+         </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+         <div className="lg:col-span-8 bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden">
+            <div className="px-10 py-7 border-b border-slate-50 bg-slate-50 flex items-center justify-between">
+               <span className="text-[11px] font-black uppercase text-slate-500 tracking-widest italic">Performance Datastream</span>
+               <span className="text-[14px] font-black text-blue-600 bg-blue-50 px-4 py-1.5 rounded-xl uppercase shadow-sm">3 Active Logs</span>
+            </div>
+            {[
+              { t: 'Numbers Unit', s: '3/3', c: 'text-emerald-500', bg: 'bg-emerald-50', i: '🔢', m: 'Concentration Peak Detected' },
+              { t: 'Colors & Shapes', s: '1/4', c: 'text-rose-500', bg: 'bg-rose-50', i: '🎨', m: 'Pattern Recognition Failure' },
+              { t: 'Animals Safari', s: '5/5', c: 'text-indigo-500', bg: 'bg-indigo-50', i: '🦁', m: 'High Success Consistency' },
+            ].map((q,idx) => (
+               <div key={idx} className="flex items-center justify-between p-8 lg:p-10 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-all cursor-pointer group">
+                  <div className="flex items-center gap-8">
+                     <div className="w-16 h-16 bg-white border border-slate-200/50 shadow-md rounded-[1.5rem] flex items-center justify-center text-4xl group-hover:rotate-12 transition-transform">{q.i}</div>
+                     <div>
+                        <h4 className="font-extrabold text-slate-800 text-xl leading-tight mb-2 italic">{q.t}</h4>
+                        <div className="flex items-center gap-2.5">
+                           <div className={`w-2 h-2 rounded-full ${q.c.replace('text', 'bg')}`} />
+                           <p className={`text-[10px] font-black uppercase tracking-wide opacity-80 ${q.c}`}>{q.m}</p>
+                        </div>
+                     </div>
+                  </div>
+                  <div className="text-right">
+                     <p className="text-4xl font-black text-slate-900 tracking-tighter tabular-nums leading-none mb-2">{q.s}</p>
+                     <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest opacity-60">Verified Accuracy</p>
+                  </div>
+               </div>
+            ))}
+         </div>
+         <div className="lg:col-span-4 space-y-6 lg:space-y-8 flex flex-col justify-between">
+            <div className="bg-gradient-to-br from-rose-50/50 to-white p-8 lg:p-10 rounded-[2.5rem] border border-rose-100/60 shadow-sm relative overflow-hidden group flex-1">
+               <div className="absolute top-0 right-0 w-32 h-32 bg-rose-200/20 blur-2xl rounded-full -mr-10 -mt-10 pointer-events-none" />
+               <div className="flex items-center gap-4 mb-6 relative z-10">
+                   <div className="w-12 h-12 bg-white text-rose-600 rounded-2xl flex items-center justify-center shadow-sm border border-rose-100 shrink-0"><AlertCircle size={22} strokeWidth={2.5} /></div>
+                   <h3 className="text-xl lg:text-2xl font-black text-rose-950 tracking-tight leading-none">Diagnostic Alert</h3>
+               </div>
+               <p className="text-[13px] lg:text-[14px] font-medium text-slate-600 leading-relaxed mb-8 relative z-10">
+                  Cognitive mapping indicates a structural struggle with <span className="text-rose-600 font-bold bg-rose-50 px-1.5 py-0.5 rounded-md">Secondary Colors</span>. We recommend an immediate intervention kit today.
+               </p>
+               <button className="w-full py-4 bg-rose-600 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-md hover:bg-rose-700 transition-all relative z-10">Initiate Evaluation Kit</button>
+            </div>
+            
+            <div className="bg-white p-8 lg:p-10 rounded-[2.5rem] border border-slate-200/60 shadow-sm flex flex-col justify-center relative overflow-hidden group hover:border-blue-200 transition-colors cursor-pointer lg:min-h-[160px]">
+               <div className="absolute right-0 bottom-0 w-40 h-40 bg-slate-50 rounded-full blur-3xl -mb-10 -mr-10 group-hover:bg-blue-50 transition-colors pointer-events-none" />
+               <div className="relative z-10 flex justify-between items-center w-full">
+                  <div>
+                    <h4 className="text-lg lg:text-xl font-black text-slate-800 tracking-tight leading-none mb-3">Diagnostic Archive</h4>
+                    <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest leading-none">30 Day Behavioral Access</p>
+                  </div>
+                  <div className="w-12 h-12 bg-slate-50 text-slate-400 rounded-2xl flex items-center justify-center border border-slate-100 shadow-sm group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-500 transition-all shrink-0">
+                     <ChevronRight size={20} strokeWidth={2.5} />
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+  </motion.div>
+);
+
+const ChatbotPanel = ({ msg, sMsg }: any) => (
+  <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="h-full max-w-3xl mx-auto bg-white rounded-3xl lg:rounded-[3rem] shadow-2xl border border-slate-200/50 overflow-hidden flex flex-col">
+      <div className="p-5 sm:p-8 bg-gradient-to-r from-indigo-900 via-indigo-800 to-indigo-700 text-white flex items-center justify-between shadow-lg">
+         <div className="flex items-center gap-4 sm:gap-5 w-full">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white/10 rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-xl border border-white/20 shadow-xl transition-transform hover:scale-105 shrink-0">
+               <BrainCircuit size={24} className="sm:w-7 sm:h-7" />
+            </div>
+            <div className="flex-1 min-w-0">
+               <h2 className="text-xl sm:text-2xl font-black tracking-tight leading-none italic truncate">Smart Mentor Hub</h2>
+               <div className="text-[9px] sm:text-[10px] font-black text-blue-200/80 uppercase tracking-widest mt-1.5 sm:mt-2 flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.5)] shrink-0" />
+                  <span className="truncate">Datastream Analysis Mode</span>
+               </div>
+            </div>
+         </div>
+         <button className="hidden sm:block p-3.5 bg-white/10 rounded-2xl hover:bg-white/20 transition-all border border-white/10 backdrop-blur-md shadow-inner shrink-0 ml-4">
+            <MoreHorizontal size={24} />
+         </button>
+      </div>
+      <div className="flex-1 p-5 sm:p-8 lg:p-10 space-y-6 sm:space-y-8 min-h-[450px] sm:min-h-[500px] bg-slate-50/30 overflow-y-auto">
+         <div className="flex gap-3 sm:gap-6">
+            <div className="w-8 h-8 sm:w-11 sm:h-11 bg-indigo-600 text-white rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 shadow-lg transition-transform hover:rotate-12 mt-1 sm:mt-0">
+               <Zap size={14} className="sm:w-5 sm:h-5" fill="currentColor" />
+            </div>
+            <div className="max-w-[90%] sm:max-w-[85%] bg-white p-5 sm:p-6 rounded-2xl sm:rounded-[1.8rem] border border-slate-100 shadow-[0_8px_20px_rgba(0,0,0,0.03)] relative">
+               <div className="hidden sm:block absolute top-6 -left-2 w-4 h-4 bg-white rotate-45 border-l border-b border-slate-100" />
+               <p className="text-[13px] sm:text-[15px] font-black text-slate-800 leading-relaxed italic">
+                  Systems Ready, Kumar. I have parsed 112 activity logs for Rahul today. Behavioral accuracy has surged by 15.4% in current units. 
+                  What evaluation would you like to review?
+               </p>
+            </div>
+         </div>
+         
+         <div className="flex flex-wrap gap-2.5 pt-4 sm:pt-6 sm:pl-1">
+            {["Analyze Cognitive Gaps", "Efficiency Surge Log", "Unit Performance", "Activity History"].map(q => (
+               <button key={q} className="px-4 py-3 sm:px-6 sm:py-4 bg-white border border-slate-200 rounded-xl sm:rounded-2xl text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-500 hover:border-indigo-600 hover:text-indigo-600 hover:bg-indigo-50 transition-all shadow-sm hover:shadow-md cursor-pointer hover:-translate-y-0.5 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-indigo-100">
+                  {q}
+               </button>
+            ))}
+         </div>
+      </div>
+      <div className="p-4 sm:p-6 lg:p-8 bg-white border-t border-slate-100 flex items-center gap-3 sm:gap-5">
+         <input 
+           type="text" 
+           value={msg} 
+           onChange={(e)=>sMsg(e.target.value)} 
+           placeholder="Query Strategic Intelligence..." 
+           className="flex-1 px-5 py-4 sm:px-8 sm:py-5 bg-slate-50 rounded-2xl sm:rounded-[1.8rem] text-xs sm:text-[14px] font-black outline-none focus:ring-4 sm:focus:ring-8 focus:ring-indigo-50 border-2 border-transparent focus:border-indigo-100 transition-all shadow-inner italic placeholder-slate-400" 
+         />
+         <button className="w-12 h-12 sm:w-16 sm:h-[64px] bg-indigo-600 text-white rounded-xl sm:rounded-[1.5rem] flex items-center justify-center shadow-lg hover:bg-slate-900 active:scale-95 transition-all group shrink-0 focus:outline-none focus:ring-4 focus:ring-indigo-200">
+            <Send size={18} className="sm:w-6 sm:h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+         </button>
+      </div>
+  </motion.div>
+);
+
+const RewardsPanel = () => (
+  <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 lg:space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8">
+         <div className="lg:col-span-4 bg-gradient-to-br from-orange-400 to-rose-600 text-white p-8 sm:p-12 lg:p-12 rounded-3xl lg:rounded-[3rem] text-center space-y-6 sm:space-y-8 shadow-[0_30px_70px_-15px_rgba(251,146,60,0.5)] relative overflow-hidden group">
+            <div className="absolute top-0 left-0 p-4 opacity-10 group-hover:scale-125 transition-transform"><Sparkles size={160} className="sm:w-[220px] sm:h-[220px]" /></div>
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/20 rounded-2xl sm:rounded-[2rem] mx-auto flex items-center justify-center backdrop-blur shadow-2xl border border-white/20 transition-transform group-hover:rotate-12">
+               <Flame size={32} className="sm:w-10 sm:h-10" />
+            </div>
+            <div>
+               <h3 className="text-3xl sm:text-4xl font-black tracking-tighter mb-3 italic">5 <span className="text-xs sm:text-sm font-bold opacity-90 uppercase tracking-widest block mt-1">Active Streak</span></h3>
+               <div className="bg-black/20 px-4 py-2 sm:px-6 sm:py-2.5 rounded-xl sm:rounded-2xl inline-flex items-center gap-2 sm:gap-3 border border-white/10 backdrop-blur-md">
+                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse shadow-sm" />
+                  <p className="text-[9px] sm:text-[11px] font-black uppercase tracking-[0.25em] sm:tracking-[0.3em] text-white/90">Institutional Elite</p>
+               </div>
+            </div>
+            <div className="pt-6 sm:pt-8 border-t border-white/20 text-[10px] sm:text-[11px] font-bold italic opacity-80 leading-relaxed max-w-[200px] sm:max-w-[240px] mx-auto">
+               Rahul's engagement range is within the top 05th percentile of global activity.
+            </div>
+         </div>
+         
+         <div className="lg:col-span-8 bg-white p-6 sm:p-10 lg:p-12 rounded-3xl lg:rounded-[3rem] border border-slate-100 shadow-sm relative overflow-hidden flex flex-col justify-between group">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 sm:mb-12 lg:mb-16 gap-4 sm:gap-6">
+               <div>
+                  <h2 className="text-lg sm:text-xl lg:text-2xl font-black text-slate-900 tracking-tight leading-none mb-2 sm:mb-3">Impact Achievements</h2>
+                  <p className="text-[9px] sm:text-[10px] lg:text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] sm:tracking-[0.3em] leading-relaxed">Milestones verified via adaptive evaluators</p>
+               </div>
+               <div className="bg-indigo-50 text-indigo-700 px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-xl sm:rounded-2xl text-[10px] sm:text-[12px] font-black uppercase tracking-widest border border-indigo-100 shadow-sm shadow-indigo-100 shrink-0">Units Unlocked: 06</div>
+            </div>
+            
+            <div className="grid grid-cols-2 min-[400px]:grid-cols-3 sm:grid-cols-6 gap-6 sm:gap-4 lg:gap-8 items-start">
+               {[
+                 { i: '🏆', l: 'Top Point', c: 'bg-yellow-50 border-yellow-100', t: 'text-yellow-600' },
+                 { i: '🔥', l: 'Loyalist', c: 'bg-orange-50 border-orange-100', t: 'text-orange-600' },
+                 { i: '🧠', l: 'Logic Unit', c: 'bg-blue-50 border-blue-100', t: 'text-blue-600' },
+                 { i: '🎨', l: 'Art Engine', c: 'bg-purple-50 border-purple-100', t: 'text-purple-600' },
+                 { i: '🦁', l: 'Safari Lead', c: 'bg-emerald-50 border-emerald-100', t: 'text-emerald-600' },
+                 { i: '💎', l: 'System MVP', c: 'bg-indigo-50 border-indigo-100', t: 'text-indigo-600' }
+               ].map((b,i) => (
+                  <div key={i} className="flex flex-col items-center gap-3 sm:gap-4 lg:gap-5 group cursor-pointer">
+                     <div className={`w-16 h-16 sm:w-14 sm:h-14 lg:w-20 lg:h-20 ${b.c} border rounded-2xl lg:rounded-[1.8rem] flex items-center justify-center text-3xl sm:text-2xl lg:text-4xl shadow-sm transition-all group-hover:scale-110 group-hover:shadow-[0_10px_20px_rgba(0,0,0,0.05)]`}>{b.i}</div>
+                     <p className={`text-[9px] sm:text-[8px] lg:text-[10px] font-black uppercase tracking-widest text-center leading-tight ${b.t} transition-transform group-hover:translate-y-0.5`}>{b.l}</p>
+                  </div>
+               ))}
+            </div>
+         </div>
+      </div>
+      
+      <div className="bg-gradient-to-tr from-[#F8FAFF] via-indigo-50/50 to-white p-8 sm:p-12 lg:p-16 rounded-3xl lg:rounded-[3rem] border border-indigo-100/60 shadow-sm relative overflow-hidden group">
+         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-100/50 blur-[100px] rounded-full pointer-events-none -mr-48 -mt-48" />
+         
+         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-16 items-center">
+            <div className="text-center lg:text-left space-y-6 sm:space-y-8">
+               <h4 className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-800 uppercase tracking-tight leading-tight">Objective Path: <br className="hidden lg:block"/> Alphabet Architect</h4>
+               <p className="text-indigo-600 text-[10px] sm:text-[11px] lg:text-[12px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] leading-relaxed">Verification: 07/10 Vowel Units Complete</p>
+               <div className="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start">
+                  <button className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-4 bg-slate-900 text-white rounded-2xl font-black uppercase text-[10px] sm:text-[11px] tracking-widest hover:bg-indigo-600 hover:scale-[1.02] active:scale-95 transition-all shadow-md">Deploy Goal Analysis</button>
+                  <p className="text-slate-500 text-[10px] sm:text-[11px] font-bold italic max-w-[200px] text-center sm:text-left">Automated evaluation path enabled for this unit.</p>
+               </div>
+            </div>
+            <div className="flex flex-col items-center lg:items-end mt-4 lg:mt-0">
+               <div className="flex items-center gap-4 sm:gap-6 mb-6 sm:mb-8 text-slate-800 transition-transform hover:scale-105">
+                  <div className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter opacity-80 leading-none">70</div>
+                   <div className="text-2xl sm:text-3xl font-black text-indigo-600 leading-none">%</div>
+               </div>
+               <div className="relative w-full max-w-sm lg:max-w-md h-3 bg-indigo-100/50 rounded-full overflow-hidden shadow-inner border border-indigo-50">
+                  <motion.div 
+                    initial={{ width: 0 }} 
+                    whileInView={{ width: '70%' }} 
+                    transition={{ duration: 2.5, ease: "circOut" }}
+                    className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full shadow-sm relative"
+                  />
+               </div>
+               <p className="text-[9px] sm:text-[10px] font-black text-indigo-500 mt-4 sm:mt-5 uppercase tracking-[0.3em] sm:tracking-[0.4em] italic text-center lg:text-right">Unit Progress Integrity: 100%</p>
+            </div>
+         </div>
+      </div>
+  </motion.div>
+);
+
+const ProfilePanel = () => (
+  <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 lg:space-y-8">
+     {/* Parent Account Details */}
+     <div className="bg-white rounded-3xl lg:rounded-[3rem] p-6 sm:p-10 lg:p-12 shadow-sm border border-slate-100 flex flex-col lg:flex-row gap-8 lg:gap-14 items-center lg:items-start group">
+        <div className="w-28 h-28 sm:w-36 sm:h-36 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-[2rem] flex items-center justify-center text-white text-4xl sm:text-5xl font-black shadow-lg shadow-indigo-200 shrink-0 transform transition-transform group-hover:scale-105 border-4 border-white">KV</div>
+        <div className="flex-1 text-center lg:text-left space-y-4 sm:space-y-5 lg:space-y-6">
+           <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest mb-3 border border-indigo-100 shadow-sm">
+                 Lead Administrator
+              </div>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-none italic">Kumar V.</h2>
+              <p className="text-sm sm:text-base font-bold text-slate-400 mt-2">kumar.v@email.com • +91 98765 43210</p>
+           </div>
+           
+           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-slate-100">
+              <div className="flex flex-col">
+                 <span className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">Account Priority</span>
+                 <span className="text-slate-800 font-bold text-sm sm:text-base">Premium Tier</span>
+              </div>
+              <div className="w-[1px] h-8 bg-slate-200 hidden sm:block" />
+              <div className="flex flex-col">
+                 <span className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">Member Since</span>
+                 <span className="text-slate-800 font-bold text-sm sm:text-base">Jan 2024</span>
+              </div>
+              <div className="w-[1px] h-8 bg-slate-200 hidden sm:block" />
+              <button className="w-full sm:w-auto px-6 py-3 bg-slate-50 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-200 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all mt-2 sm:mt-0 shadow-sm hover:shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-50">
+                 Edit Details
+              </button>
+           </div>
+        </div>
+     </div>
+
+     {/* Student Target Link */}
+     <div className="bg-gradient-to-br from-indigo-50/80 to-blue-50/40 rounded-3xl lg:rounded-[3rem] p-6 sm:p-10 lg:p-12 shadow-sm border border-indigo-100 relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-white/50 blur-[80px] rounded-full pointer-events-none -mr-32 -mt-32" />
+        <div className="relative z-10 flex flex-col lg:flex-row gap-8 sm:gap-10 items-center justify-between">
+           <div className="flex items-center gap-6 sm:gap-8 flex-col sm:flex-row text-center sm:text-left">
+              <div className="w-20 h-20 sm:w-28 sm:h-28 bg-white rounded-2xl sm:rounded-[2rem] shadow-sm border border-indigo-50 flex items-center justify-center text-4xl sm:text-5xl transition-transform group-hover:scale-110 group-hover:rotate-6">👦🏻</div>
+              <div>
+                 <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-800 tracking-tight mb-3 sm:mb-4 italic">Rahul K.</h3>
+                 <div className="flex flex-wrap justify-center sm:justify-start gap-2.5">
+                    <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white border border-slate-200 rounded-lg sm:rounded-xl text-[9px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-widest shadow-sm">Age: 6</span>
+                    <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white border border-slate-200 rounded-lg sm:rounded-xl text-[9px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-widest shadow-sm">Grade: 1</span>
+                    <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white border border-slate-200 rounded-lg sm:rounded-xl text-[9px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-widest shadow-sm">Type: Kinesthetic</span>
+                 </div>
+              </div>
+           </div>
+           
+           <div className="w-full lg:w-auto bg-white p-6 sm:p-8 rounded-2xl sm:rounded-[1.8rem] border border-slate-100 shadow-md shrink-0 transition-transform group-hover:translate-y-[-4px]">
+              <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Linked Diagnostics</p>
+              <div className="flex items-center justify-between gap-8 sm:gap-12 mb-3">
+                 <span className="text-sm sm:text-base font-bold text-slate-700">Cognitive Profile</span>
+                 <span className="text-emerald-500 text-xs sm:text-sm font-black uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">Active</span>
+              </div>
+              <div className="flex items-center justify-between gap-8 sm:gap-12">
+                 <span className="text-sm sm:text-base font-bold text-slate-700">Activity Syncer</span>
+                 <span className="text-emerald-500 text-xs sm:text-sm font-black uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">Online</span>
+              </div>
+           </div>
+        </div>
+     </div>
+  </motion.div>
+);

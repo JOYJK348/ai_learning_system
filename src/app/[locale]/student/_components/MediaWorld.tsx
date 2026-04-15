@@ -35,12 +35,24 @@ export default function MediaWorld() {
   const [video, setVideo] = useState<typeof VIDEOS[0] | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const playPromiseRef = useRef<Promise<void> | null>(null);
 
   useEffect(() => {
     return () => {
       if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
+        // Only pause if the play promise has resolved
+        const stopAudio = () => {
+          if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current = null;
+          }
+        };
+
+        if (playPromiseRef.current) {
+          playPromiseRef.current.then(stopAudio).catch(() => stopAudio());
+        } else {
+          stopAudio();
+        }
       }
     };
   }, []);
@@ -55,28 +67,42 @@ export default function MediaWorld() {
     }
   };
 
-  const handleRhymePlay = (rhyme: typeof RHYMES[0]) => {
-    if (playing === rhyme.id) {
+  const handleRhymePlay = async (rhyme: typeof RHYMES[0]) => {
+    const stopPrevious = async () => {
       if (audioRef.current) {
+        if (playPromiseRef.current) {
+          try { await playPromiseRef.current; } catch (e) { /* ignore */ }
+        }
         audioRef.current.pause();
+        audioRef.current = null;
+        playPromiseRef.current = null;
       }
+    };
+
+    if (playing === rhyme.id) {
+      await stopPrevious();
       setPlaying(null);
     } else {
-      // Stop previous audio
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
+      await stopPrevious();
       
       setPlaying(rhyme.id);
       speakText(`Let's sing ${rhyme.title}!`);
       
-      // Play new audio
       const audio = new Audio(rhyme.audio);
       audioRef.current = audio;
-      audio.play().catch(err => console.error("Audio play failed:", err));
+      
+      const playPromise = audio.play();
+      playPromiseRef.current = playPromise;
+
+      playPromise.catch(err => {
+        if (err.name !== 'AbortError') {
+          console.error("Audio play failed:", err);
+        }
+      });
       
       audio.onended = () => {
         setPlaying(null);
+        playPromiseRef.current = null;
       };
     }
   };

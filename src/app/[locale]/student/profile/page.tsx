@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
   Star, Trophy, Award, Sparkles, Crown,
@@ -8,7 +9,7 @@ import {
   BookOpen, Music, Palette, Dog,
   ChevronRight, Play, Lock, Unlock,
   User, Calendar, Settings, Edit3, Globe,
-  Bell, CreditCard, Brain
+  Bell, CreditCard, Brain, LogOut
 } from 'lucide-react';
 import { CATEGORIES } from '@/constants/dashboardData';
 
@@ -40,6 +41,9 @@ function getExplorerTitle(categories: typeof CATEGORIES): string {
    MAIN: MY WORLD PROFILE PAGE 🌍
    ═══════════════════════════════════════════ */
 export default function MyWorldProfile() {
+  const router = useRouter();
+  const params = useParams();
+  const locale = params.locale || 'en';
   const [mounted, setMounted] = useState(false);
   const [isParentMode, setIsParentMode] = useState(false);
   
@@ -64,8 +68,16 @@ export default function MyWorldProfile() {
           <div className="absolute bottom-[10%] left-[-5%] w-[40%] h-[40%] bg-blue-300/30 blur-[100px] rounded-full" />
       </div>
 
-      {/* ─── PARENT MODE TOGGLE ─── */}
-      <div className="relative z-50 flex justify-end px-6 pt-6 mb-4 max-w-7xl mx-auto w-full">
+      {/* ─── PARENT MODE & SIGN OUT TOGGLE ─── */}
+      <div className="relative z-50 flex justify-end items-center gap-3 px-6 pt-6 mb-4 max-w-7xl mx-auto w-full">
+         <button 
+           onClick={() => router.push(`/${locale}/login`)}
+           className="px-5 py-3 rounded-full bg-white/20 hover:bg-white backdrop-blur-xl text-white hover:text-rose-600 font-black text-xs uppercase tracking-widest border-2 border-white/40 hover:border-white shadow-xl flex items-center gap-2 transition-all duration-300"
+         >
+            <LogOut size={16} /> 
+            Sign Out
+         </button>
+
          <button 
            onClick={() => setIsParentMode(!isParentMode)} 
            className={`px-6 py-3 rounded-full font-black text-xs uppercase tracking-widest border-2 shadow-xl flex items-center gap-2 transition-all duration-500 ${isParentMode ? 'bg-indigo-600 text-white border-indigo-500 hover:bg-indigo-700' : 'bg-white/80 backdrop-blur-xl text-indigo-950 border-white hover:bg-white'}`}
