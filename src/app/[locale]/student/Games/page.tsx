@@ -2,23 +2,14 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Volume2, RotateCcw, Trophy, Star, Heart, Sparkles, 
-  Zap, ArrowRight, X, CheckCircle, XCircle, Sun, Cloud, 
-  Gamepad2, Music, Eye, Brain, Puzzle, Timer, Award, Play
-} from 'lucide-react';
 import { LESSONS } from '@/constants/dashboardData';
+import { audioEngine } from '@/core/utils/audio';
 
 /* ═══════════════════════════════════════════
    UTILITIES
    ═══════════════════════════════════════════ */
 function speak(text: string, rate = 0.85, pitch = 1.3) {
-  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.rate = rate; u.pitch = pitch; u.lang = 'en-US';
-    window.speechSynthesis.speak(u);
-  }
+  audioEngine?.speak(text, { rate, pitch });
 }
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -415,7 +406,10 @@ export default function GamesPlayground() {
   const [mounted, setMounted] = useState(false);
   const [activeGame, setActiveGame] = useState<string | null>(null);
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => { 
+    setMounted(true); 
+    audioEngine?.warmUp(); // Warm up for zero latency
+  }, []);
   if (!mounted) return null;
 
   return (

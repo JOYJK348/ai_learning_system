@@ -3,6 +3,7 @@
 import React, { useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter, useParams } from 'next/navigation';
+import { audioEngine } from '@/core/utils/audio';
 
 /* ─────────────── ZONE DATA ─────────────── */
 const ZONES = [
@@ -156,7 +157,14 @@ export default function DashboardHome() {
         {ZONES.map((zone) => (
           <div key={zone.id} className={`absolute ${zone.size} transition-all active:scale-95 duration-300 group`} style={zone.position}>
             <button
-              onClick={() => { if (zone.unlocked) router.push(`/${locale}/student/Learn?category=${zone.id}`); }}
+              onClick={() => { 
+                if (zone.unlocked) {
+                  audioEngine?.speak(`${zone.name} Adventure!`);
+                  router.push(`/${locale}/student/Learn?category=${zone.id}`); 
+                } else {
+                  audioEngine?.speak("Unlock this area first!");
+                }
+              }}
               className="w-full h-full flex flex-col items-center justify-center cursor-pointer"
             >
               <div className="relative">

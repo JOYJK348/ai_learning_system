@@ -10,6 +10,7 @@ import {
   Map as MapIcon,
   Trophy, Target, Music, PartyPopper
 } from 'lucide-react';
+import { audioEngine } from '@/core/utils/audio';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useData } from '@/context/DataContext';
 import MediaWorld from '../_components/MediaWorld';
@@ -28,6 +29,7 @@ export default function UltimateLearnEngine() {
 
   useEffect(() => {
     setMounted(true);
+    audioEngine?.warmUp(); // Kickstart the engine
     if (categoryParam) {
       setActiveZoneId(categoryParam);
       setView('zone');
@@ -39,18 +41,11 @@ export default function UltimateLearnEngine() {
   const activeZone = useMemo(() => categories.find(c => c.id === activeZoneId), [activeZoneId, categories]);
   const zoneLessons = useMemo(() => activeZoneId ? (allLessons[activeZoneId] || []) : [], [activeZoneId, allLessons]);
 
-  const openZone = (id: string) => router.push(`?category=${id}`, { scroll: false });
-  const closeZone = () => router.push('/en/student/Learn', { scroll: false });
+  const openZone = (id: string) => router.push(`?category=${id}`, { scroll: true });
+  const closeZone = () => router.push('/en/student/Learn', { scroll: true });
 
   const speakText = (text: string) => {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.9;
-      utterance.pitch = 1.2;
-      utterance.lang = 'en-US';
-      window.speechSynthesis.speak(utterance);
-    }
+    audioEngine?.speak(text, { rate: 0.9, pitch: 1.2 });
   };
 
   const handleLessonInteraction = (lesson: any) => {

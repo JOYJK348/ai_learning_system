@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import StudentBottomNav from './_components/StudentBottomNav';
 
 export default function StudentLayout({
@@ -8,6 +9,15 @@ export default function StudentLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    // Force absolute scroll reset on any internal navigation
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [pathname]);
+
   return (
     <div className="min-h-screen bg-white flex flex-col relative overflow-hidden">
       

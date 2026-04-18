@@ -8,6 +8,7 @@ import {
   Sparkles, Award, Play, Cloud, Sun,
   ArrowLeft
 } from 'lucide-react';
+import { audioEngine } from '@/core/utils/audio';
 import QuizEngine from '../_components/QuizEngine';
 import { SoundMatchGame, TrueOrFalseGame, SequenceGame, MemoryMatchGame } from '../_components/GameActivities';
 import { LESSONS, CATEGORIES } from '@/constants/dashboardData';
@@ -19,6 +20,7 @@ export default function QuizArena() {
 
   useEffect(() => {
     setMounted(true);
+    audioEngine?.warmUp(); // Prepare speech engine
     if (activeQuiz || activeGame) {
       document.body.style.overflow = 'hidden';
     } else {

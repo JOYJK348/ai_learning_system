@@ -3,15 +3,16 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Play, X, Disc, Music, Film, Pause, Sparkles, Tv, Monitor, ArrowRight, Plus, Star, Compass, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { audioEngine } from '@/core/utils/audio';
 
 /* ─────────── DATA ─────────── */
 const RHYMES = [
-  { id: 1, title: 'Twinkle Star', image: '⭐', color: 'from-violet-400 to-purple-500', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
-  { id: 2, title: 'ABC Fun',     image: '🔤', color: 'from-blue-400 to-indigo-500', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
-  { id: 3, title: 'Baby Shark',  image: '🦈', color: 'from-cyan-400 to-sky-500', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
-  { id: 4, title: 'Old Farm',    image: '🐄', color: 'from-emerald-400 to-green-500', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
-  { id: 5, title: 'Wheels Bus',  image: '🚌', color: 'from-yellow-400 to-orange-500', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3' },
-  { id: 6, title: 'Humpty Dumpty', image: '🥚', color: 'from-red-400 to-rose-500', audio: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3' },
+  { id: 1, title: 'Twinkle Star', image: '⭐', color: 'from-violet-400 to-purple-500', audio: 'https://cdn.pixabay.com/audio/2022/01/18/audio_d0a13f69d2.mp3' },
+  { id: 2, title: 'ABC Fun',     image: '🔤', color: 'from-blue-400 to-indigo-500', audio: 'https://cdn.pixabay.com/audio/2022/03/15/audio_732caf6185.mp3' },
+  { id: 3, title: 'Baby Shark',  image: '🦈', color: 'from-cyan-400 to-sky-500', audio: 'https://cdn.pixabay.com/audio/2021/08/04/audio_06256f5221.mp3' },
+  { id: 4, title: 'Old Farm',    image: '🐄', color: 'from-emerald-400 to-green-500', audio: 'https://cdn.pixabay.com/audio/2022/01/21/audio_31743c588f.mp3' },
+  { id: 5, title: 'Wheels Bus',  image: '🚌', color: 'from-yellow-400 to-orange-500', audio: 'https://cdn.pixabay.com/audio/2022/01/26/audio_d0c6ff3530.mp3' },
+  { id: 6, title: 'Humpty Dumpty', image: '🥚', color: 'from-red-400 to-rose-500', audio: 'https://cdn.pixabay.com/audio/2022/10/25/audio_f764a5c68d.mp3' },
 ];
 
 const VIDEOS = [
@@ -34,76 +35,38 @@ export default function MediaWorld() {
   const [playing, setPlaying] = useState<number | null>(null);
   const [video, setVideo] = useState<typeof VIDEOS[0] | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const playPromiseRef = useRef<Promise<void> | null>(null);
-
   useEffect(() => {
-    return () => {
-      if (audioRef.current) {
-        // Only pause if the play promise has resolved
-        const stopAudio = () => {
-          if (audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current = null;
-          }
-        };
+    // Warm up the engine on mount
+    audioEngine?.warmUp();
+    
+    // Preload all rhymes for zero-latency
+    RHYMES.forEach(r => audioEngine?.preload(r.audio));
 
-        if (playPromiseRef.current) {
-          playPromiseRef.current.then(stopAudio).catch(() => stopAudio());
-        } else {
-          stopAudio();
-        }
-      }
+    return () => {
+      audioEngine?.stopAllAudio();
     };
   }, []);
 
   const speakText = (text: string) => {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 1.0;
-      utterance.pitch = 1.4;
-      window.speechSynthesis.speak(utterance);
-    }
+    audioEngine?.speak(text, { rate: 1.0, pitch: 1.4 });
   };
 
   const handleRhymePlay = async (rhyme: typeof RHYMES[0]) => {
-    const stopPrevious = async () => {
-      if (audioRef.current) {
-        if (playPromiseRef.current) {
-          try { await playPromiseRef.current; } catch (e) { /* ignore */ }
-        }
-        audioRef.current.pause();
-        audioRef.current = null;
-        playPromiseRef.current = null;
-      }
-    };
-
     if (playing === rhyme.id) {
-      await stopPrevious();
+      audioEngine?.stopAllAudio();
       setPlaying(null);
     } else {
-      await stopPrevious();
-      
+      audioEngine?.stopAllAudio();
       setPlaying(rhyme.id);
       speakText(`Let's sing ${rhyme.title}!`);
       
-      const audio = new Audio(rhyme.audio);
-      audioRef.current = audio;
+      const audio = await audioEngine?.play(rhyme.audio);
       
-      const playPromise = audio.play();
-      playPromiseRef.current = playPromise;
-
-      playPromise.catch(err => {
-        if (err.name !== 'AbortError') {
-          console.error("Audio play failed:", err);
-        }
-      });
-      
-      audio.onended = () => {
-        setPlaying(null);
-        playPromiseRef.current = null;
-      };
+      if (audio) {
+        audio.onended = () => {
+          setPlaying(null);
+        };
+      }
     }
   };
 

@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Volume2, RefreshCw, Trophy, Star, Heart, Sparkles, Zap, ArrowRight } from 'lucide-react';
+import { audioEngine } from '@/core/utils/audio';
 
 /* ─────────── TYPES ─────────── */
 interface QuizOption {
@@ -57,16 +58,8 @@ function ConfettiParticle({ index }: { index: number }) {
   );
 }
 
-/* ─────────── SPEAK UTILITY ─────────── */
 function speak(text: string, rate = 0.85, pitch = 1.3) {
-  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.rate = rate;
-    u.pitch = pitch;
-    u.lang = 'en-US';
-    window.speechSynthesis.speak(u);
-  }
+  audioEngine?.speak(text, { rate, pitch });
 }
 
 /* ─────────── MAIN QUIZ ENGINE ─────────── */
@@ -83,6 +76,7 @@ export default function QuizEngine({ lesson, onClose, onComplete }: QuizEnginePr
   // ─── INTRO PHASE: Announce the lesson ───
   useEffect(() => {
     if (phase === 'intro') {
+      audioEngine?.warmUp(); // Ensure engine is awake
       speak(lesson.title);
       const timer = setTimeout(() => {
         setPhase('question');

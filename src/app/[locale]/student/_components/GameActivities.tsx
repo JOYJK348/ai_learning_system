@@ -4,15 +4,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Volume2, Star, CheckCircle, XCircle, ArrowRight, Play, ArrowLeft, Trophy, Sparkles } from 'lucide-react';
 import { LESSONS } from '@/constants/dashboardData';
+import { audioEngine } from '@/core/utils/audio';
 
 /* ── UTILS ── */
 function speak(text: string, rate = 0.85, pitch = 1.3) {
-  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.rate = rate; u.pitch = pitch; u.lang = 'en-US';
-    window.speechSynthesis.speak(u);
-  }
+  audioEngine?.speak(text, { rate, pitch });
 }
 
 function shuffleArray<T>(arr: T[]): T[] {

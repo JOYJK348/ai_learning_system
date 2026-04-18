@@ -67,6 +67,13 @@ export default function ParentDashboard() {
 
   useEffect(() => { setMounted(true); }, []);
 
+  useEffect(() => {
+    // Parent Portal: Reset scroll when switching between Dashboard/Activity/etc.
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
+  }, [activeTab]);
+
   // Performance calculations
   const totalLessons = Object.values(allLessons).flat().length;
   const completedLessons = Object.values(allLessons).flat().filter(l => l.status === 'completed').length;
