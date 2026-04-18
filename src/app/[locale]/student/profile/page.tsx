@@ -55,7 +55,7 @@ export default function MyWorldProfile() {
   const wordsDiscovered = 47;
   const daysActive = 18;
 
-  if (!mounted) return null;
+
 
   return (
     <div className="relative font-sans bg-sky-400 overflow-x-hidden">
@@ -182,7 +182,7 @@ export default function MyWorldProfile() {
                    {CATEGORIES.map((cat, i) => (
                      <motion.div 
                        key={cat.id} 
-                       initial={{ opacity: 0, y: 10 }}
+                       initial={{ opacity: 1, y: 10 }}
                        animate={{ opacity: 1, y: 0 }}
                        transition={{ delay: i * 0.1 }}
                        whileHover={{ scale: 1.05 }}
@@ -214,7 +214,7 @@ export default function MyWorldProfile() {
            PARENT VIEW (DASHBOARD & INSIGHTS)
            ═══════════════════════════════════════ */
         <motion.div 
-          initial={{ opacity: 0, y: 20 }} 
+          initial={{ opacity: 1, y: 20 }} 
           animate={{ opacity: 1, y: 0 }} 
           className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 py-6"
         >

@@ -155,7 +155,7 @@ export default function AdminPortal() {
             
             {/* 1. DASHBOARD OVERVIEW */}
             {activeTab === 'dashboard' && (
-              <motion.div key="dash" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }}>
+              <motion.div key="dash" initial={{ opacity: 1, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }}>
                  <div className="mb-10">
                     <h1 className="text-3xl font-black text-slate-900 tracking-tight mb-2">Platform Overview</h1>
                     <p className="text-slate-500 font-medium">System is working perfectly — all neural links are active.</p>
@@ -189,7 +189,7 @@ export default function AdminPortal() {
 
             {/* 2. CONTENT HUB */}
             {activeTab === 'categories' && (
-              <motion.div key="cat" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }}>
+              <motion.div key="cat" initial={{ opacity: 1, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }}>
                  <header className="flex flex-col sm:flex-row sm:items-center justify-between mb-10 gap-6">
                    <div>
                      <h1 className="text-3xl font-black text-slate-900 tracking-tight mb-2">Content Hub</h1>
@@ -233,7 +233,7 @@ export default function AdminPortal() {
 
             {/* 3. LESSON MANAGEMENT */}
             {activeTab === 'lessons' && (
-              <motion.div key="less" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }}>
+              <motion.div key="less" initial={{ opacity: 1, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }}>
                 <header className="flex flex-col sm:flex-row sm:items-center justify-between mb-10 gap-6">
                   <div>
                     <h1 className="text-3xl font-black text-slate-900 tracking-tight mb-2">Lesson Repository</h1>
@@ -298,7 +298,7 @@ export default function AdminPortal() {
 
             {/* 4. STUDENT DIRECTORY */}
             {activeTab === 'students' && (
-              <motion.div key="stud" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }}>
+              <motion.div key="stud" initial={{ opacity: 1, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }}>
                 <header className="flex flex-col sm:flex-row sm:items-center justify-between mb-10 gap-6">
                   <div>
                     <h1 className="text-3xl font-black text-slate-900 tracking-tight mb-2">Student Registry</h1>
@@ -349,7 +349,7 @@ export default function AdminPortal() {
 
             {/* 5. SETTINGS & REGISTRATIONS */}
             {activeTab === 'settings' && (
-              <motion.div key="set" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }}>
+              <motion.div key="set" initial={{ opacity: 1, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }}>
                  <div className="mb-10">
                     <h1 className="text-3xl font-black text-slate-900 tracking-tight mb-2">System Control</h1>
                     <p className="text-slate-500 font-medium leading-relaxed">Identity management and administrative permission matrix.</p>

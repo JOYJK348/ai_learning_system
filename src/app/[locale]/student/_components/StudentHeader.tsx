@@ -8,7 +8,7 @@ export default function StudentHeader() {
   return (
     <header className="fixed top-0 left-0 right-0 z-[60] px-4 sm:px-8 py-4 pointer-events-none">
       <motion.div 
-        initial={{ y: -20, opacity: 0 }}
+        initial={{ y: -20, opacity: 1 }}
         animate={{ y: 0, opacity: 1 }}
         className="max-w-7xl mx-auto flex items-center justify-between pointer-events-auto"
       >

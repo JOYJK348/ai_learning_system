@@ -68,7 +68,7 @@ export default function UltimateLearnEngine() {
     setActiveQuiz(null);
   };
 
-  if (!mounted) return null;
+
 
   return (
     <div className="relative font-sans overflow-hidden bg-sky-400">
@@ -96,7 +96,7 @@ export default function UltimateLearnEngine() {
                 <div className="relative z-20 w-full px-6 sm:px-16 flex flex-col md:flex-row items-center justify-between gap-12">
                    <div className="flex-1 space-y-6 text-center md:text-left">
                       <motion.div 
-                        initial={{ opacity: 0, x: -50 }}
+                        initial={{ opacity: 1, x: -50 }}
                         animate={{ opacity: 1, x: 0 }}
                         className="inline-flex items-center gap-3 px-6 py-2 bg-indigo-600 text-white rounded-full font-black text-xs uppercase tracking-[0.3em] shadow-xl shadow-indigo-600/20"
                       >
@@ -155,7 +155,7 @@ export default function UltimateLearnEngine() {
             {view === 'hub' ? (
               <motion.div 
                 key="hub"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 1, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
               >
@@ -323,7 +323,7 @@ export default function UltimateLearnEngine() {
             ) : (
               <motion.div 
                 key="zone"
-                initial={{ opacity: 0, x: 50 }}
+                initial={{ opacity: 1, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -50 }}
                 className="px-4 sm:px-12"

@@ -72,7 +72,7 @@ export default function ParentDashboard() {
   const completedLessons = Object.values(allLessons).flat().filter(l => l.status === 'completed').length;
   const masteryPercentage = Math.round((completedLessons / totalLessons) * 100) || 0;
 
-  if (!mounted) return null;
+
 
   const NavItem = ({ id, label, icon: Icon }: any) => (
     <button 
@@ -207,7 +207,7 @@ export default function ParentDashboard() {
    ────────────────────────────────────────────────────────────────────────── */
 
 const DashboardPanel = ({ mP, cL, tL, categories }: any) => (
-  <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="space-y-6 lg:space-y-8">
+  <motion.div initial={{ opacity: 1, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} className="space-y-6 lg:space-y-8">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8">
          
          {/* ─── HERO: THE COMMAND CENTER ─── */}
@@ -406,7 +406,7 @@ const DashboardPanel = ({ mP, cL, tL, categories }: any) => (
 );
 
 const QuizPanel = () => (
-  <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6 lg:space-y-8 text-center sm:text-left">
+  <motion.div initial={{ opacity: 1, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6 lg:space-y-8 text-center sm:text-left">
       <div className="flex flex-col sm:flex-row justify-between items-center bg-white p-8 lg:p-10 rounded-[2.5rem] border border-slate-200/50 shadow-xl gap-6">
          <div className="space-y-2">
             <h2 className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-none mb-2 italic">Diagnostic Intelligence</h2>
@@ -479,7 +479,7 @@ const QuizPanel = () => (
 );
 
 const ChatbotPanel = ({ msg, sMsg }: any) => (
-  <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="h-full max-w-3xl mx-auto bg-white rounded-3xl lg:rounded-[3rem] shadow-2xl border border-slate-200/50 overflow-hidden flex flex-col">
+  <motion.div initial={{ opacity: 1, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="h-full max-w-3xl mx-auto bg-white rounded-3xl lg:rounded-[3rem] shadow-2xl border border-slate-200/50 overflow-hidden flex flex-col">
       <div className="p-5 sm:p-8 bg-gradient-to-r from-indigo-900 via-indigo-800 to-indigo-700 text-white flex items-center justify-between shadow-lg">
          <div className="flex items-center gap-4 sm:gap-5 w-full">
             <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white/10 rounded-xl sm:rounded-2xl flex items-center justify-center backdrop-blur-xl border border-white/20 shadow-xl transition-transform hover:scale-105 shrink-0">
@@ -535,7 +535,7 @@ const ChatbotPanel = ({ msg, sMsg }: any) => (
 );
 
 const RewardsPanel = () => (
-  <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 lg:space-y-8">
+  <motion.div initial={{ opacity: 1, y: 15 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 lg:space-y-8">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8">
          <div className="lg:col-span-4 bg-gradient-to-br from-orange-400 to-rose-600 text-white p-8 sm:p-12 lg:p-12 rounded-3xl lg:rounded-[3rem] text-center space-y-6 sm:space-y-8 shadow-[0_30px_70px_-15px_rgba(251,146,60,0.5)] relative overflow-hidden group">
             <div className="absolute top-0 left-0 p-4 opacity-10 group-hover:scale-125 transition-transform"><Sparkles size={160} className="sm:w-[220px] sm:h-[220px]" /></div>
@@ -614,7 +614,7 @@ const RewardsPanel = () => (
 );
 
 const ProfilePanel = () => (
-  <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 lg:space-y-8">
+  <motion.div initial={{ opacity: 1, y: 15 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 lg:space-y-8">
      {/* Parent Account Details */}
      <div className="bg-white rounded-3xl lg:rounded-[3rem] p-6 sm:p-10 lg:p-12 shadow-sm border border-slate-100 flex flex-col lg:flex-row gap-8 lg:gap-14 items-center lg:items-start group">
         <div className="w-28 h-28 sm:w-36 sm:h-36 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-[2rem] flex items-center justify-center text-white text-4xl sm:text-5xl font-black shadow-lg shadow-indigo-200 shrink-0 transform transition-transform group-hover:scale-105 border-4 border-white">KV</div>

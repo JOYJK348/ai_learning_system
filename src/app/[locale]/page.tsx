@@ -57,7 +57,7 @@ export default function HomePage() {
 
       {/* ═══════ NAVBAR ═══════ */}
       <nav className="fixed top-0 inset-x-0 z-50 glass-nav">
-        <div className="max-w-7xl mx-auto px-5 sm:px-6 h-18 flex items-center justify-between py-4">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 h-20 flex items-center justify-between py-4">
           <a href="#" className="flex items-center gap-3 group">
             <div className="relative w-14 h-14 transition-transform group-hover:scale-110">
               <Image src="/assets/img/logo.png" alt="Zhi Logo" fill className="object-contain" />
@@ -103,7 +103,7 @@ export default function HomePage() {
       </nav>
 
       {/* ═══════ HERO ═══════ */}
-      <section className="relative min-h-[70dvh] md:min-h-[85dvh] flex items-center pt-32 md:pt-48 pb-16 overflow-hidden bg-white">
+      <section className="relative flex flex-col pt-32 md:pt-40 pb-12 overflow-hidden bg-white">
 
         {/* Professional Studio Background */}
         <div className="absolute inset-0 z-0 pointer-events-none">
@@ -222,11 +222,11 @@ export default function HomePage() {
           </div>
 
           {/* ── NEW: Unified Feature Cards Row (Same Height) ── */}
-          <div className="mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
 
             {/* Card 1: Visionary Manifesto */}
             <motion.div
-              initial={{ y: 20, opacity: 0 }}
+              initial={{ y: 0, opacity: 1 }}
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1, duration: 0.8 }}
@@ -275,7 +275,7 @@ export default function HomePage() {
 
             {/* Card 2: Professional HUD Badge */}
             <motion.div
-              initial={{ y: 20, opacity: 0 }}
+              initial={{ y: 0, opacity: 1 }}
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2, duration: 0.8 }}
@@ -327,6 +327,7 @@ export default function HomePage() {
                             <motion.div
                               initial={{ width: 0 }}
                               whileInView={{ width: `${s.val}%` }}
+                              viewport={{ once: true }}
                               transition={{ duration: 1, delay: 0.5 }}
                               className={`h-full ${s.color}`}
                             />
@@ -377,7 +378,7 @@ export default function HomePage() {
 
             {/* Card 3: Active Reality Engine */}
             <motion.div
-              initial={{ y: 20, opacity: 0 }}
+              initial={{ y: 0, opacity: 1 }}
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3, duration: 0.8 }}
@@ -461,9 +462,9 @@ export default function HomePage() {
 
 
       {/* ═══════ FEATURES: IMMERSIVE (INNOVATION) ═══════ */}
-      <section id="how-it-works" className="-mt-20 pt-12 md:pt-16 pb-8 md:pb-12 relative overflow-hidden bg-white">
+      <section id="how-it-works" className="scroll-mt-32 pt-24 md:pt-32 pb-12 md:pb-16 relative overflow-hidden bg-[#F8FAFC]">
         {/* Subtle Neural Pattern Background */}
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
+        <div className="absolute inset-0 opacity-[0.05] pointer-events-none" 
           style={{ backgroundImage: 'radial-gradient(#013237 0.8px, transparent 0.8px)', backgroundSize: '40px 40px' }} />
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-50/50 blur-[120px] rounded-full -mr-32 -mt-32 opacity-60" />
 
@@ -473,7 +474,7 @@ export default function HomePage() {
             {/* Visual Side with Holographic Tags */}
             <div className="lg:col-span-6 relative order-2 lg:order-1">
               <motion.div
-                initial={{ x: -20, opacity: 0 }}
+                initial={{ x: 0, opacity: 1 }}
                 whileInView={{ x: 0, opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 1 }}
@@ -488,28 +489,6 @@ export default function HomePage() {
                   className="w-full object-cover transition-transform duration-[2s] group-hover:scale-105"
                 />
 
-                {/* Floating Holographic Tags */}
-                <motion.div 
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute top-12 right-8 z-20 glass-morphism px-5 py-2.5 rounded-2xl border-white/50 shadow-2xl"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse outline outline-4 outline-emerald-500/20" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#013237]">4K Neural Render</span>
-                  </div>
-                </motion.div>
-
-                <motion.div 
-                  animate={{ y: [0, 10, 0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                  className="absolute bottom-16 left-8 z-20 glass-morphism px-5 py-2.5 rounded-2xl border-white/50 shadow-2xl"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse outline outline-4 outline-blue-500/20" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#013237]">1:1 Reality Overlays</span>
-                  </div>
-                </motion.div>
               </motion.div>
               
               {/* Decorative behind image */}
@@ -519,7 +498,7 @@ export default function HomePage() {
             {/* Content Side with Intelligent Tiles */}
             <div className="lg:col-span-6 order-1 lg:order-2">
               <motion.div
-                initial={{ y: 20, opacity: 0 }}
+                initial={{ y: 0, opacity: 1 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
@@ -555,7 +534,7 @@ export default function HomePage() {
                   ].map((f, i) => (
                     <motion.div
                       key={f.t}
-                      initial={{ x: 20, opacity: 0 }}
+                      initial={{ x: 0, opacity: 1 }}
                       whileInView={{ x: 0, opacity: 1 }}
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.15, duration: 0.8 }}
@@ -580,7 +559,7 @@ export default function HomePage() {
 
 
       {/* ═══════ THE ECOSYSTEM: COMPACT HUB (PORTALS) ═══════ */}
-      <section id="portals" className="-mt-24 pt-8 md:pt-12 pb-16 md:pb-24 bg-white relative overflow-hidden">
+      <section id="portals" className="scroll-mt-32 mt-20 md:mt-0 pt-36 md:pt-16 pb-16 md:pb-24 bg-white relative overflow-hidden">
         {/* Technical Grid Overlay */}
         <div className="absolute inset-0 opacity-[0.3] pointer-events-none">
           <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(#013237 0.5px, transparent 0.5px)', backgroundSize: '30px 30px' }} />
@@ -589,7 +568,7 @@ export default function HomePage() {
         <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6">
           <div className="mb-16">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 1, y: 0 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="flex flex-col md:flex-row md:items-end justify-between gap-6"
@@ -628,6 +607,7 @@ export default function HomePage() {
                         key={i}
                         initial={{ height: 0 }}
                         whileInView={{ height: `${h}%` }}
+                        viewport={{ once: true }}
                         transition={{ delay: i * 0.04, duration: 1 }}
                         className="flex-1 bg-[#013237]/80 rounded-t-[2px]"
                       />
@@ -685,9 +665,9 @@ export default function HomePage() {
                     {[1, 2, 3, 4, 5, 6].map(i => (
                       <div key={i} className="relative overflow-hidden rounded-sm bg-slate-100/30">
                         <motion.div
-                          animate={{ y: ['100%', '0%', '-100%'] }}
-                          transition={{ duration: 2.5, delay: i * 0.3, repeat: Infinity }}
-                          className="absolute inset-0 bg-violet-400/30"
+                          animate={{ opacity: [0.1, 0.5, 0.1] }}
+                          transition={{ duration: 2, delay: i * 0.2, repeat: Infinity }}
+                          className="absolute inset-0 bg-violet-400"
                         />
                       </div>
                     ))}
@@ -695,12 +675,8 @@ export default function HomePage() {
                 )
               }
             ].map((portal, i) => (
-              <motion.div
+              <div
                 key={portal.id}
-                initial={{ y: 25, opacity: 1 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.15, duration: 0.8 }}
                 className="relative group h-full cursor-default"
               >
                 {/* Visual Background Container */}
@@ -803,7 +779,7 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -811,7 +787,7 @@ export default function HomePage() {
 
 
       {/* ═══════ VISION ROADMAP ═══════ */}
-      <section id="vision" className="-mt-8 py-16 md:py-28 relative overflow-hidden"
+      <section id="vision" className="scroll-mt-32 py-16 md:py-32 relative overflow-hidden"
         style={{ background: C.primary }}>
 
         {/* Background texture */}
@@ -823,7 +799,7 @@ export default function HomePage() {
 
           {/* Header */}
           <motion.div
-            initial={{ y: 20, opacity: 0 }}
+            initial={{ y: 0, opacity: 1 }}
             whileInView={{ y: 0, opacity: 1 }}
             viewport={{ once: true }}
             className="text-center mb-20"
@@ -882,13 +858,8 @@ export default function HomePage() {
                 glow: 'rgba(212,175,55,0.2)',
               },
             ].map((r, i) => (
-              <motion.div
+              <div
                 key={r.title}
-                initial={{ y: 30, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.12, duration: 0.7 }}
-                whileHover={{ y: -8 }}
                 className="relative group h-full"
               >
                 {/* Glow behind card */}
@@ -936,13 +907,13 @@ export default function HomePage() {
                       style={{ background: r.accent }} />
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
 
           {/* Bottom CTA strip */}
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={{ opacity: 1 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
@@ -956,7 +927,7 @@ export default function HomePage() {
 
 
       {/* ═══════ CONTACT ═══════ */}
-      <section id="contact" className="-mt-8 py-16 md:py-28 bg-[#F8FAFC] relative overflow-hidden">
+      <section id="contact" className="py-16 md:py-28 bg-[#F8FAFC] relative overflow-hidden">
         {/* Background decoration */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-cyan-50/50 to-transparent blur-[120px]" />
