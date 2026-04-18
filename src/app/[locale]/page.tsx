@@ -7,7 +7,8 @@ import {
   GraduationCap, Heart, Settings, Eye, Zap, Layers,
   Mail, Phone, User, MessageCircle, X, Menu,
   ExternalLink, Video, AtSign, CheckCircle2,
-  Wifi, Battery, Rocket, Activity, TrendingUp, Gamepad2, Quote
+  Wifi, Battery, Rocket, Activity, TrendingUp, Gamepad2, Quote,
+  ChevronRight, Lock
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
@@ -46,7 +47,6 @@ export default function HomePage() {
   }, []);
 
   const navLinks = [
-    { label: 'Features', href: '#features' },
     { label: 'How it works', href: '#how-it-works' },
     { label: 'Portals', href: '#portals' },
     { label: 'Vision', href: '#vision' },
@@ -66,7 +66,7 @@ export default function HomePage() {
               <span className="font-extrabold text-lg" style={{ color: C.primary }}>
                 ZHI <span style={{ color: C.gold }}>LearnAI</span>
               </span>
-              <span className="text-[9px] uppercase tracking-[0.2em] text-slate-400 font-semibold mt-0.5">AI-Powered Learning. Game-Like Experience.</span>
+              <span className="text-[9px] uppercase tracking-[0.15em] text-slate-400 font-bold mt-0.5">Learn while playing</span>
             </div>
           </a>
 
@@ -103,7 +103,7 @@ export default function HomePage() {
       </nav>
 
       {/* ═══════ HERO ═══════ */}
-      <section className="relative min-h-[70dvh] md:min-h-[85dvh] flex items-center pt-28 md:pt-44 pb-16 overflow-hidden bg-white">
+      <section className="relative min-h-[70dvh] md:min-h-[85dvh] flex items-center pt-32 md:pt-48 pb-16 overflow-hidden bg-white">
 
         {/* Professional Studio Background */}
         <div className="absolute inset-0 z-0 pointer-events-none">
@@ -121,7 +121,7 @@ export default function HomePage() {
               initial={{ x: -20, opacity: 1 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="order-1 lg:order-1 text-center lg:text-left lg:-mt-[110px]"
+              className="order-1 lg:order-1 text-center lg:text-left lg:-mt-[40px]"
             >
               <div className="relative mb-6">
                 <h1 className="font-extrabold tracking-[-0.05em] text-slate-900 leading-[1.1]"
@@ -151,39 +151,6 @@ export default function HomePage() {
                 </a>
               </div>
 
-              {/* ── NEW: Visionary Manifesto Card (Pain -> Solution) ── */}
-              <motion.div
-                initial={{ y: 15, opacity: 1 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.5, duration: 1 }}
-                className="mt-8 relative group"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 to-transparent blur-xl -z-10" />
-                <div className="glass-morphism p-8 rounded-[2.5rem] border-white/40 shadow-premium max-w-lg relative overflow-hidden">
-                  <div className="absolute top-0 right-0 p-4 opacity-10">
-                    <Quote size={80} className="text-[#9D7606]" />
-                  </div>
-
-                  <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[#9D7606] mb-4 block">ZHI LearnAI • For Singapore Parents</span>
-
-                  <h3 className="text-2xl sm:text-3xl font-light italic text-slate-800 mb-4" style={{ fontFamily: 'serif' }}>
-                    What exactly does this <span className="font-bold not-italic">platform do?</span>
-                  </h3>
-
-                  <p className="text-[13px] sm:text-[14px] text-slate-500 leading-relaxed font-medium pr-12">
-                    Your child logs in and enters an <span className="text-slate-700 font-semibold not-italic">interactive game world</span> covering Maths, Science, English and more — guided by an AI companion at every step.
-                    <br className="hidden sm:block" /><br className="hidden sm:block" />
-                    <span className="text-[#013237] font-bold not-italic">No tuition fees. No nagging. Just a child who genuinely wants to learn.</span>
-                  </p>
-                </div>
-
-                {/* Creative Dot Decoration */}
-                <div className="absolute -left-3 top-1/2 -translate-y-1/2 flex flex-col gap-2">
-                  {[1, 2, 3].map(i => (
-                    <div key={i} className="w-1.5 h-1.5 rounded-full bg-amber-500/20" />
-                  ))}
-                </div>
-              </motion.div>
             </motion.div>
 
             {/* ── RIGHT: Immersive AR Laptop Visual ── */}
@@ -249,100 +216,371 @@ export default function HomePage() {
                     <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[80%] h-12 bg-cyan-500/10 blur-[40px] rounded-full" />
                   </div>
 
-                  {/* ── NEW: Visual Engagement Cluster (High-End & Modern) ── */}
-                  <div className="mt-14 relative w-full lg:max-w-xl">
-                    <div className="flex flex-col sm:flex-row gap-6">
-
-                      <motion.div
-                        initial={{ x: -10, opacity: 1 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: 0.1, duration: 0.8 }}
-                        className="flex-1 glass-morphism p-8 rounded-[2.5rem] border-white/40 shadow-premium relative overflow-hidden group"
-                      >
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 blur-2xl rounded-full -mr-10 -mt-10" />
-                        <div className="flex items-center gap-4 mb-6">
-                          {/* Professional HUD Badge */}
-                          <div className="relative w-16 h-16 flex items-center justify-center">
-                            <div className="absolute inset-0 bg-[#013237] rounded-xl rotate-45 shadow-lg shadow-[#013237]/30 border border-white/20" />
-                            <span className="relative z-10 text-white font-medium italic text-base" style={{ fontFamily: 'serif' }}>Lvl 12</span>
-                          </div>
-                          <div>
-                            <p className="text-[11px] font-black uppercase tracking-[0.2em] text-[#9D7606] mb-1">Play Mode: Active</p>
-                            <h4 className="text-xl font-medium italic text-slate-900 leading-none" style={{ fontFamily: 'serif' }}>Geometry Mastery</h4>
-                          </div>
-                        </div>
-
-                        {/* Segmented XP Progress Bar */}
-                        <div className="space-y-4">
-                          <div className="flex justify-between items-end mb-1">
-                            <span className="text-[11px] font-bold text-slate-700 uppercase tracking-tighter">Current XP: <span className="text-slate-900 font-black" style={{ fontFamily: 'serif' }}>850</span></span>
-                            <span className="text-[11px] font-black text-[#9D7606] uppercase">Next level: 13</span>
-                          </div>
-
-                          <div className="flex gap-1.5 h-3">
-                            {[...Array(10)].map((_, i) => (
-                              <motion.div
-                                key={i}
-                                initial={{ opacity: 0.5 }}
-                                animate={{ opacity: i < 8 ? 1 : 0.3, backgroundColor: i < 8 ? C.primary : '#CBD5E1' }}
-                                transition={{ delay: 0.2 + (i * 0.1) }}
-                                className="flex-1 rounded-sm shadow-sm"
-                              />
-                            ))}
-                          </div>
-                        </div>
-                      </motion.div>
-
-                      {/* ── Reality Translator Card (Side by Side) ── */}
-                      <motion.div
-                        initial={{ x: 10, opacity: 1 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: 0.2, duration: 0.8 }}
-                        className="flex-1 glass-morphism p-8 rounded-[2.5rem] border-white/40 shadow-premium relative overflow-hidden group"
-                      >
-                        <div className="absolute inset-0 opacity-[0.15] pointer-events-none"
-                          style={{ backgroundImage: 'linear-gradient(90deg, #D4AF37 1px, transparent 1px), linear-gradient(#D4AF37 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-
-                        <div className="flex justify-between items-start mb-6 relative z-10">
-                          <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-xl bg-[#013237] flex items-center justify-center text-[#D4AF37] border border-white/20 shadow-xl group-hover:scale-110 transition-transform">
-                              <Eye size={24} />
-                            </div>
-                            <div>
-                              <p className="text-[11px] font-black uppercase tracking-[0.2em] text-[#9D7606]">Active Reality Engine</p>
-                              <h4 className="text-xl font-medium italic text-slate-900 leading-none" style={{ fontFamily: 'serif' }}>See the Invisible.</h4>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="space-y-4 mb-8 relative z-10">
-                          <div className="flex justify-between text-[11px] font-black uppercase tracking-tighter">
-                            <span className="text-slate-700">Theory Complexity</span>
-                            <span className="text-[#013237] font-black">Simplified</span>
-                          </div>
-                          <div className="flex justify-between text-[11px] font-black uppercase tracking-tighter">
-                            <span className="text-slate-700">Memory Retention</span>
-                            <span className="text-[#013237] font-black">100% Mastery</span>
-                          </div>
-                          <div className="h-[1px] w-full bg-slate-300/50 mt-2" />
-                        </div>
-
-                        {/* Pulse Line Decoration */}
-                        <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent opacity-40" />
-                      </motion.div>
-                    </div>
-                  </div>
                 </motion.div>
               </div>
             </motion.div>
+          </div>
+
+          {/* ── NEW: Unified Feature Cards Row (Same Height) ── */}
+          <div className="mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
+
+            {/* Card 1: Visionary Manifesto */}
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1, duration: 0.8 }}
+              className="relative group h-full"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-100/40 via-white to-white rounded-[2.5rem] border border-amber-200/50 shadow-premium transition-all duration-500 group-hover:shadow-2xl group-hover:-translate-y-1" />
+              <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-amber-400/20 to-transparent blur-[80px] rounded-full -mr-20 -mt-20 group-hover:opacity-100 transition-opacity" />
+              
+              <div className="relative z-10 p-8 h-full flex flex-col">
+                <div className="absolute top-0 right-0 p-4 opacity-[0.05]">
+                  <Quote size={80} className="text-[#9D7606]" />
+                </div>
+
+                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[#9D7606] mb-4 block">ZHI LearnAI • Interactive Education</span>
+
+                <h3 className="text-2xl font-light italic text-slate-800 mb-4" style={{ fontFamily: 'serif' }}>
+                  The Future of <span className="font-bold not-italic text-amber-900">Play-Based Learning.</span>
+                </h3>
+
+                <p className="text-[13px] text-slate-600 leading-relaxed font-medium">
+                  A world where every lesson is an adventure. Through gamified quests, interactive quizzes, and cinematic audio-visual lessons, children master complex subjects naturally as they play.
+                </p>
+
+                <div className="mt-8 space-y-5 flex-grow">
+                  {[
+                    { icon: <Gamepad2 size={16} />, label: 'Gamified Quests', desc: 'Narrative-driven missions that turn study sessions into epic adventures.', color: 'text-amber-600' },
+                    { icon: <Zap size={16} />, label: 'Adaptive Quizzes', desc: 'Smart challenges that adjust difficulty in real-time to match your pace.', color: 'text-orange-500' },
+                    { icon: <Video size={16} />, label: 'Cinematic Media', desc: 'High-definition animations and audio stories for deep sensory learning.', color: 'text-amber-700' },
+                    { icon: <Star size={16} />, label: 'Milestone Rewards', desc: 'Unlock exclusive gear and badges as your child achieves breakthroughs.', color: 'text-yellow-600' }
+                  ].map((pill, i) => (
+                    <div key={i} className="flex gap-4 items-start border-l-2 border-amber-100 pl-4 transition-all hover:border-amber-400 group/pill">
+                      <div className={`${pill.color} mt-0.5 group-hover/pill:scale-110 transition-transform`}>{pill.icon}</div>
+                      <div>
+                        <p className="text-[11px] font-black uppercase text-slate-800 tracking-tight">{pill.label}</p>
+                        <p className="text-[12px] text-slate-500 leading-snug">{pill.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-8 pt-5 border-t border-amber-100/50">
+                  <span className="text-[#9D7606] font-bold text-[13px]">Engaging Games. Adaptive Quizzes. Immersive Multimedia.</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Card 2: Professional HUD Badge */}
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="relative group h-full"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-100/40 via-white to-white rounded-[2.5rem] border border-emerald-200/50 shadow-premium transition-all duration-500 group-hover:shadow-2xl group-hover:-translate-y-1" />
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-emerald-400/15 to-transparent blur-[80px] rounded-full -ml-20 -mb-20" />
+              
+              <div className="relative z-10 p-8 h-full flex flex-col">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="relative w-16 h-16 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-[#013237] rounded-xl rotate-45 shadow-lg shadow-[#013237]/30 border border-white/20" />
+                    <span className="relative z-10 text-white font-medium italic text-base" style={{ fontFamily: 'serif' }}>Lvl 12</span>
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-black uppercase tracking-[0.2em] text-emerald-700 mb-1">Play Mode: Active</p>
+                    <h4 className="text-xl font-medium italic text-slate-900 leading-none" style={{ fontFamily: 'serif' }}>Geometry Mastery</h4>
+                  </div>
+                </div>
+
+                {/* ── NEW: Professional HUD Stats ── */}
+                <div className="flex-grow py-5">
+                  <div className="grid grid-cols-2 gap-4 mb-8">
+                    <div className="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-100">
+                      <p className="text-[9px] font-black tracking-widest text-emerald-700 uppercase opacity-70">Accuracy</p>
+                      <p className="text-2xl font-black text-slate-800" style={{ fontFamily: 'serif' }}>94<span className="text-sm ml-0.5">%</span></p>
+                      <p className="text-[10px] text-emerald-600 font-bold mt-1 tracking-tight">Mastering Concepts</p>
+                    </div>
+                    <div className="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-100">
+                      <p className="text-[9px] font-black tracking-widest text-emerald-700 uppercase opacity-70">Progress Pace</p>
+                      <p className="text-2xl font-black text-slate-800" style={{ fontFamily: 'serif' }}>Fast</p>
+                      <p className="text-[10px] text-emerald-600 font-bold mt-1 tracking-tight">Ahead of Grade</p>
+                    </div>
+                  </div>
+
+                  <div className="pt-5 border-t border-emerald-100/50">
+                    <p className="text-[9px] font-black tracking-[0.2em] text-slate-400 mb-4 uppercase">Skill Strengths</p>
+                    <div className="space-y-2.5">
+                      {[
+                        { label: '3D Visualization', val: 85, color: 'bg-emerald-600', note: 'Strong' },
+                        { label: 'Spatial Reasoning', val: 92, color: 'bg-[#013237]', note: 'Excellent' },
+                      ].map(s => (
+                        <div key={s.label} className="space-y-1">
+                          <div className="flex justify-between items-center">
+                            <span className="text-[11px] font-bold text-slate-600 italic" style={{ fontFamily: 'serif' }}>{s.label}</span>
+                            <span className="text-[10px] font-black text-emerald-800">{s.note} ({s.val}%)</span>
+                          </div>
+                          <div className="h-1.5 w-full bg-emerald-100/50 rounded-full overflow-hidden">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              whileInView={{ width: `${s.val}%` }}
+                              transition={{ duration: 1, delay: 0.5 }}
+                              className={`h-full ${s.color}`}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* ── NEW: Cognitive Score to fill space ── */}
+                  <div className="mt-8 grid grid-cols-2 gap-4">
+                    <div className="p-4 rounded-2xl bg-white border border-emerald-100 transition-colors shadow-sm">
+                      <p className="text-[9px] font-black uppercase text-emerald-600 mb-1">Concentration</p>
+                      <div className="flex items-end gap-2">
+                        <span className="text-xl font-black text-slate-800">High</span>
+                        <TrendingUp size={14} className="mb-1 text-emerald-500" />
+                      </div>
+                    </div>
+                    <div className="p-4 rounded-2xl bg-white border border-emerald-100 transition-colors shadow-sm">
+                      <p className="text-[9px] font-black uppercase text-emerald-600 mb-1">Practice Streak</p>
+                      <div className="flex items-end gap-2">
+                        <span className="text-xl font-black text-slate-800">12<span className="text-xs ml-1">d</span></span>
+                        <Zap size={14} className="mb-1 text-amber-500 fill-amber-500" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4 mt-auto pt-5 border-t border-emerald-100/50">
+                  <div className="flex justify-between items-end mb-1">
+                    <span className="text-[11px] font-bold text-slate-700 uppercase tracking-tighter">Current XP: <span className="text-slate-900 font-black" style={{ fontFamily: 'serif' }}>850</span></span>
+                    <span className="text-[11px] font-black text-emerald-700 uppercase">Next level: 13</span>
+                  </div>
+                  <div className="flex gap-1.5 h-3">
+                    {[...Array(10)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0.5 }}
+                        animate={{ opacity: i < 8 ? 1 : 0.3, backgroundColor: i < 8 ? '#013237' : '#E2E8F0' }}
+                        transition={{ delay: 0.2 + (i * 0.1) }}
+                        className="flex-1 rounded-sm shadow-sm"
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Card 3: Active Reality Engine */}
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+              className="relative group h-full"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-100/40 via-white to-white rounded-[2.5rem] border border-blue-200/50 shadow-premium transition-all duration-500 group-hover:shadow-2xl group-hover:-translate-y-1" />
+              <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-cyan-400/20 to-transparent blur-[80px] rounded-full -mr-20 -mt-20 group-hover:scale-110 transition-transform" />
+              
+              <div className="relative z-10 p-8 h-full flex flex-col">
+                <div className="flex justify-between items-start mb-6 relative z-10">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-[#013237] flex items-center justify-center text-[#D4AF37] border border-white/20 shadow-xl group-hover:scale-110 transition-transform">
+                      <Eye size={24} />
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-black uppercase tracking-[0.2em] text-cyan-700">Reality Engine</p>
+                      <h4 className="text-xl font-medium italic text-slate-900 leading-none" style={{ fontFamily: 'serif' }}>See the Invisible.</h4>
+                    </div>
+                  </div>
+                </div>
+
+                {/* ── NEW: Neural Processing Visual ── */}
+                <div className="flex-grow py-5 relative z-10 transition-all group-hover:translate-x-1">
+                  <div className="flex items-center justify-between mb-8">
+                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-50 border border-cyan-100">
+                      <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
+                      <span className="text-[9px] font-black uppercase text-cyan-700 tracking-wider">Reality Sync Active</span>
+                    </div>
+                    <div className="text-[10px] font-bold text-slate-400 italic">100% Precision</div>
+                  </div>
+
+                  <div className="bg-white/60 rounded-2xl p-5 border border-blue-100/50 space-y-4 shadow-sm">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[10px] font-black uppercase text-blue-500 tracking-widest">Learning Assets</span>
+                      <Sparkles size={12} className="text-amber-500" />
+                    </div>
+                    
+                    <div className="grid grid-cols-1 gap-3">
+                      {[
+                        { label: '3D & AR Labs', val: '45+', icon: <Layers size={14} />, color: 'text-cyan-600', bg: 'bg-cyan-50' },
+                        { label: 'Animated Lessons', val: '120+', icon: <Video size={14} />, color: 'text-blue-600', bg: 'bg-blue-50' },
+                        { label: 'Interactive Quests', val: '80+', icon: <Zap size={14} />, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+                      ].map(stat => (
+                        <div key={stat.label} className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-50 shadow-sm">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-8 h-8 rounded-lg ${stat.bg} ${stat.color} flex items-center justify-center`}>
+                              {stat.icon}
+                            </div>
+                            <span className="text-[11px] font-bold text-slate-600">{stat.label}</span>
+                          </div>
+                          <span className={`text-[13px] font-black ${stat.color}`}>{stat.val}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <p className="mt-6 text-[12px] font-medium leading-relaxed text-slate-500 border-l-2 border-slate-100 pl-4">
+                    Complex ideas transformed into <span className="text-slate-900 font-bold italic">easy 3D stories.</span>
+                  </p>
+                </div>
+
+                <div className="space-y-3 mb-8 relative z-10 mt-auto pt-5 border-t border-blue-100/50">
+                  <div className="flex justify-between text-[11px] font-black uppercase tracking-tight">
+                    <span className="text-slate-500">Learning Level</span>
+                    <span className="text-cyan-700 font-black italic">Simplified for All</span>
+                  </div>
+                  <div className="flex justify-between text-[11px] font-black uppercase tracking-tight">
+                    <span className="text-slate-500">Memory Retention</span>
+                    <span className="text-blue-700 font-black italic">100% Mastery</span>
+                  </div>
+                  <div className="h-[1px] w-full bg-blue-100/50 mt-2" />
+                </div>
+              </div>
+              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent opacity-40" />
+            </motion.div>
+
           </div>
         </div>
       </section>
 
 
 
-      {/* ═══════ THE ECOSYSTEM: COMPACT HUB ═══════ */}
-      <section id="portals" className="-mt-8 py-16 md:py-24 bg-white relative overflow-hidden">
+      {/* ═══════ FEATURES: IMMERSIVE (INNOVATION) ═══════ */}
+      <section id="how-it-works" className="-mt-20 pt-12 md:pt-16 pb-8 md:pb-12 relative overflow-hidden bg-white">
+        {/* Subtle Neural Pattern Background */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
+          style={{ backgroundImage: 'radial-gradient(#013237 0.8px, transparent 0.8px)', backgroundSize: '40px 40px' }} />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-50/50 blur-[120px] rounded-full -mr-32 -mt-32 opacity-60" />
+
+        <div className="max-w-7xl mx-auto px-5 sm:px-6">
+          <div className="flex flex-col lg:grid lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+
+            {/* Visual Side with Holographic Tags */}
+            <div className="lg:col-span-6 relative order-2 lg:order-1">
+              <motion.div
+                initial={{ x: -20, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1 }}
+                className="relative z-10 rounded-[3rem] overflow-hidden group shadow-[0_32px_64px_-16px_rgba(1,50,55,0.2)]"
+              >
+                <div className="absolute inset-0 bg-gradient-to-tr from-[#013237]/30 via-transparent to-white/10 z-10" />
+                <Image
+                  src="/assets/img/achievement.png"
+                  alt="Innovation Tech"
+                  width={800}
+                  height={1000}
+                  className="w-full object-cover transition-transform duration-[2s] group-hover:scale-105"
+                />
+
+                {/* Floating Holographic Tags */}
+                <motion.div 
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute top-12 right-8 z-20 glass-morphism px-5 py-2.5 rounded-2xl border-white/50 shadow-2xl"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse outline outline-4 outline-emerald-500/20" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#013237]">4K Neural Render</span>
+                  </div>
+                </motion.div>
+
+                <motion.div 
+                  animate={{ y: [0, 10, 0] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                  className="absolute bottom-16 left-8 z-20 glass-morphism px-5 py-2.5 rounded-2xl border-white/50 shadow-2xl"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse outline outline-4 outline-blue-500/20" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#013237]">1:1 Reality Overlays</span>
+                  </div>
+                </motion.div>
+              </motion.div>
+              
+              {/* Decorative behind image */}
+              <div className="absolute -inset-10 bg-[#013237]/5 rounded-[4rem] blur-[80px] -z-10" />
+            </div>
+
+            {/* Content Side with Intelligent Tiles */}
+            <div className="lg:col-span-6 order-1 lg:order-2">
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+              >
+                <SectionLabel>Innovation</SectionLabel>
+                <h2 className="text-3xl md:text-5xl font-black mb-4 leading-[1.1] tracking-tight" style={{ color: '#013237' }}>
+                  The technology that <br /> changes <span className="text-gradient-gold">everything.</span>
+                </h2>
+
+                <div className="space-y-4 mt-6">
+                  {[
+                    {
+                      t: 'Cinematic Animations',
+                      d: 'Complex science and math topics transformed into 4K animated epics that tell unforgettable stories.',
+                      icon: Video,
+                      color: '#9D50BB',
+                      bg: 'bg-purple-50'
+                    },
+                    {
+                      t: 'Neural AI Tutoring',
+                      d: 'A personal AI companion trained locally on pedagogic principles to guide students personally.',
+                      icon: Brain,
+                      color: '#013237',
+                      bg: 'bg-emerald-50'
+                    },
+                    {
+                      t: 'Interactive AR Overlay',
+                      d: 'Turn any physical space into a digital laboratory. Study systems in true 1:1 hyper-realistic scale.',
+                      icon: Layers,
+                      color: '#00D2FF',
+                      bg: 'bg-cyan-50'
+                    }
+                  ].map((f, i) => (
+                    <motion.div
+                      key={f.t}
+                      initial={{ x: 20, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.15, duration: 0.8 }}
+                      className="group flex gap-6 p-6 rounded-[2.5rem] transition-all duration-500 hover:bg-slate-50 border border-transparent hover:border-slate-100"
+                    >
+                      <div className={`w-16 h-16 rounded-2xl ${f.bg} flex items-center justify-center flex-shrink-0 transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 shadow-sm`}>
+                        <f.icon size={28} style={{ color: f.color }} />
+                      </div>
+                      <div className="flex flex-col justify-center">
+                        <h4 className="text-xl font-black mb-2 text-slate-800 tracking-tight group-hover:text-[#013237] transition-colors">{f.t}</h4>
+                        <p className="text-slate-500 leading-relaxed text-[14px] font-medium">{f.d}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+
+      {/* ═══════ THE ECOSYSTEM: COMPACT HUB (PORTALS) ═══════ */}
+      <section id="portals" className="-mt-24 pt-8 md:pt-12 pb-16 md:pb-24 bg-white relative overflow-hidden">
         {/* Technical Grid Overlay */}
         <div className="absolute inset-0 opacity-[0.3] pointer-events-none">
           <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(#013237 0.5px, transparent 0.5px)', backgroundSize: '30px 30px' }} />
@@ -374,172 +612,199 @@ export default function HomePage() {
                 id: 'student',
                 label: 'Explorer',
                 title: 'Student Portal',
-                desc: 'A gamified sanctuary where lessons become 3D adventures and AI tutors provide absolute clarity.',
-                items: ['3D Worlds', 'AR Labs', 'AI Tutors'],
+                desc: 'A gamified sanctuary where lessons become 3D adventures and AI tutors provide absolute clarity through adaptive feedback.',
+                items: ['3D Worlds', 'AR Labs', 'AI Tutors', 'Daily Quests', 'Gear Shop', 'Global Hall'],
+                stats: [{ label: 'Active Worlds', val: '14' }, { label: 'Top Subject', val: 'Physics' }],
+                update: 'New "Quantum Realm" AR Lab added yesterday.',
                 color: '#013237',
-                icon: <GraduationCap size={20} />,
-                status: 'Live'
+                accent: 'from-emerald-400/20 to-teal-500/5',
+                border: 'border-emerald-100',
+                btn: 'bg-[#013237]',
+                icon: <GraduationCap size={22} />,
+                visual: (
+                  <div className="h-full flex items-end gap-1 px-1">
+                    {[40, 70, 45, 90, 65, 80, 50, 85, 40].map((h, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ height: 0 }}
+                        whileInView={{ height: `${h}%` }}
+                        transition={{ delay: i * 0.04, duration: 1 }}
+                        className="flex-1 bg-[#013237]/80 rounded-t-[2px]"
+                      />
+                    ))}
+                  </div>
+                )
               },
               {
                 id: 'parent',
                 label: 'Intelligence',
                 title: 'Parent Portal',
-                desc: 'Real-time windows into growth, mapping breakthrough and defining the path forward.',
-                items: ['Cognitive Maps', 'Activity Feed', 'Skill Tracking'],
+                desc: 'Real-time windows into growth, mapping breakthrough and defining the path forward for cognitive excellence.',
+                items: ['Cognitive Maps', 'Activity Feed', 'Skill Tracking', 'Safety Filter', 'Goal Setter', 'Rewards Hub'],
+                stats: [{ label: 'Growth Score', val: '92%' }, { label: 'Active Streak', val: '12d' }],
+                update: 'Breakthrough detected in Spatial Reasoning.',
                 color: '#D4AF37',
-                icon: <Heart size={20} />,
-                status: 'Connected'
+                accent: 'from-amber-400/20 to-orange-500/5',
+                border: 'border-amber-100',
+                btn: 'bg-[#9D7606]',
+                icon: <Heart size={22} />,
+                visual: (
+                  <div className="h-full flex items-center justify-center relative">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-200 to-transparent h-[1px] top-1/2 opacity-30" />
+                    <motion.div
+                      animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.5, 0.2] }}
+                      transition={{ duration: 3, repeat: Infinity }}
+                      className="w-10 h-10 rounded-full bg-amber-400/20 border border-amber-300"
+                    />
+                    <motion.div
+                      animate={{ scale: [1, 1.6, 1], opacity: [0.1, 0.3, 0.1] }}
+                      transition={{ duration: 3, delay: 1, repeat: Infinity }}
+                      className="absolute w-16 h-16 rounded-full bg-amber-400/10 border border-amber-200"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                       <TrendingUp size={16} className="text-amber-600 opacity-60" />
+                    </div>
+                  </div>
+                )
               },
               {
                 id: 'school',
                 label: 'Core',
                 title: 'Institutional Portal',
-                desc: 'Enterprise-grade orchestration for schools to manage complex curriculum and data.',
-                items: ['Bulk Analytics', 'Content Control', 'Strategy Hub'],
+                desc: 'Enterprise-grade orchestration for schools to manage complex curriculum, security, and student data.',
+                items: ['Bulk Analytics', 'Content Control', 'Strategy Hub', 'Teacher Tools', 'Compliance', 'Security'],
+                stats: [{ label: 'System Health', val: '99.9%' }, { label: 'Regional Nodes', val: '42' }],
+                update: 'Node synchronization completed globally.',
                 color: '#9D50BB',
-                icon: <Shield size={20} />,
-                status: 'Enterprise'
+                accent: 'from-violet-400/20 to-purple-500/5',
+                border: 'border-violet-100',
+                btn: 'bg-[#7C3AED]',
+                icon: <Shield size={22} />,
+                visual: (
+                  <div className="h-full grid grid-cols-6 gap-1 px-1">
+                    {[1, 2, 3, 4, 5, 6].map(i => (
+                      <div key={i} className="relative overflow-hidden rounded-sm bg-slate-100/30">
+                        <motion.div
+                          animate={{ y: ['100%', '0%', '-100%'] }}
+                          transition={{ duration: 2.5, delay: i * 0.3, repeat: Infinity }}
+                          className="absolute inset-0 bg-violet-400/30"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )
               }
             ].map((portal, i) => (
               <motion.div
                 key={portal.id}
-                initial={{ y: 15, opacity: 1 }}
+                initial={{ y: 25, opacity: 1 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.8 }}
-                whileHover={{ y: -5 }}
-                className="relative group"
+                transition={{ delay: i * 0.15, duration: 0.8 }}
+                className="relative group h-full cursor-default"
               >
-                {/* Compact Glass Card */}
-                <div className="h-full glass-morphism p-8 rounded-[2rem] border-white/40 shadow-premium transition-all duration-500 hover:shadow-2xl hover:border-slate-200 bg-white/40 flex flex-col items-start overflow-hidden border">
-
-                  {/* Subtle Glow */}
-                  <div className="absolute top-0 right-0 w-32 h-32 blur-[60px] rounded-full -mr-16 -mt-16 opacity-30 group-hover:opacity-50 transition-opacity"
-                    style={{ background: portal.color }} />
-
-                  {/* Icon & Status */}
-                  <div className="flex justify-between items-center w-full mb-8 relative z-10">
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-lg transition-transform"
-                      style={{ background: portal.color }}>
-                      {portal.icon}
+                {/* Visual Background Container */}
+                <div className={`absolute inset-0 bg-white rounded-[2.5rem] shadow-premium border ${portal.border} overflow-hidden transition-all duration-500 group-hover:shadow-2xl group-hover:-translate-y-2`} />
+                <div className={`absolute inset-0 bg-gradient-to-br ${portal.accent} opacity-40 rounded-[2.5rem]`} />
+                
+                <div className="relative z-10 p-8 h-full flex flex-col">
+                  {/* Status Row */}
+                  <div className="flex justify-between items-center mb-6">
+                    <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/90 border border-slate-100 shadow-sm">
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">{portal.label}</span>
                     </div>
-                    <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/80 border border-slate-100">
-                      <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                      <span className="text-[9px] font-black uppercase text-slate-500 tracking-wider font-inter">{portal.status}</span>
+                    <div className="text-[9px] font-black text-slate-300 uppercase">PRTL_{portal.id.toUpperCase()}</div>
+                  </div>
+
+                  {/* Header Row */}
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-lg group-hover:rotate-3 transition-transform ${portal.btn}`}>
+                       {portal.icon}
+                    </div>
+                    <div className="flex-grow">
+                      <h3 className="text-2xl font-light italic text-slate-900 leading-tight" style={{ fontFamily: 'serif' }}>
+                        {portal.title}
+                      </h3>
+                      <p className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Access Tier: Premium</p>
                     </div>
                   </div>
 
-                  {/* Content Hub */}
-                  <div className="relative z-10 flex-grow">
-                    <h3 className="text-2xl font-light italic text-slate-900 mb-4" style={{ fontFamily: 'serif' }}>
-                      {portal.title}
-                    </h3>
-                    <p className="text-slate-500 text-[14px] leading-relaxed mb-8 font-medium">
-                      {portal.desc}
-                    </p>
+                  {/* Quick Stats Grid */}
+                  <div className="grid grid-cols-2 gap-3 mb-6">
+                    {portal.stats.map(s => (
+                      <div key={s.label} className="bg-white/40 p-3 rounded-xl border border-white group-hover:bg-white transition-colors">
+                        <p className="text-[8px] font-black uppercase text-slate-400 mb-0.5">{s.label}</p>
+                        <p className="text-sm font-black text-slate-800 tracking-tight">{s.val}</p>
+                      </div>
+                    ))}
+                  </div>
 
-                    {/* Compact Feature Matrix */}
-                    <div className="flex flex-wrap gap-2 mb-8">
-                      {portal.items.map(item => (
-                        <div key={item} className="px-3 py-1.5 rounded-lg bg-slate-50/80 border border-slate-100 text-[9px] font-black uppercase tracking-tight text-slate-600 transition-colors group-hover:bg-white group-hover:border-slate-200">
-                          {item}
+                  {/* Description */}
+                  <p className="text-slate-500 text-[13px] leading-relaxed mb-6 font-medium">
+                    {portal.desc}
+                  </p>
+
+                  {/* Feature Matrix - Higher Density */}
+                  <div className="grid grid-cols-2 gap-2 mb-8">
+                    {portal.items.map(item => (
+                      <div key={item} className="flex items-center gap-2 group/tag">
+                        <div className={`w-1 h-1 rounded-full ${portal.btn} opacity-30 group-hover/tag:opacity-100 transition-opacity`} />
+                        <span className="text-[10px] font-bold text-slate-600 transition-colors group-hover:text-slate-900">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Visual Activity & Update */}
+                  <div className="mt-auto">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="h-12 w-2/3 border-r border-slate-100 pr-4">
+                        <p className="text-[8px] font-black uppercase text-slate-400 tracking-widest mb-1.5">Live Sync</p>
+                        {portal.visual}
+                      </div>
+                      <div className="w-1/3 pl-4">
+                        <p className="text-[8px] font-black uppercase text-slate-400 tracking-widest mb-1">Status</p>
+                        <span className="text-[10px] font-black text-emerald-600 uppercase">Operational</span>
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-slate-50/80 border border-slate-100 mb-6">
+                      <p className="text-[9px] font-black text-slate-800 leading-snug">
+                        <span className="opacity-40 uppercase text-[8px] mr-1">Latest Upgrade:</span><br/>
+                        {portal.update}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col items-center gap-3">
+                      <a 
+                        href={`/${locale}/login?portal=${portal.id}`} 
+                        className="group/btn relative flex items-center justify-center gap-4 px-10 py-3.5 rounded-full overflow-hidden transition-all duration-500 hover:scale-105 active:scale-95"
+                      >
+                        {/* Shimmering Background */}
+                        <div className={`absolute inset-0 opacity-10 group-hover/btn:opacity-100 transition-opacity duration-500 ${portal.btn}`} />
+                        <div className="absolute inset-0 border border-slate-200 group-hover/btn:border-transparent transition-colors" style={{ borderRadius: 'inherit' }} />
+                        
+                        <span className={`relative z-10 font-black text-[10px] uppercase tracking-[0.3em] transition-colors duration-500 group-hover/btn:text-white ${portal.id === 'student' ? 'text-[#013237]' : portal.id === 'parent' ? 'text-[#9D7606]' : 'text-[#7C3AED]'}`}>
+                          Initiate Access
+                        </span>
+                        
+                        <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 group-hover/btn:bg-white/20 group-hover/btn:translate-x-1 ${portal.btn} text-white`}>
+                          <ChevronRight size={16} className="group-hover/btn:translate-x-0.5 transition-transform" />
                         </div>
-                      ))}
-                    </div>
-                  </div>
 
-                  {/* Action */}
-                  <div className="pt-6 border-t border-slate-100/60 w-full relative z-10 mt-auto">
-                    <a href={`/${locale}/login?portal=${portal.id}`} className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#013237] group-hover:gap-5 transition-all w-full">
-                      Open Portal <ExternalLink size={14} />
-                    </a>
+                        {/* Outer Glow */}
+                        <div className={`absolute -inset-2 blur-xl opacity-0 group-hover/btn:opacity-20 transition-opacity -z-10 ${portal.btn}`} />
+                      </a>
+                      
+                      <div className="flex items-center gap-1.5 opacity-30 group-hover:opacity-60 transition-opacity">
+                        <Lock size={10} className="text-slate-400" />
+                        <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">Encrypted Gateway</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </motion.div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════ FEATURES: IMMERSIVE ═══════ */}
-      <section id="features" className="-mt-8 py-16 md:py-28 relative overflow-hidden bg-white">
-        <div className="max-w-7xl mx-auto px-5 sm:px-6">
-          <div className="flex flex-col lg:grid lg:grid-cols-12 gap-16 lg:gap-24 items-center">
-
-            {/* Visual Side */}
-            <div className="lg:col-span-6 relative order-1 lg:order-1">
-              <motion.div
-                initial={{ x: -20, opacity: 1 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                className="relative z-10 rounded-[3rem] overflow-hidden group"
-              >
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/10 to-transparent z-10" />
-                <Image
-                  src="/assets/img/achievement.png"
-                  alt="AR Learning Feature"
-                  width={800}
-                  height={1000}
-                  className="w-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                />
-              </motion.div>
-            </div>
-
-            {/* Content Side */}
-            <div className="lg:col-span-6 order-2 lg:order-2">
-              <motion.div
-                initial={{ y: 20, opacity: 1 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-              >
-                <SectionLabel>Innovation</SectionLabel>
-                <h2 className="text-4xl md:text-5xl font-black mb-8 leading-[1.1]" style={{ color: C.primary }}>
-                  The technology <br /> that changes <br /> <span className="text-gradient-gold">everything.</span>
-                </h2>
-
-                <div className="space-y-10 mt-12">
-                  {[
-                    {
-                      t: 'Cinematic Animations',
-                      d: 'We don\'t just explain. we tell stories. Complex science and math turned into 4K animated epics.',
-                      icon: Video,
-                      color: C.cyberViolet
-                    },
-                    {
-                      t: 'Neural AI Tutoring',
-                      d: 'A personal AI companion trained on pedagogic principles to guide students without giving away answers.',
-                      icon: Brain,
-                      color: C.primary
-                    },
-                    {
-                      t: 'Interactive AR Overlay',
-                      d: 'Turn any physical space into a laboratory. Study the human heart or solar systems in true 1:1 scale.',
-                      icon: Layers,
-                      color: C.cyberBlue
-                    }
-                  ].map((f, i) => (
-                    <motion.div
-                      key={f.t}
-                      initial={{ x: 15, opacity: 1 }}
-                      whileInView={{ x: 0, opacity: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.1 }}
-                      className="flex gap-6 group"
-                    >
-                      <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:rotate-6 shadow-sm border border-slate-100 group-hover:shadow-md"
-                        style={{ background: '#fff' }}>
-                        <f.icon size={26} style={{ color: f.color }} />
-                      </div>
-                      <div>
-                        <h4 className="text-xl font-black mb-2 text-slate-800 tracking-tight">{f.t}</h4>
-                        <p className="text-slate-500 leading-relaxed text-[15px]">{f.d}</p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            </div>
-
           </div>
         </div>
       </section>
@@ -586,32 +851,32 @@ export default function HomePage() {
             {[
               {
                 tag: 'Phase 1', num: '01',
-                title: 'Live AI Buddy',
-                desc: 'A conversational AI friend that talks, hints, and cheers your child on — just like a real tutor, without the pressure.',
+                title: 'Neural Study Companion',
+                desc: 'An adaptive AI guide providing personalized Socratic hinting and emotional support, ensuring mastery without frustration.',
                 icon: MessageCircle,
                 accent: C.cyberViolet,
                 glow: 'rgba(157,80,187,0.25)',
               },
               {
                 tag: 'Phase 2', num: '02',
-                title: 'AR Learning Worlds',
-                desc: 'Step inside science experiments. Explore the solar system, dissect a cell, or build a volcano — all from home.',
+                title: 'Immersive AR Laboratories',
+                desc: 'Step inside the invisible. Transition from theory to 3D reality by exploring complex systems in hyper-realistic scale.',
                 icon: Eye,
                 accent: C.cyberBlue,
                 glow: 'rgba(0,210,255,0.2)',
               },
               {
                 tag: 'Phase 3', num: '03',
-                title: 'Multiplayer Quests',
-                desc: 'Kids collaborate with friends to solve challenges and climb leaderboards — social learning through friendly play.',
+                title: 'Collaborative Social Hubs',
+                desc: 'Bridging play and academic rivalry. Students solve high-stakes challenges together, fostering leadership and teamwork.',
                 icon: Gamepad2,
                 accent: C.goldLight,
                 glow: 'rgba(247,239,138,0.15)',
               },
               {
                 tag: 'Phase 4', num: '04',
-                title: 'Global Curriculum',
-                desc: 'Supporting school syllabuses across Singapore, Malaysia, India and beyond — same fun, local content.',
+                title: 'Universal Academic Alignment',
+                desc: 'Global scaling to support localized national standards, delivering world-class curriculum with AI-powered precision.',
                 icon: Globe,
                 accent: C.gold,
                 glow: 'rgba(212,175,55,0.2)',
@@ -683,7 +948,7 @@ export default function HomePage() {
             transition={{ delay: 0.5 }}
             className="text-center mt-16"
           >
-            <p className="text-white/30 text-xs uppercase tracking-[0.3em]">Phase 1 is live now &mdash; Join thousands of Singapore learners today</p>
+            <p className="text-white/30 text-xs uppercase tracking-[0.3em]">Phase 1 is live now &mdash; Join thousands of learners today</p>
           </motion.div>
 
         </div>
@@ -707,7 +972,7 @@ export default function HomePage() {
               Ready to make learning <span className="italic font-light" style={{ fontFamily: 'serif' }}>joyful?</span>
             </h2>
             <p className="text-slate-400 text-sm max-w-md mx-auto leading-relaxed">
-              Book a personalised demo and discover why Singapore parents and schools choose ZHI LearnAI.
+              Book a personalised demo and discover why parents and schools choose ZHI LearnAI.
             </p>
           </div>
 
@@ -742,7 +1007,7 @@ export default function HomePage() {
                     </div>
                   </a>
 
-                  <a href="tel:+6567890123"
+                  <a href="tel:+18001234567"
                     className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-[#013237]/20 hover:bg-white transition-all group">
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"
                       style={{ background: `${C.gold}18`, color: C.goldDark }}>
@@ -750,7 +1015,7 @@ export default function HomePage() {
                     </div>
                     <div>
                       <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-0.5">Call Us</p>
-                      <p className="text-sm font-semibold text-slate-700">+65 6789 0123</p>
+                      <p className="text-sm font-semibold text-slate-700">+1 800 123 4567</p>
                     </div>
                   </a>
                 </div>
@@ -761,9 +1026,9 @@ export default function HomePage() {
                 <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mb-5">Why Parents Trust Us</p>
                 <div className="space-y-3">
                   {[
-                    { icon: CheckCircle2, label: 'MOE Syllabus Aligned', color: C.primary },
-                    { icon: Shield, label: 'PDPA Compliant & Secure', color: C.cyberBlue },
-                    { icon: Star, label: 'Singapore-Based Platform', color: C.goldDark },
+                    { icon: CheckCircle2, label: 'Standard Curriculum Aligned', color: C.primary },
+                    { icon: Shield, label: 'Global Data Compliance', color: C.cyberBlue },
+                    { icon: Star, label: 'Global AI-First Platform', color: C.goldDark },
                   ].map(({ icon: Icon, label, color }) => (
                     <div key={label} className="flex items-center gap-3">
                       <Icon size={15} style={{ color }} />
@@ -804,7 +1069,7 @@ export default function HomePage() {
                         <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" />
                         <input
                           type="email"
-                          placeholder="you@school.edu.sg"
+                          placeholder="you@school.edu"
                           suppressHydrationWarning
                           className="w-full pl-9 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm transition-all focus:border-[#013237] focus:bg-white focus:ring-2 focus:ring-[#013237]/8 placeholder:text-slate-300 text-slate-800"
                         />
@@ -820,7 +1085,7 @@ export default function HomePage() {
                         <Phone size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" />
                         <input
                           type="tel"
-                          placeholder="+65 9123 4567"
+                          placeholder="+1 234 567 890"
                           suppressHydrationWarning
                           className="w-full pl-9 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm transition-all focus:border-[#013237] focus:bg-white focus:ring-2 focus:ring-[#013237]/8 placeholder:text-slate-300 text-slate-800"
                         />
@@ -857,7 +1122,7 @@ export default function HomePage() {
                           className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm transition-all focus:border-[#013237] focus:bg-white focus:ring-2 focus:ring-[#013237]/8 text-slate-600 appearance-none"
                         >
                           <option value="" disabled>Select grade level...</option>
-                          {['Primary School', 'Secondary School', 'Pre-University / JC', 'Other'].map(opt => (
+                          {['Primary / Elementary', 'Secondary / Middle School', 'High School / Pre-College', 'Other'].map(opt => (
                             <option key={opt} value={opt}>{opt}</option>
                           ))}
                         </select>
@@ -872,7 +1137,7 @@ export default function HomePage() {
                         <GraduationCap size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" />
                         <input
                           type="text"
-                          placeholder="e.g. Raffles Institution"
+                          placeholder="e.g. International Academy"
                           suppressHydrationWarning
                           className="w-full pl-9 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm transition-all focus:border-[#013237] focus:bg-white focus:ring-2 focus:ring-[#013237]/8 placeholder:text-slate-300 text-slate-800"
                         />
