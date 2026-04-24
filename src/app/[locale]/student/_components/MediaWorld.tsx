@@ -114,6 +114,7 @@ export default function MediaWorld() {
                  value={searchTerm}
                  onChange={(e) => setSearchTerm(e.target.value)}
                  className="w-full bg-white border-4 border-slate-100 rounded-3xl py-4 pl-12 pr-6 text-sm font-bold text-slate-700 placeholder:text-slate-300 focus:outline-none focus:border-indigo-400 shadow-sm transition-all"
+                 suppressHydrationWarning
                />
                <div className="absolute top-1/2 -translate-y-1/2 right-4 hidden sm:block">
                   <span className="text-[10px] font-black text-slate-300 uppercase letter-spacing-widest">Find Magic</span>
@@ -147,6 +148,7 @@ export default function MediaWorld() {
                          <button 
                            onClick={() => handleRhymePlay(r)} 
                            className={`absolute -bottom-2 -right-2 w-12 h-12 rounded-full shadow-lg flex items-center justify-center text-white ${isOn ? 'bg-rose-500' : 'bg-indigo-600'}`}
+                           suppressHydrationWarning
                          >
                             {isOn ? <Pause size={20} /> : <Play size={24} fill="currentColor" />}
                          </button>

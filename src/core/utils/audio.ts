@@ -29,6 +29,9 @@ class AudioEngine {
   private lastSpokenText: string = '';
   private lastSpokenAt: number = 0;
 
+  private silentLoop: HTMLAudioElement | null = null;
+  private currentUtterance: SpeechSynthesisUtterance | null = null;
+
   public static getInstance(): AudioEngine {
     if (!AudioEngine.instance) {
       AudioEngine.instance = new AudioEngine();
@@ -41,67 +44,100 @@ class AudioEngine {
     this.voices = window.speechSynthesis.getVoices();
     
     if (this.voices.length > 0) {
+      // Prioritize the fastest available English voice
       this.selectedVoice = this.voices.find(v => 
-        v.lang.startsWith('en') && 
+        v.lang.startsWith('en') && v.localService === true &&
         (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Daniel') || v.name.includes('Samantha'))
-      ) || this.voices.find(v => v.lang.startsWith('en')) || this.voices[0] || null;
+      ) || this.voices.find(v => v.lang.startsWith('en') && v.localService === true) 
+        || this.voices.find(v => v.lang.startsWith('en')) 
+        || this.voices[0] || null;
       
       if (this.selectedVoice) {
-        console.log("🟢 AUDIO READY: Voice Loaded -", this.selectedVoice.name);
+        console.log("🟢 ZERO-LATENCY READY: Voice -", this.selectedVoice.name);
       }
     }
   }
 
   /**
-   * Wakes up the speech engine. Call this on the first user interaction.
+   * Wakes up hardware and speech engine.
    */
   public warmUp() {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
     
+    // 1. Wake up the Speech Synthesis
     window.speechSynthesis.resume();
-    const u = new SpeechSynthesisUtterance(' '); // Small kick
+    const u = new SpeechSynthesisUtterance(' ');
     u.volume = 0;
     window.speechSynthesis.speak(u);
+
+    // 2. Start Silent Hardware Loop (Keeps sound card "Hot" on mobile)
+    if (!this.silentLoop) {
+      this.silentLoop = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFRm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
+      this.silentLoop.loop = true;
+      this.silentLoop.volume = 0.01;
+      this.silentLoop.play().catch(() => {
+        // Will retry on next interaction
+        console.log("Silent loop waiting for interaction...");
+      });
+    }
+
     this.isWarmedUp = true;
+
+    // Keep-alive heartbeat
+    setInterval(() => {
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.resume();
+      }
+      if (this.silentLoop && this.silentLoop.paused) {
+        this.silentLoop.play().catch(() => {});
+      }
+    }, 3000);
   }
 
   public speak(text: string, options: { rate?: number; pitch?: number } = {}) {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
 
     // ─── DOUBLE-SPEAK GUARD ───
-    // If the same text is requested within 1 second, ignore it (fixes React double-trigger)
     const now = Date.now();
-    if (this.lastSpokenText === text && (now - this.lastSpokenAt) < 1000) {
+    if (this.lastSpokenText === text && (now - this.lastSpokenAt) < 800) {
       return;
     }
     this.lastSpokenText = text;
     this.lastSpokenAt = now;
 
+    // Ensure hardware is hot
+    if (this.silentLoop && this.silentLoop.paused) {
+      this.silentLoop.play().catch(() => {});
+    }
+
     // Reset synthesis engine state
     window.speechSynthesis.cancel();
     window.speechSynthesis.resume();
     
+    // Use a very small timeout for the engine to clear, but enough for mobile
     setTimeout(() => {
-      // Re-scan for voices if list is empty
-      if (this.voices.length === 0) {
-        this.loadVoices();
-      }
+      if (this.voices.length === 0) this.loadVoices();
 
       const u = new SpeechSynthesisUtterance(text);
+      this.currentUtterance = u;
       
-      // Ensure we have a voice or use system default
       if (this.selectedVoice) {
         u.voice = this.selectedVoice;
+        u.lang = this.selectedVoice.lang;
+      } else {
+        u.lang = 'en-US';
       }
       
-      u.rate = options.rate || 0.9;
+      u.rate = options.rate || 0.95; // Slightly faster for responsiveness
       u.pitch = options.pitch || 1.3;
       u.volume = 1.0;
-      u.lang = 'en-US';
+
+      u.onend = () => { this.currentUtterance = null; };
+      u.onerror = () => { this.currentUtterance = null; };
       
-      console.log(`[AudioEngine] Speaking: ${text}`);
+      console.log(`[AudioEngine] ⚡ Instant Speak: ${text}`);
       window.speechSynthesis.speak(u);
-    }, 150);
+    }, 80); // Minimized latency
   }
 
   /**

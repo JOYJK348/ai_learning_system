@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname } from '@/i18n/routing';
 import StudentBottomNav from './_components/StudentBottomNav';
+import { audioEngine } from '@/core/utils/audio';
 
 export default function StudentLayout({
   children,
@@ -16,6 +17,9 @@ export default function StudentLayout({
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
+    
+    // Prime the audio engine for the session
+    audioEngine?.warmUp();
   }, [pathname]);
 
   return (

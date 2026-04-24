@@ -166,6 +166,7 @@ export default function DashboardHome() {
                 }
               }}
               className="w-full h-full flex flex-col items-center justify-center cursor-pointer"
+              suppressHydrationWarning
             >
               <div className="relative">
                 {zone.id === 'alpha' && <AlphaLandmark unlocked={zone.unlocked} />}
