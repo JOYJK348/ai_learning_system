@@ -157,7 +157,7 @@ export default function DashboardHome() {
         {ZONES.map((zone) => (
           <div key={zone.id} className={`absolute ${zone.size} transition-all active:scale-95 duration-300 group`} style={zone.position}>
             <button
-              onClick={() => { 
+              onPointerDown={() => { 
                 if (zone.unlocked) {
                   audioEngine?.speak(`${zone.name} Adventure!`);
                   router.push(`/${locale}/student/Learn?category=${zone.id}`); 
@@ -165,7 +165,7 @@ export default function DashboardHome() {
                   audioEngine?.speak("Unlock this area first!");
                 }
               }}
-              className="w-full h-full flex flex-col items-center justify-center cursor-pointer"
+              className="w-full h-full flex flex-col items-center justify-center cursor-pointer [touch-action:none]"
               suppressHydrationWarning
             >
               <div className="relative">

@@ -75,15 +75,18 @@ function SoundMatchGame({ onBack }: { onBack: () => void }) {
 
   return (
     <GameShell title="Sound Match" subtitle="Listen and tap the right one!" round={round + 1} total={totalRounds} score={score} onBack={onBack}>
-      <button onClick={() => speak(`Find the ${currentRound.answer.title.replace(/^[A-Z] for /, '')}`)} className="mx-auto mb-10 w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center shadow-[0_15px_40px_rgba(59,130,246,0.4)] hover:scale-110 active:scale-95 transition-transform">
+      <button 
+        onPointerDown={() => speak(`Find the ${currentRound.answer.title.replace(/^[A-Z] for /, '')}`)} 
+        className="mx-auto mb-10 w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center shadow-[0_15px_40px_rgba(59,130,246,0.4)] hover:scale-110 active:scale-95 transition-transform [touch-action:none]"
+      >
         <Volume2 className="text-white" size={40} />
       </button>
       <p className="text-center text-blue-800 font-black text-sm uppercase tracking-[0.3em] mb-8">Tap the speaker, then pick!</p>
       <div className="grid grid-cols-3 gap-6">
         {currentRound.options.map((opt: any) => (
           <motion.button key={opt.id} whileHover={{ scale: 1.08, y: -5 }} whileTap={{ scale: 0.92 }}
-            onClick={() => handlePick(opt)}
-            className={`aspect-square rounded-[3rem] flex flex-col items-center justify-center border-4 transition-all
+            onTap={() => handlePick(opt)}
+            className={`aspect-square rounded-[3rem] flex flex-col items-center justify-center border-4 transition-all [touch-action:none]
               ${selected === opt.id && result === 'correct' ? 'bg-emerald-100 border-emerald-400 shadow-[0_0_30px_rgba(16,185,129,0.3)]' 
               : selected === opt.id && result === 'wrong' ? 'bg-red-50 border-red-300 animate-[shake_0.4s_ease-in-out]' 
               : 'bg-white/80 border-white hover:border-blue-300 hover:shadow-xl'}`}
@@ -160,11 +163,11 @@ function TrueOrFalseGame({ onBack }: { onBack: () => void }) {
         )}
       </motion.div>
       <div className="grid grid-cols-2 gap-8">
-        <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.92 }} onClick={() => handleAnswer(true)}
-          className="h-32 rounded-[3rem] bg-emerald-500 text-white font-black text-2xl flex items-center justify-center gap-3 shadow-[0_15px_40px_rgba(16,185,129,0.3)] hover:shadow-[0_20px_60px_rgba(16,185,129,0.4)] transition-all"
+        <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.92 }} onTap={() => handleAnswer(true)}
+          className="h-32 rounded-[3rem] bg-emerald-500 text-white font-black text-2xl flex items-center justify-center gap-3 shadow-[0_15px_40px_rgba(16,185,129,0.3)] hover:shadow-[0_20px_60px_rgba(16,185,129,0.4)] transition-all [touch-action:none]"
         ><CheckCircle size={36} /> TRUE</motion.button>
-        <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.92 }} onClick={() => handleAnswer(false)}
-          className="h-32 rounded-[3rem] bg-rose-500 text-white font-black text-2xl flex items-center justify-center gap-3 shadow-[0_15px_40px_rgba(244,63,94,0.3)] hover:shadow-[0_20px_60px_rgba(244,63,94,0.4)] transition-all"
+        <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.92 }} onTap={() => handleAnswer(false)}
+          className="h-32 rounded-[3rem] bg-rose-500 text-white font-black text-2xl flex items-center justify-center gap-3 shadow-[0_15px_40px_rgba(244,63,94,0.3)] hover:shadow-[0_20px_60px_rgba(244,63,94,0.4)] transition-all [touch-action:none]"
         ><XCircle size={36} /> FALSE</motion.button>
       </div>
     </GameShell>
@@ -228,8 +231,8 @@ function SequenceGame({ onBack }: { onBack: () => void }) {
       <div className="grid grid-cols-3 gap-6">
         {shuffleArray(current.options).map((opt) => (
           <motion.button key={opt} whileHover={{ scale: 1.08, y: -5 }} whileTap={{ scale: 0.92 }}
-            onClick={() => handlePick(opt)}
-            className={`h-28 rounded-[2.5rem] font-black text-3xl flex items-center justify-center border-4 transition-all
+            onTap={() => handlePick(opt)}
+            className={`h-28 rounded-[2.5rem] font-black text-3xl flex items-center justify-center border-4 transition-all [touch-action:none]
               ${result === 'correct' && opt === current.answer ? 'bg-emerald-100 border-emerald-400 text-emerald-700' 
               : result === 'wrong' && opt !== current.answer ? 'opacity-50' 
               : 'bg-white/80 border-white text-slate-800 hover:border-blue-300 hover:shadow-xl'}`}
@@ -298,8 +301,8 @@ function MemoryMatchGame({ onBack }: { onBack: () => void }) {
       <div className="grid grid-cols-4 gap-4 sm:gap-5 max-w-lg mx-auto">
         {cards.map(card => (
           <motion.button key={card.id} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.92 }}
-            onClick={() => handleFlip(card.id)}
-            className={`aspect-square rounded-[2rem] flex items-center justify-center text-5xl font-black transition-all border-4 shadow-lg
+            onTap={() => handleFlip(card.id)}
+            className={`aspect-square rounded-[2rem] flex items-center justify-center text-5xl font-black transition-all border-4 shadow-lg [touch-action:none]
               ${card.matched ? 'bg-emerald-100 border-emerald-300 opacity-60' 
               : card.flipped ? 'bg-white border-blue-300 shadow-xl' 
               : 'bg-blue-600 border-blue-500 hover:bg-blue-500'}`}
@@ -329,7 +332,7 @@ function GameShell({ title, subtitle, round, total, score, onBack, hideProgress,
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
-        <button onClick={onBack} className="px-5 py-2.5 bg-white/60 backdrop-blur-md text-blue-800 font-black text-sm rounded-2xl border-2 border-white hover:bg-white transition-all">← Back</button>
+        <button onPointerDown={onBack} className="px-5 py-2.5 bg-white/60 backdrop-blur-md text-blue-800 font-black text-sm rounded-2xl border-2 border-white hover:bg-white transition-all [touch-action:none]">← Back</button>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 bg-yellow-100 px-4 py-2 rounded-full border-2 border-yellow-300">
             <Star size={16} className="text-yellow-600 fill-yellow-500" />
@@ -384,8 +387,8 @@ function GameComplete({ title, score, total, onBack, extra }: { title: string; s
         <p className="text-4xl font-black text-blue-700 mb-2">{score}/{total}</p>
         {extra && <p className="text-slate-400 font-bold text-sm">{extra}</p>}
         
-        <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={onBack}
-          className="mt-8 w-full py-5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-black text-lg rounded-2xl shadow-[0_15px_40px_rgba(59,130,246,0.3)] flex items-center justify-center gap-3"
+        <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onTap={onBack}
+          className="mt-8 w-full py-5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-black text-lg rounded-2xl shadow-[0_15px_40px_rgba(59,130,246,0.3)] flex items-center justify-center gap-3 [touch-action:none]"
         >Play Again <ArrowRight size={20} /></motion.button>
       </div>
     </motion.div>
@@ -453,8 +456,8 @@ export default function GamesPlayground() {
                   <motion.button key={game.id}
                     initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 + i * 0.1 }}
                     whileHover={{ y: -10, scale: 1.02 }} whileTap={{ scale: 0.97 }}
-                    onClick={() => setActiveGame(game.id)}
-                    className="group relative bg-white/70 backdrop-blur-xl border-4 border-white rounded-[4rem] p-10 text-left transition-all shadow-lg hover:shadow-2xl overflow-hidden"
+                    onTap={() => setActiveGame(game.id)}
+                    className="group relative bg-white/70 backdrop-blur-xl border-4 border-white rounded-[4rem] p-10 text-left transition-all shadow-lg hover:shadow-2xl overflow-hidden [touch-action:none]"
                   >
                     {/* BG Gradient on Hover */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-0 group-hover:opacity-5 transition-opacity`} />

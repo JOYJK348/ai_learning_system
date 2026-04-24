@@ -135,8 +135,8 @@ export default function QuizEngine({ lesson, onClose, onComplete }: QuizEnginePr
         
         {/* CLOSE BUTTON */}
         <button 
-          onClick={onClose}
-          className="absolute top-4 right-4 z-50 w-12 h-12 bg-white/20 rounded-full flex items-center justify-center border border-white/20 active:scale-95"
+          onPointerDown={onClose}
+          className="absolute top-4 right-4 z-50 w-12 h-12 bg-white/20 rounded-full flex items-center justify-center border border-white/20 active:scale-95 [touch-action:none]"
         >
           <X className="text-white" size={20} />
         </button>
@@ -171,9 +171,9 @@ export default function QuizEngine({ lesson, onClose, onComplete }: QuizEnginePr
               {quiz.options.map((opt) => (
                 <button
                   key={opt.n}
-                  onClick={() => handleTap(opt)}
+                  onPointerDown={() => handleTap(opt)}
                   disabled={phase === 'wrong'}
-                  className="aspect-square bg-white rounded-[2rem] flex flex-col items-center justify-center border-b-4 border-slate-100 active:bg-blue-50 transition-colors"
+                  className="aspect-square bg-white rounded-[2rem] flex flex-col items-center justify-center border-b-4 border-slate-100 active:bg-blue-50 transition-colors [touch-action:none]"
                 >
                   <span className="text-5xl mb-1">{opt.e}</span>
                   <span className="text-slate-500 font-black text-[10px] uppercase">{opt.n}</span>
@@ -213,8 +213,8 @@ export default function QuizEngine({ lesson, onClose, onComplete }: QuizEnginePr
                <div className="text-7xl mb-4">{lesson.emoji}</div>
                <h2 className="text-2xl font-black text-slate-900 mb-6">Mission Done!</h2>
                <button 
-                 onClick={onClose}
-                 className="w-full py-4 bg-blue-600 text-white font-black rounded-2xl shadow-md active:scale-95"
+                 onPointerDown={onClose}
+                 className="w-full py-4 bg-blue-600 text-white font-black rounded-2xl shadow-md active:scale-95 [touch-action:none]"
                >
                  CONTINUE
                </button>

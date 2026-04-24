@@ -72,8 +72,8 @@ export default function QuizArena() {
                       
                       <div className="flex justify-center md:justify-start w-full">
                         <button 
-                          onClick={startDailyThree}
-                          className="bg-indigo-600 text-white px-10 py-5 rounded-[2rem] font-black text-lg shadow-2xl hover:bg-indigo-700 active:scale-95 transition-all flex items-center gap-3 group/btn"
+                          onPointerDown={startDailyThree}
+                          className="bg-indigo-600 text-white px-10 py-5 rounded-[2rem] font-black text-lg shadow-2xl hover:bg-indigo-700 active:scale-95 transition-all flex items-center gap-3 group/btn [touch-action:none]"
                         >
                            ENTER ARENA <Play className="group-hover/btn:translate-x-1 transition-transform" />
                         </button>
@@ -182,9 +182,11 @@ export default function QuizArena() {
                   { id: 'sequence', title: 'Sequence', emoji: '🧩', color: 'bg-purple-500' },
                   { id: 'memory', title: 'Memory', emoji: '🧠', color: 'bg-rose-500' },
                 ].map((game) => (
-                  <button key={game.id}
-                    onClick={() => setActiveGame(game.id)}
-                    className="bg-white/40 backdrop-blur-3xl rounded-[3rem] p-8 text-left border-2 border-white/60 shadow-2xl flex items-center gap-8 active:scale-95 transition-all group hover:bg-white/60"
+                  <motion.button key={game.id}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onTap={() => setActiveGame(game.id)}
+                    className="bg-white/40 backdrop-blur-3xl rounded-[3rem] p-8 text-left border-2 border-white/60 shadow-2xl flex items-center gap-8 transition-all group hover:bg-white/60 [touch-action:none]"
                   >
                      <div className={`w-20 h-20 rounded-[1.8rem] ${game.color} flex items-center justify-center text-4xl shadow-xl transform group-hover:scale-110 group-hover:rotate-6 transition-all`}>
                        {game.emoji}
@@ -194,7 +196,7 @@ export default function QuizArena() {
                        <span className="text-xs font-black text-indigo-900/40 uppercase tracking-[0.2em]">Start Training</span>
                      </div>
                      <ChevronRight className="ml-auto text-indigo-900/20 group-hover:text-indigo-900 group-hover:translate-x-2 transition-all" size={32} />
-                  </button>
+                  </motion.button>
                 ))}
              </div>
           </div>

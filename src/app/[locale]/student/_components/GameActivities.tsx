@@ -43,8 +43,8 @@ function GameShell({ title, subtitle, round, total, score, onBack, hideProgress,
         {/* Navigation Head */}
         <div className="flex items-center justify-between mb-10">
           <button 
-            onClick={onBack} 
-            className="flex items-center gap-2 px-6 py-3 bg-white/40 backdrop-blur-xl text-indigo-950 font-black text-xs uppercase tracking-widest rounded-2xl border border-white/60 hover:bg-white/60 transition-all shadow-xl active:scale-95"
+            onPointerDown={onBack} 
+            className="flex items-center gap-2 px-6 py-3 bg-white/40 backdrop-blur-xl text-indigo-950 font-black text-xs uppercase tracking-widest rounded-2xl border border-white/60 hover:bg-white/60 transition-all shadow-xl active:scale-95 [touch-action:none]"
           >
             <ArrowLeft size={18} /> Back
           </button>
@@ -168,8 +168,8 @@ export function SoundMatchGame({ onBack }: { onBack: () => void }) {
   return (
     <GameShell title="Sound Match" subtitle="Listen and tap the right one!" round={round + 1} total={totalRounds} score={score} onBack={onBack}>
       <button 
-        onClick={() => speak(`Find the ${cur.answer.title.replace(/^[A-Z] for /, '')}`)} 
-        className="mx-auto mb-10 w-28 h-28 bg-indigo-600 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all group border-4 border-white/20"
+        onPointerDown={() => speak(`Find the ${cur.answer.title.replace(/^[A-Z] for /, '')}`)} 
+        className="mx-auto mb-10 w-28 h-28 bg-indigo-600 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all group border-4 border-white/20 [touch-action:none]"
       >
         <Volume2 className="text-white animate-pulse" size={40} />
       </button>
@@ -180,8 +180,8 @@ export function SoundMatchGame({ onBack }: { onBack: () => void }) {
             key={opt.id} 
             whileHover={{ scale: 1.05, y: -5 }} 
             whileTap={{ scale: 0.95 }} 
-            onClick={() => handlePick(opt)}
-            className={`relative aspect-square rounded-[2.5rem] flex flex-col items-center justify-center border-2 transition-all p-4
+            onTap={() => handlePick(opt)}
+            className={`relative aspect-square rounded-[2.5rem] flex flex-col items-center justify-center border-2 transition-all p-4 [touch-action:none]
               ${selected === opt.id && result === 'correct' ? 'bg-emerald-400/30 border-emerald-400 shadow-xl' 
               : selected === opt.id && result === 'wrong' ? 'bg-rose-400/30 border-rose-400' 
               : 'bg-white/40 border-white/60 hover:bg-white/60 shadow-xl backdrop-blur-3xl'}`}
@@ -253,8 +253,8 @@ export function TrueOrFalseGame({ onBack }: { onBack: () => void }) {
         <motion.button 
           whileHover={{ scale: 1.05 }} 
           whileTap={{ scale: 0.95 }} 
-          onClick={() => handleAnswer(true)}
-          className="flex-1 h-16 sm:h-20 rounded-[1.5rem] bg-emerald-500 text-white font-black text-lg sm:text-xl flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(16,185,129,0.3)] border-b-[6px] border-emerald-700 active:border-b-0 active:translate-y-2 transition-all"
+          onTap={() => handleAnswer(true)}
+          className="flex-1 h-16 sm:h-20 rounded-[1.5rem] bg-emerald-500 text-white font-black text-lg sm:text-xl flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(16,185,129,0.3)] border-b-[6px] border-emerald-700 active:border-b-0 active:translate-y-2 transition-all [touch-action:none]"
         >
           <CheckCircle size={24} className="sm:w-7 sm:h-7" /> TRUE
         </motion.button>
@@ -262,8 +262,8 @@ export function TrueOrFalseGame({ onBack }: { onBack: () => void }) {
         <motion.button 
           whileHover={{ scale: 1.05 }} 
           whileTap={{ scale: 0.95 }} 
-          onClick={() => handleAnswer(false)}
-          className="flex-1 h-16 sm:h-20 rounded-[1.5rem] bg-rose-500 text-white font-black text-lg sm:text-xl flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(244,63,94,0.3)] border-b-[6px] border-rose-700 active:border-b-0 active:translate-y-2 transition-all"
+          onTap={() => handleAnswer(false)}
+          className="flex-1 h-16 sm:h-20 rounded-[1.5rem] bg-rose-500 text-white font-black text-lg sm:text-xl flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(244,63,94,0.3)] border-b-[6px] border-rose-700 active:border-b-0 active:translate-y-2 transition-all [touch-action:none]"
         >
           <XCircle size={24} className="sm:w-7 sm:h-7" /> FALSE
         </motion.button>
@@ -315,8 +315,8 @@ export function SequenceGame({ onBack }: { onBack: () => void }) {
             key={opt} 
             whileHover={{ scale: 1.05, y: -5 }} 
             whileTap={{ scale: 0.95 }} 
-            onClick={() => handlePick(opt)}
-            className={`h-20 sm:h-28 rounded-[2.5rem] font-black text-4xl flex items-center justify-center border-2 transition-all shadow-xl
+            onTap={() => handlePick(opt)}
+            className={`h-20 sm:h-28 rounded-[2.5rem] font-black text-4xl flex items-center justify-center border-2 transition-all shadow-xl [touch-action:none]
               ${result === 'correct' && opt === cur.answer ? 'bg-emerald-400 border-emerald-500 text-white' : 'bg-white/40 backdrop-blur-3xl border-white/60 text-indigo-950 hover:bg-white/60'}`}
           >
             {opt}
@@ -374,8 +374,8 @@ export function MemoryMatchGame({ onBack }: { onBack: () => void }) {
             key={card.id} 
             whileHover={{ scale: 1.05 }} 
             whileTap={{ scale: 0.95 }} 
-            onClick={() => handleFlip(card.id)}
-            className={`aspect-square rounded-3xl flex items-center justify-center text-4xl sm:text-5xl font-black transition-all border-2 shadow-2xl relative overflow-hidden
+            onTap={() => handleFlip(card.id)}
+            className={`aspect-square rounded-3xl flex items-center justify-center text-4xl sm:text-5xl font-black transition-all border-2 shadow-2xl relative overflow-hidden [touch-action:none]
               ${card.matched ? 'bg-emerald-400/40 border-emerald-400/50 opacity-40' 
               : card.flipped ? 'bg-white/90 border-indigo-400 shadow-xl' 
               : 'bg-indigo-600 border-indigo-500 hover:bg-indigo-700 shadow-indigo-900/10'}`}
