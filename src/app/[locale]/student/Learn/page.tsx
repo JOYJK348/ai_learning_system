@@ -201,8 +201,8 @@ export default function UltimateLearnEngine() {
                       {categories.map((zone) => (
                         <button
                           key={zone.id}
-                          onPointerDown={() => openZone(zone.id)}
-                          className="group relative [touch-action:none]"
+                          onClick={() => openZone(zone.id)}
+                          className="group relative"
                         >
                           <div className={`absolute inset-0 blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity duration-500 ${
                             zone.id === 'alpha' ? 'bg-orange-400' : 

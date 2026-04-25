@@ -457,7 +457,7 @@ export default function GamesPlayground() {
                     initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 + i * 0.1 }}
                     whileHover={{ y: -10, scale: 1.02 }} whileTap={{ scale: 0.97 }}
                     onTap={() => setActiveGame(game.id)}
-                    className="group relative bg-white/70 backdrop-blur-xl border-4 border-white rounded-[4rem] p-10 text-left transition-all shadow-lg hover:shadow-2xl overflow-hidden [touch-action:none]"
+                    className="group relative bg-white/70 backdrop-blur-xl border-4 border-white rounded-[4rem] p-10 text-left transition-all shadow-lg hover:shadow-2xl overflow-hidden"
                   >
                     {/* BG Gradient on Hover */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-0 group-hover:opacity-5 transition-opacity`} />

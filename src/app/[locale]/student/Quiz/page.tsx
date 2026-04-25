@@ -72,8 +72,8 @@ export default function QuizArena() {
                       
                       <div className="flex justify-center md:justify-start w-full">
                         <button 
-                          onPointerDown={startDailyThree}
-                          className="bg-indigo-600 text-white px-10 py-5 rounded-[2rem] font-black text-lg shadow-2xl hover:bg-indigo-700 active:scale-95 transition-all flex items-center gap-3 group/btn [touch-action:none]"
+                          onClick={startDailyThree}
+                          className="bg-indigo-600 text-white px-10 py-5 rounded-[2rem] font-black text-lg shadow-2xl hover:bg-indigo-700 active:scale-95 transition-all flex items-center gap-3 group/btn"
                         >
                            ENTER ARENA <Play className="group-hover/btn:translate-x-1 transition-transform" />
                         </button>
@@ -186,7 +186,7 @@ export default function QuizArena() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onTap={() => setActiveGame(game.id)}
-                    className="bg-white/40 backdrop-blur-3xl rounded-[3rem] p-8 text-left border-2 border-white/60 shadow-2xl flex items-center gap-8 transition-all group hover:bg-white/60 [touch-action:none]"
+                    className="bg-white/40 backdrop-blur-3xl rounded-[3rem] p-8 text-left border-2 border-white/60 shadow-2xl flex items-center gap-8 transition-all group hover:bg-white/60"
                   >
                      <div className={`w-20 h-20 rounded-[1.8rem] ${game.color} flex items-center justify-center text-4xl shadow-xl transform group-hover:scale-110 group-hover:rotate-6 transition-all`}>
                        {game.emoji}
