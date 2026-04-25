@@ -194,7 +194,7 @@ export default function DashboardHome() {
            <div className="w-12 h-12 bg-white rounded-full border-4 border-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.5)] p-0.5 animate-bounce">
               <div className="w-full h-full bg-blue-50 rounded-full flex items-center justify-center text-lg">🏃</div>
            </div>
-           <div className="absolute top-14 left-1/2 -translate-x-1/2 px-3 py-1 bg-yellow-400 text-white text-[8px] font-black rounded-full shadow-lg whitespace-nowrap">ARJUN</div>
+           <div className="absolute top-14 left-1/2 -translate-x-1/2 px-3 py-1 bg-yellow-400 text-white text-[8px] font-black rounded-full shadow-lg whitespace-nowrap">AGNIKA</div>
         </div>
       </div>
     </div>

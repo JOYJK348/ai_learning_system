@@ -105,7 +105,7 @@ export default function MyWorldProfile() {
                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
                    className="w-40 h-40 rounded-full border-4 border-white shadow-xl mb-6 flex items-center justify-center relative overflow-hidden bg-indigo-50"
                  >
-                    <img src="https://api.dicebear.com/9.x/micah/svg?seed=Arjun&backgroundColor=f4d160,b6e3f4" alt="Arjun Avatar" className="w-full h-full object-cover" />
+                    <img src="/assets/avatars/agnika_avatar.png" alt="Agnika Avatar" className="w-full h-full object-cover" />
                     <div className="absolute -bottom-2 -right-2 bg-amber-400 w-12 h-12 rounded-full border-4 border-white flex items-center justify-center shadow-lg z-10 hidden">
                       {/* Note: Kept the DOM structure, but hidden original star if needed or leave star over it */}
                     </div>
@@ -114,7 +114,7 @@ export default function MyWorldProfile() {
                     </div>
                  </motion.div>
 
-                 <h1 className="text-5xl sm:text-7xl font-black text-indigo-950 mb-4 tracking-tighter">Arjun's World</h1>
+                 <h1 className="text-5xl sm:text-7xl font-black text-indigo-950 mb-4 tracking-tighter">Agnika's World</h1>
                  
                  <div className="inline-flex items-center gap-3 px-8 py-3 bg-indigo-600 text-white rounded-full text-sm font-black uppercase tracking-[0.3em] shadow-xl">
                     <Flame size={20} fill="currentColor" className="text-amber-400" /> {explorerTitle}
@@ -221,10 +221,10 @@ export default function MyWorldProfile() {
            {/* 1. CHILD BASICS (Personal Details) */}
            <div className="bg-white/40 backdrop-blur-3xl rounded-[3.5rem] p-8 sm:p-14 border-2 border-white/60 shadow-2xl mb-12 flex flex-col md:flex-row items-center gap-10">
               <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-indigo-200 shadow-xl flex items-center justify-center flex-shrink-0 bg-indigo-50 overflow-hidden">
-                 <img src="https://api.dicebear.com/9.x/micah/svg?seed=Arjun&backgroundColor=f4d160,b6e3f4" alt="Avatar" className="w-full h-full object-cover" />
+                 <img src="/assets/avatars/agnika_avatar.png" alt="Avatar" className="w-full h-full object-cover" />
               </div>
               <div className="flex-1 text-center md:text-left">
-                 <h2 className="text-4xl sm:text-6xl font-black text-indigo-950 tracking-tighter mb-4">Arjun V.</h2>
+                 <h2 className="text-4xl sm:text-6xl font-black text-indigo-950 tracking-tighter mb-4">Agnika V.</h2>
                  <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 sm:gap-6 text-xs sm:text-sm font-black text-indigo-900/60 uppercase tracking-widest">
                     <span className="flex items-center gap-2 bg-white/40 px-4 py-2 rounded-full border border-white"><User size={16} className="text-indigo-500"/> 5 Years Old</span>
                     <span className="flex items-center gap-2 bg-white/40 px-4 py-2 rounded-full border border-white"><Award size={16} className="text-indigo-500"/> Preschool</span>
@@ -243,7 +243,7 @@ export default function MyWorldProfile() {
                    <BookOpen className="text-amber-600" size={32} /> Adventure Log
                  </h3>
                  <p className="text-lg sm:text-xl font-medium text-amber-900/80 leading-relaxed">
-                   Arjun has been on an amazing journey! He has explored <strong className="font-black text-amber-950">4 magical zones</strong>, discovered <strong className="font-black text-amber-950">47 new words</strong>, completed <strong className="font-black text-amber-950">23 levels</strong>, and spent <strong className="font-black text-amber-950">3.5 hours</strong> learning and playing this month.
+                   Agnika has been on an amazing journey! She has explored <strong className="font-black text-amber-950">4 magical zones</strong>, discovered <strong className="font-black text-amber-950">47 new words</strong>, completed <strong className="font-black text-amber-950">23 levels</strong>, and spent <strong className="font-black text-amber-950">3.5 hours</strong> learning and playing this month.
                  </p>
               </div>
               
@@ -252,12 +252,12 @@ export default function MyWorldProfile() {
                    <Brain className="text-purple-600" size={32} /> Growth Insight
                  </h3>
                  <p className="text-lg sm:text-xl font-medium text-purple-900/80 leading-relaxed">
-                   Arjun spends most of his time in the <strong className="font-black text-purple-950">Sound Lab</strong>. He responds exceptionally well to <em className="not-italic font-black text-purple-950 px-2 py-1 bg-purple-300/30 rounded-lg">audio-based learning</em>. 
+                   Agnika spends most of her time in the <strong className="font-black text-purple-950">Sound Lab</strong>. She responds exceptionally well to <em className="not-italic font-black text-purple-950 px-2 py-1 bg-purple-300/30 rounded-lg">audio-based learning</em>. 
                  </p>
                  <div className="mt-8 bg-white/60 backdrop-blur-md border border-white rounded-[2rem] p-6 flex items-start gap-4">
                     <span className="text-3xl">💡</span>
                     <p className="text-sm font-black text-indigo-950 uppercase tracking-widest leading-relaxed">
-                      Suggestion: Try introducing him to the <span className="text-emerald-600">Bird Sky zone</span> next to build on his phonetic strengths.
+                      Suggestion: Try introducing her to the <span className="text-emerald-600">Bird Sky zone</span> next to build on her phonetic strengths.
                     </p>
                  </div>
               </div>
@@ -267,7 +267,7 @@ export default function MyWorldProfile() {
            <div className="bg-emerald-400/20 backdrop-blur-3xl rounded-[3.5rem] p-10 sm:p-14 border-2 border-emerald-300 shadow-xl mb-12 flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-10">
               <div>
                  <h3 className="text-3xl font-black text-emerald-950 mb-3 tracking-tighter">This Week's Highlights</h3>
-                 <p className="text-emerald-900/70 font-black uppercase tracking-widest text-sm">A quick glance at Arjun's recent activity.</p>
+                 <p className="text-emerald-900/70 font-black uppercase tracking-widest text-sm">A quick glance at Agnika's recent activity.</p>
               </div>
               <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
                  <div className="bg-white/60 p-6 rounded-[2rem] border-2 border-white shadow-lg text-center min-w-[120px]">

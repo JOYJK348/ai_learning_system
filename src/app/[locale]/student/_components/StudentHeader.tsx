@@ -49,7 +49,7 @@ export default function StudentHeader() {
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white p-[2px] shadow-xl border border-white/40 group-hover:scale-105 transition-all">
                    <div className="w-full h-full bg-gradient-to-br from-indigo-100 to-purple-100 rounded-[14px] overflow-hidden">
                       <img 
-                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lucky" 
+                        src="/assets/avatars/agnika_avatar.png" 
                         alt="Avatar" 
                         className="w-full h-full object-cover"
                       />

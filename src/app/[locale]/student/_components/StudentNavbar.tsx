@@ -109,10 +109,10 @@ export default function StudentNavbar({
                className={`flex items-center gap-2 p-1 pr-1.5 sm:pr-3 rounded-full transition-all border ${showProfile ? 'border-[#013237]/20 bg-slate-50' : 'border-slate-200 bg-white hover:border-slate-300 shadow-sm'}`}
              >
                <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-slate-100 flex items-center justify-center text-indigo-600 border-2 border-white shadow-sm overflow-hidden shrink-0">
-                  <Image src="/assets/img/achievement.png" alt="Avatar" width={36} height={36} className="object-cover" />
+                  <Image src="/assets/avatars/agnika_avatar.png" alt="Avatar" width={36} height={36} className="object-cover" />
                </div>
                <div className="hidden xs:block text-left">
-                 <p className="text-[10px] sm:text-[11px] font-black text-[#013237] leading-tight uppercase tracking-tight">Arjun M.</p>
+                 <p className="text-[10px] sm:text-[11px] font-black text-[#013237] leading-tight uppercase tracking-tight">Agnika</p>
                </div>
              </button>
 
@@ -126,9 +126,9 @@ export default function StudentNavbar({
                 >
                   <div className="flex flex-col items-center text-center p-5 bg-gradient-to-b from-slate-50 to-white rounded-[1.5rem] mb-4 border border-slate-100/50">
                     <div className="w-20 h-20 rounded-full border-[6px] border-white shadow-xl overflow-hidden mb-3 ring-1 ring-slate-100">
-                       <Image src="/assets/img/achievement.png" alt="Avatar" width={80} height={80} className="object-cover" />
+                       <Image src="/assets/avatars/agnika_avatar.png" alt="Avatar" width={80} height={80} className="object-cover" />
                     </div>
-                    <h4 className="font-black text-[#013237] text-xl">Arjun M.</h4>
+                    <h4 className="font-black text-[#013237] text-xl">Agnika</h4>
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">LKG Explorer</p>
                   </div>
 

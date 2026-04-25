@@ -100,7 +100,7 @@ export default function UltimateLearnEngine() {
                       
                       <h1 className="text-5xl sm:text-8xl font-black text-indigo-950 leading-[0.9] tracking-tighter drop-shadow-sm">
                          READY FOR A <br/>
-                         <span className="text-indigo-800">MISSION, ARJUN?</span>
+                         <span className="text-indigo-800">MISSION, AGNIKA?</span>
                       </h1>
                       
                       <div className="flex flex-col sm:flex-row items-center gap-6 pt-4">
