@@ -7,8 +7,8 @@ import { LESSONS } from '@/constants/dashboardData';
 import { audioEngine } from '@/core/utils/audio';
 
 /* ── UTILS ── */
-function speak(text: string, rate = 0.85, pitch = 1.3) {
-  audioEngine?.speak(text, { rate, pitch });
+function speak(text: string) {
+  audioEngine?.speak(text);
 }
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -156,10 +156,10 @@ export function SoundMatchGame({ onBack }: { onBack: () => void }) {
     if (result) return;
     setSelected(opt.id);
     if (opt.id === cur.answer.id) {
-      setResult('correct'); setScore(s => s + 1); speak('Great job!', 0.9, 1.5);
+      setResult('correct'); setScore(s => s + 1); speak('Great job!');
       setTimeout(() => { if (round + 1 >= totalRounds) setGameOver(true); else { setRound(r => r + 1); setSelected(null); setResult(null); } }, 1500);
     } else {
-      setResult('wrong'); speak('Try again!', 0.9, 1.2);
+      setResult('wrong'); speak('Try again!');
       setTimeout(() => { setSelected(null); setResult(null); }, 1200);
     }
   };
@@ -221,8 +221,8 @@ export function TrueOrFalseGame({ onBack }: { onBack: () => void }) {
 
   const handleAnswer = (ans: boolean) => {
     if (result) return;
-    if (ans === cur.a) { setResult('correct'); setScore(s => s + 1); speak(ans ? 'Yes! Correct!' : 'No way! You got it!', 0.9, 1.5); }
-    else { setResult('wrong'); speak("Oops! That's not right!", 0.9, 1.2); }
+    if (ans === cur.a) { setResult('correct'); setScore(s => s + 1); speak(ans ? 'Yes! Correct!' : 'No way! You got it!'); }
+    else { setResult('wrong'); speak("Oops! That's not right!"); }
     setTimeout(() => { if (round + 1 >= questions.length) setGameOver(true); else { setRound(r => r + 1); setResult(null); } }, 1500);
   };
 
@@ -294,8 +294,8 @@ export function SequenceGame({ onBack }: { onBack: () => void }) {
 
   const handlePick = (val: string) => {
     if (result) return;
-    if (val === cur.answer) { setResult('correct'); setScore(s => s + 1); speak(`Yes! ${cur.answer}!`, 0.9, 1.5); }
-    else { setResult('wrong'); speak('Not quite!', 0.9, 1.2); }
+    if (val === cur.answer) { setResult('correct'); setScore(s => s + 1); speak(`Yes! ${cur.answer}!`); }
+    else { setResult('wrong'); speak('Not quite!'); }
     setTimeout(() => { if (round + 1 >= seqs.length) setGameOver(true); else { setRound(r => r + 1); setResult(null); } }, 1500);
   };
 
@@ -353,11 +353,11 @@ export function MemoryMatchGame({ onBack }: { onBack: () => void }) {
       setMoves(m => m + 1);
       const [first, second] = newFlipped.map(fid => newCards.find(c => c.id === fid)!);
       if (first.emoji === second.emoji) {
-        speak('Match!', 0.9, 1.5);
+        speak('Match!');
         setTimeout(() => {
           const matched = newCards.map(c => c.emoji === first.emoji ? { ...c, matched: true } : c);
           setCards(matched); setFlippedIds([]);
-          if (matched.every(c => c.matched)) { setGameOver(true); speak('All pairs found!', 0.9, 1.4); }
+          if (matched.every(c => c.matched)) { setGameOver(true); speak('All pairs found!'); }
         }, 600);
       } else {
         setTimeout(() => { setCards(newCards.map(c => newFlipped.includes(c.id) ? { ...c, flipped: false } : c)); setFlippedIds([]); }, 1000);

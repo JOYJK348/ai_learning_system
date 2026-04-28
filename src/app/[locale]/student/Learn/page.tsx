@@ -45,7 +45,7 @@ export default function UltimateLearnEngine() {
   const closeZone = () => router.push('/en/student/Learn', { scroll: true });
 
   const speakText = (text: string) => {
-    audioEngine?.speak(text, { rate: 0.9, pitch: 1.2 });
+    audioEngine?.speak(text);
   };
 
   const handleLessonInteraction = (lesson: any) => {

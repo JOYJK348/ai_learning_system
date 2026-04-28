@@ -48,7 +48,7 @@ export default function MediaWorld() {
   }, []);
 
   const speakText = (text: string) => {
-    audioEngine?.speak(text, { rate: 1.0, pitch: 1.4 });
+    audioEngine?.speak(text);
   };
 
   const handleRhymePlay = async (rhyme: typeof RHYMES[0]) => {

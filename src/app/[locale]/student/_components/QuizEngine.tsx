@@ -58,8 +58,8 @@ function ConfettiParticle({ index }: { index: number }) {
   );
 }
 
-function speak(text: string, rate = 0.85, pitch = 1.3) {
-  audioEngine?.speak(text, { rate, pitch });
+function speak(text: string) {
+  audioEngine?.speak(text);
 }
 
 /* ─────────── MAIN QUIZ ENGINE ─────────── */
@@ -104,7 +104,7 @@ export default function QuizEngine({ lesson, onClose, onComplete }: QuizEnginePr
       // ✅ CORRECT!
       setPhase('correct');
       setShowConfetti(true);
-      speak('Wonderful! You got it right!', 0.9, 1.4);
+      speak('Wonderful! You got it right!');
       setStreak(prev => prev + 1);
       
       setTimeout(() => {
@@ -116,7 +116,7 @@ export default function QuizEngine({ lesson, onClose, onComplete }: QuizEnginePr
       // ❌ WRONG — Gentle bounce
       setPhase('wrong');
       setWrongCount(prev => prev + 1);
-      speak('Oops! Try again!', 0.9, 1.2);
+      speak('Oops! Try again!');
 
       if (wrongCount >= 1) {
         // After 2 wrong attempts, show hint glow

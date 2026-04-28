@@ -8,8 +8,8 @@ import { audioEngine } from '@/core/utils/audio';
 /* ═══════════════════════════════════════════
    UTILITIES
    ═══════════════════════════════════════════ */
-function speak(text: string, rate = 0.85, pitch = 1.3) {
-  audioEngine?.speak(text, { rate, pitch });
+function speak(text: string) {
+  audioEngine?.speak(text);
 }
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -57,14 +57,14 @@ function SoundMatchGame({ onBack }: { onBack: () => void }) {
     if (option.id === currentRound.answer.id) {
       setResult('correct');
       setScore(s => s + 1);
-      speak('Great job!', 0.9, 1.5);
+      speak('Great job!');
       setTimeout(() => {
         if (round + 1 >= totalRounds) { setGameOver(true); }
         else { setRound(r => r + 1); setSelected(null); setResult(null); }
       }, 1500);
     } else {
       setResult('wrong');
-      speak('Try again!', 0.9, 1.2);
+      speak('Try again!');
       setTimeout(() => { setSelected(null); setResult(null); }, 1200);
     }
   };
@@ -136,10 +136,10 @@ function TrueOrFalseGame({ onBack }: { onBack: () => void }) {
     if (answer === current.a) {
       setResult('correct');
       setScore(s => s + 1);
-      speak(answer ? 'Yes! Correct!' : 'No way! You got it!', 0.9, 1.5);
+      speak(answer ? 'Yes! Correct!' : 'No way! You got it!');
     } else {
       setResult('wrong');
-      speak('Oops! That\'s not right!', 0.9, 1.2);
+      speak('Oops! That\'s not right!');
     }
     setTimeout(() => {
       if (round + 1 >= questions.length) setGameOver(true);
@@ -205,10 +205,10 @@ function SequenceGame({ onBack }: { onBack: () => void }) {
     if (result) return;
     if (val === current.answer) {
       setResult('correct'); setScore(s => s + 1);
-      speak(`Yes! ${current.answer}!`, 0.9, 1.5);
+      speak(`Yes! ${current.answer}!`);
     } else {
       setResult('wrong');
-      speak('Not quite! Try the next one!', 0.9, 1.2);
+      speak('Not quite! Try the next one!');
     }
     setTimeout(() => {
       if (round + 1 >= sequences.length) setGameOver(true);
@@ -275,14 +275,14 @@ function MemoryMatchGame({ onBack }: { onBack: () => void }) {
       setMoves(m => m + 1);
       const [first, second] = newFlipped.map(fid => newCards.find(c => c.id === fid)!);
       if (first.emoji === second.emoji) {
-        speak('Match!', 0.9, 1.5);
+        speak('Match!');
         setTimeout(() => {
           const matched = newCards.map(c => c.emoji === first.emoji ? { ...c, matched: true } : c);
           setCards(matched);
           setFlippedIds([]);
           if (matched.every(c => c.matched)) {
             setGameOver(true);
-            speak('Wonderful! All pairs found!', 0.9, 1.4);
+            speak('Wonderful! All pairs found!');
           }
         }, 600);
       } else {
