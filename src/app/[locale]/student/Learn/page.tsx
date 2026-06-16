@@ -70,6 +70,12 @@ function getChapterVisuals(name: string) {
     return { emoji: '🦁', mascot: '🐘', color: 'from-green-400 to-emerald-500', sound: 'Animals!' };
   if (lower.includes('fruit'))
     return { emoji: '🍎', mascot: '🍌', color: 'from-red-400 to-orange-500', sound: 'Fruits!' };
+  if (lower.includes('vegetable'))
+    return { emoji: '🥕', mascot: '🥬', color: 'from-green-400 to-emerald-500', sound: 'Vegetables!' };
+  if (lower.includes('body'))
+    return { emoji: '🧍', mascot: '🖐️', color: 'from-sky-400 to-blue-500', sound: 'Body parts!' };
+  if (lower.includes('family') || lower.includes('myself'))
+    return { emoji: '👨‍👩‍👧‍👦', mascot: '👪', color: 'from-pink-400 to-rose-500', sound: 'My family!' };
   if (lower.includes('flower') || lower.includes('plant'))
     return { emoji: '🌸', mascot: '🌻', color: 'from-pink-400 to-yellow-400', sound: 'Flowers!' };
   if (lower.includes('cvc'))
@@ -182,24 +188,48 @@ function getLessonVisuals(title: string) {
   if (lower.includes('blue')) return { emoji: '🎨', mascot: '🔵', color: 'from-blue-400 to-cyan-500', sound: 'Blue color!' };
   if (lower.includes('green')) return { emoji: '🎨', mascot: '🟢', color: 'from-green-400 to-emerald-500', sound: 'Green color!' };
   if (lower.includes('yellow')) return { emoji: '🎨', mascot: '🟡', color: 'from-yellow-400 to-amber-500', sound: 'Yellow color!' };
+  if (lower.includes('orange') && lower.includes('purple')) return { emoji: '🎨', mascot: '🟠', color: 'from-orange-400 to-purple-500', sound: 'More colors!' };
+  if (lower.includes('white') && lower.includes('black')) return { emoji: '🎨', mascot: '⚪', color: 'from-gray-400 to-slate-500', sound: 'White and black!' };
   if (lower.includes('color')) return { emoji: '🎨', mascot: '🖍️', color: 'from-purple-400 to-fuchsia-500', sound: 'Colors!' };
   // Shapes
+  if (lower.includes('rectangle') || lower.includes('diamond') || lower.includes('heart') || lower.includes('oval')) return { emoji: '🔺', mascot: '💎', color: 'from-purple-400 to-fuchsia-500', sound: 'More shapes!' };
   if (lower.includes('circle')) return { emoji: '🔺', mascot: '⭕', color: 'from-red-400 to-orange-500', sound: 'Circle!' };
   if (lower.includes('square')) return { emoji: '🔺', mascot: '⬜', color: 'from-blue-400 to-indigo-500', sound: 'Square!' };
   if (lower.includes('triangle')) return { emoji: '🔺', mascot: '🔺', color: 'from-yellow-400 to-orange-500', sound: 'Triangle!' };
   if (lower.includes('shape')) return { emoji: '🔺', mascot: '⭐', color: 'from-emerald-400 to-teal-500', sound: 'Shapes!' };
   // Animals
+  // Domestic / Wild
+  if (lower.includes('domestic')) return { emoji: '🐾', mascot: '🏠', color: 'from-amber-400 to-yellow-500', sound: 'Domestic animals!' };
+  if (lower.includes('wild')) return { emoji: '🐾', mascot: '🌴', color: 'from-green-400 to-emerald-500', sound: 'Wild animals!' };
   if (lower.includes('cat')) return { emoji: '🐾', mascot: '🐱', color: 'from-orange-400 to-amber-500', sound: 'Cat!' };
   if (lower.includes('dog')) return { emoji: '🐾', mascot: '🐶', color: 'from-amber-400 to-yellow-500', sound: 'Dog!' };
   if (lower.includes('lion')) return { emoji: '🐾', mascot: '🦁', color: 'from-orange-400 to-red-500', sound: 'Lion!' };
   if (lower.includes('elephant')) return { emoji: '🐾', mascot: '🐘', color: 'from-gray-400 to-slate-500', sound: 'Elephant!' };
   if (lower.includes('bird')) return { emoji: '🐾', mascot: '🐦', color: 'from-sky-400 to-blue-500', sound: 'Bird!' };
   if (lower.includes('fish')) return { emoji: '🐾', mascot: '🐟', color: 'from-blue-400 to-cyan-500', sound: 'Fish!' };
+  // Vegetables
+  if (lower.includes('carrot')) return { emoji: '🥕', mascot: '🥕', color: 'from-orange-400 to-red-500', sound: 'Carrot!' };
+  if (lower.includes('tomato')) return { emoji: '🍅', mascot: '🍅', color: 'from-red-400 to-rose-500', sound: 'Tomato!' };
+  if (lower.includes('potato')) return { emoji: '🥔', mascot: '🥔', color: 'from-amber-400 to-yellow-500', sound: 'Potato!' };
+  if (lower.includes('onion')) return { emoji: '🧅', mascot: '🧅', color: 'from-purple-400 to-pink-500', sound: 'Onion!' };
+  if (lower.includes('vegetable')) return { emoji: '🥕', mascot: '🥬', color: 'from-green-400 to-emerald-500', sound: 'Vegetables!' };
   // Fruits
   if (lower.includes('apple')) return { emoji: '🍎', mascot: '🍎', color: 'from-red-400 to-rose-500', sound: 'Apple!' };
   if (lower.includes('banana')) return { emoji: '🍌', mascot: '🍌', color: 'from-yellow-400 to-amber-500', sound: 'Banana!' };
   if (lower.includes('mango')) return { emoji: '🥭', mascot: '🥭', color: 'from-orange-400 to-yellow-500', sound: 'Mango!' };
   if (lower.includes('grapes')) return { emoji: '🍇', mascot: '🍇', color: 'from-purple-400 to-violet-500', sound: 'Grapes!' };
+  // Body Parts
+  if (lower.includes('head, eyes') || lower.includes('eyes, nose') || lower.includes('face')) return { emoji: '🦷', mascot: '👀', color: 'from-sky-400 to-blue-500', sound: 'My face!' };
+  if (lower.includes('hands, legs') || lower.includes('knees, toes') || lower.includes('head to toe')) return { emoji: '🧍', mascot: '🏃', color: 'from-emerald-400 to-teal-500', sound: 'My body!' };
+  if (lower.includes('head')) return { emoji: '🦷', mascot: '🧠', color: 'from-purple-400 to-pink-500', sound: 'Head!' };
+  if (lower.includes('eyes')) return { emoji: '🦷', mascot: '👀', color: 'from-blue-400 to-cyan-500', sound: 'Eyes!' };
+  if (lower.includes('nose')) return { emoji: '🦷', mascot: '👃', color: 'from-amber-400 to-yellow-500', sound: 'Nose!' };
+  if (lower.includes('ears')) return { emoji: '🦷', mascot: '👂', color: 'from-pink-400 to-purple-500', sound: 'Ears!' };
+  if (lower.includes('mouth')) return { emoji: '🦷', mascot: '👄', color: 'from-red-400 to-rose-500', sound: 'Mouth!' };
+  if (lower.includes('body')) return { emoji: '🧍', mascot: '🖐️', color: 'from-sky-400 to-blue-500', sound: 'Body parts!' };
+  // Family & Myself
+  if (lower.includes('myself') || lower.includes('name') || lower.includes('age')) return { emoji: '👤', mascot: '😊', color: 'from-pink-400 to-purple-500', sound: 'All about me!' };
+  if (lower.includes('mommy') || lower.includes('daddy') || lower.includes('family')) return { emoji: '👨‍👩‍👧‍👦', mascot: '👪', color: 'from-rose-400 to-red-500', sound: 'My family!' };
   return { emoji: '📚', mascot: '📖', color: 'from-indigo-400 to-purple-500', sound: `${title}!` };
 }
 
@@ -1398,14 +1428,16 @@ export default function UltimateLearnEngine() {
     }
 
     // Pre-writing foundation strokes → trace → quiz (all trace, no buttons)
-    if (lower.includes('standing') || lower.includes('sleeping') || lower.includes('slanting') ||
+    // Only trigger for the actual Pre-Writing chapter
+    const isPreWritingChapter = activeChapter?.name?.toLowerCase().includes('pre-writing') || activeChapter?.name?.toLowerCase().includes('pattern');
+    if (isPreWritingChapter && (lower.includes('standing') || lower.includes('sleeping') || lower.includes('slanting') ||
         lower.includes('curved') || lower.includes('curve') || lower.includes('zig') || lower.includes('zag') ||
         lower.includes('s-curve') || lower.includes('circle') ||
         lower.includes('exam') || lower.includes('review') || lower.includes('assessment') || lower.includes('mix') ||
         lower.includes('left-slanting') || lower.includes('right-slanting') ||
         lower.includes('left-curve') || lower.includes('right-curve') ||
         lower.includes('up-curve') || lower.includes('down-curve') ||
-        lower.includes('up curve') || lower.includes('down curve')) {
+        lower.includes('up curve') || lower.includes('down curve'))) {
       // Mixed exam — all CBSE strokes as trace rounds
       if (lower.includes('exam') || lower.includes('review') || lower.includes('assessment') || lower.includes('mix')) {
         const shuffled = [...QUIZ_STROKES].sort(() => Math.random() - 0.5).slice(0, EXAM_COUNT);

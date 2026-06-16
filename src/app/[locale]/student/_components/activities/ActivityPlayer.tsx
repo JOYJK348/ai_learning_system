@@ -10,8 +10,10 @@ import TraceActivity from './TraceActivity';
 import DrawCanvas from './DrawCanvas';
 import LetterShowcase from './LetterShowcase';
 import LetterFindGame from './LetterFindGame';
+import PhonicsShowcase from './PhonicsShowcase';
 import BalloonPop from './BalloonPop';
-import MemoryMatch from './MemoryMatch';
+import MatchPairs from './MatchPairs';
+import TapSelect from './TapSelect';
 import NameTraceActivity from './NameTraceActivity';
 import { useData } from '@/context/DataContext';
 
@@ -28,7 +30,7 @@ const ACTIVITY_TYPE_MAP: Record<number, string> = {
   6: 'trace',
   7: 'draw',
   3: 'match',
-  4: 'quiz',
+  4: 'tap_select',
   8: 'name',
 };
 
@@ -122,6 +124,7 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
     switch (type) {
       case 'video':
         if (act.config?.letter) return <LetterShowcase config={act.config} {...commonProps} />;
+        if (act.config?.family) return <PhonicsShowcase config={act.config} {...commonProps} />;
         return act.name.toLowerCase().includes('circle')
           ? <VideoCircle {...commonProps} />
           : <VideoSnake {...commonProps} />;
@@ -130,7 +133,9 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
       case 'draw':
         return <DrawCanvas config={act.config} {...commonProps} />;
       case 'match':
-        return <MemoryMatch config={act.config} {...commonProps} />;
+        return <MatchPairs config={act.config} {...commonProps} />;
+      case 'tap_select':
+        return <TapSelect config={act.config} {...commonProps} />;
       case 'quiz':
         return <LetterFindGame config={act.config} {...commonProps} />;
       case 'name':

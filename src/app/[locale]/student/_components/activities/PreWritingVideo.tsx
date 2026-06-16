@@ -259,7 +259,7 @@ export default function PreWritingVideo({ config, onComplete }: Props) {
 
         {/* Background guide path (dotted reference) */}
         {bgD && (
-          <svg className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
+          <svg className="absolute inset-0 w-full h-full pointer-events-none">
             <path
               d={bgD}
               fill="none"
@@ -272,27 +272,17 @@ export default function PreWritingVideo({ config, onComplete }: Props) {
           </svg>
         )}
 
-        {/* Trail glow */}
+        {/* Trail — bold white line */}
         {phase === 'playing' && trailD && (
-          <svg className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
-            <defs>
-              <filter id={`glow-${pathType}`}>
-                <feGaussianBlur stdDeviation="4" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
+          <svg className="absolute inset-0 w-full h-full pointer-events-none">
             <path
               d={trailD}
               fill="none"
-              stroke={visual.color}
-              strokeWidth="2.5"
+              stroke="white"
+              strokeWidth="6"
               strokeLinecap="round"
               strokeLinejoin="round"
-              opacity="0.7"
-              filter={`url(#glow-${pathType})`}
+              opacity="1"
             />
           </svg>
         )}
@@ -300,11 +290,11 @@ export default function PreWritingVideo({ config, onComplete }: Props) {
         {/* Glow behind dot */}
         {phase === 'playing' && (
           <div
-            className="absolute w-10 h-10 sm:w-12 sm:h-12 rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2"
+            className="absolute w-12 h-12 sm:w-14 sm:h-14 rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2"
             style={{
               left: pos.x,
               top: pos.y,
-              background: `radial-gradient(circle, ${visual.color}40 0%, transparent 70%)`,
+              background: `radial-gradient(circle, ${visual.color}60 0%, transparent 70%)`,
             }}
           />
         )}
@@ -318,15 +308,11 @@ export default function PreWritingVideo({ config, onComplete }: Props) {
             <motion.div
               className="rounded-full"
               style={{
-                width: isCircle ? 14 : 12,
-                height: isCircle ? 14 : 12,
+                width: 14,
+                height: 14,
                 background: visual.color,
-                boxShadow: `0 0 12px ${visual.color}80, 0 0 30px ${visual.color}30`,
+                boxShadow: `0 0 16px ${visual.color}aa, 0 0 40px ${visual.color}40`,
               }}
-              animate={isSCurve ? {
-                scale: [1, 1.15, 1],
-              } : undefined}
-              transition={isSCurve ? { duration: 0.8, repeat: Infinity } : undefined}
             />
           </div>
         )}
