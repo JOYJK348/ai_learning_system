@@ -7,12 +7,12 @@ import { audioEngine } from '@/core/utils/audio';
 
 /* ─────────── DATA ─────────── */
 const RHYMES = [
-  { id: 1, title: 'Twinkle Star', image: '⭐', color: 'from-violet-400 to-purple-500', audio: 'https://cdn.pixabay.com/audio/2022/01/18/audio_d0a13f69d2.mp3' },
-  { id: 2, title: 'ABC Fun',     image: '🔤', color: 'from-blue-400 to-indigo-500', audio: 'https://cdn.pixabay.com/audio/2022/03/15/audio_732caf6185.mp3' },
-  { id: 3, title: 'Baby Shark',  image: '🦈', color: 'from-cyan-400 to-sky-500', audio: 'https://cdn.pixabay.com/audio/2021/08/04/audio_06256f5221.mp3' },
-  { id: 4, title: 'Old Farm',    image: '🐄', color: 'from-emerald-400 to-green-500', audio: 'https://cdn.pixabay.com/audio/2022/01/21/audio_31743c588f.mp3' },
-  { id: 5, title: 'Wheels Bus',  image: '🚌', color: 'from-yellow-400 to-orange-500', audio: 'https://cdn.pixabay.com/audio/2022/01/26/audio_d0c6ff3530.mp3' },
-  { id: 6, title: 'Humpty Dumpty', image: '🥚', color: 'from-red-400 to-rose-500', audio: 'https://cdn.pixabay.com/audio/2022/10/25/audio_f764a5c68d.mp3' },
+  { id: 1, title: 'Twinkle Star', image: '⭐', color: 'from-violet-400 to-purple-500' },
+  { id: 2, title: 'ABC Fun',     image: '🔤', color: 'from-blue-400 to-indigo-500' },
+  { id: 3, title: 'Baby Shark',  image: '🦈', color: 'from-cyan-400 to-sky-500' },
+  { id: 4, title: 'Old Farm',    image: '🐄', color: 'from-emerald-400 to-green-500' },
+  { id: 5, title: 'Wheels Bus',  image: '🚌', color: 'from-yellow-400 to-orange-500' },
+  { id: 6, title: 'Humpty Dumpty', image: '🥚', color: 'from-red-400 to-rose-500' },
 ];
 
 const VIDEOS = [
@@ -38,9 +38,6 @@ export default function MediaWorld() {
   useEffect(() => {
     // Warm up the engine on mount
     audioEngine?.warmUp();
-    
-    // Preload all rhymes for zero-latency
-    RHYMES.forEach(r => audioEngine?.preload(r.audio));
 
     return () => {
       audioEngine?.stopAllAudio();
@@ -51,7 +48,7 @@ export default function MediaWorld() {
     audioEngine?.speak(text);
   };
 
-  const handleRhymePlay = async (rhyme: typeof RHYMES[0]) => {
+  const handleRhymePlay = (rhyme: typeof RHYMES[0]) => {
     if (playing === rhyme.id) {
       audioEngine?.stopAllAudio();
       setPlaying(null);
@@ -59,14 +56,9 @@ export default function MediaWorld() {
       audioEngine?.stopAllAudio();
       setPlaying(rhyme.id);
       speakText(`Let's sing ${rhyme.title}!`);
-      
-      const audio = await audioEngine?.play(rhyme.audio);
-      
-      if (audio) {
-        audio.onended = () => {
-          setPlaying(null);
-        };
-      }
+      setTimeout(() => {
+        setPlaying(prev => prev === rhyme.id ? null : prev);
+      }, 3000);
     }
   };
 
