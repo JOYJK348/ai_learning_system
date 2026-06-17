@@ -9,9 +9,6 @@ type DataContextType = {
   studentProfile: StudentProfile | null;
   studentDashboard: StudentDashboard | null;
   subjects: Subject[];
-  studentLoading: boolean;
-  dashboardLoading: boolean;
-  lessonsLoading: boolean;
   updateProgress: (lessonId: string, status: 'completed' | 'in_progress') => void;
   refetchLessons: () => void;
 };
@@ -23,25 +20,25 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const isStudent = user?.role === 'student';
   const queryClient = useQueryClient();
 
-  const { data: studentProfile, isLoading: studentLoading } = useQuery({
+  const { data: studentProfile } = useQuery({
     queryKey: studentKeys.me,
     queryFn: studentApi.getMe,
     enabled: isStudent,
-    staleTime: 2 * 60 * 1000,
+    staleTime: 5 * 60 * 1000,
   });
 
-  const { data: studentDashboard, isLoading: dashboardLoading } = useQuery({
+  const { data: studentDashboard } = useQuery({
     queryKey: studentKeys.dashboard,
     queryFn: studentApi.getDashboard,
     enabled: isStudent,
-    staleTime: 60 * 1000,
+    staleTime: 5 * 60 * 1000,
   });
 
-  const { data: rawLessons, isLoading: lessonsLoading } = useQuery({
+  const { data: rawLessons } = useQuery({
     queryKey: studentKeys.lessons,
     queryFn: studentApi.getLessons,
     enabled: isStudent,
-    staleTime: 60 * 1000,
+    staleTime: 5 * 60 * 1000,
   });
 
   const subjects = useMemo(() => rawLessons ?? [], [rawLessons]);
@@ -68,12 +65,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     studentProfile: studentProfile ?? null,
     studentDashboard: studentDashboard ?? null,
     subjects,
-    studentLoading,
-    dashboardLoading,
-    lessonsLoading,
     updateProgress,
     refetchLessons,
-  }), [studentProfile, studentDashboard, subjects, studentLoading, dashboardLoading, lessonsLoading, updateProgress, refetchLessons]);
+  }), [studentProfile, studentDashboard, subjects, updateProgress, refetchLessons]);
 
   return (
     <DataContext.Provider value={value}>

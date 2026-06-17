@@ -22,6 +22,8 @@ class AudioEngine {
   private voices: SpeechSynthesisVoice[] = [];
   private selectedVoice: SpeechSynthesisVoice | null = null;
   private isWarmedUp = false;
+  // When true, audio (speech + media) is fully disabled
+  private isDisabled = false;
   private audioContext: AudioContext | null = null;
 
   // ─── Media audio cache (rhymes, effects) ───
@@ -76,6 +78,22 @@ class AudioEngine {
         }
       };
       setTimeout(retryVoices, 500);
+    }
+
+    // Respect runtime disable flag (persisted in localStorage)
+    try {
+      if (localStorage.getItem('disableAudio') === '1') {
+        this.isDisabled = true;
+      }
+    } catch {
+      /* ignore */
+    }
+    // FORCE: ensure audio is disabled by default (persisted).
+    try {
+      localStorage.setItem('disableAudio', '1');
+      this.isDisabled = true;
+    } catch {
+      /* ignore */
     }
   }
 
@@ -188,6 +206,7 @@ class AudioEngine {
   // ═══════════════════════════════════════════════════════════
   private speakWithBrowserTTS(text: string) {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    if (this.isDisabled) return;
 
     window.speechSynthesis.cancel();
     window.speechSynthesis.resume();
@@ -198,11 +217,20 @@ class AudioEngine {
       const u = new SpeechSynthesisUtterance(text);
       this.currentUtterance = u;
 
-      if (this.selectedVoice) {
-        u.voice = this.selectedVoice;
-        u.lang = this.selectedVoice.lang;
+      // Detect Tamil text and prefer a Tamil voice when available
+      const containsTamil = /[\u0B80-\u0BFF]/.test(text);
+      let voiceToUse: SpeechSynthesisVoice | null = this.selectedVoice;
+      if (containsTamil) {
+        voiceToUse = this.voices.find((v) => v.lang && v.lang.startsWith('ta')) ||
+          this.voices.find((v) => v.name.toLowerCase().includes('tamil')) ||
+          voiceToUse;
+      }
+
+      if (voiceToUse) {
+        u.voice = voiceToUse;
+        u.lang = voiceToUse.lang;
       } else {
-        u.lang = 'en-US';
+        u.lang = containsTamil ? 'ta-IN' : 'en-US';
       }
 
       const isNatural =
@@ -263,6 +291,8 @@ class AudioEngine {
   public async speak(text: string, _options?: { rate?: number; pitch?: number }) {
     if (typeof window === 'undefined' || !text?.trim()) return;
 
+    if (this.isDisabled) return;
+
     // Double-speak guard
     const now = Date.now();
     if (this.lastSpokenText === text && now - this.lastSpokenAt < 800) return;
@@ -294,6 +324,7 @@ class AudioEngine {
    * Preloads a media audio file (rhymes, effects, etc.)
    */
   public preload(url: string) {
+    if (this.isDisabled) return;
     if (this.mediaCache.has(url)) return;
     const audio = new Audio(url);
     audio.preload = 'auto';
@@ -305,6 +336,8 @@ class AudioEngine {
    * Plays a media audio file (NOT speech — for rhymes, sound effects, etc.)
    */
   public async play(url: string): Promise<HTMLAudioElement | null> {
+    if (this.isDisabled) return null;
+
     this.stopSpeech();
 
     let audio = this.mediaCache.get(url);
@@ -346,6 +379,32 @@ class AudioEngine {
         /* ignore */
       }
     });
+  }
+
+  /**
+   * Disable all audio at runtime. Persists choice to `localStorage.disableAudio`.
+   */
+  public disable(persist = true) {
+    this.isDisabled = true;
+    this.stopAllAudio();
+    try {
+      if (persist) localStorage.setItem('disableAudio', '1');
+    } catch {
+      /* ignore */
+    }
+  }
+
+  /**
+   * Re-enable audio at runtime. Removes persisted disable flag.
+   */
+  public enable(persist = true) {
+    this.isDisabled = false;
+    try {
+      if (persist) localStorage.removeItem('disableAudio');
+    } catch {
+      /* ignore */
+    }
+    this.warmUp();
   }
 }
 

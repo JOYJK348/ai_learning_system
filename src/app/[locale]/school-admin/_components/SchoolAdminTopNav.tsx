@@ -36,7 +36,7 @@ export default function SchoolAdminTopNav() {
           {school?.logo_url ? (
             <Image src={school.logo_url} alt={school.name} width={44} height={44} className={styles.brandLogo} priority unoptimized />
           ) : (
-            <Image src="/assets/img/logo-removebg-preview.png" alt="ZHI Learn" width={44} height={44} className={styles.brandLogo} priority />
+            <Image src="/assets/img/logo-removebg-preview.webp" alt="ZHI Learn" width={44} height={44} className={styles.brandLogo} priority />
           )}
           <div>
             <p className={styles.brandTitle}>{school?.name || 'ZHI Learn'}</p>
@@ -66,3 +66,4 @@ export default function SchoolAdminTopNav() {
     </>
   );
 }
+

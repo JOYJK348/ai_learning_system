@@ -20,7 +20,7 @@ export default function AdminTopNav() {
   return (
     <header className={styles.topbar}>
       <div className={styles.brandIdentity}>
-        <Image src="/assets/img/logo-removebg-preview.png" alt="ZHI" width={44} height={44} className={styles.logo} />
+        <Image src="/assets/img/logo-removebg-preview.webp" alt="ZHI" width={44} height={44} className={styles.logo} />
         <div>
           <p className={styles.brandTitle}>ZHI Learn</p>
           <p className={styles.brandMeta}>Super Admin</p>
@@ -46,3 +46,4 @@ export default function AdminTopNav() {
     </header>
   );
 }
+

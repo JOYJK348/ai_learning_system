@@ -19,6 +19,7 @@ const GUIDE_EMOJIS: Record<string, string> = {
   'letter-e': '🐘', 'letter-f': '🐟', 'letter-g': '🍇', 'letter-h': '🎩',
   'letter-i': '🍦', 'letter-j': '🏺', 'letter-k': '🪁', 'letter-l': '🦁',
   'letter-m': '🥭',
+  square: '⬜', triangle: '🔺', star: '⭐', diamond: '💎', oval: '🥚', rectangle: '📘',
 };
 const GUIDE_HEADINGS: Record<string, string> = {
   standing: '🐛 Trace the Standing Line!',
@@ -47,6 +48,12 @@ const GUIDE_HEADINGS: Record<string, string> = {
   'letter-k': '🪁 Trace the Letter K!',
   'letter-l': '🦁 Trace the Letter L!',
   'letter-m': '🥭 Trace the Letter M!',
+  square: '⬜ Trace the Square!',
+  triangle: '🔺 Trace the Triangle!',
+  star: '⭐ Trace the Star!',
+  diamond: '💎 Trace the Diamond!',
+  oval: '🥚 Trace the Oval!',
+  rectangle: '📘 Trace the Rectangle!',
 };
 
 function addSeg(pts: { x: number; y: number }[], x1: number, y1: number, x2: number, y2: number, n: number) {
@@ -84,7 +91,7 @@ const LETTER_SEGMENTS: Record<string, [number, number, number, number][]> = {
 
 function generateDottedPath(pathType: string, w: number, h: number) {
   const pts: { x: number; y: number }[] = [];
-  const count = 60;
+  const count = 50;
   if (pathType === 's-curve') {
     for (let i = 0; i <= count; i++) { const t = i / count; pts.push({ x: 40 + t * (w - 80), y: h / 2 + Math.sin(t * Math.PI * 2) * (h / 4) }); }
   } else if (pathType === 'circle') {
@@ -115,6 +122,57 @@ function generateDottedPath(pathType: string, w: number, h: number) {
   } else if (pathType === 'zigzag') {
     const segs = 6;
     for (let i = 0; i <= count; i++) { const t = i / count; const seg = Math.floor(t * segs); const lt = (t * segs) - seg; pts.push({ x: 20 + t * (w - 40), y: seg % 2 === 0 ? 20 + lt * (h - 40) : h - 20 - lt * (h - 40) }); }
+  } else if (pathType === 'square') {
+    const s = Math.min(w, h) * 0.3;
+    const cx = w / 2, cy = h / 2;
+    const ptsPerSide = Math.floor(count / 4);
+    addSeg(pts, cx - s, cy - s, cx + s, cy - s, ptsPerSide);
+    addSeg(pts, cx + s, cy - s, cx + s, cy + s, ptsPerSide);
+    addSeg(pts, cx + s, cy + s, cx - s, cy + s, ptsPerSide);
+    addSeg(pts, cx - s, cy + s, cx - s, cy - s, ptsPerSide);
+  } else if (pathType === 'triangle') {
+    const s = Math.min(w, h) * 0.35;
+    const cx = w / 2, cy = h / 2 + 10;
+    const ptsPerSide = Math.floor(count / 3);
+    addSeg(pts, cx, cy - s, cx + s, cy + s * 0.6, ptsPerSide);
+    addSeg(pts, cx + s, cy + s * 0.6, cx - s, cy + s * 0.6, ptsPerSide);
+    addSeg(pts, cx - s, cy + s * 0.6, cx, cy - s, ptsPerSide);
+  } else if (pathType === 'star') {
+    const cx = w / 2, cy = h / 2;
+    const outer = Math.min(w, h) * 0.35;
+    const inner = outer * 0.4;
+    const ptsPerSeg = Math.floor(count / 10);
+    for (let i = 0; i < 10; i++) {
+      const angle = (i * Math.PI * 2) / 10 - Math.PI / 2;
+      const r = i % 2 === 0 ? outer : inner;
+      const nextAngle = ((i + 1) * Math.PI * 2) / 10 - Math.PI / 2;
+      const nextR = (i + 1) % 2 === 0 ? outer : inner;
+      addSeg(
+        pts, cx + Math.cos(angle) * r, cy + Math.sin(angle) * r,
+        cx + Math.cos(nextAngle) * nextR, cy + Math.sin(nextAngle) * nextR,
+        ptsPerSeg
+      );
+    }
+  } else if (pathType === 'diamond') {
+    const cx = w / 2, cy = h / 2;
+    const s = Math.min(w, h) * 0.35;
+    const ptsPerSide = Math.floor(count / 4);
+    addSeg(pts, cx, cy - s, cx + s, cy, ptsPerSide);
+    addSeg(pts, cx + s, cy, cx, cy + s, ptsPerSide);
+    addSeg(pts, cx, cy + s, cx - s, cy, ptsPerSide);
+    addSeg(pts, cx - s, cy, cx, cy - s, ptsPerSide);
+  } else if (pathType === 'oval') {
+    const cx = w / 2, cy = h / 2;
+    const rx = Math.min(w, h) * 0.35, ry = Math.min(w, h) * 0.22;
+    for (let i = 0; i <= count; i++) { const a = (i / count) * Math.PI * 2; pts.push({ x: cx + Math.cos(a) * rx, y: cy + Math.sin(a) * ry }); }
+  } else if (pathType === 'rectangle') {
+    const cx = w / 2, cy = h / 2;
+    const hw = Math.min(w, h) * 0.35, hh = Math.min(w, h) * 0.22;
+    const ptsPerSide = Math.floor(count / 4);
+    addSeg(pts, cx - hw, cy - hh, cx + hw, cy - hh, ptsPerSide);
+    addSeg(pts, cx + hw, cy - hh, cx + hw, cy + hh, ptsPerSide);
+    addSeg(pts, cx + hw, cy + hh, cx - hw, cy + hh, ptsPerSide);
+    addSeg(pts, cx - hw, cy + hh, cx - hw, cy - hh, ptsPerSide);
   } else if (LETTER_SEGMENTS[pathType]) {
     const segs = LETTER_SEGMENTS[pathType];
     const ptsPerSeg = Math.max(10, Math.floor(50 / segs.length));
@@ -135,13 +193,14 @@ export default function TraceActivity({ config, onComplete }: Props) {
   const [points, setPoints] = useState<{ x: number; y: number }[]>([]);
   const [done, setDone] = useState(false);
   const [passed, setPassed] = useState(false);
+  const [traceAccuracy, setTraceAccuracy] = useState(0);
   const startTime = useRef(Date.now());
   const [dottedPath, setDottedPath] = useState<{ x: number; y: number }[]>([]);
   const [dimensions, setDimensions] = useState({ w: 600, h: 200 });
 
   const pathType = (config.path as string) || 'sleeping';
   const traceColor = (config.color as string) || '#FF6B6B';
-  const tolerance = (config.tolerance as number) || 20;
+  const tolerance = (config.tolerance as number) || 15;
   const isGuide = (config.mode as string) === 'guide';
   const guideEmoji = GUIDE_EMOJIS[pathType] || '⭐';
   const actualPassThreshold = PASS_THRESHOLD;
@@ -214,24 +273,25 @@ export default function TraceActivity({ config, onComplete }: Props) {
   const handleFinish = () => {
     if (done || points.length < 2) return;
     let correct = 0;
+    let farCount = 0;
     for (const pt of points) {
-      const near = dottedPath.some(d => {
+      let minDist = Infinity;
+      for (const d of dottedPath) {
         const dx = d.x - pt.x, dy = d.y - pt.y;
-        return Math.sqrt(dx * dx + dy * dy) < tolerance;
-      });
-      if (near) correct++;
+        minDist = Math.min(minDist, Math.sqrt(dx * dx + dy * dy));
+      }
+      if (minDist < tolerance) correct++;
+      else if (minDist >= tolerance * 2) farCount++;
     }
-    const accuracy = points.length > 0 ? Math.round((correct / points.length) * 100) : 0;
+    let accuracy = points.length > 0 ? Math.round((correct / points.length) * 100) : 0;
+    // Heavily penalize points far from the path (e.g. drawing extra shapes on top)
+    if (farCount > 0) {
+      accuracy = Math.round(accuracy * (1 - (farCount / points.length) * 1.5));
+    }
     const isPass = accuracy >= actualPassThreshold;
+    setTraceAccuracy(accuracy);
     setPassed(isPass);
     setDone(true);
-    if (isPass) {
-      onComplete({
-        score: 100, max_score: 100,
-        completion_data: { accuracy, points_traced: points.length, path_type: pathType },
-        time_taken_seconds: Math.round((Date.now() - startTime.current) / 1000),
-      });
-    }
   };
 
   const handleReset = () => {
@@ -275,6 +335,12 @@ export default function TraceActivity({ config, onComplete }: Props) {
             'letter-k': '✏️ Trace Letter K!',
             'letter-l': '✏️ Trace Letter L!',
             'letter-m': '✏️ Trace Letter M!',
+            'square': '⬜ Trace the Square!',
+            'triangle': '🔺 Trace the Triangle!',
+            'star': '⭐ Trace the Star!',
+            'diamond': '💎 Trace the Diamond!',
+            'oval': '🥚 Trace the Oval!',
+            'rectangle': '📘 Trace the Rectangle!',
           }[pathType] || '🖐️ Trace the Pattern!')}
       </h3>
 
@@ -320,12 +386,12 @@ export default function TraceActivity({ config, onComplete }: Props) {
                 style={{ background: 'rgba(255,255,255,0.2)' }}>
                 {passed ? (
                   <>
-                    <p className="text-2xl sm:text-3xl">⭐⭐⭐⭐⭐</p>
+                    <p className="text-2xl sm:text-3xl">{'⭐'.repeat(traceAccuracy >= 95 ? 5 : traceAccuracy >= 85 ? 4 : 3)}</p>
                     <p className="font-bold text-white text-sm sm:text-base">{isGuide ? `${guideEmoji} Great job!` : 'Great tracing! 🎉'}</p>
                   </>
                 ) : (
                   <>
-                    <p className="text-2xl sm:text-3xl">💪</p>
+                    <p className="text-2xl sm:text-3xl">{traceAccuracy >= 50 ? '⭐'.repeat(2) : '💪'}</p>
                     <p className="font-bold text-white text-sm sm:text-base">Almost! Try again!</p>
                   </>
                 )}
@@ -342,7 +408,7 @@ export default function TraceActivity({ config, onComplete }: Props) {
             Done! ✅
           </button>
         ) : passed ? (
-          <button onClick={() => onComplete({ score: 100, max_score: 100, completion_data: {}, time_taken_seconds: Math.round((Date.now() - startTime.current) / 1000) })}
+          <button onClick={() => onComplete({ score: 100, max_score: 100, completion_data: { accuracy: traceAccuracy, points_traced: points.length, path_type: pathType }, time_taken_seconds: Math.round((Date.now() - startTime.current) / 1000) })}
             className="px-6 sm:px-8 py-2.5 sm:py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-black rounded-full shadow-lg transition-all text-sm sm:text-base">
             Next ➡️
           </button>

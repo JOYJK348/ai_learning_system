@@ -438,14 +438,11 @@ export default function GamesPlayground() {
       {/* ─── ATMOSPHERE: SKY & CLOUDS ─── */}
       <div className="fixed inset-0 select-none pointer-events-none z-0">
         <div className="absolute inset-0 bg-gradient-to-b from-sky-400 via-blue-300 to-indigo-200" />
-        <motion.div animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.7, 0.5] }} transition={{ repeat: Infinity, duration: 8 }}
-          className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-yellow-100 rounded-full blur-[100px]" />
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-yellow-100 rounded-full blur-[100px]" />
         {[...Array(5)].map((_, i) => (
-          <motion.div key={i}
-            animate={{ x: ['-20vw', '120vw'] }}
-            transition={{ repeat: Infinity, duration: 30 + i * 8, delay: i * 5, ease: 'linear' }}
-            className="absolute text-white" style={{ top: `${10 + i * 15}%` }}
-          ><Cloud size={80 + i * 30} fill="white" className="opacity-30" /></motion.div>
+          <div key={i}
+            className="absolute text-white" style={{ top: `${10 + i * 15}%`, left: `${10 + i * 20}%` }}
+          ><Cloud size={80 + i * 30} fill="white" className="opacity-30" /></div>
         ))}
       </div>
 

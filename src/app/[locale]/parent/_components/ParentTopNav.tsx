@@ -22,7 +22,7 @@ export default function ParentTopNav({ onLogout }: { onLogout?: () => void }) {
   return (
     <header className={styles.topbar}>
       <div className={styles.brandIdentity}>
-        <Image src="/assets/img/logo-removebg-preview.png" alt="ZHI" width={44} height={44} className={styles.logo} />
+        <Image src="/assets/img/logo-removebg-preview.webp" alt="ZHI" width={44} height={44} className={styles.logo} />
         <div>
           <p className={styles.brandTitle}>ZHI Learn</p>
           <p className={styles.brandMeta}>Parent Portal</p>
@@ -44,3 +44,4 @@ export default function ParentTopNav({ onLogout }: { onLogout?: () => void }) {
     </header>
   );
 }
+

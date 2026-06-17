@@ -34,13 +34,10 @@ const POSITIONS = [
 ];
 
 const MagicCastle = () => (
-  <div className="relative w-56 h-56 sm:w-96 sm:h-96 flex items-center justify-center animate-[float_4s_ease-in-out_infinite]">
-    <style>{`
-      @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-    `}</style>
+  <div className="relative w-56 h-56 sm:w-96 sm:h-96 flex items-center justify-center">
     <div className="absolute inset-10 bg-white/40 blur-3xl rounded-full" />
     <img
-      src="/central_magic_hub-removebg-preview.png"
+      src="/central_magic_hub-removebg-preview.webp"
       alt="Magic Hub"
       className="relative z-10 w-full h-full object-contain drop-shadow-2xl"
     />
@@ -58,7 +55,7 @@ export default function DashboardHome() {
   const router = useRouter();
   const params = useParams();
   const locale = params.locale || 'en';
-  const { subjects, studentProfile, studentLoading } = useData();
+  const { subjects, studentProfile } = useData();
 
   const zones = subjects.flatMap(s =>
     s.chapters.map((ch, i) => ({
@@ -74,14 +71,6 @@ export default function DashboardHome() {
 
   const studentName = studentProfile?.name || 'Explorer';
   const activeZone = [...zones].reverse().find(z => z.unlocked) || zones[0];
-
-  if (studentLoading) {
-    return (
-      <div className="relative min-h-screen font-sans select-none overflow-hidden bg-[#87CEEB] flex items-center justify-center">
-        <div className="text-2xl font-black text-white animate-pulse">Loading your world...</div>
-      </div>
-    );
-  }
 
   return (
     <div className="relative min-h-screen font-sans select-none overflow-hidden bg-[#87CEEB]">
@@ -147,7 +136,7 @@ export default function DashboardHome() {
         }}
       >
         <div className="relative">
-           <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full border-4 border-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.5)] p-0.5 animate-bounce">
+           <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full border-4 border-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.5)] p-0.5">
               <div className="w-full h-full bg-blue-50 rounded-full flex items-center justify-center text-base sm:text-lg">🏃</div>
            </div>
            <div className="absolute top-12 left-1/2 -translate-x-1/2 px-3 py-1 bg-yellow-400 text-white text-[8px] font-black rounded-full shadow-lg whitespace-nowrap">
@@ -158,3 +147,4 @@ export default function DashboardHome() {
     </div>
   );
 }
+

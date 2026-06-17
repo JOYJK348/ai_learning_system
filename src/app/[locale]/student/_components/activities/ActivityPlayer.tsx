@@ -39,7 +39,7 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const queryClient = useQueryClient();
 
-  const { data: activities, isLoading, isError } = useQuery({
+  const { data: activities, isError } = useQuery({
     queryKey: studentKeys.activities(lessonId),
     queryFn: () => studentApi.getLessonActivities(lessonId),
     staleTime: 5 * 60 * 1000,
@@ -81,22 +81,6 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
 
   const currentActivity: Activity | undefined = activities?.[currentIndex];
   const allDone = completedIds.size > 0 && activities && completedIds.size >= activities.length;
-
-  if (isLoading) {
-    return (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center"
-        style={{ background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(8px)' }}>
-        <div className="flex flex-col items-center gap-4">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
-            className="w-10 h-10 sm:w-14 sm:h-14 rounded-full border-[3px] border-white/20 border-t-white/80"
-          />
-          <p className="text-white/60 font-bold text-sm">Loading activities...</p>
-        </div>
-      </div>
-    );
-  }
 
   if (isError || !activities || activities.length === 0) {
     return (

@@ -185,7 +185,7 @@ export default function LoginPage() {
               {/* Internal Logo Section - Mobile Centered, Desktop Row */}
               <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 sm:gap-6 mb-6 pb-6 border-b border-slate-50 pt-12 sm:pt-0">
                 <div className="shrink-0">
-                  <Image src="/assets/img/logo-removebg-preview.png" alt="ZHI" width={72} height={72} className="object-contain sm:w-[88px] sm:h-[88px]" />
+                  <Image src="/assets/img/logo-removebg-preview.webp" alt="ZHI" width={72} height={72} className="object-contain sm:w-[88px] sm:h-[88px]" />
                 </div>
                 <div className="flex flex-col">
                   <p className="text-slate-900 font-black text-2xl sm:text-3xl leading-none tracking-tighter">ZHI <span className="text-blue-600">LearnAI</span></p>
@@ -354,3 +354,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

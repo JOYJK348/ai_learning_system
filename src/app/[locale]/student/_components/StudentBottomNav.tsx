@@ -4,6 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { LayoutDashboard, Compass, Gamepad2, User, Sparkles } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/routing';
+import { useLocale } from 'next-intl';
 
 const NAV_ITEMS = [
   { name: 'Home', icon: LayoutDashboard, path: '/student/Home', color: 'from-blue-400 to-indigo-500' },
@@ -14,6 +15,7 @@ const NAV_ITEMS = [
 
 export default function StudentBottomNav() {
   const pathname = usePathname();
+  const locale = useLocale();
 
   return (
     <div className="fixed bottom-0 inset-x-0 z-[100] pointer-events-none flex justify-center">
@@ -44,7 +46,7 @@ export default function StudentBottomNav() {
                       animate={{ opacity: isActive ? 1 : 0, width: isActive ? 'auto' : 0 }}
                       className={`text-[12px] font-black uppercase tracking-widest text-white whitespace-nowrap overflow-hidden ${isActive ? 'ml-1' : ''}`}
                     >
-                      {item.name}
+                      {item.name === 'Home' ? 'முகப்பு' : item.name === 'Learn' ? 'கற்க' : item.name === 'Games' ? 'விளையாட்டு' : item.name === 'Profile' ? 'சுயவிவரம்' : item.name}
                     </motion.span>
                   )}
                 </motion.div>

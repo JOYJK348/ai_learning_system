@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs><linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#11998e"/><stop offset="100%" stop-color="#38ef7d"/></linearGradient>
+  <filter id="s"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter></defs>
+  <circle cx="50" cy="50" r="45" fill="url(#g4)" filter="url(#s)" />
+  <polygon points="50,15 85,75 15,75" fill="white" filter="url(#s)" />
+  <circle cx="50" cy="55" r="20" fill="#f9d423" filter="url(#s)" />
+</svg>

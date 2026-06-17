@@ -105,12 +105,12 @@ export default function QuizArena() {
                    </div>
 
                    <div className="relative w-64 h-64 sm:w-80 sm:h-80 select-none">
-                      <div className="absolute inset-0 bg-indigo-600/10 blur-[60px] rounded-full animate-pulse" />
-                      <img 
-                        src="/assets/avatars/owl-removebg-preview.png" 
-                        className="w-full h-full object-contain animate-[float_4s_ease-in-out_infinite]" 
-                        alt="Arena Master" 
-                      />
+                       <div className="absolute inset-0 bg-indigo-600/10 blur-[60px] rounded-full" />
+                       <img 
+                         src="/assets/avatars/owl-removebg-preview.webp" 
+                         className="w-full h-full object-contain" 
+                         alt="Arena Master" 
+                       />
                    </div>
                 </div>
              </div>
@@ -188,7 +188,7 @@ export default function QuizArena() {
                        <div className="min-h-[280px] flex flex-col items-center justify-center p-8 relative overflow-hidden text-center">
                           <div className="w-24 h-24 flex items-center justify-center mb-6 drop-shadow-[0_20px_20px_rgba(0,0,0,0.1)] group-hover:scale-110 transition-transform duration-700">
                              <img 
-                                src={`/assets/portals/${['alphabet', 'numbers', 'colors', 'animals'][idx % 4]}-removebg-preview.png`}
+                                src={`/assets/portals/${['alphabet', 'numbers', 'colors', 'animals'][idx % 4]}-removebg-preview.webp`}
                                 className="w-full h-full object-contain"
                                 alt={zone.title}
                              />
@@ -268,3 +268,4 @@ export default function QuizArena() {
     </div>
   );
 }
+

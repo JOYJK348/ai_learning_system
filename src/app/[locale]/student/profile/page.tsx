@@ -18,7 +18,7 @@ import { useData } from '@/context/DataContext';
    AVATAR CHARACTERS & DATA
    ═══════════════════════════════════════════ */
 const AVATARS = [
-  { id: 'owl', name: 'Wise Owl', src: '/assets/avatars/owl.png' },
+  { id: 'owl', name: 'Wise Owl', src: '/assets/avatars/owl.webp' },
 ];
 
 const TROPHIES = [
@@ -118,7 +118,7 @@ export default function MyWorldProfile() {
                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
                    className="w-40 h-40 rounded-full border-4 border-white shadow-xl mb-6 flex items-center justify-center relative overflow-hidden bg-indigo-50"
                  >
-                    <img src="/assets/avatars/agnika_avatar.png" alt="Agnika Avatar" className="w-full h-full object-cover" />
+                    <img src="/assets/avatars/agnika_avatar.webp" alt="Agnika Avatar" className="w-full h-full object-cover" />
                     <div className="absolute -bottom-2 -right-2 bg-amber-400 w-12 h-12 rounded-full border-4 border-white flex items-center justify-center shadow-lg z-10 hidden">
                       {/* Note: Kept the DOM structure, but hidden original star if needed or leave star over it */}
                     </div>
@@ -234,7 +234,7 @@ export default function MyWorldProfile() {
            {/* 1. CHILD BASICS (Personal Details) */}
            <div className="bg-white/40 backdrop-blur-3xl rounded-[3.5rem] p-8 sm:p-14 border-2 border-white/60 shadow-2xl mb-12 flex flex-col md:flex-row items-center gap-10">
               <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-indigo-200 shadow-xl flex items-center justify-center flex-shrink-0 bg-indigo-50 overflow-hidden">
-                 <img src="/assets/avatars/agnika_avatar.png" alt="Avatar" className="w-full h-full object-cover" />
+                 <img src="/assets/avatars/agnika_avatar.webp" alt="Avatar" className="w-full h-full object-cover" />
               </div>
               <div className="flex-1 text-center md:text-left">
                   <h2 className="text-4xl sm:text-6xl font-black text-indigo-950 tracking-tighter mb-4">{studentProfile?.name || 'Explorer'}</h2>
@@ -327,4 +327,5 @@ export default function MyWorldProfile() {
   );
 
 }
+
 

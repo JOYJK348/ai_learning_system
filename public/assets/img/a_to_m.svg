@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF6B6B" />
+      <stop offset="100%" stop-color="#FF8E53" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4E65FF" />
+      <stop offset="100%" stop-color="#92EFFD" />
+    </linearGradient>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8b500" />
+      <stop offset="100%" stop-color="#fceabb" />
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="2" dy="4" stdDeviation="2" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <rect x="10" y="25" width="35" height="35" rx="8" fill="url(#grad1)" filter="url(#shadow)" transform="rotate(-10 27 42)" />
+  <text x="27" y="50" font-family="'Nunito', 'Segoe UI', sans-serif" font-weight="900" font-size="24" fill="#ffffff" text-anchor="middle" transform="rotate(-10 27 42)">A</text>
+
+  <rect x="55" y="15" width="35" height="35" rx="8" fill="url(#grad2)" filter="url(#shadow)" transform="rotate(15 72 32)" />
+  <text x="72" y="40" font-family="'Nunito', 'Segoe UI', sans-serif" font-weight="900" font-size="24" fill="#ffffff" text-anchor="middle" transform="rotate(15 72 32)">B</text>
+
+  <rect x="35" y="55" width="35" height="35" rx="8" fill="url(#grad3)" filter="url(#shadow)" />
+  <text x="52" y="80" font-family="'Nunito', 'Segoe UI', sans-serif" font-weight="900" font-size="24" fill="#ffffff" text-anchor="middle">M</text>
+</svg>

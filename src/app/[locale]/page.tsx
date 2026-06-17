@@ -60,7 +60,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-5 sm:px-6 h-20 flex items-center justify-between py-4">
           <a href="#" className="flex items-center gap-3 group">
             <div className="relative w-14 h-14 transition-transform group-hover:scale-110">
-              <Image src="/assets/img/logo.png" alt="Zhi Logo" fill className="object-contain" />
+              <Image src="/assets/img/logo.webp" alt="Zhi Logo" fill className="object-contain" />
             </div>
             <div className="flex flex-col leading-none">
               <span className="font-extrabold text-lg" style={{ color: C.primary }}>
@@ -178,7 +178,7 @@ export default function HomePage() {
                     <div className="relative aspect-[16/10] bg-black rounded-[1.8rem] overflow-hidden border border-white/5 shadow-inner">
                       {/* Image Content */}
                       <div className="absolute inset-0">
-                        <Image src="/assets/img/hero.png" alt="Zhi AR Platform" fill className="object-cover opacity-95 transition-transform duration-700 hover:scale-105" />
+                        <Image src="/assets/img/hero.webp" alt="Zhi AR Platform" fill className="object-cover opacity-95 transition-transform duration-700 hover:scale-105" />
                         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10 pointer-events-none" />
                         <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent" />
                       </div>
@@ -482,7 +482,7 @@ export default function HomePage() {
               >
                 <div className="absolute inset-0 bg-gradient-to-tr from-[#013237]/30 via-transparent to-white/10 z-10" />
                 <Image
-                  src="/assets/img/achievement.png"
+                  src="/assets/img/achievement.webp"
                   alt="Innovation Tech"
                   width={800}
                   height={1000}
@@ -1152,7 +1152,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-5 sm:px-6 grid md:grid-cols-4 gap-10 mb-12">
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-6">
-              <Image src="/assets/img/logo.png" alt="Zhi Logo" width={32} height={32} />
+              <Image src="/assets/img/logo.webp" alt="Zhi Logo" width={32} height={32} />
               <span className="font-extrabold text-lg" style={{ color: C.primary }}>
                 ZHI <span style={{ color: C.gold }}>LearnAI</span>
               </span>
@@ -1198,3 +1198,4 @@ export default function HomePage() {
     </div>
   );
 }
+

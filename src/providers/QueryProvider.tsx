@@ -33,14 +33,14 @@ export default function QueryProvider({ children }: { children: React.ReactNode 
     persisted.current = true;
 
     const persister = createSyncStoragePersister({
-      storage: window.sessionStorage,
+      storage: window.localStorage,
       key: PERSIST_KEY,
     });
 
     persistQueryClient({
       queryClient: queryClientSingleton,
       persister,
-      maxAge: 1000 * 60 * 30,
+      maxAge: 1000 * 60 * 60 * 24,
     });
   }, []);
 

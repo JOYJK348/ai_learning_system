@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 type Props = {
+  isTamil?: boolean;
   config?: { path?: string; color?: string };
   onComplete: (data: {
     score: number;
@@ -97,15 +98,33 @@ const PATH_VISUALS: Record<string, PathVisual> = {
   circle:         { label: 'Circle',          emoji: '⭕', color: '#818cf8', duration: 5500 },
 };
 
-function getVisual(path: string): PathVisual {
-  return PATH_VISUALS[path] || { label: path, emoji: '✏️', color: '#8B5CF6', duration: 4000 };
+const PATH_VISUALS_TAMIL: Record<string, string> = {
+  standing: 'நேர்கோடு',
+  sleeping: 'படுக்கைகோடு',
+  'left-slanting': 'இடது சாய்வுகோடு',
+  'right-slanting': 'வலது சாய்வுகோடு',
+  'up-curve': 'மேல் வளைவு',
+  'down-curve': 'கீழ் வளைவு',
+  'left-curve': 'இடது வளைவு',
+  'right-curve': 'வலது வளைவு',
+  zigzag: 'நெளிவுகோடு',
+  's-curve': 'எஸ் வளைவு',
+  circle: 'வட்டம்',
+};
+
+function getVisual(path: string, isTamil?: boolean): PathVisual {
+  const base = PATH_VISUALS[path] || { label: path, emoji: '✏️', color: '#8B5CF6', duration: 4000 };
+  if (isTamil && PATH_VISUALS_TAMIL[path]) {
+    return { ...base, label: PATH_VISUALS_TAMIL[path] };
+  }
+  return base;
 }
 
 /* ─── Component ─── */
 
-export default function PreWritingVideo({ config, onComplete }: Props) {
+export default function PreWritingVideo({ isTamil, config, onComplete }: Props) {
   const pathType = (config?.path as string) || 'sleeping';
-  const visual = getVisual(pathType);
+  const visual = getVisual(pathType, isTamil);
 
   const [phase, setPhase] = useState<'idle' | 'playing' | 'done'>('idle');
   const [progress, setProgress] = useState(0);
@@ -350,7 +369,7 @@ export default function PreWritingVideo({ config, onComplete }: Props) {
                   className="text-[10px] sm:text-xs font-semibold tracking-widest uppercase"
                   style={{ color: `${visual.color}cc` }}
                 >
-                  Tap to Watch
+                  {isTamil ? 'பார்க்க தட்டவும்' : 'Tap to Watch'}
                 </span>
               </motion.div>
             </motion.div>
@@ -389,7 +408,7 @@ export default function PreWritingVideo({ config, onComplete }: Props) {
                   className="text-[10px] sm:text-xs font-semibold tracking-widest mt-0.5"
                   style={{ color: `${visual.color}aa` }}
                 >
-                  DEMO COMPLETE
+                  {isTamil ? 'டெமோ முடிந்தது' : 'DEMO COMPLETE'}
                 </p>
                 <div className="flex gap-2 justify-center mt-3">
                   <motion.button
@@ -443,10 +462,10 @@ export default function PreWritingVideo({ config, onComplete }: Props) {
         style={{ color: 'rgba(255,255,255,0.35)' }}
       >
         {phase === 'idle'
-          ? 'Tap to see how it\'s done'
+          ? (isTamil ? 'எப்படி என்று பார்க்க தட்டவும்' : 'Tap to see how it\'s done')
           : phase === 'playing'
-          ? 'Watch the guide...'
-          : 'Got it! Ready to trace'}
+          ? (isTamil ? 'வழிகாட்டியைப் பார்க்கவும்...' : 'Watch the guide...')
+          : (isTamil ? 'புரிந்தது! வரைவதற்கு தயார்' : 'Got it! Ready to trace')}
       </p>
     </div>
   );
