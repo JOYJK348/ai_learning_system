@@ -90,166 +90,28 @@ class AudioEngine {
   //  WARM-UP: Unlock audio hardware across all devices
   // ═══════════════════════════════════════════════════════════
   public warmUp() {
-    if (typeof window === 'undefined') return;
-
-    // 1. Web Audio API context (required for iOS/Android)
-    try {
-      if (!this.audioContext) {
-        this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-      }
-      if (this.audioContext.state === 'suspended') {
-        this.audioContext.resume();
-      }
-      // iOS: Create a short silent buffer to unlock audio hardware
-      if (this.isIOS || this.isSafari) {
-        const buffer = this.audioContext.createBuffer(1, 1, 22050);
-        const source = this.audioContext.createBufferSource();
-        source.buffer = buffer;
-        source.connect(this.audioContext.destination);
-        source.start(0);
-      }
-    } catch {
-      /* ignore */
-    }
-
-    // 2. Unlock HTML5 Audio (create + play a silent element)
-    try {
-      const silentAudio = new Audio();
-      silentAudio.src =
-        'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
-      silentAudio.volume = 0.01;
-      silentAudio.play().then(() => silentAudio.pause()).catch(() => {});
-    } catch {
-      /* ignore */
-    }
-
-    // 3. Wake up Speech Synthesis
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.resume();
-      const u = new SpeechSynthesisUtterance(' ');
-      u.volume = 0;
-      u.rate = 2;
-      window.speechSynthesis.speak(u);
-    }
-
-    // 4. Keep-alive heartbeat (prevents Android from killing speech)
-    if (!this.isWarmedUp) {
-      setInterval(() => {
-        if ('speechSynthesis' in window) {
-          if (window.speechSynthesis.speaking) {
-            window.speechSynthesis.resume();
-          }
-          if (this.isAndroid && !window.speechSynthesis.speaking) {
-            const p = new SpeechSynthesisUtterance(' ');
-            p.volume = 0;
-            p.rate = 2;
-            window.speechSynthesis.speak(p);
-          }
-        }
-        if (this.audioContext?.state === 'suspended') {
-          this.audioContext.resume().catch(() => {});
-        }
-      }, 5000);
-      this.isWarmedUp = true;
-    }
+    // Silent no-op
   }
 
   // ═══════════════════════════════════════════════════════════
   //  VOICE SELECTION
   // ═══════════════════════════════════════════════════════════
   private loadVoices() {
-    if (typeof window === 'undefined') return;
-    this.voices = window.speechSynthesis.getVoices();
-
-    if (this.voices.length > 0) {
-      const naturalKW = ['natural', 'neural', 'online', 'aria', 'jenny', 'ana', 'sara'];
-      const qualityKW = ['samantha', 'karen', 'moira', 'tessa', 'google us english', 'google uk english female'];
-      const fallbackKW = ['zira', 'hazel', 'susan', 'female'];
-
-      const findVoice = (keywords: string[]) =>
-        this.voices.find(
-          (v) =>
-            v.lang.startsWith('en') && keywords.some((kw) => v.name.toLowerCase().includes(kw)),
-        );
-
-      this.selectedVoice =
-        findVoice(naturalKW) ||
-        findVoice(qualityKW) ||
-        findVoice(fallbackKW) ||
-        this.voices.find((v) => v.lang.startsWith('en') && v.localService) ||
-        this.voices.find((v) => v.lang.startsWith('en')) ||
-        this.voices[0] ||
-        null;
-    }
+    // Silent no-op
   }
 
   // ═══════════════════════════════════════════════════════════
   //  WEB SPEECH API (primary — no external dependencies)
   // ═══════════════════════════════════════════════════════════
   private speakWithBrowserTTS(text: string) {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.resume();
-
-    setTimeout(() => {
-      if (this.voices.length === 0) this.loadVoices();
-
-      const u = new SpeechSynthesisUtterance(text);
-      this.currentUtterance = u;
-
-      if (this.selectedVoice) {
-        u.voice = this.selectedVoice;
-        u.lang = this.selectedVoice.lang;
-      } else {
-        u.lang = 'en-US';
-      }
-
-      const isNatural =
-        this.selectedVoice?.name?.toLowerCase().includes('natural') ||
-        this.selectedVoice?.name?.toLowerCase().includes('neural') ||
-        this.selectedVoice?.name?.toLowerCase().includes('online');
-
-      u.rate = isNatural ? 0.88 : 0.85;
-      u.pitch = isNatural ? 1.0 : 1.1;
-      u.volume = 1.0;
-
-      const cleanup = () => {
-        this.currentUtterance = null;
-        this.isSpeaking = false;
-        this.processQueue();
-      };
-
-      u.onend = cleanup;
-      u.onerror = cleanup;
-
-      this.isSpeaking = true;
-
-      if (this.isIOS || this.isSafari) {
-        window.speechSynthesis.resume();
-      }
-
-      window.speechSynthesis.speak(u);
-
-      if (this.isAndroid) {
-        const keepAlive = setInterval(() => {
-          if (window.speechSynthesis.speaking) {
-            window.speechSynthesis.resume();
-          } else {
-            clearInterval(keepAlive);
-          }
-        }, 3000);
-      }
-    }, 100);
+    // Silent no-op
   }
 
   // ═══════════════════════════════════════════════════════════
   //  QUEUE SYSTEM — Prevents audio overlap & race conditions
   // ═══════════════════════════════════════════════════════════
   private processQueue() {
-    if (this.speechQueue.length === 0 || this.isSpeaking) return;
-    const next = this.speechQueue.shift();
-    if (next) this.speakWithBrowserTTS(next);
+    // Silent no-op
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -261,32 +123,13 @@ class AudioEngine {
    * No external services, no CORS issues, works offline.
    */
   public async speak(text: string, _options?: { rate?: number; pitch?: number }) {
-    if (typeof window === 'undefined' || !text?.trim()) return;
-
-    // Double-speak guard
-    const now = Date.now();
-    if (this.lastSpokenText === text && now - this.lastSpokenAt < 800) return;
-    this.lastSpokenText = text;
-    this.lastSpokenAt = now;
-
-    // Stop anything currently playing
-    this.stopSpeech();
-
-    // Clear queue — latest speech takes priority
-    this.speechQueue = [];
-
-    // Speak immediately
-    this.speakWithBrowserTTS(text);
+    // Silent no-op
   }
 
   /**
    * Stops all speech.
    */
   private stopSpeech() {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
-    this.currentUtterance = null;
     this.isSpeaking = false;
   }
 

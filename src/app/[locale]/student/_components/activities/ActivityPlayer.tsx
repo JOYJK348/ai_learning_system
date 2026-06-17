@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { studentApi, studentKeys, type Activity } from '@/core/services/studentApi';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useParams } from 'next/navigation';
 import VideoSnake from './VideoSnake';
 import VideoCircle from './VideoCircle';
 import TraceActivity from './TraceActivity';
@@ -35,6 +36,8 @@ const ACTIVITY_TYPE_MAP: Record<number, string> = {
 };
 
 export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onClose }: Props) {
+  const params = useParams();
+  const isTamil = params?.locale === 'ta';
   const [currentIndex, setCurrentIndex] = useState(0);
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const queryClient = useQueryClient();
@@ -92,7 +95,9 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
             transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
             className="w-10 h-10 sm:w-14 sm:h-14 rounded-full border-[3px] border-white/20 border-t-white/80"
           />
-          <p className="text-white/60 font-bold text-sm">Loading activities...</p>
+          <p className="text-white/60 font-bold text-sm font-sans">
+            {isTamil ? 'செயல்பாடுகள் ஏற்றப்படுகின்றன...' : 'Loading activities...'}
+          </p>
         </div>
       </div>
     );
@@ -104,9 +109,11 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
         style={{ background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(8px)' }}>
         <div className="rounded-[2rem] p-8 max-w-lg w-full mx-4 shadow-2xl text-center border border-white/30 backdrop-blur-md"
           style={{ background: 'rgba(255,255,255,0.15)' }}>
-          <p className="text-lg font-black text-white">No activities for this lesson yet.</p>
-          <button onClick={onClose} className="mt-4 px-6 py-2 bg-slate-200 rounded-full font-bold">
-            Back
+          <p className="text-lg font-black text-white font-sans">
+            {isTamil ? 'இந்த பாடத்திற்கு இன்னும் செயல்பாடுகள் இல்லை.' : 'No activities for this lesson yet.'}
+          </p>
+          <button onClick={onClose} className="mt-4 px-6 py-2 bg-slate-200 rounded-full font-bold font-sans shadow-md border-b-2 active:scale-95">
+            {isTamil ? 'பின்னால்' : 'Back'}
           </button>
         </div>
       </div>
@@ -129,7 +136,7 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
           ? <VideoCircle {...commonProps} />
           : <VideoSnake {...commonProps} />;
       case 'trace':
-        return <TraceActivity config={act.config} hasAttempt={!!act.attempt} {...commonProps} />;
+        return <TraceActivity config={{ ...act.config, isTamil }} hasAttempt={!!act.attempt} {...commonProps} />;
       case 'draw':
         return <DrawCanvas config={act.config} {...commonProps} />;
       case 'match':
@@ -143,12 +150,12 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
       default:
         return (
           <div className="flex flex-col items-center gap-4 p-8">
-            <p className="text-lg font-bold">Coming soon!</p>
+            <p className="text-lg font-bold font-sans">{isTamil ? 'விரைவில்!' : 'Coming soon!'}</p>
             <button
               onClick={() => handleActivityComplete(act.id, { score: 100, max_score: 100, completion_data: { skipped: true }, time_taken_seconds: 0 })}
-              className="px-6 py-2 bg-indigo-500 text-white rounded-full font-bold"
+              className="px-6 py-2 bg-indigo-500 text-white rounded-full font-bold font-sans shadow-md border-b-2 active:scale-95"
             >
-              Skip
+              {isTamil ? 'தவிர்' : 'Skip'}
             </button>
           </div>
         );
@@ -198,15 +205,17 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
             >
               {allDone ? (
                 <div className="flex flex-col items-center gap-4 sm:gap-6 px-6 sm:px-10 pb-6 sm:pb-10 pt-2">
-                  <span className="text-5xl sm:text-7xl">🎉</span>
-                  <h2 className="text-xl sm:text-3xl font-black text-white drop-shadow-lg text-center">{lessonTitle}</h2>
-                  <p className="text-sm sm:text-lg font-bold text-green-200">Lesson Complete!</p>
+                  <span className="text-5xl sm:text-7xl animate-bounce">🎉</span>
+                  <h2 className="text-xl sm:text-3xl font-black text-white drop-shadow-lg text-center font-sans">{lessonTitle}</h2>
+                  <p className="text-sm sm:text-lg font-bold text-green-200 font-sans">
+                    {isTamil ? 'பாடம் வெற்றிகரமாக முடிந்தது! 🎉' : 'Lesson Complete! 🎉'}
+                  </p>
                   <motion.button
                     whileTap={{ scale: 0.95 }}
                     onClick={onComplete}
-                    className="px-6 sm:px-10 py-2.5 sm:py-4 bg-white/25 backdrop-blur-md text-white font-black text-sm sm:text-lg rounded-full shadow-xl border-2 border-white/40 hover:bg-white/35 transition-all"
+                    className="px-6 sm:px-10 py-2.5 sm:py-4 bg-white/25 backdrop-blur-md text-white font-black text-sm sm:text-lg rounded-full shadow-xl border-2 border-white/40 hover:bg-white/35 transition-all border-b-4 border-white/50 active:scale-95 font-sans"
                   >
-                    Back to Lessons
+                    {isTamil ? 'பாடங்களுக்குத் திரும்பு ➡️' : 'Back to Lessons ➡️'}
                   </motion.button>
                 </div>
               ) : currentActivity ? (

@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { audioEngine } from '@/core/utils/audio';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, useParams } from 'next/navigation';
 import { useData } from '@/context/DataContext';
 import { studentApi, studentKeys, type Chapter, type Lesson } from '@/core/services/studentApi';
 import ActivityPlayer from '../_components/activities/ActivityPlayer';
@@ -25,7 +25,7 @@ import LetterCheckpoint from '../_components/activities/LetterCheckpoint';
 import TutorialPlayer from '../_components/activities/TutorialPlayer';
 
 /* ─── STROKE LABELS ─── */
-const STROKE_LABELS: Record<string, string> = {
+const STROKE_LABELS_EN: Record<string, string> = {
   standing: 'Standing Line',
   sleeping: 'Sleeping Line',
   'left-slanting': 'Left Slanting Line',
@@ -36,6 +36,17 @@ const STROKE_LABELS: Record<string, string> = {
   'down-curve': 'Down Curve',
 };
 
+const STROKE_LABELS_TA: Record<string, string> = {
+  standing: 'நேர்கோடு',
+  sleeping: 'படுக்கைகோடு',
+  'left-slanting': 'இடது சாய்வுகோடு',
+  'right-slanting': 'வலது சாய்வுகோடு',
+  'left-curve': 'இடது வளைவு',
+  'right-curve': 'வலது வளைவு',
+  'up-curve': 'மேல் வளைவு',
+  'down-curve': 'கீழ் வளைவு',
+};
+
 const QUIZ_STROKES = ['standing', 'sleeping', 'left-slanting', 'right-slanting', 'left-curve', 'right-curve', 'up-curve', 'down-curve'];
 const EXAM_COUNT = 5;
 
@@ -43,6 +54,7 @@ export default function UltimateLearnEngine() {
   const { subjects, studentProfile, updateProgress, refetchLessons } = useData();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const params = useParams();
   const queryClient = useQueryClient();
 
   const subjectParam = searchParams.get('subject');
@@ -72,6 +84,13 @@ export default function UltimateLearnEngine() {
     subjects.find(s => s.id === activeSubjectId), [activeSubjectId, subjects]);
   const activeChapter = useMemo(() =>
     activeSubject?.chapters.find(c => c.id === activeChapterId), [activeSubject, activeChapterId]);
+
+  const isTamil = params?.locale === 'ta' || 
+                  (activeSubject?.name ? (
+                    activeSubject.name.toLowerCase().includes('tamil') || 
+                    activeSubject.name.includes('தமிழ்') || 
+                    activeSubject.name.includes('முன்')
+                  ) : false);
 
   const openSubject = (subject: typeof subjects[0]) => {
     const visuals = getSubjectVisuals(subject.name);
@@ -137,18 +156,29 @@ export default function UltimateLearnEngine() {
     }
 
     // Pre-writing foundation strokes → trace → quiz (all trace, no buttons)
-    // Only trigger for the actual Pre-Writing chapter
-    const isPreWritingChapter = activeChapter?.name?.toLowerCase().includes('pre-writing') || activeChapter?.name?.toLowerCase().includes('pattern');
-    if (isPreWritingChapter && (lower.includes('standing') || lower.includes('sleeping') || lower.includes('slanting') ||
+    // Only trigger for the actual Pre-Writing chapter (supports Tamil name "முன் எழுத்து பயிற்சிகள்")
+    const isPreWritingChapter = 
+      activeChapter?.name?.toLowerCase().includes('pre-writing') || 
+      activeChapter?.name?.toLowerCase().includes('pattern') ||
+      activeChapter?.name?.toLowerCase().includes('முன் எழுத்து') ||
+      activeChapter?.name?.toLowerCase().includes('பயிற்சி');
+
+    if (isPreWritingChapter && (
+        lower.includes('standing') || lower.includes('sleeping') || lower.includes('slanting') ||
         lower.includes('curved') || lower.includes('curve') || lower.includes('zig') || lower.includes('zag') ||
         lower.includes('s-curve') || lower.includes('circle') ||
         lower.includes('exam') || lower.includes('review') || lower.includes('assessment') || lower.includes('mix') ||
         lower.includes('left-slanting') || lower.includes('right-slanting') ||
         lower.includes('left-curve') || lower.includes('right-curve') ||
         lower.includes('up-curve') || lower.includes('down-curve') ||
-        lower.includes('up curve') || lower.includes('down curve'))) {
+        lower.includes('up curve') || lower.includes('down curve') ||
+        // Tamil shapes support
+        lower.includes('நேர்') || lower.includes('படுத்த') || lower.includes('படுக்கை') ||
+        lower.includes('சாய்வு') || lower.includes('வளைவு') || lower.includes('வட்டம்') ||
+        lower.includes('தேர்வு')
+      )) {
       // Mixed exam — all CBSE strokes as trace rounds
-      if (lower.includes('exam') || lower.includes('review') || lower.includes('assessment') || lower.includes('mix')) {
+      if (lower.includes('exam') || lower.includes('review') || lower.includes('assessment') || lower.includes('mix') || lower.includes('தேர்வு')) {
         const shuffled = [...QUIZ_STROKES].sort(() => Math.random() - 0.5).slice(0, EXAM_COUNT);
         setTraceRounds(shuffled.map(p => ({ type: 'trace' as const, path: p })));
         setRoundIndex(0);
@@ -156,7 +186,7 @@ export default function UltimateLearnEngine() {
         setTraceDone(false);
         return;
       }
-      // Individual stroke path map (CBSE names with backward compat)
+      // Individual stroke path map (CBSE names with backward compat + Tamil names)
       const pathMap: Record<string, string> = {
         standing: 'standing', sleeping: 'sleeping',
         'left slanting': 'left-slanting', 'right slanting': 'right-slanting',
@@ -168,6 +198,19 @@ export default function UltimateLearnEngine() {
         slanting: 'left-slanting', curved: 'up-curve',
         zig: 'zigzag', zag: 'zigzag',
         's-curve': 's-curve', circle: 'circle',
+        // Tamil translations
+        'நேர்கோடு': 'standing',
+        'நேர் கோடு': 'standing',
+        'படுக்கைகோடு': 'sleeping',
+        'படுக்கை கோடு': 'sleeping',
+        'படுத்த கோடு': 'sleeping',
+        'இடது சாய்வு': 'left-slanting',
+        'வலது சாய்வு': 'right-slanting',
+        'இடது வளைவு': 'left-curve',
+        'வலது வளைவு': 'right-curve',
+        'மேல் வளைவு': 'up-curve',
+        'கீழ் வளைவு': 'down-curve',
+        'வட்டம்': 'circle',
       };
       let path = '';
       for (const [key, p] of Object.entries(pathMap)) {
@@ -609,71 +652,81 @@ export default function UltimateLearnEngine() {
       {traceRounds && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto"
           style={{ background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(8px)' }}>
-          <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-2xl sm:rounded-[2.5rem] shadow-[0_25px_60px_rgba(0,0,0,0.2)]"
-            style={{ background: 'linear-gradient(145deg, #7dd3fc, #38bdf8, #3b82f6)' }}>
-            <div className="absolute inset-0 opacity-20 pointer-events-none"
+          <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-y-auto max-h-[96vh] sm:max-h-[90vh] rounded-[1.5rem] sm:rounded-[2.5rem] border-[8px] sm:border-[14px] border-[#5a3825] shadow-[0_24px_50px_rgba(0,0,0,0.5),_inset_0_4px_24px_rgba(0,0,0,0.8)]"
+            style={{ 
+              backgroundColor: '#0c2e22',
+              backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.08) 12%, transparent 13%)',
+              backgroundSize: '10px 10px',
+            }}>
+            <div className="absolute inset-0 opacity-10 pointer-events-none"
               style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '18px 18px' }} />
             {!traceDone ? (() => {
-              const cur = traceRounds[roundIndex];
-              const isGuide = cur.type === 'guide';
-              const path = cur.path;
-              const guideColors: Record<string, string> = {
-                standing: '#6366F1', sleeping: '#22C55E', 'left-slanting': '#F59E0B', 'right-slanting': '#F97316',
-                'left-curve': '#8B5CF6', 'right-curve': '#EC4899', 'up-curve': '#06B6D4', 'down-curve': '#10B981',
-              };
-              return (
-                <>
-                  <div className="flex items-center justify-between px-3 sm:px-5 pt-3 sm:pt-5 pb-0">
-                    <span className="text-white/50 text-xs font-bold">
-                      {roundIndex + 1} / {traceRounds.length}
-                    </span>
-                    <button onClick={() => { setTraceRounds(null); setActiveLesson(null); }}
-                      className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/15 hover:bg-white/30 flex items-center justify-center text-white/60 hover:text-white text-base sm:text-lg font-bold transition-all">&times;</button>
-                  </div>
-                  <p className="text-center text-white/70 font-bold text-xs mt-1">
-                    {isGuide ? `👀 ${STROKE_LABELS[path] || path}` : `✏️ ${STROKE_LABELS[path] || path}`}
-                  </p>
-                  {isGuide ? (
-                    <PreWritingVideo key={`${roundIndex}-${path}`}
-                      config={{ path, color: guideColors[path] || '#8B5CF6' }}
-                      onComplete={() => {
-                        setRoundPassed(prev => [...prev, 100]);
-                        if (roundIndex < traceRounds.length - 1) setRoundIndex(i => i + 1);
-                        else setTraceDone(true);
-                      }}
-                    />
-                  ) : (
-                    <TraceActivity
-                      key={`${roundIndex}-${path}`}
-                      config={{ path }}
-                      onComplete={(data) => {
-                        const acc = Number(data.completion_data?.accuracy) || 0;
-                        setRoundPassed(prev => [...prev, acc]);
-                        if (roundIndex < traceRounds.length - 1) setRoundIndex(i => i + 1);
-                        else setTraceDone(true);
-                      }}
-                    />
-                  )}
-                </>
-              );
+               const cur = traceRounds[roundIndex];
+               const isGuide = cur.type === 'guide';
+               const path = cur.path;
+               const guideColors: Record<string, string> = {
+                 standing: '#6366F1', sleeping: '#22C55E', 'left-slanting': '#F59E0B', 'right-slanting': '#F97316',
+                 'left-curve': '#8B5CF6', 'right-curve': '#EC4899', 'up-curve': '#06B6D4', 'down-curve': '#10B981',
+               };
+               return (
+                 <>
+                   <div className="flex items-center justify-between px-3 sm:px-5 pt-3 sm:pt-5 pb-0">
+                     <span className="text-white/50 text-xs font-bold">
+                       {roundIndex + 1} / {traceRounds.length}
+                     </span>
+                     <button onClick={() => { setTraceRounds(null); setActiveLesson(null); }}
+                       className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/15 hover:bg-white/30 flex items-center justify-center text-white/60 hover:text-white text-base sm:text-lg font-bold transition-all">&times;</button>
+                   </div>
+                   {isGuide ? (
+                     <PreWritingVideo key={`${roundIndex}-${path}`}
+                       config={{ path, color: guideColors[path] || '#8B5CF6', isTamil, borderless: true }}
+                       onComplete={() => {
+                         setRoundPassed(prev => [...prev, 100]);
+                         if (roundIndex < traceRounds.length - 1) setRoundIndex(i => i + 1);
+                         else setTraceDone(true);
+                       }}
+                     />
+                   ) : (
+                     <TraceActivity
+                       key={`${roundIndex}-${path}`}
+                       config={{ path, isTamil, borderless: true }}
+                       onComplete={(data) => {
+                         const acc = Number(data.completion_data?.accuracy) || 0;
+                         setRoundPassed(prev => [...prev, acc]);
+                         if (roundIndex < traceRounds.length - 1) setRoundIndex(i => i + 1);
+                         else setTraceDone(true);
+                       }}
+                     />
+                   )}
+                 </>
+               );
             })() : (
               <motion.div key="score" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
                 className="flex flex-col items-center gap-4 px-6 py-10">
-                <span className="text-6xl">
+                <span className="text-6xl animate-bounce">
                   {roundPassed.every(a => a >= 70) ? '🎉' : '💪'}
                 </span>
-                <p className="text-xl font-black text-white">
-                  {roundPassed.every(a => a >= 70) ? 'Super!' : 'Nice try!'}
+                <p className="text-xl font-black text-white font-sans">
+                  {roundPassed.every(a => a >= 70) 
+                    ? (isTamil ? 'அருமை! சூப்பர்!' : 'Super!') 
+                    : (isTamil ? 'மீண்டும் முயற்சி செய்!' : 'Nice try!')}
                 </p>
-                <p className="text-white/60 font-bold text-sm">
-                  Avg: {Math.round(roundPassed.reduce((s, a) => s + a, 0) / roundPassed.length)}%
+                <p className="text-white/60 font-bold text-sm font-sans">
+                  {isTamil ? 'சராசரி' : 'Avg'}: {Math.round(roundPassed.reduce((s, a) => s + a, 0) / roundPassed.length)}%
                 </p>
                 <button onClick={() => { setTraceRounds(null); setActiveLesson(null); refetchLessons(); }}
-                  className="px-8 py-3 bg-green-500 hover:bg-green-600 text-white font-black rounded-full shadow-lg transition-all">
-                  Done ✅
+                  className="px-8 py-3 bg-green-500 hover:bg-green-600 text-white font-black rounded-full shadow-lg transition-all border-b-4 border-green-700 active:scale-95 font-sans">
+                  {isTamil ? 'முடிந்தது! ✅' : 'Done ✅'}
                 </button>
               </motion.div>
             )}
+
+            {/* Wooden Chalk Tray at the bottom of the main chalkboard card */}
+            <div className="w-[90%] mx-auto h-4 bg-[#4a2e1f] rounded-t-lg shadow-md flex items-center justify-start px-8 gap-4 relative z-10 border-t border-black/20 mt-2">
+              <div className="w-8 h-2.5 bg-yellow-100 rounded-sm transform rotate-6 border border-yellow-200/50 shadow-sm animate-pulse" />
+              <div className="w-9 h-2.5 bg-white rounded-sm transform -rotate-3 border border-white/20 shadow-sm" />
+              <div className="w-7 h-2.5 bg-pink-200 rounded-sm transform rotate-12 border border-pink-300/30 shadow-sm" />
+            </div>
           </div>
         </div>
       )}
