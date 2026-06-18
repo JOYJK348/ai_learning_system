@@ -67,6 +67,7 @@ type Kid = {
   section?: string | null;
   parent_name?: string;
   parent_id?: string | null;
+  school_name?: string;
 };
 
 const CONTAINER = {

@@ -21,7 +21,7 @@ export default function ProfilePage() {
   const meRaw = useQuery({
     queryKey: parentKeys.me, queryFn: parentApi.me, staleTime: 5 * 60 * 1000,
   });
-  const parentProfile = meRaw.data?.parent ?? null;
+  const parentProfile = meRaw.data ?? null;
 
   const { data: childrenData } = useQuery({
     queryKey: parentKeys.children, queryFn: parentApi.children, staleTime: 5 * 60 * 1000,

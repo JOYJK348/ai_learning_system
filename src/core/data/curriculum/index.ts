@@ -1,5 +1,7 @@
 import * as english from './english';
 import * as tamil from './tamil';
+import * as maths from './maths';
+import * as evs from './evs';
 import { type TutorialStep } from './english';
 
 export { type TutorialStep };
@@ -11,6 +13,24 @@ function isTamilSubject(subjectName?: string): boolean {
   if (!subjectName) return false;
   const lower = subjectName.toLowerCase();
   return lower.includes('tamil') || lower.includes('தமிழ்');
+}
+
+/**
+ * Checks if the subject is Maths based on its name or ID.
+ */
+function isMathsSubject(subjectName?: string): boolean {
+  if (!subjectName) return false;
+  const lower = subjectName.toLowerCase();
+  return lower.includes('math') || lower.includes('ganith') || lower === 'maths';
+}
+
+/**
+ * Checks if the subject is EVS based on its name or ID.
+ */
+function isEvsSubject(subjectName?: string): boolean {
+  if (!subjectName) return false;
+  const lower = subjectName.toLowerCase();
+  return lower.includes('environment') || lower.includes('evs') || lower.includes('science') || lower === 'evs';
 }
 
 /**
@@ -109,6 +129,12 @@ export function getChapterVisuals(subjectName: string, name: string) {
   if (isTamilSubject(subjectName)) {
     return tamil.getChapterVisuals(name);
   }
+  if (isMathsSubject(subjectName)) {
+    return maths.getChapterVisuals(name);
+  }
+  if (isEvsSubject(subjectName)) {
+    return evs.getChapterVisuals(name);
+  }
   return english.getChapterVisuals(name);
 }
 
@@ -119,6 +145,12 @@ export function getLessonVisuals(subjectName: string, title: string) {
   if (isTamilSubject(subjectName)) {
     return tamil.getLessonVisuals(title);
   }
+  if (isMathsSubject(subjectName)) {
+    return maths.getLessonVisuals(title);
+  }
+  if (isEvsSubject(subjectName)) {
+    return evs.getLessonVisuals(title);
+  }
   return english.getLessonVisuals(title);
 }
 
@@ -128,6 +160,12 @@ export function getLessonVisuals(subjectName: string, title: string) {
 export function buildTutorial(subjectName: string, title: string, studentName?: string): TutorialStep[] {
   if (isTamilSubject(subjectName)) {
     return tamil.buildTutorial(title, studentName);
+  }
+  if (isMathsSubject(subjectName)) {
+    return maths.buildTutorial(title, studentName);
+  }
+  if (isEvsSubject(subjectName)) {
+    return evs.buildTutorial(title, studentName);
   }
   return english.buildTutorial(title, studentName);
 }

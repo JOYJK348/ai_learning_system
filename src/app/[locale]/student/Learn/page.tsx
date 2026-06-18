@@ -77,7 +77,7 @@ function UltimateLearnEngineInner() {
     const [checkpointTitle, setCheckpointTitle] = useState('');
     const [showVowelQuiz, setShowVowelQuiz] = useState<null | 'a-u' | 'e-au'>(null);
     const [showMeiQuiz, setShowMeiQuiz] = useState<null | 'set-1' | 'set-2' | 'set-3' | 'set-4' | 'set-5'>(null);
-    const [showWordShowcase, setShowWordShowcase] = useState<null | 'set-1' | 'set-2' | 'set-3'>(null);
+    const [showWordShowcase, setShowWordShowcase] = useState<null | 'set-1' | 'set-2' | 'set-3' | 'set-4'>(null);
 
     useEffect(() => {
         const timer = requestAnimationFrame(() => setMounted(true));
@@ -149,13 +149,12 @@ function UltimateLearnEngineInner() {
         const chapterName = activeChapter?.name || '';
         const isVowelAU =
             chapterName.includes('உயிர் எழுத்துக்கள் அ-ஊ') ||
-            (chapterName.toLowerCase().includes('vowel') && !chapterName.includes('எ-ஔ')) ||
-            lower.includes('அ') || lower.includes('ஆ') || lower.includes('இ') ||
-            lower.includes('ஈ') || lower.includes('உ') || lower.includes('ஊ');
+            (chapterName.toLowerCase().includes('vowel') && !chapterName.includes('எ-ஔ') && !chapterName.includes('எ-ஃ')) ||
+            ['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ'].includes(lower.trim());
         const isVowelEAU =
             chapterName.includes('உயிர் எழுத்துக்கள் எ-ஔ') ||
-            lower.includes('எ') || lower.includes('ஏ') || lower.includes('ஐ') ||
-            lower.includes('ஒ') || lower.includes('ஓ') || lower.includes('ஔ');
+            chapterName.includes('உயிர் எழுத்துக்கள் எ-ஃ') ||
+            ['எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ', 'ஃ'].includes(lower.trim());
         if (isVowelAU) {
             setShowVowelQuiz('a-u');
             setActiveLesson(null);
@@ -182,14 +181,18 @@ function UltimateLearnEngineInner() {
 
         // Tamil simple words → TamilWordShowcase
         const isWordChapter = chapterName.includes('எளிய சொற்கள்');
-        if (isWordChapter && (lower.includes('அம்மா') || lower.includes('ஆடு'))) {
-            setShowWordShowcase('set-1'); setActiveLesson(null); return;
-        }
-        if (isWordChapter && (lower.includes('எலி') || lower.includes('கடிகாரம்'))) {
-            setShowWordShowcase('set-2'); setActiveLesson(null); return;
-        }
         if (isWordChapter) {
-            setShowWordShowcase('set-3'); setActiveLesson(null); return;
+            if (lower.includes('உயிரெழுத்து') || lower.includes('vowel')) {
+                setShowWordShowcase('set-1');
+            } else if (lower.includes('அடிப்படை') || lower.includes('simple') || lower.includes('அம்மா')) {
+                setShowWordShowcase('set-2');
+            } else if (lower.includes('விலங்குகள்') || lower.includes('animal')) {
+                setShowWordShowcase('set-3');
+            } else {
+                setShowWordShowcase('set-4');
+            }
+            setActiveLesson(null);
+            return;
         }
 
         // "My Name Writing" → direct name tracing
@@ -577,12 +580,22 @@ function UltimateLearnEngineInner() {
                                             </motion.div>
                                             <h2 className="text-3xl font-black text-indigo-950 uppercase tracking-tighter">{activeChapter.name}</h2>
                                             <p className="text-[11px] font-bold text-indigo-950/50 mt-2">
-                                                {activeChapter.completed_lessons}/{activeChapter.total_lessons} lessons
+                                                {(() => {
+                                                    const filtered = activeChapter.lessons.filter(l => {
+                                                        const t = l.title.toLowerCase();
+                                                        return !t.includes('inside') && !t.includes('outside') && !t.includes('complete the pattern');
+                                                    });
+                                                    const completed = filtered.filter(l => l.progress?.status === 'completed').length;
+                                                    return `${completed}/${filtered.length}`;
+                                                })()} lessons
                                             </p>
                                         </div>
 
                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
-                                            {activeChapter.lessons.map((lesson) => {
+                                            {activeChapter.lessons.filter(l => {
+                                                const t = l.title.toLowerCase();
+                                                return !t.includes('inside') && !t.includes('outside') && !t.includes('complete the pattern');
+                                            }).map((lesson) => {
                                                 const visuals = getLessonVisuals(activeSubject.name, lesson.title);
                                                 return (
                                                     <motion.button
@@ -656,9 +669,44 @@ function UltimateLearnEngineInner() {
                 />
             )}
 
-            {/* ─── TAMIL VOWEL QUIZ ─── */}
+            {activeLesson && !showNameTrace && (
+                <ActivityPlayer
+                    key={activeLesson.id}
+                    lessonId={activeLesson.id}
+                    lessonTitle={activeLesson.title}
+                    onClose={() => setActiveLesson(null)}
+                    onComplete={handleActivityComplete}
+                />
+            )}
+
+            {/* ─── NAME TRACING ACTIVITY ─── */}
+            {showNameTrace && (
+                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-gradient-to-br from-sky-300 via-sky-400 to-blue-500">
+                    <div className="relative w-full max-w-lg mx-3 my-4 overflow-hidden rounded-[2.5rem] shadow-[0_25px_60px_rgba(0,0,0,0.2)] bg-white/95">
+                        <div className="absolute inset-0 opacity-10 pointer-events-none"
+                            style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #013237 1px, transparent 0)', backgroundSize: '18px 18px' }} />
+                        <div className="relative z-10">
+                            <div className="flex items-center justify-between px-5 pt-4 pb-0">
+                                <span className="text-[10px] font-black text-amber-700/60 uppercase tracking-widest">✏️ Name Writing</span>
+                                <button
+                                    onClick={() => { setShowNameTrace(false); setActiveLesson(null); }}
+                                    className="w-7 h-7 rounded-full bg-amber-100 hover:bg-amber-200 flex items-center justify-center text-amber-500 text-base font-bold transition-all"
+                                >
+                                    &times;
+                                </button>
+                            </div>
+                            <NameTraceActivity
+                                config={{}}
+                                studentName={studentName}
+                                onComplete={() => handleNameTraceComplete()}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {showVowelQuiz && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto"
+                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
                     style={{ background: 'rgba(15,23,42,0.7)', backdropFilter: 'blur(8px)' }}>
                     <div className="relative w-full max-w-sm sm:max-w-md mx-3 my-4 overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] border-[8px] sm:border-[12px] border-[#5a3825] shadow-[0_24px_50px_rgba(0,0,0,0.6),_inset_0_4px_24px_rgba(0,0,0,0.8)]"
                         style={{
@@ -693,46 +741,9 @@ function UltimateLearnEngineInner() {
                 </div>
             )}
 
-
-            {activeLesson && !showNameTrace && (
-                <ActivityPlayer
-                    key={activeLesson.id}
-                    lessonId={activeLesson.id}
-                    lessonTitle={activeLesson.title}
-                    onClose={() => setActiveLesson(null)}
-                    onComplete={handleActivityComplete}
-                />
-            )}
-
-            {/* ─── NAME TRACING ACTIVITY ─── */}
-            {showNameTrace && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-gradient-to-br from-sky-300 via-sky-400 to-blue-500">
-                    <div className="relative w-full max-w-lg mx-3 my-4 overflow-hidden rounded-[2.5rem] shadow-[0_25px_60px_rgba(0,0,0,0.2)] bg-white/95">
-                        <div className="absolute inset-0 opacity-10 pointer-events-none"
-                            style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #013237 1px, transparent 0)', backgroundSize: '18px 18px' }} />
-                        <div className="relative z-10">
-                            <div className="flex items-center justify-between px-5 pt-4 pb-0">
-                                <span className="text-[10px] font-black text-amber-700/60 uppercase tracking-widest">✏️ Name Writing</span>
-                                <button
-                                    onClick={() => { setShowNameTrace(false); setActiveLesson(null); }}
-                                    className="w-7 h-7 rounded-full bg-amber-100 hover:bg-amber-200 flex items-center justify-center text-amber-500 text-base font-bold transition-all"
-                                >
-                                    &times;
-                                </button>
-                            </div>
-                            <NameTraceActivity
-                                config={{}}
-                                studentName={studentName}
-                                onComplete={() => handleNameTraceComplete()}
-                            />
-                        </div>
-                    </div>
-                </div>
-            )}
-
             {/* ─── TAMIL MEI QUIZ ─── */}
             {showMeiQuiz && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto"
+                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
                     style={{ background: 'rgba(15,23,42,0.7)', backdropFilter: 'blur(8px)' }}>
                     <div className="relative w-full max-w-sm sm:max-w-md mx-3 my-4 overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] border-[8px] sm:border-[12px] border-[#5a3825] shadow-[0_24px_50px_rgba(0,0,0,0.6),_inset_0_4px_24px_rgba(0,0,0,0.8)]"
                         style={{
@@ -773,7 +784,7 @@ function UltimateLearnEngineInner() {
 
             {/* ─── TAMIL WORD SHOWCASE ─── */}
             {showWordShowcase && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto"
+                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
                     style={{ background: 'rgba(15,23,42,0.7)', backdropFilter: 'blur(8px)' }}>
                     <div className="relative w-full max-w-sm sm:max-w-md mx-3 my-4 overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] border-[8px] sm:border-[12px] border-[#5a3825] shadow-[0_24px_50px_rgba(0,0,0,0.6),_inset_0_4px_24px_rgba(0,0,0,0.8)]"
                         style={{
@@ -783,7 +794,12 @@ function UltimateLearnEngineInner() {
                         }}>
                         <div className="flex items-center justify-between px-4 pt-4 pb-0">
                             <span className="text-[10px] font-black text-emerald-300/60 uppercase tracking-widest">
-                                ✍️ {{'set-1': 'எளிய சொற்கள் அ–ஊ', 'set-2': 'எளிய சொற்கள் இ–ஔ', 'set-3': 'எளிய சொற்கள்'}[showWordShowcase] || 'எளிய சொற்கள்'}
+                                ✍️ {{
+                                    'set-1': 'உயிரெழுத்து சார்ந்த சொற்கள்',
+                                    'set-2': 'அடிப்படை எளிய சொற்கள்',
+                                    'set-3': 'விலங்குகள் (Animals)',
+                                    'set-4': 'நம்மை சுற்றியுள்ள பொருட்கள்',
+                                }[showWordShowcase] || 'எளிய சொற்கள்'}
                             </span>
                             <button onClick={() => { setShowWordShowcase(null); }}
                                 className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/60 hover:text-white text-base font-bold transition-all">&times;</button>
@@ -801,7 +817,7 @@ function UltimateLearnEngineInner() {
 
             {/* ─── PRE-WRITING TRACE ROUNDS ─── */}
             {traceRounds && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto"
+                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
                     style={{ background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(8px)' }}>
                     <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-y-auto max-h-[96vh] sm:max-h-[90vh] rounded-[1.5rem] sm:rounded-[2.5rem] border-[8px] sm:border-[14px] border-[#5a3825] shadow-[0_24px_50px_rgba(0,0,0,0.5),_inset_0_4px_24px_rgba(0,0,0,0.8)]"
                         style={{

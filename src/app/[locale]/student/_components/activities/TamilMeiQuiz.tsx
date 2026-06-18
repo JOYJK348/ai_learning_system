@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo, useRef } from 'react';
+import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface MeiEntry {
@@ -221,132 +221,398 @@ function Showcase({ mei, index, total, onNext }: ShowcaseProps) {
           border: `2px solid ${mei.color}80`,
         }}
       >
-        வினாடி வினா கேளுங்கள்! 🎯
+        எழுதிப் பழகுங்கள்! ✏️
       </motion.button>
     </motion.div>
   );
 }
 
-interface QuizOption {
-  id: string;
-  word: string;
-  emoji: string;
-  correct: boolean;
-}
-
-interface QuizProps {
+interface TraceBoardProps {
   mei: MeiEntry;
   onCorrect: () => void;
 }
 
-function Quiz({ mei, onCorrect }: QuizProps) {
-  const [selected, setSelected] = useState<string | null>(null);
-  const [wrongShake, setWrongShake] = useState(false);
+function TraceBoard({ mei, onCorrect }: TraceBoardProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const guideCanvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const options = useMemo<QuizOption[]>(() => {
-    const wrong = DISTRACTOR_POOL
-      .filter(d => d.letter !== mei.letter)
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 2)
-      .map((d, i) => ({ id: `w${i}`, word: d.word, emoji: d.emoji, correct: false }));
-    return shuffleArray([
-      { id: 'correct', word: mei.word, emoji: mei.emoji, correct: true },
-      ...wrong,
-    ]);
-  }, [mei]);
+  // Use refs for drawn points — avoids stale closure in handlers entirely
+  const pointsRef = useRef<{ x: number; y: number }[]>([]);
 
-  const handleTap = useCallback((opt: QuizOption) => {
-    if (selected) return;
-    setSelected(opt.id);
-    if (opt.correct) {
-      setTimeout(onCorrect, 700);
-    } else {
-      setWrongShake(true);
-      setTimeout(() => { setWrongShake(false); setSelected(null); }, 600);
+  // Pre-built letter data — computed once after font is confirmed loaded
+  const letterDataRef = useRef<{
+    pixels: { x: number; y: number }[];   // sampled letter pixels
+    minX: number; maxX: number;
+    minY: number; maxY: number;
+  } | null>(null);
+
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [hasDrawn, setHasDrawn] = useState(false);
+  const [pointCount, setPointCount] = useState(0);   // drives button enable/disable only
+  const [done, setDone] = useState(false);
+  const [failMsg, setFailMsg] = useState<string | null>(null);
+  const [dimensions, setDimensions] = useState({ w: 400, h: 400 });
+  const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Build the letter pixel mask. Called after font is confirmed loaded.
+  const buildLetterData = useCallback((w: number, h: number) => {
+    const off = document.createElement('canvas');
+    off.width = w;
+    off.height = h;
+    const ctx = off.getContext('2d');
+    if (!ctx) return;
+
+    const fontSize = Math.min(260, Math.max(160, Math.round(w * 0.5)));
+    ctx.font = `900 ${fontSize}px "Noto Sans Tamil", "Latha", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#ff0000';
+    ctx.fillText(mei.letter, w / 2, h / 2);
+
+    const img = ctx.getImageData(0, 0, w, h);
+    const pixels: { x: number; y: number }[] = [];
+    let minX = w, maxX = 0, minY = h, maxY = 0;
+
+    const step = 4;
+    for (let py = 0; py < h; py += step) {
+      for (let px = 0; px < w; px += step) {
+        if (img.data[(py * w + px) * 4] > 100) {
+          pixels.push({ x: px, y: py });
+          if (px < minX) minX = px;
+          if (px > maxX) maxX = px;
+          if (py < minY) minY = py;
+          if (py > maxY) maxY = py;
+        }
+      }
     }
-  }, [selected, onCorrect]);
+
+    if (pixels.length > 0) {
+      letterDataRef.current = { pixels, minX, maxX, minY, maxY };
+    }
+  }, [mei.letter]);
+
+  // Draw guide letter on the visible canvas
+  const drawGuide = useCallback((w: number, h: number) => {
+    const gc = guideCanvasRef.current;
+    if (!gc) return;
+    gc.width = w;
+    gc.height = h;
+    const ctx = gc.getContext('2d');
+    if (!ctx) return;
+    const fontSize = Math.min(260, Math.max(160, Math.round(w * 0.5)));
+    ctx.clearRect(0, 0, w, h);
+    ctx.font = `900 ${fontSize}px "Noto Sans Tamil", "Latha", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    ctx.shadowColor = 'rgba(255,255,255,0.3)';
+    ctx.shadowBlur = 6;
+    ctx.fillText(mei.letter, w / 2, h / 2);
+  }, [mei.letter]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const setup = async () => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      const w = container.clientWidth || 360;
+      const h = Math.max(400, Math.round(w * 0.85));
+
+      if (!cancelled) setDimensions({ w, h });
+
+      // Size the drawing canvas
+      const dc = canvasRef.current;
+      if (dc) { dc.width = w; dc.height = h; }
+
+      // Reset mask
+      letterDataRef.current = null;
+
+      // Explicitly load the Tamil font before rendering mask
+      try {
+        await document.fonts.load(`900 ${Math.round(w * 0.5)}px "Noto Sans Tamil"`);
+      } catch (_) { /* ignore, we'll try anyway */ }
+
+      if (cancelled) return;
+
+      // Draw guide + build mask (font is now loaded)
+      drawGuide(w, h);
+      buildLetterData(w, h);
+    };
+
+    const timer = setTimeout(setup, 80);
+    const onResize = () => { clearTimeout(timer); setTimeout(setup, 80); };
+    window.addEventListener('resize', onResize);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+      window.removeEventListener('resize', onResize);
+      if (successTimerRef.current) clearTimeout(successTimerRef.current);
+    };
+  }, [mei.letter, drawGuide, buildLetterData]);
+
+  const getCanvasPos = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    const rect = canvasRef.current!.getBoundingClientRect();
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  };
+
+  const startDrawing = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (done) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    setIsDrawing(true);
+    setHasDrawn(true);
+    setFailMsg(null);
+    const pos = getCanvasPos(e);
+    pointsRef.current.push(pos);
+    setPointCount(pointsRef.current.length);
+    const ctx = canvasRef.current?.getContext('2d');
+    if (ctx) { ctx.beginPath(); ctx.moveTo(pos.x, pos.y); }
+  };
+
+  const draw = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!isDrawing || done) return;
+    const pos = getCanvasPos(e);
+    pointsRef.current.push(pos);
+    setPointCount(c => c + 1);
+
+    const ctx = canvasRef.current?.getContext('2d');
+    if (ctx) {
+      ctx.strokeStyle = 'rgba(255,255,255,0.95)';
+      ctx.lineWidth = 8;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.shadowBlur = 0;
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+    }
+  };
+
+  const stopDrawing = () => setIsDrawing(false);
+
+  const handleReset = () => {
+    const ctx = canvasRef.current?.getContext('2d');
+    if (ctx) ctx.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
+    pointsRef.current = [];
+    setPointCount(0);
+    setHasDrawn(false);
+    setDone(false);
+    setFailMsg(null);
+    if (successTimerRef.current) clearTimeout(successTimerRef.current);
+  };
+
+  const handleFinish = () => {
+    const pts = pointsRef.current;
+    if (pts.length < 20) return;
+
+    const data = letterDataRef.current;
+    if (!data || data.pixels.length === 0) {
+      setFailMsg('மீண்டும் முயற்சி செய்க.');
+      return;
+    }
+
+    // Calculate letter dimensions
+    const letterW = data.maxX - data.minX;
+    const letterH = data.maxY - data.minY;
+
+    if (letterW <= 0 || letterH <= 0) {
+      setFailMsg('மீண்டும் முயற்சி செய்க.');
+      return;
+    }
+
+    // ── Grid Setup for Coverage ──
+    const GRID_SIZE = 7;
+    const cellW = letterW / GRID_SIZE;
+    const cellH = letterH / GRID_SIZE;
+
+    // Count how many letter pixels fall into each cell of the 7x7 grid
+    const cellPixelCounts = new Map<string, number>();
+    for (const p of data.pixels) {
+      const col = Math.floor((p.x - data.minX) / cellW);
+      const row = Math.floor((p.y - data.minY) / cellH);
+      const c = Math.max(0, Math.min(GRID_SIZE - 1, col));
+      const r = Math.max(0, Math.min(GRID_SIZE - 1, row));
+      const cellKey = `${c},${r}`;
+      cellPixelCounts.set(cellKey, (cellPixelCounts.get(cellKey) || 0) + 1);
+    }
+
+    // A cell is only "active" if it contains a significant portion of the letter stroke (>= 8 pixels).
+    // This filters out edge/corner noise cells.
+    const activeCells = new Set<string>();
+    for (const [cellKey, count] of cellPixelCounts.entries()) {
+      if (count >= 8) {
+        activeCells.add(cellKey);
+      }
+    }
+
+    // Set tolerance radius (e.g. 28px on a 400px canvas) - friendlier for child fingers
+    const tol = Math.max(26, Math.round(dimensions.w * 0.07));
+    const tolSq = tol * tol;
+
+    // Generate a dense set of points by interpolating between consecutive drawn points
+    // to prevent fast drawing gaps from skipping grid cells.
+    const densePoints: { x: number; y: number }[] = [];
+    if (pts.length > 0) {
+      densePoints.push(pts[0]);
+      for (let i = 1; i < pts.length; i++) {
+        const p1 = pts[i - 1];
+        const p2 = pts[i];
+        const dx = p2.x - p1.x;
+        const dy = p2.y - p1.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist > 8) {
+          const steps = Math.ceil(dist / 8);
+          for (let s = 1; s <= steps; s++) {
+            densePoints.push({
+              x: p1.x + (dx * s) / steps,
+              y: p1.y + (dy * s) / steps,
+            });
+          }
+        } else {
+          densePoints.push(p2);
+        }
+      }
+    }
+
+    // Track user containment and which active cells they visit
+    let pointsOnLetter = 0;
+    const visitedActiveCells = new Set<string>();
+
+    for (const p of densePoints) {
+      let isClose = false;
+      for (const lp of data.pixels) {
+        const dx = lp.x - p.x;
+        const dy = lp.y - p.y;
+        if (dx * dx + dy * dy < tolSq) {
+          isClose = true;
+          break;
+        }
+      }
+
+      if (isClose) {
+        pointsOnLetter++;
+        // Determine which cell the point is in
+        const col = Math.floor((p.x - data.minX) / cellW);
+        const row = Math.floor((p.y - data.minY) / cellH);
+        const c = Math.max(0, Math.min(GRID_SIZE - 1, col));
+        const r = Math.max(0, Math.min(GRID_SIZE - 1, row));
+        const cellKey = `${c},${r}`;
+        if (activeCells.has(cellKey)) {
+          visitedActiveCells.add(cellKey);
+        }
+      }
+    }
+
+    const containment = densePoints.length > 0 ? (pointsOnLetter / densePoints.length) * 100 : 0;
+    const coverage = activeCells.size > 0 ? (visitedActiveCells.size / activeCells.size) * 100 : 0;
+
+    // Verdict
+    // Containment must be high (user is drawing on/near the letter, not off-board scribbling)
+    // Coverage must be high (user has traced the majority of the letter's main strokes, including loops and dots)
+    const passed = containment >= 70 && coverage >= 70;
+
+    if (passed) {
+      setDone(true);
+      successTimerRef.current = setTimeout(onCorrect, 900);
+    } else if (containment < 70) {
+      setFailMsg('எழுத்தின் மேல் மட்டும் எழுதவும்! 🎯');
+    } else {
+      setFailMsg('முழு எழுத்தையும் trace செய்யவும்! ✍️');
+    }
+  };
 
   return (
     <motion.div
-      key={`quiz-${mei.letter}`}
+      key={`trace-${mei.letter}`}
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
       className="flex flex-col items-center gap-4 w-full"
     >
+      {/* Instruction */}
+      <div className="w-full text-center">
+        <p className="text-white/80 text-sm font-bold font-sans">
+          &quot;{mei.letter}&quot; எழுத்தை பலகையில் எழுதி பழகுங்கள்!
+        </p>
+      </div>
+
+      {/* Blackboard */}
       <div
-        className="relative w-full rounded-2xl overflow-hidden px-4 py-5 flex flex-col items-center gap-3"
+        ref={containerRef}
+        className="relative w-full rounded-2xl overflow-hidden touch-none"
         style={{
+          height: dimensions.h,
           background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)',
           border: '3px solid #2d4a2d',
           boxShadow: '0 8px 40px rgba(0,0,0,0.5)',
+          touchAction: 'none',
         }}
       >
         <BoardLines />
-        <p className="relative z-10 text-white/60 text-xs font-bold tracking-widest uppercase">"{mei.letter}" எந்த சொல்லில் வருகிறது?</p>
-        <span
-          className="relative z-10 font-black leading-none"
-          style={{
-            fontSize: 'clamp(3.5rem, 14vw, 6rem)',
-            color: '#fff',
-            textShadow: `0 0 24px ${mei.color}80`,
-            fontFamily: '"Noto Sans Tamil", "Latha", sans-serif',
-          }}
-        >
-          {mei.letter}
-        </span>
+
+        {/* Guide letter canvas */}
+        <canvas ref={guideCanvasRef} className="absolute inset-0 z-0 pointer-events-none touch-none w-full h-full" />
+
+        {/* Drawing canvas */}
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 z-10 cursor-crosshair touch-none"
+          style={{ width: dimensions.w, height: dimensions.h, touchAction: 'none' }}
+          onPointerDown={startDrawing}
+          onPointerMove={draw}
+          onPointerUp={stopDrawing}
+          onPointerLeave={stopDrawing}
+        />
+
+        {/* Success overlay */}
+        {done && (
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/30 backdrop-blur-[2px]">
+            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex flex-col items-center">
+              <div className="text-6xl">⭐</div>
+              <p className="text-base font-black text-emerald-400 mt-1 font-sans">அருமை!</p>
+            </motion.div>
+          </div>
+        )}
+
+        {/* Fail overlay */}
+        <AnimatePresence>
+          {failMsg && !done && (
+            <motion.div
+              key="fail"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
+            >
+              <div className="bg-red-700/90 text-white rounded-xl px-5 py-3 text-sm font-black shadow-xl text-center max-w-[280px]">
+                <p className="mb-0.5">❌ {failMsg}</p>
+                <p className="text-[11px] text-white/75">மீண்டும் 🔄 button press பண்ணி try பண்ணுங்கள்</p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      <motion.div
-        animate={wrongShake ? { x: [0, -8, 8, -5, 5, 0] } : {}}
-        transition={{ duration: 0.3 }}
-        className="grid grid-cols-3 gap-2.5 w-full"
-      >
-        {options.map(opt => {
-          const isSelected = selected === opt.id;
-          const isWin = isSelected && opt.correct;
-          const isLose = isSelected && !opt.correct;
-          return (
-            <button
-              key={opt.id}
-              onClick={() => handleTap(opt)}
-              className="flex flex-col items-center gap-1.5 py-3 px-2 rounded-2xl transition-all active:scale-95 relative overflow-hidden"
-              style={{
-                background: isWin
-                  ? 'rgba(34,197,94,0.25)'
-                  : isLose
-                    ? 'rgba(239,68,68,0.25)'
-                    : 'rgba(255,255,255,0.08)',
-                border: isWin
-                  ? '2px solid rgba(34,197,94,0.6)'
-                  : isLose
-                    ? '2px solid rgba(239,68,68,0.5)'
-                    : '1.5px solid rgba(255,255,255,0.12)',
-                boxShadow: isWin ? '0 0 16px rgba(34,197,94,0.3)' : 'none',
-              }}
-            >
-              {isWin && (
-                <div className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-green-500 flex items-center justify-center text-white text-[9px] font-black shadow">✓</div>
-              )}
-              <span className="text-3xl sm:text-4xl leading-none">{opt.emoji}</span>
-              <span
-                className="text-[11px] sm:text-xs font-black"
-                style={{
-                  color: isWin ? '#4ade80' : isLose ? '#f87171' : 'rgba(255,255,255,0.7)',
-                  fontFamily: '"Noto Sans Tamil", sans-serif',
-                }}
-              >
-                {opt.word}
-              </span>
-            </button>
-          );
-        })}
-      </motion.div>
-
-      {!selected && (
-        <p className="text-white/30 text-[10px] font-bold tracking-wider text-center">சரியான படத்தை தொடுங்கள் 👆</p>
-      )}
+      {/* Buttons */}
+      <div className="flex gap-4 w-full max-w-xs justify-center mt-1">
+        <button
+          onClick={handleReset}
+          disabled={!hasDrawn || done}
+          className="flex-1 py-3 rounded-2xl font-black text-white text-xs sm:text-sm tracking-wide bg-amber-500 hover:bg-amber-600 disabled:opacity-40 disabled:cursor-not-allowed shadow-md transition-all active:scale-95 font-sans"
+        >
+          மீண்டும் 🔄
+        </button>
+        <button
+          onClick={handleFinish}
+          disabled={pointCount < 20 || done}
+          className="flex-1 py-3 rounded-2xl font-black text-white text-xs sm:text-sm tracking-wide bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 disabled:cursor-not-allowed shadow-md transition-all active:scale-95 font-sans"
+        >
+          முடிந்தது! ✅
+        </button>
+      </div>
     </motion.div>
   );
 }
@@ -552,7 +818,7 @@ export default function TamilMeiQuiz({ config, onComplete }: Props) {
           />
         )}
         {phase === 'quiz' && (
-          <Quiz
+          <TraceBoard
             key={`quiz-${meiIndex}`}
             mei={mei}
             onCorrect={onCorrect}

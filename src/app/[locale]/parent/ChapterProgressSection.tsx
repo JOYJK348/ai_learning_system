@@ -13,7 +13,7 @@ export default function ChapterProgressSection({ childId }: { childId?: string |
   useEffect(() => {
     if (!childId) return;
     parentApi.childChapterProgress(childId)
-      .then(d => setData(d))
+      .then(d => setData(Array.isArray(d) ? d[0] : d))
       .catch(() => setData(null))
       .finally(() => setLoading(false));
   }, [childId]);
