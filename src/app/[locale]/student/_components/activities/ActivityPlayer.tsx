@@ -16,6 +16,9 @@ import BalloonPop from './BalloonPop';
 import MatchPairs from './MatchPairs';
 import TapSelect from './TapSelect';
 import NameTraceActivity from './NameTraceActivity';
+import TamilVowelQuiz from './TamilVowelQuiz';
+import TamilMeiQuiz from './TamilMeiQuiz';
+import TamilWordShowcase from './TamilWordShowcase';
 import { useData } from '@/context/DataContext';
 
 type Props = {
@@ -33,6 +36,9 @@ const ACTIVITY_TYPE_MAP: Record<number, string> = {
   3: 'match',
   4: 'tap_select',
   8: 'name',
+  9: 'vowel_quiz',
+  10: 'mei_quiz',
+  11: 'word_showcase',
 };
 
 export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onClose }: Props) {
@@ -147,6 +153,12 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
         return <LetterFindGame config={act.config} {...commonProps} />;
       case 'name':
         return <NameTraceActivity config={act.config} studentName={act.config?.name as string} {...commonProps} />;
+      case 'vowel_quiz':
+        return <TamilVowelQuiz config={act.config} {...commonProps} />;
+      case 'mei_quiz':
+        return <TamilMeiQuiz config={act.config} {...commonProps} />;
+      case 'word_showcase':
+        return <TamilWordShowcase config={act.config} {...commonProps} />;
       default:
         return (
           <div className="flex flex-col items-center gap-4 p-8">
