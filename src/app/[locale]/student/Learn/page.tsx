@@ -305,6 +305,26 @@ function UltimateLearnEngineInner() {
     };
 
     const handleActivityComplete = () => {
+        // Save progress for this lesson (fire-and-forget from parent so it survives unmount)
+        if (activeLesson) {
+            studentApi.updateProgress(activeLesson.id, { status: 'completed', completion_percentage: 100 }).catch(() => {});
+            // Auto-complete any incomplete hidden lessons in the same chapter
+            const chapter = subjects.flatMap(s => s.chapters).find(c => c.lessons.some(l => l.id === activeLesson.id));
+            if (chapter) {
+                const filtered = chapter.lessons.filter(l => {
+                    const t = l.title.toLowerCase();
+                    return !t.includes('inside') && !t.includes('outside') && !t.includes('complete the pattern') && !(t.includes('animal') && t.includes('sound'));
+                });
+                const allVisibleDone = filtered.every(l => l.progress?.status === 'completed');
+                if (allVisibleDone) {
+                    chapter.lessons.forEach(l => {
+                        if (l.progress?.status !== 'completed') {
+                            studentApi.updateProgress(l.id, { status: 'completed', completion_percentage: 100 });
+                        }
+                    });
+                }
+            }
+        }
         refetchLessons();
         setActiveLesson(null);
     };
@@ -594,7 +614,7 @@ function UltimateLearnEngineInner() {
                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
                                             {activeChapter.lessons.filter(l => {
                                                 const t = l.title.toLowerCase();
-                                                return !t.includes('inside') && !t.includes('outside') && !t.includes('complete the pattern');
+                                                return !t.includes('inside') && !t.includes('outside') && !t.includes('complete the pattern') && !(t.includes('animal') && t.includes('sound'));
                                             }).map((lesson) => {
                                                 const visuals = getLessonVisuals(activeSubject.name, lesson.title);
                                                 return (

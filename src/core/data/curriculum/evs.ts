@@ -29,15 +29,13 @@ export function getLessonVisuals(title: string) {
 
   if (lower.includes('family') && lower.includes('member'))
     return { emoji: '👨‍👩‍👧', mascot: '👵', color: 'from-pink-400 to-rose-500', sound: 'Family Members!' };
+  if (lower.includes('animal') && lower.includes('home'))
+    return { emoji: '🪺', mascot: '🏡', color: 'from-amber-400 to-brown-500', sound: 'Animal Homes!' };
   if (lower.includes('home'))
     return { emoji: '🏠', mascot: '🛏️', color: 'from-orange-400 to-amber-500', sound: 'My Home!' };
 
   if (lower.includes('pet') && lower.includes('wild'))
     return { emoji: '🐕', mascot: '🦁', color: 'from-amber-400 to-yellow-500', sound: 'Pet & Wild Animals!' };
-  if (lower.includes('animal') && lower.includes('sound'))
-    return { emoji: '🐮', mascot: '🐱', color: 'from-orange-400 to-red-500', sound: 'Animal Sounds!' };
-  if (lower.includes('animal') && lower.includes('home'))
-    return { emoji: '🪺', mascot: '🏡', color: 'from-amber-400 to-brown-500', sound: 'Animal Homes!' };
 
   if (lower.includes('part') && lower.includes('plant'))
     return { emoji: '🌱', mascot: '🌻', color: 'from-green-400 to-emerald-500', sound: 'Parts of a Plant!' };
@@ -108,36 +106,6 @@ export function buildTutorial(title: string, studentName?: string): TutorialStep
       { title: 'Family Love!', speak: `Family is love ${name}! Give everyone a big hug! You are blessed!`, emoji: '💖', anim: 'shake' },
     ];
   }
-  if (lower.includes('home')) {
-    return [
-      { title: 'My Home!', speak: `${name}! This is your HOME! Different rooms for different things!`, emoji: '🏠', anim: 'pop' },
-      { title: 'Bedroom!', speak: 'This is the BEDROOM! 🛏️ Where you sleep and rest! Good night!', emoji: '🛏️', anim: 'pulse' },
-      { title: 'Kitchen!', speak: 'This is the KITCHEN! 🍳 Where Mama cooks yummy food!', emoji: '🍳', anim: 'bounce' },
-      { title: 'Bathroom!', speak: 'This is the BATHROOM! 🚿 Where you get clean! Splash splash!', emoji: '🚿', anim: 'float' },
-      { title: 'Home Sweet Home!', speak: `Awesome ${name}! You know your home! Where is the kitchen? Point!`, emoji: '🏡', anim: 'shake' },
-    ];
-  }
-
-  // ────── Chapter 3: Animals ──────
-
-  if (lower.includes('pet') && lower.includes('wild')) {
-    return [
-      { title: 'Pet & Wild Animals!', speak: `${name}! Some animals live with us, some live in the wild!`, emoji: '🐕', anim: 'pop' },
-      { title: 'Pet Animals!', speak: 'PET animals live with us! 🐕 Doggy! 🐈 Cat! 🐠 Fish! They are our friends!', emoji: '🐕', anim: 'bounce' },
-      { title: 'Wild Animals!', speak: 'WILD animals live in the jungle! 🦁 Lion! 🐘 Elephant! 🐯 Tiger! They are free!', emoji: '🦁', anim: 'jump' },
-      { title: 'Pet or Wild?', speak: 'Which lives with humans? A dog or a lion? The dog is a pet! Woof!', emoji: '🐕', anim: 'wiggle' },
-      { title: 'Animal Friend!', speak: `You love animals ${name}! Be kind to all animals, big and small!`, emoji: '❤️', anim: 'shake' },
-    ];
-  }
-  if (lower.includes('animal') && lower.includes('sound')) {
-    return [
-      { title: 'Animal Sounds!', speak: `${name}! What sounds do animals make? Let's learn them!`, emoji: '🐮', anim: 'pop' },
-      { title: 'Cow says Moo!', speak: 'The COW says MOO! 🐮 Moo moo! Give us milk!', emoji: '🐮', anim: 'bounce' },
-      { title: 'Dog says Bow Wow!', speak: 'The DOG says BOW WOW! 🐕 Woof woof! Our friendly guard!', emoji: '🐕', anim: 'jump' },
-      { title: 'Cat says Meow!', speak: 'The CAT says MEOW! 🐱 Purr purr! Soft and cuddly!', emoji: '🐱', anim: 'float' },
-      { title: 'Animal Sounds Star!', speak: `Super ${name}! Moo, bow wow, meow! You know animal sounds!`, emoji: '🌟', anim: 'shake' },
-    ];
-  }
   if (lower.includes('animal') && lower.includes('home')) {
     return [
       { title: 'Animal Homes!', speak: `${name}! Animals have homes too! Let's see where they live!`, emoji: '🪺', anim: 'pop' },
@@ -145,6 +113,15 @@ export function buildTutorial(title: string, studentName?: string): TutorialStep
       { title: 'Fish in Water!', speak: 'A FISH lives in WATER! 🐟 Splish splash! In the pond or sea!', emoji: '🐟', anim: 'float' },
       { title: 'Rabbit in a Burrow!', speak: 'A RABBIT lives in a BURROW! 🐇 Underground! Hop hop!', emoji: '🐇', anim: 'jump' },
       { title: 'Animal Homes Pro!', speak: `Amazing ${name}! Animals have cozy homes just like you!`, emoji: '🏡', anim: 'shake' },
+    ];
+  }
+  if (lower.includes('home')) {
+    return [
+      { title: 'My Home!', speak: `${name}! This is your HOME! Different rooms for different things!`, emoji: '🏠', anim: 'pop' },
+      { title: 'Bedroom!', speak: 'This is the BEDROOM! 🛏️ Where you sleep and rest! Good night!', emoji: '🛏️', anim: 'pulse' },
+      { title: 'Kitchen!', speak: 'This is the KITCHEN! 🍳 Where Mama cooks yummy food!', emoji: '🍳', anim: 'bounce' },
+      { title: 'Bathroom!', speak: 'This is the BATHROOM! 🚿 Where you get clean! Splash splash!', emoji: '🚿', anim: 'float' },
+      { title: 'Home Sweet Home!', speak: `Awesome ${name}! You know your home! Where is the kitchen? Point!`, emoji: '🏡', anim: 'shake' },
     ];
   }
 

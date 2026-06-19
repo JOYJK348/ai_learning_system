@@ -24,6 +24,7 @@ import ShapesSpatialQuiz from './ShapesSpatialQuiz';
 import NumberAdventureQuiz from './NumberAdventureQuiz';
 import NumberAdventureQuiz610 from './NumberAdventureQuiz610';
 import SortingComparisonQuiz from './SortingComparisonQuiz';
+import EvsExploreGame from './EvsExploreGame';
 import { useData } from '@/context/DataContext';
 
 type Props = {
@@ -201,6 +202,33 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   };
   const sortingComparisonConceptKey = getSortingComparisonConceptKey();
 
+  const getEvsConceptKey = () => {
+    const lower = lessonTitle.toLowerCase();
+    if (lower.includes('body') && lower.includes('part')) return 'my-body-parts';
+    if (lower.includes('five') && lower.includes('sense')) return 'my-five-senses';
+    if (lower.includes('taking') && lower.includes('care')) return 'taking-care';
+    if (lower.includes('family') && lower.includes('member')) return 'family-members';
+    if (lower.includes('animal') && lower.includes('home')) return 'animal-homes';
+    if (lower.includes('home')) return 'my-home';
+    if (lower.includes('pet') && lower.includes('wild')) return 'pet-wild-animals';
+    if (lower.includes('part') && lower.includes('plant')) return 'plant-parts';
+    if (lower.includes('thing') && lower.includes('nature')) return 'nature-things';
+    if (lower.includes('season')) return 'seasons';
+    if (lower.includes('land') && lower.includes('transport')) return 'land-transport';
+    if (lower.includes('air') && lower.includes('water')) return 'air-water-transport';
+    if (lower.includes('traffic') && lower.includes('rule')) return 'traffic-rules';
+    if (lower.includes('clean') && lower.includes('habit')) return 'clean-habits';
+    if (lower.includes('healthy') && lower.includes('food')) return 'healthy-food';
+    if (lower.includes('daily') && lower.includes('routine')) return 'daily-routine';
+    return null;
+  };
+  const evsConceptKey = getEvsConceptKey();
+
+  const handleEvsComplete = useCallback((data: { score: number; max_score: number; completion_data: Record<string, unknown>; time_taken_seconds: number }) => {
+    progressMutation.mutate(undefined);
+    onComplete();
+  }, [progressMutation, onComplete]);
+
   const handleSortingComparisonComplete = useCallback((data: { score: number; max_score: number; completion_data: Record<string, unknown>; time_taken_seconds: number }) => {
     if (activities && activities.length > 0) {
       activities.forEach((act) => {
@@ -232,7 +260,7 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
     );
   }
 
-  if (isError || !activities || activities.length === 0) {
+  if (!evsConceptKey && (isError || !activities || activities.length === 0)) {
     return (
       <div className="fixed inset-0 z-[200] flex items-center justify-center"
         style={{ background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(8px)' }}>
@@ -250,6 +278,44 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   }
 
 
+
+  // ── EVS EXPLORE GAME ──
+  if (evsConceptKey) {
+    return (
+      <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
+        style={{ background: 'rgba(5,15,5,0.75)', backdropFilter: 'blur(10px)' }}>
+        <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-2xl sm:rounded-[2.5rem] shadow-[0_25px_80px_rgba(0,0,0,0.7),0_0_40px_rgba(34,197,94,0.12)]"
+          style={{ background: 'linear-gradient(160deg, #0d2310 0%, #071a09 50%, #020d03 100%)', border: '2px solid rgba(34,197,94,0.25)' }}>
+          <div className="absolute inset-0 opacity-[0.07] pointer-events-none"
+            style={{ backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, #86efac 1px, transparent 0)', backgroundSize: '20px 20px' }} />
+          <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
+            style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(134,239,172,0.6) 28px)', backgroundSize: '100% 28px' }} />
+          <div className="absolute top-[-15%] left-[-8%] w-[45%] h-[55%] bg-emerald-500/10 blur-[80px] rounded-full pointer-events-none" />
+
+          <div className="relative z-10 flex items-center justify-end px-3 sm:px-5 pt-3 sm:pt-5 pb-2 sm:pb-3">
+            <button onClick={onClose}
+              className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 hover:bg-emerald-500/30 flex items-center justify-center text-white/50 hover:text-white text-base sm:text-lg font-bold transition-all border border-white/10">
+              &times;
+            </button>
+          </div>
+
+          <div className="relative z-10">
+            <EvsExploreGame
+              conceptKey={evsConceptKey}
+              onComplete={handleEvsComplete}
+            />
+          </div>
+
+          {/* Chalk tray */}
+          <div className="relative z-10 w-[90%] mx-auto mb-4 sm:mb-6 h-3 sm:h-4 bg-[#4a2e1f] rounded-t-lg flex items-center justify-start px-4 sm:px-8 gap-2 sm:gap-4 border-t border-black/20">
+            <div className="w-6 h-2 sm:w-8 sm:h-2.5 bg-yellow-100 rounded-sm transform rotate-6 border border-yellow-200/50 shadow-sm" />
+            <div className="w-7 h-2 sm:w-9 sm:h-2.5 bg-white rounded-sm transform -rotate-3 border border-white/20 shadow-sm" />
+            <div className="w-5 h-2 sm:w-7 sm:h-2.5 bg-pink-200 rounded-sm transform rotate-12 border border-pink-300/30 shadow-sm" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // ── SORTING & COMPARISON must be checked BEFORE shapes to prevent collision ──
   if (sortingComparisonConceptKey) {
