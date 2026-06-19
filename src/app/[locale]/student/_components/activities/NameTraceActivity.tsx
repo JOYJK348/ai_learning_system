@@ -156,13 +156,13 @@ export default function NameTraceActivity({ config, onComplete, studentName }: P
                   setLetterScores(newScores);
                   audioEngine?.speak(`Great ${currentLetter}!`);
                   if (currentIdx < letters.length - 1) {
-                    setTimeout(() => setCurrentIdx(currentIdx + 1), 800);
+                    setTimeout(() => setCurrentIdx(currentIdx + 1), 350);
                   } else {
                     setTimeout(() => {
                       setAllDone(true);
                       setShowCelebration(true);
                       audioEngine?.speak(`You wrote ${name}! Amazing!`);
-                    }, 600);
+                    }, 300);
                   }
                 }}
               />
@@ -428,7 +428,7 @@ function LetterTraceCanvas({
     setDone(true);
 
     if (isPass) {
-      setTimeout(() => onComplete(accuracy), 700);
+      setTimeout(() => onComplete(accuracy), 250);
     }
   }, [done, isDone, points, dottedPath, onComplete]);
 

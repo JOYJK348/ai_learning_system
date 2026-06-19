@@ -1097,15 +1097,1252 @@ const LESSONS: Record<string, EvsLesson> = {
       },
     ],
   },
+  // ══════════════════════════════════════════════════════════════════
+  // CHAPTER 1: Animal World 🐾
+  // ══════════════════════════════════════════════════════════════════
+  'gk-animal-names': {
+    id: 'gk-animal-names',
+    rounds: [
+      {
+        type: 'story',
+        story: 'Dogs, cats, elephants, lions — animals are amazing!',
+      },
+      {
+        type: 'learn',
+        showEmoji: '🐶 🐱 🐘 🦁',
+        labels: ['Dog', 'Cat', 'Elephant', 'Lion'],
+        story: 'Animal Names',
+      },
+      {
+        type: 'learn',
+        showEmoji: '🐒 🐰 🐄 🐯',
+        labels: ['Monkey', 'Rabbit', 'Cow', 'Tiger'],
+        story: 'More Animals',
+      },
+      {
+        type: 'question',
+        showEmoji: '🗣️',
+        question: 'Which animal says BOW WOW?',
+        options: [
+          { id: 'dog', emoji: '🐕', label: 'Dog' },
+          { id: 'cat', emoji: '🐱', label: 'Cat' },
+          { id: 'lion', emoji: '🦁', label: 'Lion' },
+        ],
+        correctId: 'dog',
+      },
+      {
+        type: 'question',
+        showEmoji: '🌊',
+        question: 'Which animal has a long TRUNK?',
+        options: [
+          { id: 'elephant', emoji: '🐘', label: 'Elephant' },
+          { id: 'tiger', emoji: '🐯', label: 'Tiger' },
+          { id: 'monkey', emoji: '🐒', label: 'Monkey' },
+        ],
+        correctId: 'elephant',
+      },
+      {
+        type: 'question',
+        showEmoji: '👑',
+        question: 'Which is the KING of the jungle?',
+        options: [
+          { id: 'lion', emoji: '🦁', label: 'Lion' },
+          { id: 'tiger', emoji: '🐯', label: 'Tiger' },
+          { id: 'rabbit', emoji: '🐰', label: 'Rabbit' },
+        ],
+        correctId: 'lion',
+      },
+      {
+        type: 'question',
+        showEmoji: '🥕',
+        question: 'Which animal loves CARROTS?',
+        options: [
+          { id: 'rabbit', emoji: '🐰', label: 'Rabbit' },
+          { id: 'cow', emoji: '🐄', label: 'Cow' },
+          { id: 'monkey', emoji: '🐒', label: 'Monkey' },
+        ],
+        correctId: 'rabbit',
+      },
+      {
+        type: 'reward',
+        story: 'Roar! You know so many animals!',
+      },
+    ],
+  },
+  'gk-birds-insects': {
+    id: 'gk-birds-insects',
+    rounds: [
+      {
+        type: 'story',
+        story: 'Birds fly high, butterflies flutter, bees buzz!',
+      },
+      {
+        type: 'learn',
+        showEmoji: '🐦 🦋 🐝',
+        labels: ['Bird', 'Butterfly', 'Bee'],
+        story: 'Birds & Insects',
+      },
+      {
+        type: 'learn',
+        showEmoji: '🐓 🦜 🐜',
+        labels: ['Hen', 'Parrot', 'Ant'],
+        story: 'More',
+      },
+      {
+        type: 'question',
+        showEmoji: '🪶',
+        question: 'Which one can FLY?',
+        options: [
+          { id: 'bird', emoji: '🐦', label: 'Bird' },
+          { id: 'hen', emoji: '🐓', label: 'Hen' },
+          { id: 'ant', emoji: '🐜', label: 'Ant' },
+        ],
+        correctId: 'bird',
+      },
+      {
+        type: 'question',
+        showEmoji: '🌸',
+        question: 'Which insect has colourful WINGS?',
+        options: [
+          { id: 'butterfly', emoji: '🦋', label: 'Butterfly' },
+          { id: 'bee', emoji: '🐝', label: 'Bee' },
+          { id: 'parrot', emoji: '🦜', label: 'Parrot' },
+        ],
+        correctId: 'butterfly',
+      },
+      {
+        type: 'question',
+        showEmoji: '🍯',
+        question: 'Which insect makes HONEY?',
+        options: [
+          { id: 'bee', emoji: '🐝', label: 'Bee' },
+          { id: 'butterfly', emoji: '🦋', label: 'Butterfly' },
+          { id: 'ant', emoji: '🐜', label: 'Ant' },
+        ],
+        correctId: 'bee',
+      },
+      {
+        type: 'reward',
+        story: 'Wonderful! Birds, butterflies, bees, and more — nature is full of life!',
+      },
+    ],
+  },
+  'gk-basic-colors': {
+    id: 'gk-basic-colors',
+    rounds: [
+      {
+        type: 'story',
+        story: 'Red, blue, yellow, green — colors make the world beautiful!',
+      },
+      {
+        type: 'learn',
+        showEmoji: '🔴 🔵 🟡 🟢',
+        labels: ['Red', 'Blue', 'Yellow', 'Green'],
+        story: 'Basic Colors',
+      },
+      {
+        type: 'question',
+        showEmoji: '🔴',
+        options: [
+          { id: 'blue', emoji: '🔵', label: 'Blue' },
+          { id: 'red', emoji: '🔴', label: 'Red' },
+          { id: 'yellow', emoji: '🟡', label: 'Yellow' },
+        ],
+        correctId: 'red',
+      },
+      {
+        type: 'question',
+        showEmoji: '🔵',
+        options: [
+          { id: 'blue', emoji: '🔵', label: 'Blue' },
+          { id: 'green', emoji: '🟢', label: 'Green' },
+          { id: 'red', emoji: '🔴', label: 'Red' },
+        ],
+        correctId: 'blue',
+      },
+      {
+        type: 'question',
+        showEmoji: '🟡',
+        options: [
+          { id: 'red', emoji: '🔴', label: 'Red' },
+          { id: 'green', emoji: '🟢', label: 'Green' },
+          { id: 'yellow', emoji: '🟡', label: 'Yellow' },
+        ],
+        correctId: 'yellow',
+      },
+      {
+        type: 'question',
+        showEmoji: '🟢',
+        options: [
+          { id: 'yellow', emoji: '🟡', label: 'Yellow' },
+          { id: 'blue', emoji: '🔵', label: 'Blue' },
+          { id: 'green', emoji: '🟢', label: 'Green' },
+        ],
+        correctId: 'green',
+      },
+      {
+        type: 'reward',
+        story: 'Colorful! Red, blue, yellow, green — you know them all!',
+      },
+    ],
+  },
+  'gk-color-match': {
+    id: 'gk-color-match',
+    rounds: [
+      {
+        type: 'story',
+        story: 'Bananas are yellow, apples are red! Let us match objects to their colors!',
+      },
+      {
+        type: 'learn',
+        showEmoji: '🍌 🍎 🌿 💧',
+        labels: ['Yellow', 'Red', 'Green', 'Blue'],
+        story: 'Color Match',
+      },
+      {
+        type: 'question',
+        showEmoji: '🍌',
+        options: [
+          { id: 'green', emoji: '🟢', label: 'Green' },
+          { id: 'yellow', emoji: '🟡', label: 'Yellow' },
+          { id: 'red', emoji: '🔴', label: 'Red' },
+        ],
+        correctId: 'yellow',
+      },
+      {
+        type: 'question',
+        showEmoji: '🍎',
+        options: [
+          { id: 'red', emoji: '🔴', label: 'Red' },
+          { id: 'blue', emoji: '🔵', label: 'Blue' },
+          { id: 'yellow', emoji: '🟡', label: 'Yellow' },
+        ],
+        correctId: 'red',
+      },
+      {
+        type: 'question',
+        showEmoji: '🌿',
+        options: [
+          { id: 'yellow', emoji: '🟡', label: 'Yellow' },
+          { id: 'blue', emoji: '🔵', label: 'Blue' },
+          { id: 'green', emoji: '🟢', label: 'Green' },
+        ],
+        correctId: 'green',
+      },
+      {
+        type: 'question',
+        showEmoji: '💧',
+        options: [
+          { id: 'green', emoji: '🟢', label: 'Green' },
+          { id: 'blue', emoji: '🔵', label: 'Blue' },
+          { id: 'red', emoji: '🔴', label: 'Red' },
+        ],
+        correctId: 'blue',
+      },
+      {
+        type: 'reward',
+        story: 'Super matching! Bananas yellow, apples red, leaves green, water blue!',
+      },
+    ],
+  },
+  'gk-places': {
+    id: 'gk-places',
+    rounds: [
+      {
+        type: 'story',
+        story: 'Home, school, hospital, shop — we go to so many places!',
+      },
+      {
+        type: 'learn',
+        showEmoji: '🏠 🏫 🏥 🛒',
+        labels: ['Home', 'School', 'Hospital', 'Shop'],
+        story: 'Places Around Us',
+      },
+      {
+        type: 'question',
+        showEmoji: '🏠',
+        options: [
+          { id: 'school', emoji: '🏫', label: 'School' },
+          { id: 'home', emoji: '🏠', label: 'Home' },
+          { id: 'shop', emoji: '🛒', label: 'Shop' },
+        ],
+        correctId: 'home',
+      },
+      {
+        type: 'question',
+        showEmoji: '🏫',
+        options: [
+          { id: 'home', emoji: '🏠', label: 'Home' },
+          { id: 'hospital', emoji: '🏥', label: 'Hospital' },
+          { id: 'school', emoji: '🏫', label: 'School' },
+        ],
+        correctId: 'school',
+      },
+      {
+        type: 'question',
+        showEmoji: '🏥',
+        options: [
+          { id: 'hospital', emoji: '🏥', label: 'Hospital' },
+          { id: 'shop', emoji: '🛒', label: 'Shop' },
+          { id: 'school', emoji: '🏫', label: 'School' },
+        ],
+        correctId: 'hospital',
+      },
+      {
+        type: 'reward',
+        story: 'Amazing! Home, school, hospital, shop — you know all the places!',
+      },
+    ],
+  },
+  'gk-community-helpers': {
+    id: 'gk-community-helpers',
+    rounds: [
+      {
+        type: 'story',
+        story: 'Teachers, doctors, police, firefighters — they help us every day!',
+      },
+      {
+        type: 'learn',
+        showEmoji: '👩‍🏫 👨‍⚕️ 👮 👨‍🚒',
+        labels: ['Teacher', 'Doctor', 'Police', 'Firefighter'],
+        story: 'Community Helpers',
+      },
+      {
+        type: 'question',
+        showEmoji: '👨‍⚕️',
+        options: [
+          { id: 'teacher', emoji: '👩‍🏫', label: 'Teacher' },
+          { id: 'police', emoji: '👮', label: 'Police' },
+          { id: 'doctor', emoji: '👨‍⚕️', label: 'Doctor' },
+        ],
+        correctId: 'doctor',
+      },
+      {
+        type: 'question',
+        showEmoji: '👩‍🏫',
+        options: [
+          { id: 'police', emoji: '👮', label: 'Police' },
+          { id: 'firefighter', emoji: '👨‍🚒', label: 'Firefighter' },
+          { id: 'teacher', emoji: '👩‍🏫', label: 'Teacher' },
+        ],
+        correctId: 'teacher',
+      },
+      {
+        type: 'question',
+        showEmoji: '👨‍🚒',
+        options: [
+          { id: 'doctor', emoji: '👨‍⚕️', label: 'Doctor' },
+          { id: 'police', emoji: '👮', label: 'Police' },
+          { id: 'firefighter', emoji: '👨‍🚒', label: 'Firefighter' },
+        ],
+        correctId: 'firefighter',
+      },
+      {
+        type: 'reward',
+        story: 'Heroes! Teachers, doctors, police, firefighters help us every day!',
+      },
+    ],
+  },
+  'gk-transport': {
+    id: 'gk-transport',
+    rounds: [
+      {
+        type: 'story',
+        story: 'Cars, buses, cycles, aeroplanes, ships — so many ways to travel!',
+      },
+      {
+        type: 'learn',
+        showEmoji: '🚗 🚌 🚲 ✈️ 🚢',
+        labels: ['Car', 'Bus', 'Cycle', 'Aeroplane', 'Ship'],
+        story: 'Transport',
+      },
+      {
+        type: 'question',
+        showEmoji: '🚗',
+        options: [
+          { id: 'bus', emoji: '🚌', label: 'Bus' },
+          { id: 'car', emoji: '🚗', label: 'Car' },
+          { id: 'cycle', emoji: '🚲', label: 'Cycle' },
+        ],
+        correctId: 'car',
+      },
+      {
+        type: 'question',
+        showEmoji: '🚌',
+        options: [
+          { id: 'car', emoji: '🚗', label: 'Car' },
+          { id: 'ship', emoji: '🚢', label: 'Ship' },
+          { id: 'bus', emoji: '🚌', label: 'Bus' },
+        ],
+        correctId: 'bus',
+      },
+      {
+        type: 'question',
+        showEmoji: '✈️',
+        options: [
+          { id: 'cycle', emoji: '🚲', label: 'Cycle' },
+          { id: 'aeroplane', emoji: '✈️', label: 'Aeroplane' },
+          { id: 'car', emoji: '🚗', label: 'Car' },
+        ],
+        correctId: 'aeroplane',
+      },
+      {
+        type: 'reward',
+        story: 'Vroom vroom! Cars, buses, cycles, planes, ships — you know them all!',
+      },
+    ],
+  },
+  'gk-vehicles-around-us': {
+    id: 'gk-vehicles-around-us',
+    rounds: [
+      {
+        type: 'story',
+        story: 'Some go on land, some fly in the sky, some sail on water!',
+      },
+      {
+        type: 'learn',
+        showEmoji: '🚗 ✈️ 🚢',
+        labels: ['Land: Car', 'Air: Aeroplane', 'Water: Ship'],
+        story: 'Land / Air / Water',
+      },
+      {
+        type: 'question',
+        showEmoji: '🚗',
+        options: [
+          { id: 'air', emoji: '✈️', label: 'Air' },
+          { id: 'water', emoji: '🚢', label: 'Water' },
+          { id: 'land', emoji: '🚗', label: 'Land' },
+        ],
+        correctId: 'land',
+      },
+      {
+        type: 'question',
+        showEmoji: '✈️',
+        options: [
+          { id: 'land', emoji: '🚗', label: 'Land' },
+          { id: 'air', emoji: '✈️', label: 'Air' },
+          { id: 'water', emoji: '🚢', label: 'Water' },
+        ],
+        correctId: 'air',
+      },
+      {
+        type: 'question',
+        showEmoji: '🚢',
+        options: [
+          { id: 'water', emoji: '🚢', label: 'Water' },
+          { id: 'air', emoji: '✈️', label: 'Air' },
+          { id: 'land', emoji: '🚗', label: 'Land' },
+        ],
+        correctId: 'water',
+      },
+      {
+        type: 'reward',
+        story: 'Amazing! Cars on land, planes in the sky, ships on water!',
+      },
+    ],
+  },
+  'gk-sky-objects': {
+    id: 'gk-sky-objects',
+    rounds: [
+      {
+        type: 'story',
+        story: 'Sun shines in the day, moon and stars shine at night!',
+      },
+      {
+        type: 'learn',
+        showEmoji: '☀️ 🌙 ⭐ ☁️',
+        labels: ['Sun', 'Moon', 'Stars', 'Cloud'],
+        story: 'Sky World',
+      },
+      {
+        type: 'question',
+        showEmoji: '☀️',
+        options: [
+          { id: 'moon', emoji: '🌙', label: 'Moon' },
+          { id: 'cloud', emoji: '☁️', label: 'Cloud' },
+          { id: 'sun', emoji: '☀️', label: 'Sun' },
+        ],
+        correctId: 'sun',
+      },
+      {
+        type: 'question',
+        showEmoji: '🌙',
+        options: [
+          { id: 'stars', emoji: '⭐', label: 'Stars' },
+          { id: 'sun', emoji: '☀️', label: 'Sun' },
+          { id: 'moon', emoji: '🌙', label: 'Moon' },
+        ],
+        correctId: 'moon',
+      },
+      {
+        type: 'question',
+        showEmoji: '⭐',
+        options: [
+          { id: 'moon', emoji: '🌙', label: 'Moon' },
+          { id: 'cloud', emoji: '☁️', label: 'Cloud' },
+          { id: 'stars', emoji: '⭐', label: 'Stars' },
+        ],
+        correctId: 'stars',
+      },
+      {
+        type: 'reward',
+        story: 'Twinkle twinkle! Sun, moon, stars, and clouds in the sky!',
+      },
+    ],
+  },
+  'gk-weather': {
+    id: 'gk-weather',
+    rounds: [
+      {
+        type: 'story',
+        story: 'Sunny, rainy, cloudy — what is the weather today?',
+      },
+      {
+        type: 'learn',
+        showEmoji: '☀️ 🌧️ ☁️',
+        labels: ['Sunny', 'Rainy', 'Cloudy'],
+        story: 'Weather',
+      },
+      {
+        type: 'question',
+        showEmoji: '☀️',
+        options: [
+          { id: 'rainy', emoji: '🌧️', label: 'Rainy' },
+          { id: 'cloudy', emoji: '☁️', label: 'Cloudy' },
+          { id: 'sunny', emoji: '☀️', label: 'Sunny' },
+        ],
+        correctId: 'sunny',
+      },
+      {
+        type: 'question',
+        showEmoji: '🌧️',
+        options: [
+          { id: 'cloudy', emoji: '☁️', label: 'Cloudy' },
+          { id: 'sunny', emoji: '☀️', label: 'Sunny' },
+          { id: 'rainy', emoji: '🌧️', label: 'Rainy' },
+        ],
+        correctId: 'rainy',
+      },
+      {
+        type: 'question',
+        showEmoji: '☁️',
+        options: [
+          { id: 'sunny', emoji: '☀️', label: 'Sunny' },
+          { id: 'rainy', emoji: '🌧️', label: 'Rainy' },
+          { id: 'cloudy', emoji: '☁️', label: 'Cloudy' },
+        ],
+        correctId: 'cloudy',
+      },
+      {
+        type: 'reward',
+        story: 'Weather wise! Sunny, rainy, cloudy — you know the weather!',
+      },
+    ],
+  },
+  'gk-clean-habits': {
+    id: 'gk-clean-habits',
+    rounds: [
+      {
+        type: 'story',
+        story: 'Brush your teeth, wash your hands, keep clean — good habits!',
+      },
+      {
+        type: 'learn',
+        showEmoji: '🪥 🧼 🧹',
+        labels: ['Brush Teeth', 'Wash Hands', 'Keep Clean'],
+        story: 'Clean Habits',
+      },
+      {
+        type: 'question',
+        showEmoji: '🪥',
+        options: [
+          { id: 'wash', emoji: '🧼', label: 'Wash Hands' },
+          { id: 'clean', emoji: '🧹', label: 'Keep Clean' },
+          { id: 'brush', emoji: '🪥', label: 'Brush Teeth' },
+        ],
+        correctId: 'brush',
+      },
+      {
+        type: 'question',
+        showEmoji: '🧼',
+        options: [
+          { id: 'clean', emoji: '🧹', label: 'Keep Clean' },
+          { id: 'brush', emoji: '🪥', label: 'Brush Teeth' },
+          { id: 'wash', emoji: '🧼', label: 'Wash Hands' },
+        ],
+        correctId: 'wash',
+      },
+      {
+        type: 'question',
+        showEmoji: '🧹',
+        options: [
+          { id: 'brush', emoji: '🪥', label: 'Brush Teeth' },
+          { id: 'wash', emoji: '🧼', label: 'Wash Hands' },
+          { id: 'clean', emoji: '🧹', label: 'Keep Clean' },
+        ],
+        correctId: 'clean',
+      },
+      {
+        type: 'reward',
+        story: 'Squeaky clean! Brush, wash, keep clean — good habits!',
+      },
+    ],
+  },
+  'gk-good-manners': {
+    id: 'gk-good-manners',
+    rounds: [
+      {
+        type: 'story',
+        story: 'Please, thank you, sorry — good manners make everyone happy!',
+      },
+      {
+        type: 'learn',
+        showEmoji: '🙏 😊 😔',
+        labels: ['Please', 'Thank You', 'Sorry'],
+        story: 'Good Manners',
+      },
+      {
+        type: 'question',
+        showEmoji: '🙏',
+        options: [
+          { id: 'sorry', emoji: '😔', label: 'Sorry' },
+          { id: 'please', emoji: '🙏', label: 'Please' },
+          { id: 'thanks', emoji: '😊', label: 'Thank You' },
+        ],
+        correctId: 'please',
+      },
+      {
+        type: 'question',
+        showEmoji: '😊',
+        options: [
+          { id: 'please', emoji: '🙏', label: 'Please' },
+          { id: 'thanks', emoji: '😊', label: 'Thank You' },
+          { id: 'sorry', emoji: '😔', label: 'Sorry' },
+        ],
+        correctId: 'thanks',
+      },
+      {
+        type: 'question',
+        showEmoji: '😔',
+        options: [
+          { id: 'sorry', emoji: '😔', label: 'Sorry' },
+          { id: 'please', emoji: '🙏', label: 'Please' },
+          { id: 'thanks', emoji: '😊', label: 'Thank You' },
+        ],
+        correctId: 'sorry',
+      },
+      {
+        type: 'reward',
+        story: 'Polite and kind! Please, thank you, sorry — good manners!',
+      },
+    ],
+  },
+  // ══════════════════════════════════════════════════════════════════
+  // LEGACY GK LESSONS (old DB seed only)
+  // ══════════════════════════════════════════════════════════════════
+  'gk-my-name-identity': {
+    id: 'gk-my-name-identity',
+    rounds: [
+      {
+        type: 'story',
+        story: "Every child is special! Let's learn about you — your name, age, and more!",
+      },
+      {
+        type: 'learn',
+        showEmoji: '🙋 🎂 👦👧 🏫',
+        labels: ['My Name', 'My Age', 'Boy/Girl', 'My School'],
+        story: 'All About Me',
+      },
+      {
+        type: 'learn',
+        showEmoji: '🙂 🎨 🍎 👀',
+        labels: ['About Me', 'Colours', 'Fruits', 'My Body'],
+        story: 'More About Me',
+      },
+      {
+        type: 'question',
+        showEmoji: '🙋',
+        question: 'What is your name?',
+        options: [
+          { id: 'yourname', emoji: '🧒', label: 'Your Name' },
+          { id: 'pet', emoji: '🐕', label: 'Pet' },
+          { id: 'flower', emoji: '🌸', label: 'Flower' },
+        ],
+        correctId: 'yourname',
+      },
+      {
+        type: 'question',
+        showEmoji: '🎂',
+        question: 'How old are you?',
+        options: [
+          { id: 'three', emoji: '3️⃣', label: '3-4 Years' },
+          { id: 'one', emoji: '👶', label: '1 Year' },
+          { id: 'ten', emoji: '🧑', label: '10 Years' },
+        ],
+        correctId: 'three',
+      },
+      {
+        type: 'question',
+        showEmoji: '👦',
+        question: 'Who is a boy?',
+        options: [
+          { id: 'boy', emoji: '👦', label: 'Boy' },
+          { id: 'girl', emoji: '👧', label: 'Girl' },
+          { id: 'baby', emoji: '👶', label: 'Baby' },
+        ],
+        correctId: 'boy',
+      },
+      {
+        type: 'question',
+        showEmoji: '🏫',
+        question: 'Where do you learn?',
+        options: [
+          { id: 'school', emoji: '🏫', label: 'School' },
+          { id: 'home', emoji: '🏠', label: 'Home' },
+          { id: 'shop', emoji: '🛒', label: 'Shop' },
+        ],
+        correctId: 'school',
+      },
+      {
+        type: 'question',
+        showEmoji: '🙂',
+        question: 'I have two...',
+        options: [
+          { id: 'eyes', emoji: '👀', label: 'Eyes' },
+          { id: 'ears', emoji: '👂', label: 'Ears' },
+          { id: 'nose', emoji: '👃', label: 'Nose' },
+        ],
+        correctId: 'eyes',
+      },
+      {
+        type: 'question',
+        showEmoji: '🎨',
+        question: 'Sky is which colour?',
+        options: [
+          { id: 'red', emoji: '🔴', label: 'Red' },
+          { id: 'blue', emoji: '🔵', label: 'Blue' },
+          { id: 'green', emoji: '🟢', label: 'Green' },
+        ],
+        correctId: 'blue',
+      },
+      {
+        type: 'question',
+        showEmoji: '🍎',
+        question: 'Which fruit is red?',
+        options: [
+          { id: 'apple', emoji: '🍎', label: 'Apple' },
+          { id: 'banana', emoji: '🍌', label: 'Banana' },
+          { id: 'grapes', emoji: '🍇', label: 'Grapes' },
+        ],
+        correctId: 'apple',
+      },
+      {
+        type: 'reward',
+        story: 'Amazing! You know your name, age, school, and so much more!',
+      },
+    ],
+  },
+  'gk-my-daily-routine': {
+    id: 'gk-my-daily-routine',
+    rounds: [
+      {
+        type: 'story',
+        story: 'Morning, afternoon, night — every day has a routine!',
+      },
+      {
+        type: 'learn',
+        showEmoji: '🌅 ☀️ 🌙',
+        labels: ['Morning', 'Afternoon', 'Night'],
+        story: 'My Daily Routine',
+      },
+      {
+        type: 'question',
+        showEmoji: '🌅',
+        options: [
+          { id: 'morning', emoji: '🌅', label: 'Morning' },
+          { id: 'afternoon', emoji: '☀️', label: 'Afternoon' },
+          { id: 'night', emoji: '🌙', label: 'Night' },
+        ],
+        correctId: 'morning',
+      },
+      {
+        type: 'question',
+        showEmoji: '🌙',
+        options: [
+          { id: 'morning', emoji: '🌅', label: 'Morning' },
+          { id: 'afternoon', emoji: '☀️', label: 'Afternoon' },
+          { id: 'night', emoji: '🌙', label: 'Night' },
+        ],
+        correctId: 'night',
+      },
+      {
+        type: 'reward',
+        story: 'Wake up, play, sleep — a perfect daily routine!',
+      },
+    ],
+  },
+  'gk-road-safety': {
+    id: 'gk-road-safety',
+    rounds: [
+      {
+        type: 'story',
+        story: 'Red means stop, green means go — stay safe on the road!',
+      },
+      {
+        type: 'learn',
+        showEmoji: '🛑 🟢 🟡',
+        labels: ['Stop', 'Go', 'Wait'],
+        story: 'Road Safety',
+      },
+      {
+        type: 'question',
+        showEmoji: '🛑',
+        options: [
+          { id: 'stop', emoji: '🛑', label: 'Stop' },
+          { id: 'go', emoji: '🟢', label: 'Go' },
+          { id: 'run', emoji: '🏃', label: 'Run' },
+        ],
+        correctId: 'stop',
+      },
+      {
+        type: 'question',
+        showEmoji: '🟢',
+        options: [
+          { id: 'stop', emoji: '🛑', label: 'Stop' },
+          { id: 'go', emoji: '🟢', label: 'Go' },
+          { id: 'wait', emoji: '🟡', label: 'Wait' },
+        ],
+        correctId: 'go',
+      },
+      {
+        type: 'reward',
+        story: 'Red stop, green go — you know road safety!',
+      },
+    ],
+  },
+  'gk-festivals': {
+    id: 'gk-festivals',
+    rounds: [
+      {
+        type: 'story',
+        story: 'Birthdays, Diwali, Christmas — festivals are fun to celebrate!',
+      },
+      {
+        type: 'learn',
+        showEmoji: '🎂 🪔 🎄',
+        labels: ['Birthday', 'Diwali', 'Christmas'],
+        story: 'Festivals',
+      },
+      {
+        type: 'question',
+        showEmoji: '🎄',
+        options: [
+          { id: 'birthday', emoji: '🎂', label: 'Birthday' },
+          { id: 'diwali', emoji: '🪔', label: 'Diwali' },
+          { id: 'christmas', emoji: '🎄', label: 'Christmas' },
+        ],
+        correctId: 'christmas',
+      },
+      {
+        type: 'question',
+        showEmoji: '🪔',
+        options: [
+          { id: 'christmas', emoji: '🎄', label: 'Christmas' },
+          { id: 'diwali', emoji: '🪔', label: 'Diwali' },
+          { id: 'birthday', emoji: '🎂', label: 'Birthday' },
+        ],
+        correctId: 'diwali',
+      },
+      {
+        type: 'reward',
+        story: 'Cake, lights, gifts — festivals bring joy!',
+      },
+    ],
+  },
+
+  // ══════════════════════════════════════════════════════════════════
+  // HINDI 🇮🇳
+  // ══════════════════════════════════════════════════════════════════
+  'hindi-pre-writing': {
+    id: 'hindi-pre-writing',
+    rounds: [
+      { type: 'story', story: 'Let us practice our pre-writing strokes!' },
+      {
+        type: 'learn',
+        showEmoji: '📏 🛌 🌊',
+        labels: ['खड़ी रेखा (Standing)', 'लेटी रेखा (Sleeping)', 'वक्र रेखा (Curve)'],
+        story: 'Basic Strokes',
+      },
+      {
+        type: 'learn',
+        showEmoji: '↗️ ⭕ ⚡',
+        labels: ['तिरछी रेखा (Slanting)', 'वृत्त (Circle)', 'टेढ़ी रेखा (Zigzag)'],
+        story: 'More Strokes',
+      },
+      {
+        type: 'question',
+        showEmoji: '📐',
+        question: 'Which line stands UP?',
+        options: [
+          { id: 'standing', emoji: '📏', label: 'खड़ी रेखा' },
+          { id: 'sleeping', emoji: '🛌', label: 'लेटी रेखा' },
+          { id: 'curve', emoji: '🌊', label: 'वक्र रेखा' },
+        ],
+        correctId: 'standing',
+      },
+      {
+        type: 'question',
+        showEmoji: '🛏️',
+        question: 'Which line is SLEEPING / horizontal?',
+        options: [
+          { id: 'sleeping', emoji: '🛌', label: 'लेटी रेखा' },
+          { id: 'standing', emoji: '📏', label: 'खड़ी रेखा' },
+          { id: 'zigzag', emoji: '⚡', label: 'टेढ़ी रेखा' },
+        ],
+        correctId: 'sleeping',
+      },
+      {
+        type: 'question',
+        showEmoji: '🌉',
+        question: 'Which one is a CURVE?',
+        options: [
+          { id: 'curve', emoji: '🌊', label: 'वक्र रेखा' },
+          { id: 'standing', emoji: '📏', label: 'खड़ी रेखा' },
+          { id: 'sleeping', emoji: '🛌', label: 'लेटी रेखा' },
+        ],
+        correctId: 'curve',
+      },
+      { type: 'reward', story: 'Shabash! You know your strokes!' },
+    ],
+  },
+  'hindi-swar': {
+    id: 'hindi-swar',
+    rounds: [
+      { type: 'story', story: 'अ से अनार, आ से आम — Hindi vowels!' },
+      {
+        type: 'learn',
+        showEmoji: 'अ आ इ',
+        labels: ['अनार 🍎', 'आम 🥭', 'इमली 🍈'],
+        story: 'स्वर (Vowels)',
+      },
+      {
+        type: 'learn',
+        showEmoji: 'ई उ ऊ',
+        labels: ['ईंट 🧱', 'उल्लू 🦉', 'ऊँट 🐪'],
+        story: 'More Vowels',
+      },
+      {
+        type: 'question',
+        showEmoji: 'अ',
+        question: 'Which word starts with अ?',
+        options: [
+          { id: 'anar', emoji: '🍎', label: 'अनार' },
+          { id: 'aam', emoji: '🥭', label: 'आम' },
+          { id: 'ullu', emoji: '🦉', label: 'उल्लू' },
+        ],
+        correctId: 'anar',
+      },
+      {
+        type: 'question',
+        showEmoji: 'आ',
+        question: 'Which word starts with आ?',
+        options: [
+          { id: 'aam', emoji: '🥭', label: 'आम' },
+          { id: 'anar', emoji: '🍎', label: 'अनार' },
+          { id: 'oont', emoji: '🐪', label: 'ऊँट' },
+        ],
+        correctId: 'aam',
+      },
+      {
+        type: 'question',
+        showEmoji: 'इ',
+        question: 'Which word starts with इ?',
+        options: [
+          { id: 'imli', emoji: '🍈', label: 'इमली' },
+          { id: 'aam', emoji: '🥭', label: 'आम' },
+          { id: 'anar', emoji: '🍎', label: 'अनार' },
+        ],
+        correctId: 'imli',
+      },
+      { type: 'reward', story: 'Excellent! आपने स्वर सीख लिए!' },
+    ],
+  },
+  'hindi-vyanjan': {
+    id: 'hindi-vyanjan',
+    rounds: [
+      { type: 'story', story: 'क से कबूतर, ख से खरगोश — Hindi consonants!' },
+      {
+        type: 'learn',
+        showEmoji: 'क ख ग घ',
+        labels: ['कबूतर 🕊️', 'खरगोश 🐇', 'गाय 🐄', 'घर 🏠'],
+        story: 'व्यंजन Set 1',
+      },
+      {
+        type: 'learn',
+        showEmoji: 'च छ ज',
+        labels: ['चिड़िया 🐦', 'छाता 🌂', 'जहाज़ 🚢'],
+        story: 'व्यंजन Set 2',
+      },
+      {
+        type: 'question',
+        showEmoji: '🕊️',
+        question: 'Which letter is for KABOOTAR (pigeon)?',
+        options: [
+          { id: 'ka', emoji: 'क', label: 'क कबूतर' },
+          { id: 'kha', emoji: 'ख', label: 'ख खरगोश' },
+          { id: 'ga', emoji: 'ग', label: 'ग गाय' },
+        ],
+        correctId: 'ka',
+      },
+      {
+        type: 'question',
+        showEmoji: '🐇',
+        question: 'Which letter is for KHARGOSH (rabbit)?',
+        options: [
+          { id: 'kha', emoji: 'ख', label: 'ख खरगोश' },
+          { id: 'ka', emoji: 'क', label: 'क कबूतर' },
+          { id: 'gha', emoji: 'घ', label: 'घ घर' },
+        ],
+        correctId: 'kha',
+      },
+      {
+        type: 'question',
+        showEmoji: '🐦',
+        question: 'Which letter is for CHIDIYA (bird)?',
+        options: [
+          { id: 'cha', emoji: 'च', label: 'च चिड़िया' },
+          { id: 'chha', emoji: 'छ', label: 'छ छाता' },
+          { id: 'ja', emoji: 'ज', label: 'ज जहाज़' },
+        ],
+        correctId: 'cha',
+      },
+      { type: 'reward', story: 'बहुत अच्छे! आपने व्यंजन सीखे!' },
+    ],
+  },
+  'hindi-simple-words': {
+    id: 'hindi-simple-words',
+    rounds: [
+      { type: 'story', story: 'घर, फल, जल, वन — simple Hindi words!' },
+      {
+        type: 'learn',
+        showEmoji: '🏠 🍎 💧 🌲',
+        labels: ['घर', 'फल', 'जल', 'वन'],
+        story: 'सरल शब्द',
+      },
+      {
+        type: 'question',
+        showEmoji: '🏠',
+        question: 'Which word means HOME?',
+        options: [
+          { id: 'ghar', emoji: '🏠', label: 'घर' },
+          { id: 'phal', emoji: '🍎', label: 'फल' },
+          { id: 'van', emoji: '🌲', label: 'वन' },
+        ],
+        correctId: 'ghar',
+      },
+      {
+        type: 'question',
+        showEmoji: '🍎',
+        question: 'Which word means FRUIT?',
+        options: [
+          { id: 'phal', emoji: '🍎', label: 'फल' },
+          { id: 'jal', emoji: '💧', label: 'जल' },
+          { id: 'ghar', emoji: '🏠', label: 'घर' },
+        ],
+        correctId: 'phal',
+      },
+      {
+        type: 'question',
+        showEmoji: '💧',
+        question: 'Which word means WATER?',
+        options: [
+          { id: 'jal', emoji: '💧', label: 'जल' },
+          { id: 'van', emoji: '🌲', label: 'वन' },
+          { id: 'phal', emoji: '🍎', label: 'फल' },
+        ],
+        correctId: 'jal',
+      },
+      { type: 'reward', story: 'Wah! आपने सरल शब्द सीख लिए!' },
+    ],
+  },
+  'hindi-bolna': {
+    id: 'hindi-bolna',
+    rounds: [
+      { type: 'story', story: 'Let us learn to speak in Hindi!' },
+      {
+        type: 'learn',
+        showEmoji: '🙏 👩 👨',
+        labels: ['नमस्ते', 'मम्मी', 'पापा'],
+        story: 'बोलना (Speaking)',
+      },
+      {
+        type: 'learn',
+        showEmoji: '👋 🗣️',
+        labels: ['मेरा नाम...', 'नमस्ते कहो'],
+        story: 'More Phrases',
+      },
+      {
+        type: 'question',
+        showEmoji: '🙏',
+        question: 'How do you say HELLO in Hindi?',
+        options: [
+          { id: 'namaste', emoji: '🙏', label: 'नमस्ते' },
+          { id: 'mammi', emoji: '👩', label: 'मम्मी' },
+          { id: 'papa', emoji: '👨', label: 'पापा' },
+        ],
+        correctId: 'namaste',
+      },
+      {
+        type: 'question',
+        showEmoji: '👩',
+        question: 'Who is MAMMI?',
+        options: [
+          { id: 'mammi', emoji: '👩', label: 'मम्मी' },
+          { id: 'papa', emoji: '👨', label: 'पापा' },
+          { id: 'namaste', emoji: '🙏', label: 'नमस्ते' },
+        ],
+        correctId: 'mammi',
+      },
+      {
+        type: 'question',
+        showEmoji: '👨',
+        question: 'Who is PAPA?',
+        options: [
+          { id: 'papa', emoji: '👨', label: 'पापा' },
+          { id: 'mammi', emoji: '👩', label: 'मम्मी' },
+          { id: 'dada', emoji: '👴', label: 'दादा' },
+        ],
+        correctId: 'papa',
+      },
+      { type: 'reward', story: 'बहुत अच्छे! You can speak Hindi!' },
+    ],
+  },
+  'hindi-kavita': {
+    id: 'hindi-kavita',
+    rounds: [
+      { type: 'story', story: 'Rhymes and stories make learning fun!' },
+      {
+        type: 'learn',
+        showEmoji: '🎵 📖',
+        labels: ['कविताएँ (Rhymes)', 'कहानियाँ (Stories)'],
+        story: 'कविताएँ और कहानियाँ',
+      },
+      {
+        type: 'question',
+        showEmoji: '🎵',
+        question: 'What do we SING?',
+        options: [
+          { id: 'kavita', emoji: '🎵', label: 'कविता' },
+          { id: 'kahani', emoji: '📖', label: 'कहानी' },
+          { id: 'chitra', emoji: '🖼️', label: 'चित्र' },
+        ],
+        correctId: 'kavita',
+      },
+      {
+        type: 'question',
+        showEmoji: '📖',
+        question: 'What do we READ and enjoy?',
+        options: [
+          { id: 'kahani', emoji: '📖', label: 'कहानी' },
+          { id: 'kavita', emoji: '🎵', label: 'कविता' },
+          { id: 'shabd', emoji: '📝', label: 'शब्द' },
+        ],
+        correctId: 'kahani',
+      },
+      {
+        type: 'question',
+        showEmoji: '🎤',
+        question: 'Which one is a RHYME we sing?',
+        options: [
+          { id: 'kavita', emoji: '🎵', label: 'कविता' },
+          { id: 'kahani', emoji: '📖', label: 'कहानी' },
+          { id: 'ghar', emoji: '🏠', label: 'घर' },
+        ],
+        correctId: 'kavita',
+      },
+      { type: 'reward', story: 'मज़ा आया! Rhymes and stories are fun!' },
+    ],
+  },
+  'hindi-picture-recognition': {
+    id: 'hindi-picture-recognition',
+    rounds: [
+      { type: 'story', story: 'Picture देखो और सही शब्द बताओ!' },
+      {
+        type: 'learn',
+        showEmoji: '🐘 🐱 🌸',
+        labels: ['हाथी', 'बिल्ली', 'फूल'],
+        story: 'चित्र पहचान',
+      },
+      {
+        type: 'learn',
+        showEmoji: '🚗 🏠 🌳',
+        labels: ['गाड़ी', 'घर', 'पेड़'],
+        story: 'More Pictures',
+      },
+      {
+        type: 'question',
+        showEmoji: '❓',
+        question: 'यह कौन है? (Who is this?)',
+        options: [
+          { id: 'hathi', emoji: '🐘', label: 'हाथी' },
+          { id: 'billi', emoji: '🐱', label: 'बिल्ली' },
+          { id: 'phool', emoji: '🌸', label: 'फूल' },
+        ],
+        correctId: 'hathi',
+      },
+      {
+        type: 'question',
+        showEmoji: '❓',
+        question: 'यह क्या है? (What is this?)',
+        options: [
+          { id: 'billi', emoji: '🐱', label: 'बिल्ली' },
+          { id: 'hathi', emoji: '🐘', label: 'हाथी' },
+          { id: 'ped', emoji: '🌳', label: 'पेड़' },
+        ],
+        correctId: 'billi',
+      },
+      {
+        type: 'question',
+        showEmoji: '❓',
+        question: 'यह क्या है? (What is this?)',
+        options: [
+          { id: 'phool', emoji: '🌸', label: 'फूल' },
+          { id: 'gadi', emoji: '🚗', label: 'गाड़ी' },
+          { id: 'ghar', emoji: '🏠', label: 'घर' },
+        ],
+        correctId: 'phool',
+      },
+      { type: 'reward', story: 'बहुत खूब! You recognized all pictures!' },
+    ],
+  },
 };
 
 type Props = {
   conceptKey: string;
   onComplete: (data: { score: number; max_score: number; completion_data: Record<string, unknown>; time_taken_seconds: number }) => void;
+  childName?: string;
 };
 
-export default function EvsExploreGame({ conceptKey, onComplete }: Props) {
-  const lesson = LESSONS[conceptKey];
+export default function EvsExploreGame({ conceptKey, onComplete, childName }: Props) {
+  const lesson = useMemo(() => {
+    const base = LESSONS[conceptKey];
+    if (!base || !childName) return base;
+    return {
+      ...base,
+      rounds: base.rounds.map((r) => {
+        if (r.type !== 'question') return r;
+        return {
+          ...r,
+          options: r.options?.map((opt) => {
+            if (opt.id === 'yourname') {
+              return { ...opt, label: childName };
+            }
+            return opt;
+          }),
+        };
+      }),
+    };
+  }, [conceptKey, childName]);
   const [roundIndex, setRoundIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedId, setSelectedId] = useState<string | null>(null);

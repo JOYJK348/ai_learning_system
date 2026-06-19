@@ -195,8 +195,16 @@ function UltimateLearnEngineInner() {
             return;
         }
 
-        // "My Name Writing" → direct name tracing
-        if (lower.includes('name')) {
+        // "My Name Writing" → direct name tracing (exclude GK/EVS/Hindi subjects)
+        const isGkOrEvsSubject =
+            activeSubject?.name?.toLowerCase().includes('general') ||
+            activeSubject?.name?.toLowerCase().includes('knowledge') ||
+            activeSubject?.name?.toLowerCase().includes('little genius') ||
+            activeSubject?.name?.toLowerCase().includes('environment') ||
+            activeSubject?.name?.toLowerCase().includes('evs') ||
+            activeSubject?.name?.toLowerCase().includes('gk') ||
+            activeSubject?.name?.toLowerCase().includes('hindi');
+        if (!isGkOrEvsSubject && lower.includes('name') && !lower.includes('identity')) {
             setShowNameTrace(true);
             return;
         }
@@ -305,10 +313,8 @@ function UltimateLearnEngineInner() {
     };
 
     const handleActivityComplete = () => {
-        // Save progress for this lesson (fire-and-forget from parent so it survives unmount)
-        if (activeLesson) {
-            studentApi.updateProgress(activeLesson.id, { status: 'completed', completion_percentage: 100 }).catch(() => {});
-            // Auto-complete any incomplete hidden lessons in the same chapter
+        // Auto-complete any incomplete hidden lessons in the same chapter
+        if (activeLesson && subjects?.length) {
             const chapter = subjects.flatMap(s => s.chapters).find(c => c.lessons.some(l => l.id === activeLesson.id));
             if (chapter) {
                 const filtered = chapter.lessons.filter(l => {
@@ -324,8 +330,8 @@ function UltimateLearnEngineInner() {
                     });
                 }
             }
+            refetchLessons();
         }
-        refetchLessons();
         setActiveLesson(null);
     };
 
@@ -696,6 +702,8 @@ function UltimateLearnEngineInner() {
                     lessonTitle={activeLesson.title}
                     onClose={() => setActiveLesson(null)}
                     onComplete={handleActivityComplete}
+                    studentName={studentName}
+                    subjectName={activeSubject?.name}
                 />
             )}
 

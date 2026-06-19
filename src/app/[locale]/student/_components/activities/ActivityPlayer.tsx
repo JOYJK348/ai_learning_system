@@ -32,6 +32,8 @@ type Props = {
   lessonTitle: string;
   onComplete: () => void;
   onClose: () => void;
+  studentName?: string;
+  subjectName?: string;
 };
 
 const ACTIVITY_TYPE_MAP: Record<number, string> = {
@@ -47,7 +49,7 @@ const ACTIVITY_TYPE_MAP: Record<number, string> = {
   11: 'word_showcase',
 };
 
-export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onClose }: Props) {
+export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onClose, studentName, subjectName }: Props) {
   const params = useParams();
   const isTamil = params?.locale === 'ta';
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -204,6 +206,35 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
 
   const getEvsConceptKey = () => {
     const lower = lessonTitle.toLowerCase();
+    // Hindi lessons
+    if (subjectName?.toLowerCase().includes('hindi')) {
+      if (lower.includes('पूर्व') || lower.includes('pre') || lower.includes('line') || lower.includes('curve') || lower.includes('standing') || lower.includes('sleeping') || lower.includes('slanting')) return 'hindi-pre-writing';
+      if (lower.includes('स्वर') || lower.includes('vowel') || lower.includes('अ आ')) return 'hindi-swar';
+      if (lower.includes('व्यंजन') || lower.includes('consonant') || lower.includes('क ख')) return 'hindi-vyanjan';
+      if (lower.includes('सरल') || lower.includes('simple') || lower.includes('word') || lower.includes('शब्द') || lower.includes('अनार') || lower.includes('आम')) return 'hindi-simple-words';
+      if (lower.includes('बोलना') || lower.includes('speak') || lower.includes('bolna') || lower.includes('नमस्ते')) return 'hindi-bolna';
+      if (lower.includes('कविता') || lower.includes('rhyme') || lower.includes('कहानी') || lower.includes('stor') || lower.includes('poem')) return 'hindi-kavita';
+      if (lower.includes('picture') || lower.includes('चित्र') || lower.includes('पहचान') || lower.includes('recogni') || lower.includes('हाथी') || lower.includes('बिल्ली')) return 'hindi-picture-recognition';
+      return 'hindi-swar';
+    }
+    // GK lessons (checked first to avoid EVS conflicts)
+    if (lower.includes('name') && lower.includes('identity')) return 'gk-my-name-identity';
+    if (lower.includes('my') && lower.includes('daily') && lower.includes('routine')) return 'gk-my-daily-routine';
+    if (lower.includes('road') && lower.includes('safety')) return 'gk-road-safety';
+    if (lower.includes('festival')) return 'gk-festivals';
+    if (lower.includes('animal') && lower.includes('name')) return 'gk-animal-names';
+    if (lower.includes('bird') && lower.includes('insect')) return 'gk-birds-insects';
+    if (lower.includes('basic') && lower.includes('color')) return 'gk-basic-colors';
+    if (lower.includes('color') && lower.includes('match')) return 'gk-color-match';
+    if (lower.includes('community') && lower.includes('helper')) return 'gk-community-helpers';
+    if (lower.includes('place') && !lower.includes('plant')) return 'gk-places';
+    if (lower.includes('vehicle')) return 'gk-vehicles-around-us';
+    if (lower.includes('sky') && lower.includes('object')) return 'gk-sky-objects';
+    if (lower.includes('weather')) return 'gk-weather';
+    if (lower.includes('healthy') && lower.includes('habit')) return 'gk-clean-habits';
+    if (lower.includes('good') && lower.includes('manner')) return 'gk-good-manners';
+    // EVS lessons
+    if (lower.includes('clean') && lower.includes('habit')) return 'clean-habits';
     if (lower.includes('body') && lower.includes('part')) return 'my-body-parts';
     if (lower.includes('five') && lower.includes('sense')) return 'my-five-senses';
     if (lower.includes('taking') && lower.includes('care')) return 'taking-care';
@@ -214,10 +245,12 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
     if (lower.includes('part') && lower.includes('plant')) return 'plant-parts';
     if (lower.includes('thing') && lower.includes('nature')) return 'nature-things';
     if (lower.includes('season')) return 'seasons';
+    // EVS transport (before generic GK transport check)
     if (lower.includes('land') && lower.includes('transport')) return 'land-transport';
     if (lower.includes('air') && lower.includes('water')) return 'air-water-transport';
     if (lower.includes('traffic') && lower.includes('rule')) return 'traffic-rules';
-    if (lower.includes('clean') && lower.includes('habit')) return 'clean-habits';
+    // GK transport (after EVS transport to avoid "Land Transport" conflict)
+    if (lower.includes('transport')) return 'gk-transport';
     if (lower.includes('healthy') && lower.includes('food')) return 'healthy-food';
     if (lower.includes('daily') && lower.includes('routine')) return 'daily-routine';
     return null;
@@ -225,7 +258,9 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   const evsConceptKey = getEvsConceptKey();
 
   const handleEvsComplete = useCallback((data: { score: number; max_score: number; completion_data: Record<string, unknown>; time_taken_seconds: number }) => {
+    // Fire completion API in background — don't wait for it
     progressMutation.mutate(undefined);
+    // Close lesson immediately
     onComplete();
   }, [progressMutation, onComplete]);
 
@@ -303,6 +338,7 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
             <EvsExploreGame
               conceptKey={evsConceptKey}
               onComplete={handleEvsComplete}
+              childName={studentName}
             />
           </div>
 
