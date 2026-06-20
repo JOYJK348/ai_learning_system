@@ -119,7 +119,13 @@ export const studentApi = {
   getDashboard: (): Promise<StudentDashboard> =>
     fetchJson<StudentDashboard>('/api/student/dashboard'),
 
-  updateProgress: (lessonId: string, body: { status?: string; completion_percentage?: number }) =>
+  updateProgress: (lessonId: string, body: { 
+    status?: string; 
+    completion_percentage?: number;
+    quiz_completed?: boolean;
+    quiz_score?: number;
+    quiz_max_score?: number;
+  }) =>
     fetchJson(`/api/student/lessons/${lessonId}/progress`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

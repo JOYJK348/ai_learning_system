@@ -8,6 +8,8 @@ import {
 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useData } from '@/context/DataContext';
+import { useQueryClient } from '@tanstack/react-query';
+import { studentApi, studentKeys } from '@/core/services/studentApi';
 import QuizEngine from '../_components/QuizEngine';
 import { SoundMatchGame, TrueOrFalseGame, SequenceGame, MemoryMatchGame } from '../_components/GameActivities';
 
@@ -847,6 +849,7 @@ function SimpleTraceCanvas({ letter, onComplete }: { letter: string; onComplete:
 export default function QuizArena() {
   const params = useParams();
   const locale = (params?.locale as string) || 'en';
+  const queryClient = useQueryClient();
 
   const { subjects, studentProfile } = useData();
   const [mounted, setMounted] = useState(false);
@@ -920,6 +923,33 @@ export default function QuizArena() {
     setMounted(true);
     setLevelScores({});
   }, [studentProfile]);
+
+  // Load level scores from database
+  useEffect(() => {
+    if (!subjects || subjects.length === 0) return;
+    const scoresMap: Record<number, number> = {};
+    const allLessons = subjects.flatMap(s => s.chapters.flatMap(c => c.lessons));
+    const mappings: Record<number, string> = {
+      1: 'f750d0ef-3fc2-44b5-89a5-0abfcc618479',
+      2: 'e9efc803-66fe-4574-a4e0-ef8ce18f104a',
+      3: 'c6035e74-6b37-409e-a0c0-c58bb4f64fee',
+      4: '27869c1b-70c6-4019-965f-619c799eb0e0',
+      5: '260d91dd-1d8b-4964-8311-3ff589c38e5a',
+      6: '45b61435-fe57-4e0c-a893-68bc25d96d53',
+    };
+    Object.entries(mappings).forEach(([levelId, lessonId]) => {
+      const match = allLessons.find(l => l.id === lessonId);
+      if (match && match.progress) {
+        const prog = match.progress as any;
+        if (prog.quiz_score !== undefined && prog.quiz_score !== null) {
+          scoresMap[Number(levelId)] = Number(prog.quiz_score);
+        } else if (prog.status === 'completed') {
+          scoresMap[Number(levelId)] = 5;
+        }
+      }
+    });
+    setLevelScores(scoresMap);
+  }, [subjects, studentProfile]);
 
   useEffect(() => {
     if (activeQuiz || activeGame || view !== 'dashboard') {
@@ -1034,6 +1064,32 @@ export default function QuizArena() {
               ...prev,
               [activeLevel.id]: finalScore
             }));
+
+            // Sync with backend database
+            const mappings: Record<number, string> = {
+              1: 'f750d0ef-3fc2-44b5-89a5-0abfcc618479',
+              2: 'e9efc803-66fe-4574-a4e0-ef8ce18f104a',
+              3: 'c6035e74-6b37-409e-a0c0-c58bb4f64fee',
+              4: '27869c1b-70c6-4019-965f-619c799eb0e0',
+              5: '260d91dd-1d8b-4964-8311-3ff589c38e5a',
+              6: '45b61435-fe57-4e0c-a893-68bc25d96d53',
+            };
+            const lessonId = mappings[activeLevel.id];
+            if (lessonId) {
+              studentApi.updateProgress(lessonId, {
+                status: 'completed',
+                completion_percentage: 100,
+                quiz_completed: true,
+                quiz_score: finalScore,
+                quiz_max_score: 5
+              }).then(() => {
+                queryClient.invalidateQueries({ queryKey: studentKeys.lessons });
+                queryClient.invalidateQueries({ queryKey: studentKeys.dashboard });
+                queryClient.invalidateQueries({ queryKey: studentKeys.me });
+              }).catch((err) => {
+                console.error("Failed to sync score to DB:", err);
+              });
+            }
           }
         }
       }
