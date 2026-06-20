@@ -236,10 +236,10 @@ export default function ParentsPage() {
                   key={p.id}
                   variants={ROW_ITEM}
                   className={styles.row}
-onClick={() => setDetailParent(p)}
+                  onClick={() => setDetailParent(p)}
                    role="button"
                    tabIndex={0}
-                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setDetailParent(p); } }}
+                   onKeyDown={(e: any) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setDetailParent(p); } }}
                 >
                   <div className={styles.cellParent}>
                     <div

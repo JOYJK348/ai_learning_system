@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { useRouter, useParams } from 'next/navigation';
 import { audioEngine } from '@/core/utils/audio';
 import { useData } from '@/context/DataContext';
@@ -34,10 +33,7 @@ const POSITIONS = [
 ];
 
 const MagicCastle = () => (
-  <div className="relative w-56 h-56 sm:w-96 sm:h-96 flex items-center justify-center animate-[float_4s_ease-in-out_infinite] [will-change:transform]">
-    <style>{`
-      @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    `}</style>
+  <div className="relative w-56 h-56 sm:w-96 sm:h-96 flex items-center justify-center">
     <div className="absolute inset-10 bg-white/20 rounded-full" />
     <img
       src="/central_magic_hub-removebg-preview.png"
@@ -66,8 +62,10 @@ export default function DashboardHome() {
   }, [subjects]);
 
   const [selectedSubjectId, setSelectedSubjectId] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     if (activeSubjects.length > 0 && !selectedSubjectId) {
       setSelectedSubjectId(activeSubjects[0].id);
     }
@@ -95,10 +93,10 @@ export default function DashboardHome() {
     return [...zones].reverse().find(z => z.unlocked) || zones[0];
   }, [zones]);
 
-  if (studentLoading) {
+  if (!mounted || studentLoading) {
     return (
       <div className="relative min-h-screen font-sans select-none overflow-hidden bg-[#87CEEB] flex items-center justify-center">
-        <div className="text-2xl font-black text-white animate-pulse">Loading your world...</div>
+        <div className="text-2xl font-black text-white">Loading your world...</div>
       </div>
     );
   }
@@ -158,7 +156,7 @@ export default function DashboardHome() {
       {/* Chapters (Zones) */}
       <div className="relative z-10 w-full min-h-screen pt-24">
         {zones.map((zone, idx) => (
-          <div key={zone.id} className="absolute w-24 h-28 sm:w-40 sm:h-48 transition-transform active:scale-95 duration-200 group" style={zone.position}>
+          <div key={zone.id} className="absolute w-24 h-28 sm:w-40 sm:h-48 active:scale-95 group" style={zone.position}>
             <button
               onClick={() => {
                 if (zone.unlocked) {
@@ -177,14 +175,14 @@ export default function DashboardHome() {
                     <span className="text-5xl sm:text-7xl drop-shadow-md">{zone.mascot}</span>
                   </div>
                 ) : (
-                  <div className="w-16 h-16 sm:w-28 sm:h-28 bg-white rounded-[2rem] border-4 border-white shadow-lg flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                  <div className="w-16 h-16 sm:w-28 sm:h-28 bg-white rounded-[2rem] border-4 border-white shadow-lg flex items-center justify-center">
                     <span className="text-4xl sm:text-6xl">{zone.mascot}</span>
                   </div>
                 )}
               </div>
-              <div className={`mt-2 px-3 py-1.5 rounded-2xl border-4 border-white shadow-md transition-all text-center max-w-[120px] sm:max-w-[160px] ${
+              <div className={`mt-2 px-3 py-1.5 rounded-2xl border-4 border-white shadow-md text-center max-w-[120px] sm:max-w-[160px] ${
                 zone.unlocked ? `bg-gradient-to-r ${zone.color}` : 'bg-gray-400'
-              } group-hover:scale-105 group-active:scale-95`}>
+              }`}>
                 <span className="text-[8px] sm:text-[10px] font-black text-white uppercase tracking-tight leading-tight block">
                   {zone.unlocked ? zone.name : '🔒'}
                 </span>
@@ -196,7 +194,7 @@ export default function DashboardHome() {
 
       {/* Avatar Tracker */}
       {activeZone && (
-        <div className="absolute z-20 pointer-events-none transition-all duration-700 ease-out"
+        <div className="absolute z-20 pointer-events-none"
           style={{
             top: `calc(${activeZone?.position?.top || '20%'} - 30px)`,
             left: activeZone?.position?.left || `calc(100% - ${(activeZone?.position as any)?.right || '10%'})`,
@@ -204,7 +202,7 @@ export default function DashboardHome() {
           }}
         >
           <div className="relative">
-             <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full border-4 border-yellow-400 shadow-md p-0.5 animate-bounce">
+             <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full border-4 border-yellow-400 shadow-md p-0.5">
                 <div className="w-full h-full bg-blue-50 rounded-full flex items-center justify-center text-base sm:text-lg">🏃</div>
              </div>
              <div className="absolute top-12 left-1/2 -translate-x-1/2 px-3 py-1 bg-yellow-400 text-white text-[8px] font-black rounded-full shadow whitespace-nowrap">

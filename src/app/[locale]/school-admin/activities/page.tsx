@@ -300,7 +300,7 @@ export default function ActivitiesPage() {
                   onClick={() => setSelectedActivity(a)}
                   role="button"
                   tabIndex={0}
-                  onKeyDown={(e) => { if (e.key === 'Enter') setSelectedActivity(a); }}
+                  onKeyDown={(e: any) => { if (e.key === 'Enter') setSelectedActivity(a); }}
                 >
                   <div
                     className={styles.feedDot}

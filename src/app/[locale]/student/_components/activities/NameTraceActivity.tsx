@@ -258,7 +258,7 @@ export default function NameTraceActivity({ config, onComplete, studentName }: P
               initial={{ y: 50 }}
               animate={{ y: 0 }}
               className="bg-white rounded-[3rem] p-8 sm:p-12 shadow-2xl text-center max-w-sm mx-4 border-4 border-amber-200"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: any) => e.stopPropagation()}
             >
               <motion.div
                 animate={{ rotate: [0, -10, 10, -10, 0], scale: [1, 1.2, 1] }}

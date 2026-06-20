@@ -69,7 +69,7 @@ export default function StudentLayout({
     <div className="min-h-screen bg-white flex flex-col relative overflow-hidden">
       
       {/* ── MAIN CONTENT ── */}
-      <main className="flex-1 w-full transition-opacity duration-300">
+      <main className="flex-1 w-full">
         {children}
         <div className="h-24 sm:h-32" />
       </main>

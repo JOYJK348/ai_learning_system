@@ -1097,10 +1097,10 @@ export default function QuizArena() {
                        </div>
 
                        <div className="relative w-64 h-64 sm:w-80 sm:h-80 select-none">
-                          <div className="absolute inset-0 bg-indigo-600/10 blur-[60px] rounded-full animate-pulse" />
+                          <div className="absolute inset-0 bg-indigo-600/10 blur-[60px] rounded-full" />
                           <img 
                             src="/assets/avatars/owl-removebg-preview.png" 
-                            className="w-full h-full object-contain animate-[float_4s_ease-in-out_infinite]" 
+                            className="w-full h-full object-contain" 
                             alt="Arena Master" 
                           />
                        </div>
@@ -1116,7 +1116,7 @@ export default function QuizArena() {
                    { label: 'Arena Level', val: 'Level 4', icon: Target, color: 'text-blue-600', glow: 'bg-blue-400' },
                    { label: 'Global Rank', val: '#12', icon: Award, color: 'text-purple-600', glow: 'bg-purple-400' },
                  ].map((stat, i) => (
-                   <div key={i} className="bg-white/40 backdrop-blur-3xl rounded-[2.5rem] p-6 sm:p-8 text-center border-2 border-white/60 shadow-2xl relative overflow-hidden group active:scale-95 transition-all">
+                    <div key={i} className="bg-white/95 rounded-[2.5rem] p-6 sm:p-8 text-center border-2 border-white/60 shadow-2xl relative overflow-hidden group active:scale-95 transition-all">
                       <div className={`absolute -top-10 -right-10 w-24 h-24 ${stat.glow} opacity-10 blur-3xl rounded-full`} />
                       <stat.icon className={`${stat.color} mb-3 mx-auto`} size={28} />
                       <span className="text-xl sm:text-2xl font-black text-indigo-950 block mb-0.5 leading-tight">{stat.val}</span>
@@ -1166,13 +1166,13 @@ export default function QuizArena() {
                            }}
                            className="group relative"
                          >
-                           <div className={`absolute inset-0 blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity duration-500 bg-indigo-400`} />
+                           <div className={`absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity duration-500 bg-indigo-400`} />
                            
-                           <div className={`relative backdrop-blur-3xl rounded-[3.5rem] p-2 border-2 transition-all duration-700 group-hover:-translate-y-6 will-change-transform bg-white/20 border-white/40 shadow-xl`}>
+                           <div className={`relative rounded-[3.5rem] p-2 border-2 transition-all duration-350 group-hover:-translate-y-2 bg-white/90 border-white/40 shadow-xl`}>
                              <div className="min-h-[280px] flex flex-col items-center justify-center p-8 relative overflow-hidden text-center">
                                 <div className="w-24 h-24 flex items-center justify-center mb-6 drop-shadow-[0_20px_20px_rgba(0,0,0,0.1)] group-hover:scale-110 transition-transform duration-700">
                                    {isTamilCloud ? (
-                                     <span className="text-6xl select-none animate-[bounce_2s_infinite]">🐯</span>
+                                     <span className="text-6xl select-none">🐯</span>
                                    ) : (
                                      <img 
                                         src={`/assets/portals/${['alphabet', 'numbers', 'colors', 'animals'][idx % 4]}-removebg-preview.png`}
@@ -1222,7 +1222,7 @@ export default function QuizArena() {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => setActiveGame(game.id)}
-                        className="bg-white/40 backdrop-blur-3xl rounded-[3rem] p-8 text-left border-2 border-white/60 shadow-2xl flex items-center gap-8 transition-all group hover:bg-white/60 w-full"
+                        className="bg-white/95 rounded-[3rem] p-8 text-left border-2 border-white/60 shadow-2xl flex items-center gap-8 transition-all group hover:bg-white w-full"
                       >
                          <div className={`w-20 h-20 rounded-[1.8rem] ${game.color} flex items-center justify-center text-4xl shadow-xl transform group-hover:scale-110 group-hover:rotate-6 transition-all`}>
                            {game.emoji}
@@ -1250,7 +1250,7 @@ export default function QuizArena() {
               className="w-full flex flex-col gap-6 max-w-2xl mx-auto pt-6 px-4 pb-20 min-h-screen relative"
             >
               {/* Back navigation & Game Status Bar */}
-              <div className="sticky top-4 z-50 flex items-center justify-between gap-4 bg-white/90 backdrop-blur-xl px-5 py-3 rounded-full border-2 border-indigo-150 shadow-[0_10px_30px_rgba(79,70,229,0.12)] w-full">
+              <div className="sticky top-4 z-50 flex items-center justify-between gap-4 bg-white px-5 py-3 rounded-full border-2 border-indigo-150 shadow-[0_10px_30px_rgba(79,70,229,0.12)] w-full">
                 {/* Back button */}
                 <button
                   onClick={() => setView('dashboard')}
@@ -1272,7 +1272,7 @@ export default function QuizArena() {
 
                 {/* Right Stars counter */}
                 <div className="flex items-center gap-1.5 px-3.5 py-2 bg-amber-50 border border-amber-200 rounded-full shadow-inner select-none shrink-0">
-                  <span className="text-base animate-pulse">⭐</span>
+                  <span className="text-base">⭐</span>
                   <span className="text-xs font-black text-amber-800 font-sans leading-none pt-0.5">
                     {Object.values(levelScores).reduce((a, b) => a + b, 0)} / 30
                   </span>
@@ -1345,7 +1345,7 @@ export default function QuizArena() {
                                   </span>
                                 </div>
                               ) : (
-                                <span className="text-[10px] font-black text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full font-sans animate-pulse">
+                                <span className="text-[10px] font-black text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full font-sans">
                                   விளையாடு 🎮
                                 </span>
                               )}
@@ -1448,7 +1448,7 @@ export default function QuizArena() {
                                 key={idx} 
                                 className={`px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-3xl flex items-center justify-center font-black text-sm sm:text-lg shadow-sm border-2 transition-all
                                   ${isPlaceholder 
-                                    ? 'bg-amber-50 text-amber-600 animate-pulse border-dashed border-amber-400 min-w-[70px] sm:min-w-[90px]' 
+                                    ? 'bg-amber-50 text-amber-600 border-dashed border-amber-400 min-w-[70px] sm:min-w-[90px]' 
                                     : 'bg-white border-slate-150 text-slate-800'
                                   }`}
                               >
@@ -1612,7 +1612,7 @@ export default function QuizArena() {
                       <Star
                         key={idx}
                         size={28}
-                        className={earned ? 'text-amber-500 fill-amber-500 animate-bounce' : 'text-slate-200'}
+                        className={earned ? 'text-amber-500 fill-amber-500' : 'text-slate-200'}
                         style={{ animationDelay: `${idx * 0.1}s` }}
                       />
                     );

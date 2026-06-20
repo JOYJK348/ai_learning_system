@@ -24,6 +24,10 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  webpack(config: any) {
+    config.resolve.alias['framer-motion'] = path.resolve(__dirname, './src/core/mocks/framer-motion.tsx');
+    return config;
+  },
 } as any;
 
 export default withNextIntl(nextConfig);

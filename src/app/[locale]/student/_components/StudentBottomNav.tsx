@@ -3,7 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { LayoutDashboard, Compass, Gamepad2, User } from 'lucide-react';
-import { Link, usePathname } from '@/i18n/routing';
+import { Link, usePathname, useRouter } from '@/i18n/routing';
+import { useQueryClient } from '@tanstack/react-query';
+import { studentKeys, studentApi } from '@/core/services/studentApi';
 
 const NAV_ITEMS = [
   { name: 'Home', icon: LayoutDashboard, path: '/student/Home', color: 'from-blue-400 to-indigo-500' },
@@ -14,6 +16,8 @@ const NAV_ITEMS = [
 
 export default function StudentBottomNav() {
   const pathname = usePathname();
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const [hideNav, setHideNav] = useState(false);
 
   useEffect(() => {
@@ -43,7 +47,49 @@ export default function StudentBottomNav() {
             const isActive = pathname.toLowerCase().includes(item.path.toLowerCase());
 
             return (
-              <Link key={item.name} href={item.path} className="relative group">
+              <Link 
+                key={item.name} 
+                href={item.path} 
+                className="relative group"
+                onMouseEnter={() => {
+                  router.prefetch(item.path);
+                  
+                  // Prefetch API data to cache
+                  if (item.path.toLowerCase().includes('learn')) {
+                    queryClient.prefetchQuery({
+                      queryKey: studentKeys.lessons,
+                      queryFn: studentApi.getLessons,
+                      staleTime: 5 * 60 * 1000,
+                    });
+                  } else if (item.path.toLowerCase().includes('quiz')) {
+                    queryClient.prefetchQuery({
+                      queryKey: studentKeys.lessons,
+                      queryFn: studentApi.getLessons,
+                      staleTime: 5 * 60 * 1000,
+                    });
+                  } else if (item.path.toLowerCase().includes('home')) {
+                    queryClient.prefetchQuery({
+                      queryKey: studentKeys.dashboard,
+                      queryFn: studentApi.getDashboard,
+                      staleTime: 5 * 60 * 1000,
+                    });
+                    queryClient.prefetchQuery({
+                      queryKey: studentKeys.me,
+                      queryFn: studentApi.getMe,
+                      staleTime: 10 * 60 * 1000,
+                    });
+                  } else if (item.path.toLowerCase().includes('profile')) {
+                    queryClient.prefetchQuery({
+                      queryKey: studentKeys.me,
+                      queryFn: studentApi.getMe,
+                      staleTime: 10 * 60 * 1000,
+                    });
+                  }
+                }}
+                onTouchStart={() => {
+                  router.prefetch(item.path);
+                }}
+              >
                 <motion.div
                   whileHover={{ y: -4, scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}

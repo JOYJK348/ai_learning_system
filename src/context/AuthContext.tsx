@@ -98,7 +98,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       saveCachedUser(data.user);
       setUser(data.user);
       document.cookie = `zhi_user_role=${data.user.role}; path=/; max-age=${60 * 60 * 24 * 30}`;
-      // Warm admin cache immediately after login
+      // Warm admin or student cache immediately after login
       if (data.user.role === 'super_admin' || data.user.role === 'school_admin') {
         Promise.all([
           import('@/core/services/adminApi'),
@@ -110,6 +110,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           qc.prefetchQuery({ queryKey: adminKeys.paymentsTab('approvals'), queryFn: adminApi.paymentsApprovals, staleTime: 60000 });
           qc.prefetchQuery({ queryKey: adminKeys.students, queryFn: adminApi.students, staleTime: 60000 });
           qc.prefetchQuery({ queryKey: adminKeys.schoolDirectory, queryFn: adminApi.schoolDirectory, staleTime: 60000 });
+        }).catch(() => {});
+      } else if (data.user.role === 'student') {
+        Promise.all([
+          import('@/core/services/studentApi'),
+        ]).then(([{ studentApi, studentKeys }]) => {
+          const qc = queryClientSingleton;
+          qc.prefetchQuery({ queryKey: studentKeys.me, queryFn: studentApi.getMe, staleTime: 10 * 60 * 1000 });
+          qc.prefetchQuery({ queryKey: studentKeys.dashboard, queryFn: studentApi.getDashboard, staleTime: 5 * 60 * 1000 });
+          qc.prefetchQuery({ queryKey: studentKeys.lessons, queryFn: studentApi.getLessons, staleTime: 5 * 60 * 1000 });
         }).catch(() => {});
       }
       return data.user;

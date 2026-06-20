@@ -443,7 +443,7 @@ export default function StudentsPage() {
                     }}
                     role="button"
                     tabIndex={0}
-                    onKeyDown={(e) => {
+                    onKeyDown={(e: any) => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
                         if (!selectedIds.size) setDetailStudent(s as StudentDetail);

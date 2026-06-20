@@ -74,6 +74,7 @@ function UltimateLearnEngineInner() {
     const [roundIndex, setRoundIndex] = useState(0);
     const [roundPassed, setRoundPassed] = useState<number[]>([]);
     const [traceDone, setTraceDone] = useState(false);
+    const [traceLessonId, setTraceLessonId] = useState<string | null>(null);
     const [showCheckpoint, setShowCheckpoint] = useState(false);
     const [checkpointLessonId, setCheckpointLessonId] = useState<string | null>(null);
     const [checkpointTitle, setCheckpointTitle] = useState('');
@@ -256,6 +257,8 @@ function UltimateLearnEngineInner() {
                 setRoundIndex(0);
                 setRoundPassed([]);
                 setTraceDone(false);
+                setTraceLessonId(lesson.id);
+                setActiveLesson(null);
                 return;
             }
             // Individual stroke path map (CBSE names with backward compat + Tamil names)
@@ -293,6 +296,7 @@ function UltimateLearnEngineInner() {
                 setRoundIndex(0);
                 setRoundPassed([]);
                 setTraceDone(false);
+                setTraceLessonId(lesson.id);
                 setActiveLesson(null);
             }
             return;
@@ -357,7 +361,7 @@ function UltimateLearnEngineInner() {
 
     if (mounted && !authLoading && !user) {
         return (
-            <div className="fixed inset-0 z-[500] flex items-center justify-center bg-slate-950/60 backdrop-blur-lg">
+            <div className="fixed inset-0 z-[500] flex items-center justify-center bg-slate-950/90">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -413,9 +417,9 @@ function UltimateLearnEngineInner() {
                         <div className="relative w-full flex items-center overflow-hidden pt-10 pb-10 sm:pt-14 sm:pb-12 border-b-8 border-white/10">
                             <div className="absolute inset-0 opacity-40" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} />
                             <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-white/30 to-transparent skew-x-[-20deg] transform translate-x-32" />
-                            <div className="absolute top-10 left-[10%] text-6xl opacity-40 animate-bounce cursor-default">☁️</div>
-                            <div className="absolute bottom-20 left-[30%] text-4xl opacity-30 animate-pulse cursor-default">☁️</div>
-                            <div className="absolute top-20 right-[40%] text-8xl opacity-30 animate-bounce cursor-default" style={{ animationDelay: '1s' }}>☁️</div>
+                            <div className="absolute top-10 left-[10%] text-6xl opacity-40 cursor-default">☁️</div>
+                            <div className="absolute bottom-20 left-[30%] text-4xl opacity-30 cursor-default">☁️</div>
+                            <div className="absolute top-20 right-[40%] text-8xl opacity-30 cursor-default" style={{ animationDelay: '1s' }}>☁️</div>
 
                             <div className="relative z-20 w-full px-6 sm:px-16 flex flex-col md:flex-row items-center justify-between gap-12">
                                 <div className="flex-1 space-y-6 text-center md:text-left">
@@ -433,7 +437,7 @@ function UltimateLearnEngineInner() {
                                     </h1>
 
                                     <div className="flex flex-col sm:flex-row items-center gap-6 pt-4">
-                                        <div className="px-8 py-4 bg-white/40 backdrop-blur-xl border border-white/60 rounded-2xl flex items-center gap-4">
+                                        <div className="px-8 py-4 bg-white/95 border border-white/60 rounded-2xl flex items-center gap-4">
                                             <div className="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center shadow-lg">
                                                 <Zap size={20} className="text-white" />
                                             </div>
@@ -450,7 +454,7 @@ function UltimateLearnEngineInner() {
                                     <div className="relative w-64 h-64 sm:w-[450px] sm:h-[450px] drop-shadow-[0_45px_45px_rgba(0,0,0,0.15)] transform group-hover:scale-110 transition-transform duration-700">
                                         <img
                                             src="/assets/avatars/owl-removebg-preview.png"
-                                            className="w-full h-full object-contain animate-[float_4s_ease-in-out_infinite]"
+                                            className="w-full h-full object-contain"
                                             alt="Mission Master Owl"
                                         />
                                     </div>
@@ -469,7 +473,7 @@ function UltimateLearnEngineInner() {
                             >
                                 <div className="px-4 sm:px-12 mb-20">
                                     <div className="flex items-center gap-4 mb-10">
-                                        <div className="w-10 h-10 bg-white/40 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/60 shadow-lg">
+                                        <div className="w-10 h-10 bg-white/95 rounded-xl flex items-center justify-center border border-white/60 shadow-lg">
                                             <MapIcon className="text-indigo-950" size={20} />
                                         </div>
                                         <div>
@@ -497,10 +501,10 @@ function UltimateLearnEngineInner() {
                                                         initial={{ opacity: 0, y: 20 }}
                                                         animate={{ opacity: 1, y: 0 }}
                                                         transition={{ delay: idx * 0.05 }}
-                                                        className={`group relative rounded-[2.5rem] p-1.5 border-2 transition-all duration-500 backdrop-blur-3xl shadow-xl ${v.shadow} hover:shadow-2xl ${v.bg} ${v.border}`}
+                                                        className={`group relative rounded-[2.5rem] p-1.5 border-2 transition-all duration-350 shadow-xl ${v.shadow} hover:shadow-2xl ${v.bg} ${v.border}`}
                                                     >
-                                                        <div className={`absolute inset-0 rounded-[2.5rem] bg-gradient-to-br ${v.color} opacity-10 group-hover:opacity-20 transition-opacity duration-500 blur-xl`} />
-                                                        <div className="relative min-h-[220px] sm:min-h-[260px] flex flex-col items-center justify-center p-6 rounded-[2.2rem] overflow-hidden bg-white/40">
+                                                        <div className={`absolute inset-0 rounded-[2.5rem] bg-gradient-to-br ${v.color} opacity-10 group-hover:opacity-20 transition-opacity duration-350 blur-xl`} />
+                                                        <div className="relative min-h-[220px] sm:min-h-[260px] flex flex-col items-center justify-center p-6 rounded-[2.2rem] overflow-hidden bg-white/90">
                                                             <div className="absolute -top-12 -right-12 w-32 h-32 bg-white/50 blur-3xl rounded-full" />
 
                                                             {/* Floating mascot */}
@@ -586,8 +590,8 @@ function UltimateLearnEngineInner() {
                                                         transition={{ delay: idx * 0.05 }}
                                                         whileHover={chapter.is_unlocked ? { y: -6, scale: 1.02 } : {}}
                                                         whileTap={chapter.is_unlocked ? { scale: 0.97 } : {}}
-                                                        className={`relative text-left bg-white/40 backdrop-blur-2xl border-2 rounded-[2.5rem] p-5 shadow-xl transition-all overflow-hidden group ${chapter.is_unlocked
-                                                                ? 'border-white/60 hover:bg-white/60 active:scale-[0.98]'
+                                                        className={`relative text-left bg-white/95 border-2 rounded-[2.5rem] p-5 shadow-xl transition-all overflow-hidden group ${chapter.is_unlocked
+                                                                ? 'border-white/60 hover:bg-white active:scale-[0.98]'
                                                                 : 'border-gray-300/30 opacity-60 cursor-not-allowed'
                                                             }`}
                                                     >
@@ -786,7 +790,7 @@ function UltimateLearnEngineInner() {
             )}
 
             {showVowelQuiz && (
-                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/40 backdrop-blur-md">
+                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/80">
                     <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
                         {/* Playful background blobs */}
                         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
@@ -826,7 +830,7 @@ function UltimateLearnEngineInner() {
 
             {/* ─── TAMIL MEI QUIZ ─── */}
             {showMeiQuiz && (
-                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/40 backdrop-blur-md">
+                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/80">
                     <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
                         {/* Playful background blobs */}
                         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
@@ -872,7 +876,7 @@ function UltimateLearnEngineInner() {
 
             {/* ─── TAMIL WORD SHOWCASE ─── */}
             {showWordShowcase && (
-                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/40 backdrop-blur-md">
+                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/80">
                     <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
                         {/* Playful background blobs */}
                         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
@@ -917,7 +921,7 @@ function UltimateLearnEngineInner() {
 
             {/* ─── PRE-WRITING TRACE ROUNDS ─── */}
             {traceRounds && (
-                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/40 backdrop-blur-md">
+                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/80">
                     <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
                         {/* Playful background blobs */}
                         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
@@ -977,7 +981,7 @@ function UltimateLearnEngineInner() {
                         })() : (
                             <motion.div key="score" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
                                 className="flex flex-col items-center gap-4 px-6 py-10">
-                                <span className="text-6xl animate-bounce">
+                                <span className="text-6xl">
                                     {roundPassed.every(a => a >= 70) ? '🎉' : '💪'}
                                 </span>
                                 <p className="text-xl font-black text-amber-950 font-sans">
@@ -988,7 +992,15 @@ function UltimateLearnEngineInner() {
                                 <p className="text-amber-800 font-bold text-sm font-sans">
                                     {isTamil ? 'சராசரி' : 'Avg'}: {Math.round(roundPassed.reduce((s, a) => s + a, 0) / roundPassed.length)}%
                                 </p>
-                                <button onClick={() => { setTraceRounds(null); setActiveLesson(null); refetchLessons(); }}
+                                <button onClick={() => {
+                                    if (traceLessonId) {
+                                        updateProgress(traceLessonId, 'completed');
+                                    }
+                                    setTraceRounds(null);
+                                    setTraceLessonId(null);
+                                    setActiveLesson(null);
+                                    refetchLessons();
+                                }}
                                     className="px-8 py-3 bg-green-500 hover:bg-green-600 text-white font-black rounded-full shadow-lg transition-all border-b-4 border-green-700 active:scale-95 font-sans">
                                     {isTamil ? 'முடிந்தது! ✅' : 'Done ✅'}
                                 </button>
@@ -997,7 +1009,7 @@ function UltimateLearnEngineInner() {
 
                         {/* Warm Cream Tray at the bottom of the card */}
                         <div className="w-[90%] mx-auto mb-4 sm:mb-6 h-3 sm:h-4 bg-[#fffdf9] rounded-t-lg flex items-center justify-start px-4 sm:px-8 gap-2 sm:gap-4 border-t border-amber-100">
-                            <div className="w-6 h-2 sm:w-8 sm:h-2.5 bg-yellow-100 rounded-sm transform rotate-6 border border-yellow-200/50 shadow-sm animate-pulse" />
+                            <div className="w-6 h-2 sm:w-8 sm:h-2.5 bg-yellow-100 rounded-sm transform rotate-6 border border-yellow-200/50 shadow-sm" />
                             <div className="w-7 h-2 sm:w-9 sm:h-2.5 bg-white rounded-sm transform -rotate-3 border border-white/20 shadow-sm" />
                             <div className="w-5 h-2 sm:w-7 sm:h-2.5 bg-pink-200 rounded-sm transform rotate-12 border border-pink-300/30 shadow-sm" />
                         </div>

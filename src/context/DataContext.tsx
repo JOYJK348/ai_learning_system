@@ -27,28 +27,86 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     queryKey: studentKeys.me,
     queryFn: studentApi.getMe,
     enabled: isStudent,
-    staleTime: 2 * 60 * 1000,
+    staleTime: 10 * 60 * 1000, // 10 minutes cache
   });
 
   const { data: studentDashboard, isLoading: dashboardLoading } = useQuery({
     queryKey: studentKeys.dashboard,
     queryFn: studentApi.getDashboard,
     enabled: isStudent,
-    staleTime: 60 * 1000,
+    staleTime: 5 * 60 * 1000, // 5 minutes cache
   });
 
   const { data: rawLessons, isLoading: lessonsLoading } = useQuery({
     queryKey: studentKeys.lessons,
     queryFn: studentApi.getLessons,
     enabled: isStudent,
-    staleTime: 60 * 1000,
+    staleTime: 5 * 60 * 1000, // 5 minutes cache
   });
+
+
 
   const subjects = useMemo(() => rawLessons ?? [], [rawLessons]);
 
   const progressMutation = useMutation({
     mutationFn: ({ lessonId, status }: { lessonId: string; status: string }) =>
       studentApi.updateProgress(lessonId, { status, completion_percentage: status === 'completed' ? 100 : 50 }),
+    onMutate: async ({ lessonId, status }) => {
+      await queryClient.cancelQueries({ queryKey: studentKeys.lessons });
+      await queryClient.cancelQueries({ queryKey: studentKeys.dashboard });
+
+      const previousLessons = queryClient.getQueryData<Subject[]>(studentKeys.lessons);
+      const previousDashboard = queryClient.getQueryData<StudentDashboard>(studentKeys.dashboard);
+
+      if (previousLessons) {
+        const nextLessons = previousLessons.map((subject) => ({
+          ...subject,
+          chapters: subject.chapters.map((chapter) => {
+            const hasLesson = chapter.lessons?.some((l) => l.id === lessonId);
+            if (!hasLesson) return chapter;
+
+            const nextLessonsList = chapter.lessons.map((l) =>
+              l.id === lessonId
+                ? { ...l, progress: { ...l.progress, status: status as any, completion_percentage: status === 'completed' ? 100 : 50 } }
+                : l
+            );
+            const completedCount = nextLessonsList.filter((l) => l.progress.status === 'completed').length;
+            const completionPerc = Math.round((completedCount / nextLessonsList.length) * 100);
+
+            return {
+              ...chapter,
+              lessons: nextLessonsList,
+              completed_lessons: completedCount,
+              completion_percentage: completionPerc,
+            };
+          }),
+        }));
+        queryClient.setQueryData(studentKeys.lessons, nextLessons);
+      }
+
+      if (previousDashboard) {
+        const nextDashboard = {
+          ...previousDashboard,
+          lesson_stats: {
+            ...previousDashboard.lesson_stats,
+            completed_lessons: status === 'completed' 
+              ? previousDashboard.lesson_stats.completed_lessons + 1 
+              : previousDashboard.lesson_stats.completed_lessons,
+          }
+        };
+        queryClient.setQueryData(studentKeys.dashboard, nextDashboard);
+      }
+
+      return { previousLessons, previousDashboard };
+    },
+    onError: (err, variables, context: any) => {
+      if (context?.previousLessons) {
+        queryClient.setQueryData(studentKeys.lessons, context.previousLessons);
+      }
+      if (context?.previousDashboard) {
+        queryClient.setQueryData(studentKeys.dashboard, context.previousDashboard);
+      }
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: studentKeys.lessons });
       queryClient.invalidateQueries({ queryKey: studentKeys.dashboard });

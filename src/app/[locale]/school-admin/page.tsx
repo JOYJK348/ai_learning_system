@@ -298,7 +298,7 @@ export default function SchoolAdminPage() {
                     onClick={() => setDetailStudent(s as StudentDetail)}
                     role="button"
                     tabIndex={0}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setDetailStudent(s as StudentDetail); } }}
+                    onKeyDown={(e: any) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setDetailStudent(s as StudentDetail); } }}
                   >
                     <div className={styles.studentInfo}>
                       <div className={styles.avatar} style={{ background: getAvatarGradient(s.full_name ?? '') }}>
