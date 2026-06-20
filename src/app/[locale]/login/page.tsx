@@ -62,6 +62,7 @@ export default function LoginPage() {
   const [childGrade, setChildGrade] = useState('UKG');
   const [errorMessage, setErrorMessage] = useState('');
   const [trialExpired, setTrialExpired] = useState(false);
+  const [sessionClosed, setSessionClosed] = useState(false);
 
   const router = useRouter();
   const params = useParams();
@@ -72,6 +73,9 @@ export default function LoginPage() {
   useEffect(() => {
     if (window.location.search.includes('expired=1')) {
       setTrialExpired(true);
+    }
+    if (window.location.search.includes('session_closed=1')) {
+      setSessionClosed(true);
     }
   }, []);
 
@@ -295,6 +299,12 @@ export default function LoginPage() {
                   <div className="bg-red-50 border border-red-200 p-4 text-center">
                     <p className="text-xs font-bold text-red-700 uppercase tracking-widest mb-1">Trial Ended</p>
                     <p className="text-sm text-red-600 font-semibold">Your 14-day trial has expired. Please contact support to renew your plan.</p>
+                  </div>
+                )}
+                {sessionClosed && (
+                  <div className="bg-amber-50 border border-amber-200 p-4 text-center">
+                    <p className="text-xs font-bold text-amber-700 uppercase tracking-widest mb-1">Session Ended</p>
+                    <p className="text-sm text-amber-600 font-semibold">Your session has expired. Please log in again to continue.</p>
                   </div>
                 )}
                 {errorMessage && (

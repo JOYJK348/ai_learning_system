@@ -280,16 +280,15 @@ export default function NumberAdventureQuiz({ conceptKey = 'numbers-1-2', onComp
             exit={{ opacity: 0 }}
             className="flex flex-col items-center gap-6 w-full max-w-md"
           >
-            <div className="relative w-full rounded-3xl overflow-hidden min-h-[300px] flex flex-col justify-center items-center px-6 py-8 border-[3px] border-[#2d4a2d]"
-              style={{ background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
-              <BoardLines />
+            <div className="relative w-full rounded-3xl overflow-hidden min-h-[300px] flex flex-col justify-center items-center px-6 py-8 border-[3px] border-amber-200 bg-amber-50/40"
+              style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.03)' }}>
               <div className="relative z-10 flex flex-col items-center gap-5 text-center">
-                <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} className="text-6xl sm:text-7xl">
-                  🔢
+                <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} className="w-32 h-32 flex items-center justify-center">
+                  <img src="/assets/quiz/numbers-1-5.png" className="w-full h-full object-contain" alt="Numbers Adventure" />
                 </motion.div>
                 <div className="flex flex-col gap-2">
-                  <h3 className="text-2xl font-black text-white font-sans">{lesson.title} 🚀</h3>
-                  <p className="text-sm text-white/70 font-medium px-4 font-sans leading-relaxed">
+                  <h3 className="text-2xl font-black text-amber-950 font-sans">{lesson.title} 🚀</h3>
+                  <p className="text-sm text-amber-900/70 font-medium px-4 font-sans leading-relaxed">
                     Ready to count and learn numbers? Tap start below!
                   </p>
                 </div>
@@ -319,28 +318,27 @@ export default function NumberAdventureQuiz({ conceptKey = 'numbers-1-2', onComp
                 exit={{ opacity: 0 }}
                 className="flex flex-col items-center gap-4 w-full"
               >
-                {/* Blackboard */}
-                <div className="relative w-full rounded-3xl overflow-hidden px-4 py-5 flex flex-col items-center justify-center gap-4 border-[3px] border-[#2d4a2d] min-h-[180px]"
-                  style={{ background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
-                  <BoardLines />
+                {/* Light Board Card */}
+                <div className="relative w-full rounded-3xl overflow-hidden px-4 py-5 flex flex-col items-center justify-center gap-4 border-[3px] border-amber-200 bg-amber-50/40"
+                  style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.02)' }}>
                   {q.mascotText && (
-                    <p className="relative z-10 text-xs text-emerald-300 font-bold uppercase tracking-wider bg-emerald-950/50 px-3 py-1 rounded-full">
+                    <p className="relative z-10 text-[10px] font-black text-amber-800 uppercase tracking-wider bg-amber-100 px-3 py-1 rounded-full text-center border border-amber-200">
                       {q.mascotText}
                     </p>
                   )}
-                  <h3 className="relative z-10 text-xl sm:text-2xl font-black text-white text-center font-sans px-2 leading-snug">
+                  <h3 className="relative z-10 text-xl sm:text-2xl font-black text-amber-950 text-center font-sans px-2 leading-snug">
                     {q.question}
                   </h3>
-                  <div className="relative z-10 flex gap-1.5 text-xs text-white/50 font-bold bg-black/20 px-3 py-1 rounded-full">
-                    Tapped: <span className="text-sky-400 font-black">{tappedFlowers.size}</span> / {q.requiredCount}
+                  <div className="relative z-10 flex gap-1.5 text-xs text-amber-800 font-bold bg-amber-100/60 px-3 py-1 rounded-full border border-amber-200">
+                    Tapped: <span className="text-emerald-600 font-black">{tappedFlowers.size}</span> / {q.requiredCount}
                   </div>
                 </div>
 
-                {/* Feedback Overlay inside option area */}
+                {/* Feedback Overlay */}
                 <AnimatePresence>
                   {feedbackMsg && (
-                    <div className="absolute z-20 inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm pointer-events-none rounded-3xl">
-                      <div className="px-6 py-4 rounded-2xl font-black bg-[#163e32]/95 border-2 border-emerald-500 text-white shadow-2xl text-center">
+                    <div className="absolute z-20 inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm pointer-events-none rounded-3xl">
+                      <div className="px-6 py-4 rounded-2xl font-black bg-emerald-50 border-2 border-emerald-300 text-emerald-800 shadow-2xl text-center">
                         <p className="text-lg font-black font-sans">{feedbackMsg}</p>
                       </div>
                     </div>
@@ -356,8 +354,8 @@ export default function NumberAdventureQuiz({ conceptKey = 'numbers-1-2', onComp
                         key={idx}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => handleFlowerTap(idx)}
-                        className={`w-16 h-16 rounded-full flex items-center justify-center text-4xl border-3 shadow-md transition-all
-                          ${isTapped ? 'bg-emerald-500/20 border-emerald-400 opacity-60 scale-90' : 'bg-white/10 border-white/20 hover:bg-white/15'}`}
+                        className={`w-16 h-16 rounded-2xl flex items-center justify-center text-4xl border-2 shadow-sm transition-all bg-white
+                          ${isTapped ? 'bg-emerald-50 border-emerald-400 opacity-60 scale-90' : 'border-amber-200 hover:bg-amber-50/50'}`}
                       >
                         {isTapped ? '💖' : '🌸'}
                       </motion.button>
@@ -377,34 +375,33 @@ export default function NumberAdventureQuiz({ conceptKey = 'numbers-1-2', onComp
               exit={{ opacity: 0 }}
               className="flex flex-col items-center gap-4 w-full"
             >
-              {/* Blackboard */}
-              <div className="relative w-full rounded-3xl overflow-hidden px-4 py-5 flex flex-col items-center justify-center gap-4 border-[3px] border-[#2d4a2d] min-h-[180px]"
-                style={{ background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
-                <BoardLines />
+              {/* Light Board Card */}
+              <div className="relative w-full rounded-3xl overflow-hidden px-4 py-5 flex flex-col items-center justify-center gap-4 border-[3px] border-amber-200 bg-amber-50/40"
+                style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.02)' }}>
 
                 {q.mascotText && (
-                  <p className="relative z-10 text-[10px] sm:text-xs text-emerald-300 font-bold uppercase tracking-wider bg-emerald-950/50 px-3 py-1 rounded-full text-center">
+                  <p className="relative z-10 text-[10px] sm:text-xs text-amber-800 font-bold uppercase tracking-wider bg-amber-100 px-3 py-1 rounded-full text-center border border-amber-200">
                     {q.mascotText}
                   </p>
                 )}
 
                 {q.visual && (
-                  <div className={`relative z-10 text-4xl sm:text-5xl font-mono text-emerald-400 font-bold tracking-widest leading-normal whitespace-pre`}>
+                  <div className={`relative z-10 text-4xl sm:text-5xl font-mono text-amber-950 font-bold tracking-widest leading-normal whitespace-pre`}>
                     {q.visual}
                   </div>
                 )}
 
-                <h3 className="relative z-10 text-lg sm:text-xl font-black text-white text-center font-sans px-2 leading-snug">
+                <h3 className="relative z-10 text-lg sm:text-xl font-black text-amber-950 text-center font-sans px-2 leading-snug">
                   {q.question}
                 </h3>
               </div>
 
-              {/* Feedback Overlay inside options */}
+              {/* Feedback Overlay */}
               <AnimatePresence>
                 {feedbackMsg && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                    className="absolute z-20 inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm pointer-events-none rounded-3xl">
-                    <div className="px-6 py-4 rounded-2xl font-black bg-[#163e32]/95 border-2 border-emerald-500 text-white shadow-2xl text-center">
+                    className="absolute z-20 inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm pointer-events-none rounded-3xl">
+                    <div className="px-6 py-4 rounded-2xl font-black bg-emerald-50 border-2 border-emerald-300 text-emerald-800 shadow-2xl text-center">
                       <p className="text-lg font-black font-sans">{feedbackMsg}</p>
                     </div>
                   </motion.div>
@@ -420,20 +417,20 @@ export default function NumberAdventureQuiz({ conceptKey = 'numbers-1-2', onComp
                     <button
                       key={opt.id}
                       onClick={() => handleQuizTap(opt)}
-                      className="flex flex-col items-center justify-center gap-2.5 p-4 rounded-2xl transition-all active:scale-95 relative overflow-hidden bg-white/10 hover:bg-white/15 border-2 border-white/10"
+                      className="flex flex-col items-center justify-center gap-2.5 p-4 rounded-2xl transition-all active:scale-95 relative overflow-hidden bg-[#fffdf9] border-2 border-amber-200 hover:bg-amber-50/50 text-amber-950 shadow-sm"
                       style={{
                         ...(isSelected && opt.correct && {
-                          background: 'rgba(34,197,94,0.25)',
-                          borderColor: 'rgba(34,197,94,0.7)',
+                          background: 'rgba(16,185,129,0.1)',
+                          borderColor: 'rgba(16,185,129,0.7)',
                         }),
                         ...(isSelected && !opt.correct && {
-                          background: 'rgba(239,68,68,0.25)',
+                          background: 'rgba(239,68,68,0.1)',
                           borderColor: 'rgba(239,68,68,0.6)',
                         })
                       }}
                     >
                       <span className="text-4xl sm:text-5xl leading-none drop-shadow-md">{opt.emoji}</span>
-                      <span className="text-xs sm:text-sm font-black text-white/95 font-sans">{opt.label}</span>
+                      <span className="text-xs sm:text-sm font-black font-sans">{opt.label}</span>
                     </button>
                   );
                 })}

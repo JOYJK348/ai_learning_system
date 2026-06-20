@@ -13,6 +13,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { audioEngine } from '@/core/utils/audio';
 import { useRouter, useSearchParams, useParams } from 'next/navigation';
 import { useData } from '@/context/DataContext';
+import { useAuth } from '@/context/AuthContext';
 import { studentApi, studentKeys, type Chapter, type Lesson } from '@/core/services/studentApi';
 import ActivityPlayer from '../_components/activities/ActivityPlayer';
 import NameTraceActivity from '../_components/activities/NameTraceActivity';
@@ -53,6 +54,7 @@ const QUIZ_STROKES = ['standing', 'sleeping', 'left-slanting', 'right-slanting',
 const EXAM_COUNT = 5;
 
 function UltimateLearnEngineInner() {
+    const { user, loading: authLoading } = useAuth();
     const { subjects, studentProfile, updateProgress, refetchLessons } = useData();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -85,8 +87,18 @@ function UltimateLearnEngineInner() {
         return () => cancelAnimationFrame(timer);
     }, []);
 
+    const filteredSubjects = useMemo(() => {
+        if (params?.locale === 'ta') {
+            return subjects.filter(s => {
+                const name = s.name.toLowerCase();
+                return !(name.includes('முன் எழுத்து') || name.includes('pre-writing') || name.includes('pre writing'));
+            });
+        }
+        return subjects;
+    }, [subjects, params?.locale]);
+
     const activeSubject = useMemo(() =>
-        subjects.find(s => s.id === activeSubjectId), [activeSubjectId, subjects]);
+        filteredSubjects.find(s => s.id === activeSubjectId), [activeSubjectId, filteredSubjects]);
     const activeChapter = useMemo(() =>
         activeSubject?.chapters.find(c => c.id === activeChapterId), [activeSubject, activeChapterId]);
 
@@ -157,12 +169,10 @@ function UltimateLearnEngineInner() {
             ['எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ', 'ஃ'].includes(lower.trim());
         if (isVowelAU) {
             setShowVowelQuiz('a-u');
-            setActiveLesson(null);
             return;
         }
         if (isVowelEAU) {
             setShowVowelQuiz('e-au');
-            setActiveLesson(null);
             return;
         }
 
@@ -173,11 +183,11 @@ function UltimateLearnEngineInner() {
         const isMeiSet3 = isMeiChapter && (lower.includes('க்') || lower.includes('ங்') || lower.includes('ச்') || lower.includes('ஞ்'));
         const isMeiSet4 = isMeiChapter && (lower.includes('ட்') || lower.includes('ண்') || lower.includes('த்') || lower.includes('ந்'));
         const isMeiSet5 = isMeiChapter && (lower.includes('ப்') || lower.includes('ம்'));
-        if (isMeiSet1) { setShowMeiQuiz('set-1'); setActiveLesson(null); return; }
-        if (isMeiSet2) { setShowMeiQuiz('set-2'); setActiveLesson(null); return; }
-        if (isMeiSet3) { setShowMeiQuiz('set-3'); setActiveLesson(null); return; }
-        if (isMeiSet4) { setShowMeiQuiz('set-4'); setActiveLesson(null); return; }
-        if (isMeiSet5) { setShowMeiQuiz('set-5'); setActiveLesson(null); return; }
+        if (isMeiSet1) { setShowMeiQuiz('set-1'); return; }
+        if (isMeiSet2) { setShowMeiQuiz('set-2'); return; }
+        if (isMeiSet3) { setShowMeiQuiz('set-3'); return; }
+        if (isMeiSet4) { setShowMeiQuiz('set-4'); return; }
+        if (isMeiSet5) { setShowMeiQuiz('set-5'); return; }
 
         // Tamil simple words → TamilWordShowcase
         const isWordChapter = chapterName.includes('எளிய சொற்கள்');
@@ -191,7 +201,6 @@ function UltimateLearnEngineInner() {
             } else {
                 setShowWordShowcase('set-4');
             }
-            setActiveLesson(null);
             return;
         }
 
@@ -346,6 +355,49 @@ function UltimateLearnEngineInner() {
 
     if (!mounted) return null;
 
+    if (mounted && !authLoading && !user) {
+        return (
+            <div className="fixed inset-0 z-[500] flex items-center justify-center bg-slate-950/60 backdrop-blur-lg">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="relative w-full max-w-md mx-4 p-8 text-center bg-[#fffdf9] rounded-[2.5rem] border-4 border-amber-200/80 shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden"
+                >
+                    {/* Playful background blobs */}
+                    <div className="absolute top-[-20%] left-[-20%] w-[50%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
+                    <div className="absolute bottom-[-20%] right-[-20%] w-[50%] h-[50%] bg-sky-100/50 rounded-full blur-[60px] pointer-events-none" />
+
+                    <div className="relative z-10 flex flex-col items-center gap-6">
+                        <div className="w-20 h-20 bg-amber-50 rounded-full flex items-center justify-center text-4xl shadow-md border-2 border-amber-100">
+                            🔒
+                        </div>
+                        
+                        <div>
+                            <h2 className="text-2xl font-black text-amber-950 tracking-tight font-sans">
+                                {isTamil ? 'அமர்வு முடிந்தது!' : 'Session Expired!'}
+                            </h2>
+                            <p className="text-sm font-bold text-amber-800/80 mt-2 font-sans leading-relaxed">
+                                {isTamil 
+                                    ? 'உங்கள் அமர்வு முடிந்துவிட்டது. தயவுசெய்து மீண்டும் உள்நுழையவும்!' 
+                                    : 'Your session has expired. Please log in again to continue your adventure!'}
+                            </p>
+                        </div>
+
+                        <motion.button
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => {
+                                window.location.href = `/${params?.locale || 'en'}/login?session_closed=1`;
+                            }}
+                            className="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-black text-base rounded-2xl shadow-lg border-b-4 border-emerald-700 active:scale-95 font-sans"
+                        >
+                            {isTamil ? 'மீண்டும் உள்நுழைக ➡️' : 'Log In Again ➡️'}
+                        </motion.button>
+                    </div>
+                </motion.div>
+            </div>
+        );
+    }
+
     return (
         <div className="relative font-sans overflow-hidden bg-sky-400">
             <div className="fixed inset-0 z-0">
@@ -427,12 +479,12 @@ function UltimateLearnEngineInner() {
                                     </div>
 
                                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                                        {subjects.length === 0 ? (
+                                        {filteredSubjects.length === 0 ? (
                                             <div className="col-span-full text-center py-20">
                                                 <p className="text-white/60 font-black text-lg">No worlds loaded yet. Start your journey!</p>
                                             </div>
                                         ) : (
-                                            subjects.map((subject, idx) => {
+                                            filteredSubjects.map((subject, idx) => {
                                                 const v = getSubjectVisuals(subject.name);
                                                 const total = subject.chapters.length;
 
@@ -695,7 +747,7 @@ function UltimateLearnEngineInner() {
                 />
             )}
 
-            {activeLesson && !showNameTrace && (
+            {activeLesson && !showNameTrace && !showVowelQuiz && !showMeiQuiz && !showWordShowcase && (
                 <ActivityPlayer
                     key={activeLesson.id}
                     lessonId={activeLesson.id}
@@ -734,36 +786,39 @@ function UltimateLearnEngineInner() {
             )}
 
             {showVowelQuiz && (
-                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
-                    style={{ background: 'rgba(15,23,42,0.7)', backdropFilter: 'blur(8px)' }}>
-                    <div className="relative w-full max-w-sm sm:max-w-md mx-3 my-4 overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] border-[8px] sm:border-[12px] border-[#5a3825] shadow-[0_24px_50px_rgba(0,0,0,0.6),_inset_0_4px_24px_rgba(0,0,0,0.8)]"
-                        style={{
-                            backgroundColor: '#0c2e22',
-                            backgroundImage: 'radial-gradient(rgba(255,255,255,0.06) 12%, transparent 13%)',
-                            backgroundSize: '10px 10px',
-                        }}>
+                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/40 backdrop-blur-md">
+                    <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
+                        {/* Playful background blobs */}
+                        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
+                        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[50%] bg-sky-100/50 rounded-full blur-[60px] pointer-events-none" />
+
                         {/* Header */}
-                        <div className="flex items-center justify-between px-4 pt-4 pb-0">
-                            <span className="text-[10px] font-black text-emerald-300/60 uppercase tracking-widest">
+                        <div className="relative z-10 flex items-center justify-between px-6 pt-5 pb-3 border-b border-amber-100/60 bg-amber-50/30">
+                            <span className="text-xs sm:text-sm font-black text-amber-700/80 tracking-wider">
                                 ✍️ {showVowelQuiz === 'e-au' ? 'உயிர் எழுத்துக்கள் எ–ஔ' : 'உயிர் எழுத்துக்கள் அ–ஊ'}
                             </span>
                             <button
-                                onClick={() => { setShowVowelQuiz(null); }}
-                                className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/60 hover:text-white text-base font-bold transition-all"
+                                onClick={() => { setShowVowelQuiz(null); setActiveLesson(null); }}
+                                className="w-8 h-8 rounded-full bg-amber-100/60 hover:bg-amber-200/80 flex items-center justify-center text-amber-800 text-xl font-bold transition-all border border-amber-200/50 active:scale-90"
                             >
                                 &times;
                             </button>
                         </div>
-                        <TamilVowelQuiz
-                            key={showVowelQuiz}
-                            config={{ set: showVowelQuiz }}
-                            onComplete={() => { setShowVowelQuiz(null); refetchLessons(); }}
-                        />
-                        {/* Chalk tray */}
-                        <div className="w-[90%] mx-auto h-4 bg-[#4a2e1f] rounded-t-lg flex items-center justify-start px-8 gap-4 border-t border-black/20 mt-2">
-                            <div className="w-8 h-2.5 bg-yellow-100 rounded-sm transform rotate-6 border border-yellow-200/50 shadow-sm" />
-                            <div className="w-9 h-2.5 bg-white rounded-sm transform -rotate-3 border border-white/20 shadow-sm" />
-                            <div className="w-7 h-2.5 bg-pink-200 rounded-sm transform rotate-12 border border-pink-300/30 shadow-sm" />
+                        <div className="relative z-10 p-4 sm:p-6 min-h-[350px] flex flex-col justify-center">
+                            <TamilVowelQuiz
+                                key={showVowelQuiz}
+                                config={{ set: showVowelQuiz }}
+                                onComplete={() => {
+                                    if (activeLesson) {
+                                        studentApi.updateProgress(activeLesson.id, { status: 'completed', completion_percentage: 100 })
+                                            .catch(() => {})
+                                            .finally(() => refetchLessons());
+                                    }
+                                    setShowVowelQuiz(null);
+                                    setActiveLesson(null);
+                                    refetchLessons();
+                                }}
+                            />
                         </div>
                     </div>
                 </div>
@@ -771,16 +826,15 @@ function UltimateLearnEngineInner() {
 
             {/* ─── TAMIL MEI QUIZ ─── */}
             {showMeiQuiz && (
-                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
-                    style={{ background: 'rgba(15,23,42,0.7)', backdropFilter: 'blur(8px)' }}>
-                    <div className="relative w-full max-w-sm sm:max-w-md mx-3 my-4 overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] border-[8px] sm:border-[12px] border-[#5a3825] shadow-[0_24px_50px_rgba(0,0,0,0.6),_inset_0_4px_24px_rgba(0,0,0,0.8)]"
-                        style={{
-                            backgroundColor: '#0c2e22',
-                            backgroundImage: 'radial-gradient(rgba(255,255,255,0.06) 12%, transparent 13%)',
-                            backgroundSize: '10px 10px',
-                        }}>
-                        <div className="flex items-center justify-between px-4 pt-4 pb-0">
-                            <span className="text-[10px] font-black text-emerald-300/60 uppercase tracking-widest">
+                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/40 backdrop-blur-md">
+                    <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
+                        {/* Playful background blobs */}
+                        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
+                        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[50%] bg-sky-100/50 rounded-full blur-[60px] pointer-events-none" />
+
+                        {/* Header */}
+                        <div className="relative z-10 flex items-center justify-between px-6 pt-5 pb-3 border-b border-amber-100/60 bg-amber-50/30">
+                            <span className="text-xs sm:text-sm font-black text-amber-700/80 tracking-wider">
                                 ✍️ {{
                                     'set-1': 'மெய் எழுத்துக்கள் ய்–வ்',
                                     'set-2': 'மெய் எழுத்துக்கள் ழ்–ன்',
@@ -790,21 +844,27 @@ function UltimateLearnEngineInner() {
                                 }[showMeiQuiz] || 'மெய் எழுத்துக்கள்'}
                             </span>
                             <button
-                                onClick={() => { setShowMeiQuiz(null); }}
-                                className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/60 hover:text-white text-base font-bold transition-all"
+                                onClick={() => { setShowMeiQuiz(null); setActiveLesson(null); }}
+                                className="w-8 h-8 rounded-full bg-amber-100/60 hover:bg-amber-200/80 flex items-center justify-center text-amber-800 text-xl font-bold transition-all border border-amber-200/50 active:scale-90"
                             >
                                 &times;
                             </button>
                         </div>
-                        <TamilMeiQuiz
-                            key={showMeiQuiz}
-                            config={{ set: showMeiQuiz }}
-                            onComplete={() => { setShowMeiQuiz(null); refetchLessons(); }}
-                        />
-                        <div className="w-[90%] mx-auto h-4 bg-[#4a2e1f] rounded-t-lg flex items-center justify-start px-8 gap-4 border-t border-black/20 mt-2">
-                            <div className="w-8 h-2.5 bg-yellow-100 rounded-sm transform rotate-6 border border-yellow-200/50 shadow-sm" />
-                            <div className="w-9 h-2.5 bg-white rounded-sm transform -rotate-3 border border-white/20 shadow-sm" />
-                            <div className="w-7 h-2.5 bg-pink-200 rounded-sm transform rotate-12 border border-pink-300/30 shadow-sm" />
+                        <div className="relative z-10 p-4 sm:p-6 min-h-[350px] flex flex-col justify-center">
+                            <TamilMeiQuiz
+                                key={showMeiQuiz}
+                                config={{ set: showMeiQuiz }}
+                                onComplete={() => {
+                                    if (activeLesson) {
+                                        studentApi.updateProgress(activeLesson.id, { status: 'completed', completion_percentage: 100 })
+                                            .catch(() => {})
+                                            .finally(() => refetchLessons());
+                                    }
+                                    setShowMeiQuiz(null);
+                                    setActiveLesson(null);
+                                    refetchLessons();
+                                }}
+                            />
                         </div>
                     </div>
                 </div>
@@ -812,16 +872,15 @@ function UltimateLearnEngineInner() {
 
             {/* ─── TAMIL WORD SHOWCASE ─── */}
             {showWordShowcase && (
-                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
-                    style={{ background: 'rgba(15,23,42,0.7)', backdropFilter: 'blur(8px)' }}>
-                    <div className="relative w-full max-w-sm sm:max-w-md mx-3 my-4 overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] border-[8px] sm:border-[12px] border-[#5a3825] shadow-[0_24px_50px_rgba(0,0,0,0.6),_inset_0_4px_24px_rgba(0,0,0,0.8)]"
-                        style={{
-                            backgroundColor: '#0c2e22',
-                            backgroundImage: 'radial-gradient(rgba(255,255,255,0.06) 12%, transparent 13%)',
-                            backgroundSize: '10px 10px',
-                        }}>
-                        <div className="flex items-center justify-between px-4 pt-4 pb-0">
-                            <span className="text-[10px] font-black text-emerald-300/60 uppercase tracking-widest">
+                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/40 backdrop-blur-md">
+                    <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
+                        {/* Playful background blobs */}
+                        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
+                        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[50%] bg-sky-100/50 rounded-full blur-[60px] pointer-events-none" />
+
+                        {/* Header */}
+                        <div className="relative z-10 flex items-center justify-between px-6 pt-5 pb-3 border-b border-amber-100/60 bg-amber-50/30">
+                            <span className="text-xs sm:text-sm font-black text-amber-700/80 tracking-wider">
                                 ✍️ {{
                                     'set-1': 'உயிரெழுத்து சார்ந்த சொற்கள்',
                                     'set-2': 'அடிப்படை எளிய சொற்கள்',
@@ -829,15 +888,28 @@ function UltimateLearnEngineInner() {
                                     'set-4': 'நம்மை சுற்றியுள்ள பொருட்கள்',
                                 }[showWordShowcase] || 'எளிய சொற்கள்'}
                             </span>
-                            <button onClick={() => { setShowWordShowcase(null); }}
-                                className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/60 hover:text-white text-base font-bold transition-all">&times;</button>
+                            <button
+                                onClick={() => { setShowWordShowcase(null); setActiveLesson(null); }}
+                                className="w-8 h-8 rounded-full bg-amber-100/60 hover:bg-amber-200/80 flex items-center justify-center text-amber-800 text-xl font-bold transition-all border border-amber-200/50 active:scale-90"
+                            >
+                                &times;
+                            </button>
                         </div>
-                        <TamilWordShowcase key={showWordShowcase} config={{ set: showWordShowcase }}
-                            onComplete={() => { setShowWordShowcase(null); refetchLessons(); }} />
-                        <div className="w-[90%] mx-auto h-4 bg-[#4a2e1f] rounded-t-lg flex items-center justify-start px-8 gap-4 border-t border-black/20 mt-2">
-                            <div className="w-8 h-2.5 bg-yellow-100 rounded-sm transform rotate-6 border border-yellow-200/50 shadow-sm" />
-                            <div className="w-9 h-2.5 bg-white rounded-sm transform -rotate-3 border border-white/20 shadow-sm" />
-                            <div className="w-7 h-2.5 bg-pink-200 rounded-sm transform rotate-12 border border-pink-300/30 shadow-sm" />
+                        <div className="relative z-10 p-4 sm:p-6 min-h-[350px] flex flex-col justify-center">
+                            <TamilWordShowcase
+                                key={showWordShowcase}
+                                config={{ set: showWordShowcase }}
+                                onComplete={() => {
+                                    if (activeLesson) {
+                                        studentApi.updateProgress(activeLesson.id, { status: 'completed', completion_percentage: 100 })
+                                            .catch(() => {})
+                                            .finally(() => refetchLessons());
+                                    }
+                                    setShowWordShowcase(null);
+                                    setActiveLesson(null);
+                                    refetchLessons();
+                                }}
+                            />
                         </div>
                     </div>
                 </div>
@@ -845,16 +917,13 @@ function UltimateLearnEngineInner() {
 
             {/* ─── PRE-WRITING TRACE ROUNDS ─── */}
             {traceRounds && (
-                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
-                    style={{ background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(8px)' }}>
-                    <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-y-auto max-h-[96vh] sm:max-h-[90vh] rounded-[1.5rem] sm:rounded-[2.5rem] border-[8px] sm:border-[14px] border-[#5a3825] shadow-[0_24px_50px_rgba(0,0,0,0.5),_inset_0_4px_24px_rgba(0,0,0,0.8)]"
-                        style={{
-                            backgroundColor: '#0c2e22',
-                            backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.08) 12%, transparent 13%)',
-                            backgroundSize: '10px 10px',
-                        }}>
-                        <div className="absolute inset-0 opacity-10 pointer-events-none"
-                            style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '18px 18px' }} />
+                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/40 backdrop-blur-md">
+                    <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
+                        {/* Playful background blobs */}
+                        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
+                        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[50%] bg-sky-100/50 rounded-full blur-[60px] pointer-events-none" />
+                        <div className="absolute inset-0 opacity-[0.02] pointer-events-none"
+                            style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #b45309 1px, transparent 0)', backgroundSize: '18px 18px' }} />
                         {!traceDone ? (() => {
                             const cur = traceRounds[roundIndex];
                             const isGuide = cur.type === 'guide';
@@ -865,12 +934,22 @@ function UltimateLearnEngineInner() {
                             };
                             return (
                                 <>
-                                    <div className="flex items-center justify-between px-3 sm:px-5 pt-3 sm:pt-5 pb-0">
-                                        <span className="text-white/50 text-xs font-bold">
+                                    <div className="relative z-10 flex items-center justify-between px-6 pt-5 pb-3 border-b border-amber-100/60 bg-amber-50/30">
+                                        <span className="text-xs sm:text-sm font-black text-amber-700/80 tracking-wider">
                                             {roundIndex + 1} / {traceRounds.length}
                                         </span>
+                                        <div className="flex items-center gap-2">
+                                            {traceRounds.map((a, i) => (
+                                                <div key={i}
+                                                    className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-black transition-all shadow-sm
+                                                        ${roundIndex > i ? 'bg-emerald-500 text-white' : i === roundIndex ? 'bg-amber-400 text-amber-950 ring-2 ring-amber-300' : 'bg-amber-100/60 text-amber-700/40'}`}
+                                                >
+                                                    {roundIndex > i ? '✓' : i + 1}
+                                                </div>
+                                            ))}
+                                        </div>
                                         <button onClick={() => { setTraceRounds(null); setActiveLesson(null); }}
-                                            className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/15 hover:bg-white/30 flex items-center justify-center text-white/60 hover:text-white text-base sm:text-lg font-bold transition-all">&times;</button>
+                                            className="w-8 h-8 rounded-full bg-amber-100/60 hover:bg-amber-200/80 flex items-center justify-center text-amber-800 text-xl font-bold transition-all border border-amber-200/50 active:scale-90">&times;</button>
                                     </div>
                                     {isGuide ? (
                                         <PreWritingVideo key={`${roundIndex}-${path}`}
@@ -901,12 +980,12 @@ function UltimateLearnEngineInner() {
                                 <span className="text-6xl animate-bounce">
                                     {roundPassed.every(a => a >= 70) ? '🎉' : '💪'}
                                 </span>
-                                <p className="text-xl font-black text-white font-sans">
+                                <p className="text-xl font-black text-amber-950 font-sans">
                                     {roundPassed.every(a => a >= 70)
                                         ? (isTamil ? 'அருமை! சூப்பர்!' : 'Super!')
                                         : (isTamil ? 'மீண்டும் முயற்சி செய்!' : 'Nice try!')}
                                 </p>
-                                <p className="text-white/60 font-bold text-sm font-sans">
+                                <p className="text-amber-800 font-bold text-sm font-sans">
                                     {isTamil ? 'சராசரி' : 'Avg'}: {Math.round(roundPassed.reduce((s, a) => s + a, 0) / roundPassed.length)}%
                                 </p>
                                 <button onClick={() => { setTraceRounds(null); setActiveLesson(null); refetchLessons(); }}
@@ -916,11 +995,11 @@ function UltimateLearnEngineInner() {
                             </motion.div>
                         )}
 
-                        {/* Wooden Chalk Tray at the bottom of the main chalkboard card */}
-                        <div className="w-[90%] mx-auto h-4 bg-[#4a2e1f] rounded-t-lg shadow-md flex items-center justify-start px-8 gap-4 relative z-10 border-t border-black/20 mt-2">
-                            <div className="w-8 h-2.5 bg-yellow-100 rounded-sm transform rotate-6 border border-yellow-200/50 shadow-sm animate-pulse" />
-                            <div className="w-9 h-2.5 bg-white rounded-sm transform -rotate-3 border border-white/20 shadow-sm" />
-                            <div className="w-7 h-2.5 bg-pink-200 rounded-sm transform rotate-12 border border-pink-300/30 shadow-sm" />
+                        {/* Warm Cream Tray at the bottom of the card */}
+                        <div className="w-[90%] mx-auto mb-4 sm:mb-6 h-3 sm:h-4 bg-[#fffdf9] rounded-t-lg flex items-center justify-start px-4 sm:px-8 gap-2 sm:gap-4 border-t border-amber-100">
+                            <div className="w-6 h-2 sm:w-8 sm:h-2.5 bg-yellow-100 rounded-sm transform rotate-6 border border-yellow-200/50 shadow-sm animate-pulse" />
+                            <div className="w-7 h-2 sm:w-9 sm:h-2.5 bg-white rounded-sm transform -rotate-3 border border-white/20 shadow-sm" />
+                            <div className="w-5 h-2 sm:w-7 sm:h-2.5 bg-pink-200 rounded-sm transform rotate-12 border border-pink-300/30 shadow-sm" />
                         </div>
                     </div>
                 </div>

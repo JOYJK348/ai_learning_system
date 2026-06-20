@@ -18,72 +18,6 @@ type Props = {
   nextLessonId?: string;
 };
 
-/* ─── Letter SVG paths + stroke-by-stroke instructions (viewBox 0 0 100 120) ─── */
-// Each letter has: path (SVG), steps (array of instructions that appear during draw)
-interface LetterData {
-  path: string;
-  steps: string[];
-  totalSteps: number;
-}
-
-const LETTER_DRAW_CAPS: Record<string, LetterData> = {
-  A: { path: 'M 50 10 L 15 105 M 50 10 L 85 105 M 30 70 L 70 70', steps: ['slant down left', 'slant down right', 'cross in the middle'], totalSteps: 3 },
-  B: { path: 'M 25 10 L 25 110 M 25 10 C 70 10 75 42 50 60 C 75 78 70 110 25 110', steps: ['straight line down', 'bump out and in', 'bump again at bottom'], totalSteps: 3 },
-  C: { path: 'M 80 25 C 65 10 35 12 22 35 C 10 60 15 90 28 105 C 45 120 75 110 80 95', steps: ['start at top right', 'curve left and down', 'curve back to bottom'], totalSteps: 3 },
-  D: { path: 'M 25 10 L 25 110 M 25 10 C 75 10 90 60 75 90 C 65 105 40 110 25 105', steps: ['straight line down', 'big curve out', 'curve back in'], totalSteps: 3 },
-  E: { path: 'M 80 10 L 25 10 L 25 110 L 80 110 M 25 60 L 70 60', steps: ['line across top', 'line down', 'line across bottom', 'line across middle'], totalSteps: 4 },
-  F: { path: 'M 80 10 L 25 10 L 25 110 M 25 60 L 65 60', steps: ['line across top', 'line down', 'line across middle'], totalSteps: 3 },
-  G: { path: 'M 75 15 C 55 8 25 15 20 40 C 12 70 25 105 55 105 C 75 105 85 90 85 75 L 85 60 L 55 60', steps: ['curve around top', 'curve down left', 'line goes right'], totalSteps: 3 },
-  H: { path: 'M 25 10 L 25 110 M 75 10 L 75 110 M 25 60 L 75 60', steps: ['left line down', 'right line down', 'connect in the middle'], totalSteps: 3 },
-  I: { path: 'M 50 10 L 50 110', steps: ['one straight line down'], totalSteps: 1 },
-  J: { path: 'M 75 30 C 75 10 35 8 28 22 C 20 38 22 65 30 75 M 50 110 L 50 95', steps: ['curve down left', 'hook at the bottom'], totalSteps: 2 },
-  K: { path: 'M 25 10 L 25 110 M 25 55 L 75 15 M 25 55 L 75 105', steps: ['straight line down', 'slant up to top', 'slant down to bottom'], totalSteps: 3 },
-  L: { path: 'M 25 10 L 25 110 L 80 110', steps: ['line down', 'line across bottom'], totalSteps: 2 },
-  M: { path: 'M 15 110 L 15 20 L 50 55 L 85 20 L 85 110', steps: ['line up left', 'slant down middle', 'slant up middle', 'line down right'], totalSteps: 4 },
-  N: { path: 'M 20 110 L 20 15 L 80 110 L 80 15', steps: ['line up left', 'slant down right', 'line up right'], totalSteps: 3 },
-  O: { path: 'M 50 10 C 20 10 15 60 50 110 C 85 60 80 10 50 10', steps: ['curve around top', 'curve back around bottom'], totalSteps: 2 },
-  P: { path: 'M 25 110 L 25 15 M 25 15 C 75 15 80 55 50 60 C 30 62 25 60 25 60', steps: ['line down from top', 'bump out and back'], totalSteps: 2 },
-  Q: { path: 'M 50 10 C 20 10 15 60 50 105 C 75 95 82 50 50 10 M 65 80 L 82 98', steps: ['big round circle', 'little tail at bottom'], totalSteps: 2 },
-  R: { path: 'M 25 110 L 25 15 M 25 15 C 75 15 80 55 50 60 C 30 62 25 60 25 60 M 50 60 L 80 110', steps: ['line down', 'bump out and in', 'slant down to bottom'], totalSteps: 3 },
-  S: { path: 'M 65 25 C 65 12 25 12 28 35 C 30 55 70 55 72 75 C 75 95 30 100 30 85', steps: ['curve top left', 'curve bottom right'], totalSteps: 2 },
-  T: { path: 'M 20 15 L 80 15 M 50 15 L 50 110', steps: ['line across top', 'line down middle'], totalSteps: 2 },
-  U: { path: 'M 20 25 C 20 80 80 80 80 25', steps: ['curve down and up'], totalSteps: 1 },
-  V: { path: 'M 15 15 L 50 110 L 85 15', steps: ['slant down left', 'slant up right'], totalSteps: 2 },
-  W: { path: 'M 10 15 L 30 110 L 50 30 L 70 110 L 90 15', steps: ['slant down', 'slant up', 'slant down', 'slant up'], totalSteps: 4 },
-  X: { path: 'M 15 15 L 85 110 M 85 15 L 15 110', steps: ['slant down right', 'cross slant down left'], totalSteps: 2 },
-  Y: { path: 'M 15 15 L 50 55 M 85 15 L 50 55 M 50 55 L 50 110', steps: ['slant down left', 'slant down right', 'line straight down'], totalSteps: 3 },
-  Z: { path: 'M 15 15 L 85 15 L 15 110 L 85 110', steps: ['line across top', 'slant down left', 'line across bottom'], totalSteps: 3 },
-};
-
-const LETTER_DRAW_SMALL: Record<string, LetterData> = {
-  a: { path: 'M 55 80 C 35 80 25 65 30 50 C 35 38 50 38 55 50 L 60 80 C 62 90 75 92 78 85 C 80 78 70 72 55 72 L 35 72', steps: ['round circle', 'line down right'], totalSteps: 2 },
-  b: { path: 'M 35 115 L 35 25 M 35 40 C 25 40 20 60 28 72 C 35 82 55 82 62 72 C 70 62 65 40 35 40', steps: ['line down', 'bump on right'], totalSteps: 2 },
-  c: { path: 'M 70 45 C 60 35 40 35 35 50 C 30 65 35 85 50 92 C 62 96 72 90 75 82', steps: ['curve top left', 'curve bottom right'], totalSteps: 2 },
-  d: { path: 'M 65 115 L 65 25 M 65 40 C 75 40 80 60 72 72 C 65 82 45 82 38 72 C 30 62 35 40 65 40', steps: ['line down', 'bump on left'], totalSteps: 2 },
-  e: { path: 'M 72 58 C 70 40 30 40 30 55 C 30 70 40 85 55 88 C 68 90 78 80 78 72 L 40 72', steps: ['round body', 'line across middle'], totalSteps: 2 },
-  f: { path: 'M 55 25 L 55 102 M 55 25 C 55 18 40 18 40 28 M 35 58 L 72 58', steps: ['line down', 'hook top left', 'line across middle'], totalSteps: 3 },
-  g: { path: 'M 55 72 C 35 72 28 55 35 42 C 42 30 62 30 68 42 C 75 55 68 72 55 72 M 55 72 L 55 115 C 55 125 30 125 28 115', steps: ['round circle', 'tail down left'], totalSteps: 2 },
-  h: { path: 'M 35 115 L 35 25 M 35 40 C 25 40 22 62 30 72 C 38 82 60 80 65 70 C 70 60 65 40 35 40', steps: ['line down', 'bump across right'], totalSteps: 2 },
-  i: { path: 'M 50 40 L 50 102 M 50 25 L 50 30', steps: ['line down', 'dot on top'], totalSteps: 2 },
-  j: { path: 'M 55 40 L 55 102 M 55 102 C 55 115 35 115 33 105 M 55 25 L 55 30', steps: ['line down', 'curve bottom left', 'dot on top'], totalSteps: 3 },
-  k: { path: 'M 38 115 L 38 25 M 38 65 L 68 45 M 38 65 L 70 88', steps: ['line down', 'slant up right', 'slant down right'], totalSteps: 3 },
-  l: { path: 'M 48 115 L 48 25', steps: ['line down'], totalSteps: 1 },
-  m: { path: 'M 20 100 L 20 45 M 20 50 C 20 38 40 38 45 52 C 50 38 70 38 75 52 L 78 100', steps: ['left line', 'first hump', 'second hump', 'right line'], totalSteps: 4 },
-  n: { path: 'M 28 100 L 28 45 M 28 50 C 28 38 58 38 65 55 L 68 100', steps: ['line down', 'bump across right', 'line down'], totalSteps: 3 },
-  o: { path: 'M 50 42 C 30 42 28 68 50 92 C 72 68 70 42 50 42', steps: ['curve around', 'curve back around'], totalSteps: 2 },
-  p: { path: 'M 38 102 L 38 42 M 38 48 C 28 48 25 68 32 78 C 40 88 58 88 65 78 C 72 68 65 48 38 48', steps: ['line up from bottom', 'bump on right'], totalSteps: 2 },
-  q: { path: 'M 62 102 L 62 42 M 62 48 C 72 48 75 68 68 78 C 60 88 42 88 35 78 C 28 68 35 48 62 48 M 62 102 L 62 118', steps: ['line up from bottom', 'bump on left', 'tail down'], totalSteps: 3 },
-  r: { path: 'M 28 100 L 28 45 M 28 48 C 28 40 55 40 60 52 L 52 62', steps: ['line down', 'curve up and hook'], totalSteps: 2 },
-  s: { path: 'M 62 42 C 75 42 78 52 68 60 C 55 68 38 65 35 78 C 32 90 50 95 65 90', steps: ['curve top left', 'curve bottom right'], totalSteps: 2 },
-  t: { path: 'M 50 25 L 50 105 M 32 58 L 72 58', steps: ['line down', 'line across middle'], totalSteps: 2 },
-  u: { path: 'M 28 50 L 28 80 C 28 98 72 98 72 80 L 72 50', steps: ['line down left', 'curve bottom', 'line up right'], totalSteps: 3 },
-  v: { path: 'M 22 38 L 50 98 L 78 38', steps: ['slant down left', 'slant up right'], totalSteps: 2 },
-  w: { path: 'M 15 38 L 32 98 L 50 48 L 68 98 L 85 38', steps: ['slant down', 'slant up', 'slant down', 'slant up'], totalSteps: 4 },
-  x: { path: 'M 25 38 L 75 98 M 75 38 L 25 98', steps: ['slant down right', 'cross slant down left'], totalSteps: 2 },
-  y: { path: 'M 22 38 L 50 88 M 78 38 L 50 88 L 50 118', steps: ['slant down left', 'slant down right', 'line straight down'], totalSteps: 3 },
-  z: { path: 'M 25 42 L 75 42 L 25 92 L 75 92', steps: ['line across top', 'slant down left', 'line across bottom'], totalSteps: 3 },
-};
-
 /* ─── Fun facts per letter ─── */
 const LETTER_FACTS: Record<string, string> = {
   A: "A is the first letter of the alphabet!",
@@ -140,6 +74,402 @@ const LETTER_FACTS: Record<string, string> = {
   z: "z zigzags across like lightning!",
 };
 
+/* ─── Dotted Board Guidelines ─── */
+function BoardLines() {
+  return (
+    <svg className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden>
+      {[0.33, 0.66].map((y) => (
+        <line
+          key={y}
+          x1="4%" y1={`${y * 100}%`} x2="96%" y2={`${y * 100}%`}
+          stroke="rgba(180, 83, 9, 0.08)" strokeWidth="1.5" strokeDasharray="6 5"
+        />
+      ))}
+    </svg>
+  );
+}
+
+/* ─── Letter showcase badge ─── */
+function BoardLetter({ letter, color }: { letter: string; color: string }) {
+  return (
+    <div
+      className="relative flex items-center justify-center select-none"
+      style={{ width: '100%', aspectRatio: '1 / 1', maxWidth: 200 }}
+    >
+      <div
+        className="absolute inset-0 rounded-full opacity-10 blur-xl animate-pulse"
+        style={{ background: color }}
+      />
+      <span
+        className="relative z-10 font-black leading-none font-sans"
+        style={{
+          fontSize: 'clamp(5rem, 20vw, 8.5rem)',
+          color: '#78350f',
+          textShadow: `0 0 30px ${color}50, 0 2px 4px rgba(120,53,15,0.1)`,
+        }}
+      >
+        {letter}
+      </span>
+    </div>
+  );
+}
+
+/* ─── Tracing board sub-component ─── */
+interface TraceBoardProps {
+  letter: string;
+  color: string;
+  onCorrect: () => void;
+}
+
+function TraceBoard({ letter, color, onCorrect }: TraceBoardProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const guideCanvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const pointsRef = useRef<{ x: number; y: number }[]>([]);
+  const letterDataRef = useRef<{
+    pixels: { x: number; y: number }[];
+    minX: number; maxX: number;
+    minY: number; maxY: number;
+  } | null>(null);
+
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [hasDrawn, setHasDrawn] = useState(false);
+  const [done, setDone] = useState(false);
+  const [failMsg, setFailMsg] = useState<string | null>(null);
+  const [dimensions, setDimensions] = useState({ w: 400, h: 400 });
+  const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const buildLetterData = useCallback((w: number, h: number) => {
+    const off = document.createElement('canvas');
+    off.width = w;
+    off.height = h;
+    const ctx = off.getContext('2d');
+    if (!ctx) return;
+
+    const fontSize = Math.min(260, Math.max(165, Math.round(w * 0.55)));
+    ctx.font = `900 ${fontSize}px "Arial", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#ff0000';
+    ctx.fillText(letter, w / 2, h / 2);
+
+    const img = ctx.getImageData(0, 0, w, h);
+    const pixels: { x: number; y: number }[] = [];
+    let minX = w, maxX = 0, minY = h, maxY = 0;
+
+    const step = 4;
+    for (let py = 0; py < h; py += step) {
+      for (let px = 0; px < w; px += step) {
+        if (img.data[(py * w + px) * 4] > 100) {
+          pixels.push({ x: px, y: py });
+          if (px < minX) minX = px;
+          if (px > maxX) maxX = px;
+          if (py < minY) minY = py;
+          if (py > maxY) maxY = py;
+        }
+      }
+    }
+
+    if (pixels.length > 0) {
+      letterDataRef.current = { pixels, minX, maxX, minY, maxY };
+    }
+  }, [letter]);
+
+  const drawGuide = useCallback((w: number, h: number) => {
+    const gc = guideCanvasRef.current;
+    if (!gc) return;
+    gc.width = w;
+    gc.height = h;
+    const ctx = gc.getContext('2d');
+    if (!ctx) return;
+    const fontSize = Math.min(260, Math.max(165, Math.round(w * 0.55)));
+    ctx.clearRect(0, 0, w, h);
+    ctx.font = `900 ${fontSize}px "Arial", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    
+    // Light brown guide letter with elegant dashes
+    ctx.fillStyle = 'rgba(180, 83, 9, 0.12)';
+    ctx.fillText(letter, w / 2, h / 2);
+
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = 'rgba(180, 83, 9, 0.25)';
+    ctx.setLineDash([5, 8]);
+    ctx.strokeText(letter, w / 2, h / 2);
+  }, [letter]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const setup = async () => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      const w = container.clientWidth || 360;
+      const h = Math.max(380, Math.round(w * 0.9));
+
+      if (!cancelled) setDimensions({ w, h });
+
+      const dc = canvasRef.current;
+      if (dc) { dc.width = w; dc.height = h; }
+
+      letterDataRef.current = null;
+
+      if (cancelled) return;
+
+      drawGuide(w, h);
+      buildLetterData(w, h);
+    };
+
+    const timer = setTimeout(setup, 80);
+    const onResize = () => { clearTimeout(timer); setTimeout(setup, 80); };
+    window.addEventListener('resize', onResize);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+      window.removeEventListener('resize', onResize);
+      if (successTimerRef.current) clearTimeout(successTimerRef.current);
+    };
+  }, [letter, drawGuide, buildLetterData]);
+
+  const getCanvasPos = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    const rect = canvasRef.current!.getBoundingClientRect();
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  };
+
+  const startDrawing = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (done) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    setIsDrawing(true);
+    setHasDrawn(true);
+    setFailMsg(null);
+    const pos = getCanvasPos(e);
+    pointsRef.current.push(pos);
+    const ctx = canvasRef.current?.getContext('2d');
+    if (ctx) { ctx.beginPath(); ctx.moveTo(pos.x, pos.y); }
+  };
+
+  const draw = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!isDrawing || done) return;
+    const pos = getCanvasPos(e);
+    pointsRef.current.push(pos);
+
+    const ctx = canvasRef.current?.getContext('2d');
+    if (ctx) {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 14;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+    }
+  };
+
+  const stopDrawing = () => setIsDrawing(false);
+
+  const handleReset = () => {
+    const ctx = canvasRef.current?.getContext('2d');
+    if (ctx) ctx.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
+    pointsRef.current = [];
+    setHasDrawn(false);
+    setDone(false);
+    setFailMsg(null);
+    if (successTimerRef.current) clearTimeout(successTimerRef.current);
+  };
+
+  const handleFinish = () => {
+    const pts = pointsRef.current;
+    if (pts.length < 15) return;
+
+    const data = letterDataRef.current;
+    if (!data || data.pixels.length === 0) {
+      setFailMsg('Try again! ✍️');
+      return;
+    }
+
+    const letterW = data.maxX - data.minX;
+    const letterH = data.maxY - data.minY;
+
+    if (letterW <= 0 || letterH <= 0) {
+      setFailMsg('Try again! ✍️');
+      return;
+    }
+
+    const GRID_SIZE = 7;
+    const cellW = letterW / GRID_SIZE;
+    const cellH = letterH / GRID_SIZE;
+
+    const cellPixelCounts = new Map<string, number>();
+    for (const p of data.pixels) {
+      const col = Math.floor((p.x - data.minX) / cellW);
+      const row = Math.floor((p.y - data.minY) / cellH);
+      const c = Math.max(0, Math.min(GRID_SIZE - 1, col));
+      const r = Math.max(0, Math.min(GRID_SIZE - 1, row));
+      const cellKey = `${c},${r}`;
+      cellPixelCounts.set(cellKey, (cellPixelCounts.get(cellKey) || 0) + 1);
+    }
+
+    const activeCells = new Set<string>();
+    for (const [cellKey, count] of cellPixelCounts.entries()) {
+      if (count >= 8) {
+        activeCells.add(cellKey);
+      }
+    }
+
+    const tol = Math.max(34, Math.round(dimensions.w * 0.11));
+    const tolSq = tol * tol;
+
+    const densePoints: { x: number; y: number }[] = [];
+    if (pts.length > 0) {
+      densePoints.push(pts[0]);
+      for (let i = 1; i < pts.length; i++) {
+        const p1 = pts[i - 1];
+        const p2 = pts[i];
+        const dx = p2.x - p1.x;
+        const dy = p2.y - p1.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist > 8) {
+          const steps = Math.ceil(dist / 8);
+          for (let s = 1; s <= steps; s++) {
+            densePoints.push({
+              x: p1.x + (dx * s) / steps,
+              y: p1.y + (dy * s) / steps,
+            });
+          }
+        } else {
+          densePoints.push(p2);
+        }
+      }
+    }
+
+    let pointsOnLetter = 0;
+    const visitedActiveCells = new Set<string>();
+
+    for (const p of densePoints) {
+      let isClose = false;
+      for (const lp of data.pixels) {
+        const dx = lp.x - p.x;
+        const dy = lp.y - p.y;
+        if (dx * dx + dy * dy < tolSq) {
+          isClose = true;
+          break;
+        }
+      }
+
+      if (isClose) {
+        pointsOnLetter++;
+        const col = Math.floor((p.x - data.minX) / cellW);
+        const row = Math.floor((p.y - data.minY) / cellH);
+        const c = Math.max(0, Math.min(GRID_SIZE - 1, col));
+        const r = Math.max(0, Math.min(GRID_SIZE - 1, row));
+        const cellKey = `${c},${r}`;
+        if (activeCells.has(cellKey)) {
+          visitedActiveCells.add(cellKey);
+        }
+      }
+    }
+
+    const containment = densePoints.length > 0 ? (pointsOnLetter / densePoints.length) * 100 : 0;
+    const coverage = activeCells.size > 0 ? (visitedActiveCells.size / activeCells.size) * 100 : 0;
+
+    const passed = containment >= 40 && coverage >= 45;
+
+    if (passed) {
+      setDone(true);
+      successTimerRef.current = setTimeout(onCorrect, 1000);
+    } else if (containment < 40) {
+      setFailMsg('Stay on the letter lines! 🎯');
+    } else {
+      setFailMsg('Trace the whole letter! ✍️');
+    }
+  };
+
+  return (
+    <motion.div
+      key={`trace-${letter}`}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex flex-col items-center gap-4 w-full"
+    >
+      <div className="w-full text-center">
+        <p className="text-amber-900 text-sm sm:text-base font-black font-sans">
+          Trace the letter &quot;{letter}&quot;! ✍️
+        </p>
+      </div>
+
+      {/* Cream Slate Board */}
+      <div
+        ref={containerRef}
+        className="relative w-full rounded-3xl overflow-hidden touch-none"
+        style={{
+          height: dimensions.h,
+          background: '#fffdf9',
+          border: '4px solid #b45309',
+          boxShadow: '0 8px 30px rgba(180,83,9,0.06)',
+          touchAction: 'none',
+        }}
+      >
+        <BoardLines />
+        <canvas ref={guideCanvasRef} className="absolute inset-0 z-0 pointer-events-none touch-none w-full h-full" />
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 z-10 cursor-crosshair touch-none"
+          style={{ width: dimensions.w, height: dimensions.h, touchAction: 'none' }}
+          onPointerDown={startDrawing}
+          onPointerMove={draw}
+          onPointerUp={stopDrawing}
+          onPointerLeave={stopDrawing}
+        />
+
+        {done && (
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-amber-50/40 backdrop-blur-[2px]">
+            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex flex-col items-center">
+              <div className="text-6xl animate-bounce">⭐</div>
+              <p className="text-lg font-black text-emerald-600 mt-2 font-sans">Awesome Job! 🎊</p>
+            </motion.div>
+          </div>
+        )}
+
+        <AnimatePresence>
+          {failMsg && !done && (
+            <motion.div
+              key="fail"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 bg-rose-50 border border-rose-200 text-rose-700 px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans whitespace-nowrap"
+            >
+              {failMsg}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <div className="flex gap-4 w-full justify-center">
+        <button
+          onClick={handleReset}
+          disabled={done}
+          className="flex-1 py-3.5 rounded-2xl font-black text-amber-800 text-sm bg-amber-100 hover:bg-amber-200/60 active:scale-95 transition-all border-b-4 border-amber-300 disabled:opacity-50 font-sans"
+        >
+          Clear 🧼
+        </button>
+
+        <button
+          onClick={handleFinish}
+          disabled={!hasDrawn || done}
+          className="flex-1 py-3.5 rounded-2xl font-black text-white text-sm bg-gradient-to-r from-emerald-500 to-teal-500 shadow-md border-b-4 border-emerald-700 active:scale-95 transition-all disabled:opacity-50 font-sans"
+        >
+          Check ✅
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ─── Main Component ─── */
 export default function LetterShowcase({ config, onComplete, nextLessonId }: Props) {
   const rawLetter = (config.letter as string) || 'A';
   const isCaps = rawLetter === rawLetter.toUpperCase() && rawLetter.length === 1;
@@ -148,20 +478,12 @@ export default function LetterShowcase({ config, onComplete, nextLessonId }: Pro
   const word = (config.word as string) || letterData.word;
   const emoji = (config.emoji as string) || letterData.emoji;
   const color = (config.color as string) || letterData.color;
-  const drawMap = isCaps ? LETTER_DRAW_CAPS : LETTER_DRAW_SMALL;
-  const lookupKey = isCaps ? letter : letter.toLowerCase();
-  const drawData = drawMap[lookupKey] || { path: 'M 50 10 L 50 110', steps: ['line down'], totalSteps: 1 };
-  const pathD = drawData.path;
-  const steps = drawData.steps;
-  const totalSteps = drawData.totalSteps;
   const fact = LETTER_FACTS[letter] || 'fun letter!';
   const queryClient = useQueryClient();
 
-  const [phase, setPhase] = useState<'showcase' | 'quiz' | 'done'>('showcase');
-  const [showExtra, setShowExtra] = useState(false);
-  const [wrongTap, setWrongTap] = useState(false);
+  const [phase, setPhase] = useState<'showcase' | 'trace' | 'quiz' | 'done'>('showcase');
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [currentStep, setCurrentStep] = useState(0);
+  const [wrongTap, setWrongTap] = useState(false);
   const startTime = useRef(Date.now());
 
   /* ── Prefetch next lesson when showcase is visible ── */
@@ -173,22 +495,6 @@ export default function LetterShowcase({ config, onComplete, nextLessonId }: Pro
       });
     }
   }, [phase, nextLessonId, queryClient]);
-
-  /* ── Step-by-step instruction timing ── */
-  useEffect(() => {
-    if (phase !== 'showcase') return;
-    // Show steps one by one during the draw (each step takes ~1.5s)
-    const stepDuration = 1800;
-    const stepTimers: NodeJS.Timeout[] = [];
-    for (let i = 0; i <= totalSteps; i++) {
-      stepTimers.push(setTimeout(() => {
-        setCurrentStep(i);
-      }, i * stepDuration));
-    }
-    // Show emoji+word after draw completes
-    stepTimers.push(setTimeout(() => setShowExtra(true), totalSteps * stepDuration + 400));
-    return () => stepTimers.forEach(clearTimeout);
-  }, [phase, totalSteps]);
 
   /* ── Quiz options ── */
   const quizOptions = useMemo(() => {
@@ -202,10 +508,13 @@ export default function LetterShowcase({ config, onComplete, nextLessonId }: Pro
       { id: 'correct', word, emoji, correct: true },
       ...distractors.map((d, i) => ({ id: `w${i}`, ...d, correct: false })),
     ]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [letter, word, emoji]);
 
   /* ── Handlers ── */
+  const handleTraceCorrect = useCallback(() => {
+    setPhase('quiz');
+  }, []);
+
   const handleQuizTap = useCallback((opt: { id: string; correct: boolean }) => {
     if (selectedId) return;
     setSelectedId(opt.id);
@@ -219,300 +528,177 @@ export default function LetterShowcase({ config, onComplete, nextLessonId }: Pro
 
   const handleComplete = useCallback(() => {
     onComplete({
-      score: 100, max_score: 100,
+      score: 100,
+      max_score: 100,
       completion_data: { letter, word, emoji, quiz_passed: true },
       time_taken_seconds: Math.round((Date.now() - startTime.current) / 1000),
     });
   }, [onComplete, letter, word, emoji]);
 
-  const bgGrad = `linear-gradient(145deg, ${color}dd, ${color}55)`;
-
   return (
-    <div className="flex flex-col items-center justify-center gap-2 sm:gap-3 px-2 sm:px-4 pt-1 sm:pt-2 pb-2 sm:pb-3 select-none">
+    <div className="flex flex-col items-center justify-center gap-3 px-3 sm:px-5 pb-4 select-none w-full">
       <AnimatePresence mode="wait">
         {/* ═══════════ PHASE 1: SHOWCASE ═══════════ */}
         {phase === 'showcase' && (
           <motion.div
             key="showcase"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.35 }}
-            className="w-full"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="flex flex-col items-center gap-4 w-full"
           >
-            <div className="rounded-xl sm:rounded-2xl overflow-hidden shadow-xl sm:shadow-2xl border border-white/10"
-              style={{ background: 'linear-gradient(160deg, #0f172a 0%, #1e293b 100%)' }}>
-              {/* SVG Letter Animation Area */}
-              <div className="relative w-full aspect-[4/3] sm:aspect-[3/2]">
-                <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
-                  style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)', backgroundSize: '20px 20px' }} />
-
-                {isCaps ? (
-                  <svg viewBox="0 0 100 120" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
-                    {pathD && (
-                      <path d={pathD} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
-                    )}
-                    {pathD && (
-                      <motion.path d={pathD} fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" strokeOpacity={0.9}
-                        initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-                        transition={{ duration: totalSteps * 1.6, ease: 'easeInOut' }}
-                        style={{ filter: `drop-shadow(0 0 6px ${color}60)` }}
-                      />
-                    )}
-                  </svg>
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <motion.span
-                      initial={{ opacity: 0, scale: 2 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 1.5, ease: 'easeOut' }}
-                      className="font-black text-white select-none"
-                      style={{ fontSize: 'clamp(5rem, 20vw, 8rem)', filter: `drop-shadow(0 0 20px ${color}60)` }}
-                    >
-                      {letter}
-                    </motion.span>
-                  </div>
-                )}
-
-                {/* Step-by-step instruction overlay */}
-                {currentStep < totalSteps && (
-                  <motion.div
-                    key={currentStep}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="absolute top-2 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full"
-                    style={{ background: `${color}33`, backdropFilter: 'blur(8px)', border: `1px solid ${color}44` }}
-                  >
-                    <span className="text-[10px] sm:text-xs font-bold text-white/80 tracking-wide flex items-center gap-1.5">
-                      <span className="w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-bold" style={{ background: color }}>
-                        {currentStep + 1}
-                      </span>
-                      {steps[currentStep]}
-                    </span>
-                  </motion.div>
-                )}
-
-                {/* Floating emoji + word - appears after draw */}
-                <AnimatePresence>
-                  {showExtra && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-1.5 sm:py-2 rounded-full"
-                      style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)' }}
-                    >
-                      <motion.span
-                        initial={{ scale: 0, rotate: -20 }}
-                        animate={{ scale: 1, rotate: 0 }}
-                        transition={{ type: 'spring', stiffness: 250, damping: 14, delay: 0.1 }}
-                        className="text-xl sm:text-2xl"
-                      >
-                        {emoji}
-                      </motion.span>
-                      <motion.span
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="text-xs sm:text-sm font-bold text-white/80 tracking-wide"
-                      >
-                        {letter} = {word}
-                      </motion.span>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Letter label top-left */}
-                <div className="absolute top-2 sm:top-3 left-3 sm:left-4 flex items-center gap-1.5">
-                  <span className="text-[10px] sm:text-xs font-semibold text-white/30 tracking-widest uppercase">Letter</span>
-                  <span className="text-sm sm:text-base font-black text-white/50">{letter}</span>
-                </div>
-              </div>
-
-              {/* Bottom section: fact + button */}
-              <AnimatePresence>
-                {showExtra && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="px-4 sm:px-6 pb-4 sm:pb-5 pt-2 flex flex-col items-center gap-3"
-                  >
-                    <p className="text-[10px] sm:text-xs text-white/40 font-medium text-center max-w-xs leading-relaxed">
-                      {fact}
-                    </p>
-                    <motion.button
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.96 }}
-                      onClick={() => setPhase('quiz')}
-                      className="px-6 sm:px-8 py-2 sm:py-2.5 text-xs sm:text-sm font-bold rounded-lg transition-all"
-                      style={{ background: color, boxShadow: `0 4px 20px ${color}50`, color: '#fff' }}
-                    >
-                      Got It! ✨
-                    </motion.button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100/50 border border-amber-200/50">
+              <span className="text-[10px] font-black text-amber-800 tracking-wider uppercase font-sans">English Lesson</span>
             </div>
 
-            <p className="text-[8px] sm:text-[10px] font-medium text-white/25 text-center mt-2 tracking-wider uppercase">
-              Watch the letter draw itself
+            {/* Showcase Card */}
+            <div
+              className="relative w-full rounded-3xl overflow-hidden border-[3px] border-amber-200 bg-amber-50/40 p-6 flex flex-col items-center gap-4"
+              style={{ boxShadow: '0 8px 30px rgba(180,83,9,0.02)' }}
+            >
+              <BoardLetter letter={letter} color={color} />
+
+              <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border border-amber-100 shadow-sm mt-2 font-sans">
+                <span className="text-3xl">{emoji}</span>
+                <span className="text-lg font-black text-amber-950">
+                  {letter} is for {word}
+                </span>
+              </div>
+            </div>
+
+            <p className="text-[10px] sm:text-xs text-amber-800/80 font-bold text-center max-w-xs leading-relaxed font-sans px-2">
+              {fact}
             </p>
+
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setPhase('trace')}
+              className="w-full max-w-xs py-3.5 rounded-2xl font-black text-white text-sm tracking-wide shadow-md active:scale-95 font-sans"
+              style={{
+                background: `linear-gradient(135deg, ${color}, ${color}ee)`,
+                boxShadow: `0 4px 20px ${color}30`,
+                borderBottom: `4px solid ${color}aa`
+              }}
+            >
+              Learn to Trace! ✏️
+            </motion.button>
           </motion.div>
         )}
 
-        {/* ═══════════ PHASE 2: QUIZ ═══════════ */}
+        {/* ═══════════ PHASE 2: TRACING ═══════════ */}
+        {phase === 'trace' && (
+          <motion.div
+            key="trace"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            className="w-full"
+          >
+            <TraceBoard
+              letter={letter}
+              color={color}
+              onCorrect={handleTraceCorrect}
+            />
+          </motion.div>
+        )}
+
+        {/* ═══════════ PHASE 3: QUIZ ═══════════ */}
         {phase === 'quiz' && (
           <motion.div
             key="quiz"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="w-full"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="flex flex-col items-center gap-4 w-full"
           >
-            <div className="rounded-xl sm:rounded-2xl overflow-hidden border border-white/10"
-              style={{ background: 'linear-gradient(160deg, #0f172a 0%, #1e293b 100%)' }}>
-              <div className="px-4 sm:px-6 pt-5 sm:pt-7 pb-3 sm:pb-4 text-center">
-                <div className="flex items-center justify-center gap-2 mb-1">
-                  <span className="text-xl sm:text-2xl">🤔</span>
-                  <h3 className="text-base sm:text-lg font-bold text-white/90">
-                    What is <span style={{ color }}>{letter}</span> for?
-                  </h3>
-                </div>
-                <p className="text-[10px] sm:text-xs text-white/40 font-medium">Tap the matching picture</p>
+            <div className="text-center mb-2">
+              <h3 className="text-lg sm:text-xl font-black text-amber-950 font-sans">
+                What is <span style={{ color }}>{letter}</span> for? 🤔
+              </h3>
+              <p className="text-xs text-amber-800/60 font-bold font-sans">Tap the matching picture</p>
+            </div>
+
+            <motion.div
+              animate={wrongTap ? { x: [0, -6, 6, -4, 4, 0] } : {}}
+              transition={{ duration: 0.3 }}
+              className="w-full max-w-xs sm:max-w-sm"
+            >
+              <div className="grid grid-cols-3 gap-3">
+                {quizOptions.map((opt) => {
+                  const isSelected = selectedId === opt.id;
+                  const isWin = isSelected && opt.correct;
+                  const isLose = isSelected && !opt.correct;
+
+                  return (
+                    <motion.button
+                      key={opt.id}
+                      disabled={!!selectedId}
+                      whileTap={!selectedId ? { scale: 0.95 } : undefined}
+                      onClick={() => handleQuizTap(opt)}
+                      className={`
+                        relative flex flex-col items-center gap-1.5 p-3 rounded-2xl border-2 transition-all duration-200 shadow-sm font-sans
+                        ${isWin
+                          ? 'border-emerald-400 bg-emerald-500/10 scale-105'
+                          : isLose
+                            ? 'border-rose-400 bg-rose-500/10'
+                            : selectedId
+                              ? 'border-amber-100 bg-[#fffdf9] opacity-50'
+                              : 'border-amber-200 bg-[#fffdf9] hover:bg-amber-50/50 cursor-pointer active:scale-95'
+                        }
+                      `}
+                    >
+                      {isWin && (
+                        <motion.span
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="absolute -top-1.5 -right-1.5 text-xs sm:text-sm bg-emerald-500 text-white rounded-full w-5 h-5 flex items-center justify-center font-bold"
+                        >
+                          ✓
+                        </motion.span>
+                      )}
+                      <span className="text-3xl sm:text-4xl">{opt.emoji}</span>
+                      <span className={`text-[10px] sm:text-xs font-black uppercase ${isWin ? 'text-emerald-700' : 'text-amber-950'}`}>
+                        {opt.word}
+                      </span>
+                    </motion.button>
+                  );
+                })}
               </div>
 
-              <motion.div
-                animate={wrongTap ? { x: [0, -6, 6, -4, 4, 0] } : {}}
-                transition={{ duration: 0.3, type: 'tween' }}
-                className="px-4 sm:px-6 pb-5 sm:pb-7"
-              >
-                <div className="grid grid-cols-3 gap-2.5 sm:gap-4 max-w-sm mx-auto">
-                  {quizOptions.map((opt) => {
-                    const isSelected = selectedId === opt.id;
-                    const isWin = isSelected && opt.correct;
-                    const isLose = isSelected && !opt.correct;
-
-                    return (
-                      <motion.button
-                        key={opt.id}
-                        whileHover={!selectedId ? { y: -3, scale: 1.03 } : {}}
-                        whileTap={!selectedId ? { scale: 0.95 } : {}}
-                        onClick={() => handleQuizTap(opt)}
-                        className="relative flex flex-col items-center gap-1.5 sm:gap-2 p-2.5 sm:p-4 rounded-xl transition-all overflow-hidden"
-                        style={{
-                          background: isWin
-                            ? 'rgba(34,197,94,0.2)'
-                            : isLose
-                            ? 'rgba(239,68,68,0.2)'
-                            : 'rgba(255,255,255,0.06)',
-                          border: isWin
-                            ? '2px solid rgba(34,197,94,0.5)'
-                            : isLose
-                            ? '2px solid rgba(239,68,68,0.5)'
-                            : '1px solid rgba(255,255,255,0.06)',
-                        }}
-                      >
-                        {isWin && (
-                          <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            className="absolute -top-0.5 -right-0.5 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-green-500 flex items-center justify-center text-white text-[8px] sm:text-[10px] font-bold shadow-lg"
-                          >
-                            ✓
-                          </motion.div>
-                        )}
-                        <span className="text-3xl sm:text-5xl">{opt.emoji}</span>
-                        <span className={`text-[9px] sm:text-[11px] font-bold ${isWin ? 'text-green-400' : isLose ? 'text-red-400' : 'text-white/50'} uppercase tracking-wider`}>
-                          {opt.word}
-                        </span>
-                      </motion.button>
-                    );
-                  })}
-                </div>
-
-                {wrongTap && (
-                  <motion.p
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-center text-[10px] sm:text-xs font-bold text-red-300 mt-3"
-                  >
-                    Not that one — try again! 💪
-                  </motion.p>
-                )}
-              </motion.div>
-            </div>
+              {wrongTap && (
+                <p className="text-center text-xs font-bold text-rose-600 mt-4 font-sans">
+                  Not that one — try again! 💪
+                </p>
+              )}
+            </motion.div>
           </motion.div>
         )}
 
-        {/* ═══════════ PHASE 3: DONE ═══════════ */}
+        {/* ═══════════ PHASE 4: DONE ═══════════ */}
         {phase === 'done' && (
           <motion.div
             key="done"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
-            className="w-full"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col items-center gap-5 py-6 text-center w-full"
           >
-            <div className="rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 text-center"
-              style={{ background: `linear-gradient(160deg, ${color}22, #0f172a 60%)` }}>
-              <div className="px-4 sm:px-6 py-6 sm:py-8 flex flex-col items-center gap-2 sm:gap-3">
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1, rotate: [0, 5, -5, 0] }}
-                  transition={{ type: 'tween', duration: 0.5 }}
-                  className="text-3xl sm:text-5xl"
-                >
-                  {emoji}
-                </motion.div>
+            <span className="text-6xl animate-bounce">🎈</span>
+            <h3 className="text-xl sm:text-2xl font-black text-amber-950 font-sans">Great Job!</h3>
+            <p className="text-sm font-bold text-amber-800 max-w-xs leading-relaxed font-sans">
+              You learned the letter &quot;{letter}&quot; and matched {word} {emoji}!
+            </p>
 
-                <motion.p
-                  initial={{ y: 10, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.2 }}
-                  className="text-base sm:text-xl font-bold text-white/90"
-                >
-                  {letter} is for {word}!
-                </motion.p>
-
-                <motion.p
-                  initial={{ y: 8, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.35 }}
-                  className="text-[9px] sm:text-xs text-white/40 font-medium"
-                >
-                  You learned the letter {letter}! 🌟
-                </motion.p>
-
-                {/* Letter preview for visual satisfaction */}
-                {isCaps ? (
-                  <motion.svg viewBox="0 0 100 120" className="w-16 sm:w-20 h-auto my-1"
-                    initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4 }}>
-                    {pathD && (
-                      <path d={pathD} fill="none" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" opacity={0.7} style={{ filter: `drop-shadow(0 0 8px ${color}40)` }} />
-                    )}
-                  </motion.svg>
-                ) : (
-                  <motion.span
-                    initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4 }}
-                    className="text-3xl sm:text-4xl font-black my-1" style={{ color }}>
-                    {letter}
-                  </motion.span>
-                )}
-
-                <motion.button
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.96 }}
-                  onClick={handleComplete}
-                  className="mt-1 px-6 sm:px-8 py-2 sm:py-2.5 text-xs sm:text-sm font-bold rounded-lg transition-all"
-                  style={{ background: color, boxShadow: `0 4px 20px ${color}50`, color: '#fff' }}
-                >
-                  Continue ➡️
-                </motion.button>
-              </div>
+            <div className="w-20 h-20 rounded-2xl bg-emerald-50 border-2 border-emerald-200 flex items-center justify-center text-4xl font-bold text-emerald-600 shadow-sm font-sans">
+              {letter}
             </div>
+
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={handleComplete}
+              className="w-full max-w-xs py-3.5 rounded-2xl font-black text-white text-sm bg-gradient-to-r from-emerald-500 to-teal-500 shadow-md border-b-4 border-emerald-700 active:scale-95 font-sans"
+            >
+              Continue ➡️
+            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>

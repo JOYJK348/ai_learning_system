@@ -97,7 +97,7 @@ function BoardLines() {
     <svg className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden>
       {[0.33, 0.66].map((y) => (
         <line key={y} x1="4%" y1={`${y * 100}%`} x2="96%" y2={`${y * 100}%`}
-          stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" strokeDasharray="6 5" />
+          stroke="rgba(180, 83, 9, 0.08)" strokeWidth="1.5" strokeDasharray="6 5" />
       ))}
     </svg>
   );
@@ -129,6 +129,22 @@ function StarBurst() {
   );
 }
 
+function FamilyMedia({ emoji, className = "w-10 h-10 object-contain" }: { emoji: string; className?: string }) {
+  const images: Record<string, string> = {
+    '👩': '/assets/quiz/family-mother.png',
+    '👨': '/assets/quiz/family-father.png',
+    '👧': '/assets/quiz/family-sister.png',
+    '👦': '/assets/quiz/family-brother.png',
+    '👵': '/assets/quiz/family-grandma.png',
+    '👴': '/assets/quiz/family-grandpa.png',
+  };
+  const src = images[emoji];
+  if (src) {
+    return <img src={src} className={className} alt={emoji} />;
+  }
+  return <span className={className.includes('w-') ? 'text-3xl select-none' : ''}>{emoji}</span>;
+}
+
 /* ─── Phase: Showcase ─── */
 interface ShowcaseProps { entry: WordEntry; index: number; total: number; onNext: () => void; }
 
@@ -138,43 +154,37 @@ function Showcase({ entry, index, total, onNext }: ShowcaseProps) {
       exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.28, ease: 'easeOut' }}
       className="flex flex-col items-center gap-4 w-full">
       
-      <div className="flex items-center gap-2 px-4 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.18)' }}>
-        <span className="text-xs font-black text-white/60 tracking-widest uppercase">படம் அறிதல்</span>
-        <span className="text-xs font-bold text-white/40">{index + 1} / {total}</span>
+      <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100/50 border border-amber-200/50">
+        <span className="text-xs font-black text-amber-800 tracking-widest uppercase">படம் அறிதல்</span>
+        <span className="text-xs font-bold text-amber-700/60">{index + 1} / {total}</span>
       </div>
 
-      {/* Blackboard container */}
-      <div className="relative w-full rounded-2xl overflow-hidden min-h-[280px] flex flex-col justify-center items-center" style={{
-        background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)',
-        boxShadow: '0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)',
-        border: '3px solid #2d4a2d',
-      }}>
+      {/* Board container */}
+      <div className="relative w-full rounded-[2rem] border-4 border-[#b45309] shadow-sm bg-[#fffdf9] overflow-hidden min-h-[280px] flex flex-col justify-center items-center">
         <BoardLines />
-        <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
-          style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'4\' height=\'4\'%3E%3Crect width=\'4\' height=\'4\' fill=\'%23ffffff10\'/%3E%3Crect width=\'2\' height=\'2\' fill=\'%23ffffff08\'/%3E%3C/svg%3E")' }} />
 
         <div className="relative z-10 flex flex-col items-center justify-center px-4 py-6 text-center">
           
           {/* Optional Vowel Letter Hint badge */}
           {entry.letterHint && (
-            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute top-3 px-3 py-1 bg-white/10 rounded-lg border border-white/20 text-emerald-400 font-black text-lg font-sans">
+            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute top-3 px-3 py-1 bg-amber-100/50 rounded-lg border border-amber-200/50 text-amber-800 font-black text-lg font-sans">
               {entry.letterHint}
             </motion.div>
           )}
 
-          {/* Big Emoji with float/bounce animation */}
+          {/* Big Emoji */}
           <motion.div
             animate={{ y: [0, -10, 0] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-            className="text-7xl sm:text-8xl drop-shadow-xl select-none mt-2"
+            className="flex items-center justify-center mt-2"
           >
-            {entry.emoji}
+            <FamilyMedia emoji={entry.emoji} className="w-24 h-24 sm:w-28 sm:h-28 object-contain" />
           </motion.div>
 
           {/* Word Label */}
-          <h2 className="text-3xl sm:text-4xl font-black text-white mt-5 tracking-wide" style={{
+          <h2 className="text-3xl sm:text-4xl font-black text-amber-950 mt-5 tracking-wide" style={{
             fontFamily: '"Noto Sans Tamil", "Latha", sans-serif',
-            textShadow: `0 0 24px ${entry.color}70, 0 2px 5px rgba(0,0,0,0.5)`
+            textShadow: '0 2px 4px rgba(180, 83, 9, 0.15)'
           }}>
             {entry.word}
           </h2>
@@ -184,12 +194,7 @@ function Showcase({ entry, index, total, onNext }: ShowcaseProps) {
       {/* Next Button */}
       <motion.button initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
         whileTap={{ scale: 0.96 }} onClick={onNext}
-        className="w-full max-w-xs py-3 rounded-2xl font-black text-white text-sm sm:text-base tracking-wide shadow-xl transition-all active:scale-95 mt-1"
-        style={{
-          background: `linear-gradient(135deg, ${entry.color}, ${entry.color}bb)`,
-          boxShadow: `0 4px 24px ${entry.color}60, 0 2px 0 ${entry.color}40`,
-          border: `2px solid ${entry.color}80`,
-        }}>
+        className="w-full max-w-xs py-3.5 rounded-2xl font-black text-white text-sm sm:text-base tracking-wide shadow-md transition-all active:scale-95 mt-1 bg-gradient-to-r from-emerald-500 to-teal-500 border-b-4 border-emerald-700">
         அடுத்து ➡️
       </motion.button>
     </motion.div>
@@ -224,7 +229,7 @@ function Quiz({ entry, onCorrect }: QuizProps) {
     if (selected) return;
     setSelected(opt.id);
     if (opt.correct) {
-      setTimeout(onCorrect, 800);
+      setTimeout(onCorrect, 400);
     } else {
       setWrongShake(true);
       setTimeout(() => { setWrongShake(false); setSelected(null); }, 600);
@@ -236,19 +241,18 @@ function Quiz({ entry, onCorrect }: QuizProps) {
       animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}
       className="flex flex-col items-center gap-4 w-full">
       
-      {/* Question Blackboard */}
-      <div className="relative w-full rounded-2xl overflow-hidden px-4 py-5 flex flex-col items-center gap-2"
-        style={{ background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)', border: '3px solid #2d4a2d', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
+      {/* Question board */}
+      <div className="relative w-full rounded-[2rem] border-4 border-[#b45309] shadow-sm bg-[#fffdf9] overflow-hidden px-4 py-5 flex flex-col items-center gap-2">
         <BoardLines />
-        <p className="relative z-10 text-white/50 text-[11px] font-black tracking-widest uppercase">படம் பார்த்து கண்டுபிடி!</p>
+        <p className="relative z-10 text-amber-800/80 text-[11px] font-black tracking-widest uppercase">படம் பார்த்து கண்டுபிடி!</p>
         
         <div className="flex items-center gap-3 relative z-10">
-          <span className="text-3xl sm:text-4xl font-black text-white" style={{ fontFamily: '"Noto Sans Tamil", "Latha", sans-serif' }}>
+          <span className="text-3xl sm:text-4xl font-black text-amber-950" style={{ fontFamily: '"Noto Sans Tamil", "Latha", sans-serif' }}>
             {entry.word}
           </span>
         </div>
         
-        <p className="relative z-10 text-white/40 text-[10px] font-bold">சரியான படத்தை தொடுங்கள் 👇</p>
+        <p className="relative z-10 text-amber-700/60 text-[10px] font-bold">சரியான படத்தை தொடுங்கள் 👇</p>
       </div>
 
       {/* 3 Picture Options */}
@@ -262,14 +266,14 @@ function Quiz({ entry, onCorrect }: QuizProps) {
             <button key={opt.id} onClick={() => handleTap(opt)}
               className="flex flex-col items-center gap-2 py-4 px-2 rounded-2xl transition-all active:scale-95 relative overflow-hidden"
               style={{
-                background: isWin ? 'rgba(34,197,94,0.25)' : isLose ? 'rgba(239,68,68,0.25)' : 'rgba(255,255,255,0.08)',
-                border: isWin ? '2.5px solid rgba(34,197,94,0.7)' : isLose ? '2.5px solid rgba(239,68,68,0.5)' : '1.5px solid rgba(255,255,255,0.12)',
-                boxShadow: isWin ? '0 0 20px rgba(34,197,94,0.35)' : 'none',
+                background: isWin ? 'rgba(16,185,129,0.15)' : isLose ? 'rgba(244,63,94,0.15)' : 'rgba(180,83,9,0.05)',
+                border: isWin ? '2.5px solid rgba(16,185,129,0.7)' : isLose ? '2.5px solid rgba(244,63,94,0.5)' : '1.5px solid rgba(180,83,9,0.15)',
+                boxShadow: isWin ? '0 0 20px rgba(16,185,129,0.15)' : 'none',
               }}>
-              {isWin && <div className="absolute -top-0.5 -right-0.5 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white text-[10px] font-black shadow">✓</div>}
+              {isWin && <div className="absolute -top-0.5 -right-0.5 w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white text-[10px] font-black shadow">✓</div>}
               
-              <span className="text-4xl sm:text-5xl leading-none drop-shadow">{opt.emoji}</span>
-              <span className="text-[11px] sm:text-xs font-black mt-1" style={{ color: isWin ? '#4ade80' : isLose ? '#f87171' : 'rgba(255,255,255,0.7)', fontFamily: '"Noto Sans Tamil", sans-serif' }}>
+              <FamilyMedia emoji={opt.emoji} className="w-12 h-12 sm:w-14 sm:h-14 object-contain" />
+              <span className="text-[11px] sm:text-xs font-black mt-1" style={{ color: isWin ? '#10b981' : isLose ? '#f43f5e' : 'rgba(180,83,9,0.8)', fontFamily: '"Noto Sans Tamil", sans-serif' }}>
                 {opt.word}
               </span>
             </button>
@@ -287,21 +291,17 @@ function WordDone({ entry, onNext, isLast }: { entry: WordEntry; onNext: () => v
       exit={{ opacity: 0 }} transition={{ type: 'spring', stiffness: 260, damping: 22 }}
       className="flex flex-col items-center gap-4 w-full relative">
       <StarBurst />
-      <div className="flex flex-col items-center gap-3 px-6 py-6 rounded-2xl w-full" style={{ background: 'rgba(255,255,255,0.07)', border: '1.5px solid rgba(255,255,255,0.12)' }}>
-        <span className="text-6xl sm:text-7xl">{entry.emoji}</span>
-        <p className="text-2xl sm:text-3xl font-black text-white text-center" style={{ fontFamily: '"Noto Sans Tamil", sans-serif' }}>
+      <div className="flex flex-col items-center gap-3 px-6 py-6 rounded-[2rem] border-4 border-amber-200/80 bg-[#fffdf9] w-full shadow-sm">
+        <FamilyMedia emoji={entry.emoji} className="w-16 h-16 object-contain" />
+        <p className="text-2xl sm:text-3xl font-black text-amber-950 text-center" style={{ fontFamily: '"Noto Sans Tamil", sans-serif' }}>
           {entry.word}
         </p>
-        <p className="text-xs text-white/50 font-bold tracking-wider text-center">
+        <p className="text-xs text-amber-800 font-bold tracking-wider text-center">
           அருமையாக கற்றீர்கள்! ⭐
         </p>
       </div>
       <motion.button whileTap={{ scale: 0.96 }} onClick={onNext}
-        className="w-full max-w-xs py-3.5 rounded-2xl font-black text-white text-sm sm:text-base tracking-wide shadow-xl active:scale-95"
-        style={{
-          background: isLast ? 'linear-gradient(135deg, #f97316, #ec4899)' : `linear-gradient(135deg, ${entry.color}, ${entry.color}bb)`,
-          boxShadow: `0 4px 24px ${entry.color}50`,
-        }}>
+        className="w-full max-w-xs py-3.5 rounded-2xl font-black text-white text-sm sm:text-base tracking-wide shadow-md active:scale-95 bg-gradient-to-r from-emerald-500 to-teal-500 border-b-4 border-emerald-700 mt-1">
         {isLast ? 'முடிந்தது! 🎉' : 'அடுத்த சொல் →'}
       </motion.button>
     </motion.div>
@@ -316,26 +316,25 @@ function AllDone({ entries, onComplete }: { entries: WordEntry[]; onComplete: ()
       <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} className="text-6xl sm:text-7xl">
         🏆
       </motion.div>
-      <div className="flex flex-col items-center gap-3 px-6 py-5 rounded-2xl w-full text-center" style={{ background: 'rgba(255,255,255,0.07)', border: '1.5px solid rgba(255,255,255,0.15)' }}>
-        <p className="text-lg sm:text-xl font-black text-white" style={{ fontFamily: '"Noto Sans Tamil", sans-serif' }}>
+      <div className="flex flex-col items-center gap-3 px-6 py-5 rounded-[2rem] border-4 border-amber-200/80 bg-[#fffdf9] w-full text-center shadow-sm">
+        <p className="text-lg sm:text-xl font-black text-amber-950" style={{ fontFamily: '"Noto Sans Tamil", sans-serif' }}>
           மிகவும் அருமை! 🎊
         </p>
-        <p className="text-xs text-white/50 font-bold tracking-wide" style={{ fontFamily: '"Noto Sans Tamil", sans-serif' }}>
+        <p className="text-xs text-amber-800 font-bold tracking-wide" style={{ fontFamily: '"Noto Sans Tamil", sans-serif' }}>
           அனைத்து சொற்களையும் வெற்றிகரமாக கற்றீர்கள்!
         </p>
         <div className="flex items-center gap-2 mt-2 flex-wrap justify-center max-w-sm">
           {entries.map((e, i) => (
             <motion.span key={e.word} initial={{ scale: 0 }} animate={{ scale: 1 }}
               transition={{ delay: i * 0.05, type: 'spring', stiffness: 300, damping: 18 }}
-              className="text-2xl" title={e.word}>
-              {e.emoji}
+              className="w-8 h-8 flex items-center justify-center" title={e.word}>
+              <FamilyMedia emoji={e.emoji} className="w-7 h-7 object-contain" />
             </motion.span>
           ))}
         </div>
       </div>
       <motion.button whileTap={{ scale: 0.96 }} onClick={onComplete}
-        className="w-full max-w-xs py-3.5 rounded-2xl font-black text-white text-base tracking-wide shadow-xl active:scale-95"
-        style={{ background: 'linear-gradient(135deg, #f97316, #ec4899, #6366f1)', boxShadow: '0 4px 28px rgba(249,115,22,0.5)' }}>
+        className="w-full max-w-xs py-3.5 rounded-2xl font-black text-white text-base tracking-wide shadow-md active:scale-95 bg-gradient-to-r from-emerald-500 to-teal-500 border-b-4 border-emerald-700">
         அடுத்த பாடம் ➡️
       </motion.button>
     </motion.div>
@@ -389,7 +388,7 @@ export default function TamilWordShowcase({ config, onComplete }: Props) {
         {WORDS.map((e, i) => (
           <div key={e.word} className="transition-all duration-300" style={{
             width: i === wordIndex ? 16 : 6, height: 6, borderRadius: 99,
-            background: scores[e.word] ? '#22c55e' : i === wordIndex ? e.color : 'rgba(255,255,255,0.2)',
+            background: scores[e.word] ? '#10b981' : i === wordIndex ? e.color : 'rgba(180, 83, 9, 0.18)',
           }} />
         ))}
       </div>

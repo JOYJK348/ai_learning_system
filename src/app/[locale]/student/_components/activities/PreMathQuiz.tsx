@@ -529,18 +529,16 @@ export default function PreMathQuiz({ conceptKey = 'big-small', onComplete }: Pr
             exit={{ opacity: 0 }}
             className="flex flex-col items-center gap-6 w-full max-w-md"
           >
-            {/* Blackboard */}
-            <div className="relative w-full rounded-3xl overflow-hidden min-h-[300px] flex flex-col justify-center items-center px-6 py-8 border-[3px] border-[#2d4a2d]"
-              style={{ background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
-              <BoardLines />
+            <div className="relative w-full rounded-3xl overflow-hidden min-h-[300px] flex flex-col justify-center items-center px-6 py-8 border-[3px] border-amber-200 bg-amber-50/40"
+              style={{ boxShadow: '0 8px 30px rgba(245,158,11,0.05)' }}>
               
               <div className="relative z-10 flex flex-col items-center gap-5 text-center">
-                <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} className="text-6xl sm:text-7xl">
-                  🤔
+                <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} className="w-32 h-32 flex items-center justify-center">
+                  <img src="/assets/quiz/quiz-hero.png" className="w-full h-full object-contain" alt="Quiz Hero" />
                 </motion.div>
                 <div className="flex flex-col gap-2">
-                  <h3 className="text-2xl font-black text-white font-sans">Ready for Quiz? 🧠</h3>
-                  <p className="text-sm text-white/70 font-medium px-4 font-sans leading-relaxed">
+                  <h3 className="text-2xl font-black text-amber-950 font-sans">Ready for Quiz? 🧠</h3>
+                  <p className="text-sm text-amber-900/70 font-medium px-4 font-sans leading-relaxed">
                     Let's see if you can find the correct answers! Tap below to start!
                   </p>
                 </div>
@@ -563,6 +561,12 @@ export default function PreMathQuiz({ conceptKey = 'big-small', onComplete }: Pr
         {/* ─── PHASE: SHOWCASE ─── */}
         {!showQuizPrompt && phase === 'showcase' && (() => {
           const sc = concept.showcases[showcaseIndex];
+          const illustUrl = conceptKey.includes('big') || conceptKey.includes('size') || conceptKey.includes('tall') || conceptKey.includes('heavy')
+            ? '/assets/quiz/big-small.png'
+            : conceptKey.includes('color') || conceptKey.includes('same')
+              ? '/assets/quiz/color-balls.png'
+              : '/assets/quiz/shapes.png';
+
           return (
             <motion.div
               key={`showcase-${showcaseIndex}`}
@@ -571,18 +575,22 @@ export default function PreMathQuiz({ conceptKey = 'big-small', onComplete }: Pr
               exit={{ opacity: 0, y: -20 }}
               className="flex flex-col items-center gap-4 w-full"
             >
-              <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20">
-                <span className="text-xs font-black text-white/75 tracking-wider uppercase">{concept.title}</span>
+              <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100 border border-amber-200">
+                <span className="text-xs font-black text-amber-800 tracking-wider uppercase">{concept.title}</span>
               </div>
 
-              {/* Blackboard */}
-              <div className="relative w-full rounded-3xl overflow-hidden min-h-[300px] flex flex-col justify-center items-center px-4 py-6 border-[3px] border-[#2d4a2d]"
-                style={{ background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
-                <BoardLines />
+              {/* Showcase illustration card */}
+              <div className="relative w-full rounded-3xl overflow-hidden min-h-[300px] flex flex-col justify-center items-center px-4 py-6 border-[3px] border-amber-200 bg-amber-50/30"
+                style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.03)' }}>
+                
+                {/* Vector Illustration */}
+                <div className="w-full flex justify-center mb-4">
+                  <img src={illustUrl} className="h-32 object-contain rounded-2xl" alt={concept.title} />
+                </div>
 
                 <div className="relative z-10 w-full flex justify-around items-center gap-4 max-w-sm">
                   {/* Left item */}
-                  <div className="flex flex-col items-center gap-3">
+                  <div className="flex flex-col items-center gap-2">
                     <motion.div
                       initial={{ scale: 0.5, opacity: 0 }}
                       animate={{
@@ -592,12 +600,12 @@ export default function PreMathQuiz({ conceptKey = 'big-small', onComplete }: Pr
                         opacity: 1
                       }}
                       transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-                      className="text-7xl sm:text-8xl drop-shadow-lg"
+                      className="text-6xl sm:text-7xl drop-shadow-sm"
                       style={{ transformOrigin: 'bottom center' }}
                     >
                       {sc.left.emoji}
                     </motion.div>
-                    <span className="px-3 py-1.5 rounded-xl text-emerald-300 bg-emerald-950/40 border border-emerald-900 font-bold text-sm sm:text-base font-sans">
+                    <span className="px-3 py-1 rounded-xl text-amber-950 bg-amber-100/80 border border-amber-200 font-black text-xs sm:text-sm font-sans">
                       {sc.left.label}
                     </span>
                   </div>
@@ -608,16 +616,16 @@ export default function PreMathQuiz({ conceptKey = 'big-small', onComplete }: Pr
                       initial={{ rotate: 0 }}
                       animate={{ rotate: -12 }}
                       transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-                      className="text-3xl text-white/30"
+                      className="text-3xl text-amber-500/60 animate-pulse"
                     >
                       ⚖️
                     </motion.div>
                   ) : (
-                    <div className="text-xl font-bold text-white/20 font-sans">vs</div>
+                    <div className="text-sm font-black text-amber-900/30 font-sans uppercase tracking-widest">vs</div>
                   )}
 
                   {/* Right item */}
-                  <div className="flex flex-col items-center gap-3">
+                  <div className="flex flex-col items-center gap-2">
                     <motion.div
                       initial={{ scale: 0.5, opacity: 0 }}
                       animate={{
@@ -627,12 +635,12 @@ export default function PreMathQuiz({ conceptKey = 'big-small', onComplete }: Pr
                         opacity: 1
                       }}
                       transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-                      className="text-7xl sm:text-8xl drop-shadow-lg"
+                      className="text-6xl sm:text-7xl drop-shadow-sm"
                       style={{ transformOrigin: 'bottom center' }}
                     >
                       {sc.right.emoji}
                     </motion.div>
-                    <span className="px-3 py-1.5 rounded-xl text-amber-300 bg-amber-950/40 border border-amber-900 font-bold text-sm sm:text-base font-sans">
+                    <span className="px-3 py-1 rounded-xl text-amber-950 bg-amber-100/80 border border-amber-200 font-black text-xs sm:text-sm font-sans">
                       {sc.right.label}
                     </span>
                   </div>
@@ -658,11 +666,10 @@ export default function PreMathQuiz({ conceptKey = 'big-small', onComplete }: Pr
               exit={{ opacity: 0 }}
               className="flex flex-col items-center gap-4 w-full"
             >
-              <div className="relative w-full rounded-3xl overflow-hidden px-4 py-5 flex flex-col items-center gap-2 border-[3px] border-[#2d4a2d]"
-                style={{ background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
-                <BoardLines />
-                <p className="relative z-10 text-white/50 text-[10px] font-black tracking-widest uppercase">Quiz Time!</p>
-                <h3 className="relative z-10 text-2xl font-black text-white text-center font-sans">
+              <div className="relative w-full rounded-3xl overflow-hidden px-4 py-5 flex flex-col items-center gap-2 border-[3px] border-amber-200 bg-amber-50/40"
+                style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.02)' }}>
+                <p className="relative z-10 text-amber-700/60 text-[10px] font-black tracking-widest uppercase">Quiz Time!</p>
+                <h3 className="relative z-10 text-xl sm:text-2xl font-black text-amber-950 text-center font-sans">
                   {q.question}
                 </h3>
               </div>
@@ -671,9 +678,9 @@ export default function PreMathQuiz({ conceptKey = 'big-small', onComplete }: Pr
               <AnimatePresence>
                 {feedbackMsg && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                    className="absolute z-20 inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm pointer-events-none rounded-3xl">
+                    className="absolute z-20 inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm pointer-events-none rounded-3xl">
                     <div className={`px-6 py-4 rounded-2xl font-black shadow-2xl text-center border-2 ${
-                      feedbackType === 'success' ? 'bg-[#163e32]/95 border-emerald-500 text-white' : 'bg-red-950/95 border-red-500 text-red-100'
+                      feedbackType === 'success' ? 'bg-emerald-50 border-emerald-300 text-emerald-800' : 'bg-rose-50 border-rose-300 text-rose-800'
                     }`}>
                       <p className="text-lg font-black font-sans">{feedbackMsg}</p>
                     </div>
@@ -691,21 +698,21 @@ export default function PreMathQuiz({ conceptKey = 'big-small', onComplete }: Pr
                     <button
                       key={opt.id}
                       onClick={() => handleQuizTap(opt)}
-                      className="flex flex-col items-center justify-center gap-3 p-6 rounded-2xl transition-all active:scale-95 relative overflow-hidden bg-white/10 hover:bg-white/15 border-2 border-white/10"
+                      className="flex flex-col items-center justify-center gap-3 p-5 rounded-2xl transition-all active:scale-95 relative overflow-hidden bg-[#fffdf9] border-2 border-amber-200/80 hover:bg-amber-50/60 text-amber-950 shadow-sm"
                       style={{
                         ...(isSelected && isCorrect && {
-                          background: 'rgba(34,197,94,0.25)',
-                          borderColor: 'rgba(34,197,94,0.7)',
+                          background: 'rgba(16,185,129,0.1)',
+                          borderColor: 'rgba(16,185,129,0.7)',
                         }),
                         ...(isSelected && !isCorrect && {
-                          background: 'rgba(239,68,68,0.25)',
+                          background: 'rgba(239,68,68,0.1)',
                           borderColor: 'rgba(239,68,68,0.6)',
                         })
                       }}
                     >
-                      {isSelected && isCorrect && <div className="absolute -top-0.5 -right-0.5 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white text-[10px] font-black shadow">✓</div>}
-                      <span className="text-6xl sm:text-7xl leading-none drop-shadow-md">{opt.emoji}</span>
-                      <span className="text-sm sm:text-base font-black text-white/95 font-sans">{opt.label}</span>
+                      {isSelected && isCorrect && <div className="absolute -top-0.5 -right-0.5 w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white text-[10px] font-black shadow">✓</div>}
+                      <span className="text-5xl sm:text-6xl leading-none drop-shadow-sm">{opt.emoji}</span>
+                      <span className="text-sm sm:text-base font-black font-sans">{opt.label}</span>
                     </button>
                   );
                 })}
@@ -726,14 +733,13 @@ export default function PreMathQuiz({ conceptKey = 'big-small', onComplete }: Pr
               className="flex flex-col items-center gap-4 w-full"
             >
               <div className="w-full text-center">
-                <h3 className="text-xl sm:text-2xl font-black text-white font-sans">Sort the Items! 🧺</h3>
-                <p className="text-xs text-white/50 font-bold font-sans">Tap an object at the top, then tap the correct basket at the bottom! 👇</p>
+                <h3 className="text-xl sm:text-2xl font-black text-amber-950 font-sans">Sort the Items! 🧺</h3>
+                <p className="text-xs text-amber-800/70 font-bold font-sans">Tap an object at the top, then tap the correct basket at the bottom! 👇</p>
               </div>
 
-              {/* Blackboard Grid */}
-              <div className="relative w-full rounded-3xl overflow-hidden min-h-[340px] flex flex-col justify-between items-center px-4 py-6 border-[3px] border-[#2d4a2d]"
-                style={{ background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
-                <BoardLines />
+              {/* Light Board Grid */}
+              <div className="relative w-full rounded-3xl overflow-hidden min-h-[340px] flex flex-col justify-between items-center px-4 py-6 border-[3px] border-amber-200 bg-amber-50/20"
+                style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.02)' }}>
 
                 {/* Top: Bubble items to sort */}
                 <div className="relative z-10 flex flex-wrap justify-center gap-4 w-full py-2 min-h-[100px]">
@@ -746,10 +752,10 @@ export default function PreMathQuiz({ conceptKey = 'big-small', onComplete }: Pr
                       <button
                         key={item.id}
                         onClick={() => handleLeftClick(item.id)}
-                        className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center text-5xl sm:text-6xl transition-all relative border-4 shadow-lg active:scale-95
+                        className={`w-20 h-20 sm:w-24 sm:h-24 rounded-2xl flex items-center justify-center text-5xl sm:text-6xl transition-all relative border-2 shadow-sm bg-white active:scale-95
                           ${isSelected 
-                            ? 'bg-sky-500/25 border-sky-400 scale-105 shadow-sky-500/40 ring-4 ring-sky-400/20' 
-                            : 'bg-white/10 border-white/20 hover:bg-white/15'}`}
+                            ? 'bg-amber-100/60 border-amber-400 scale-105 shadow-md ring-4 ring-amber-400/20' 
+                            : 'border-amber-200 hover:bg-amber-50/50'}`}
                       >
                         {item.emoji}
                       </button>
@@ -760,7 +766,6 @@ export default function PreMathQuiz({ conceptKey = 'big-small', onComplete }: Pr
                 {/* Bottom: The two large buckets */}
                 <div className="relative z-10 flex gap-6 w-full max-w-md justify-center mt-4">
                   {m.targets.map(target => {
-                    // Find all items sorted into this bucket
                     const sortedItems = Object.entries(matchedPairs)
                       .filter(([_, targetId]) => targetId === target.id)
                       .map(([itemId]) => m.items.find(item => item.id === itemId));
@@ -773,20 +778,20 @@ export default function PreMathQuiz({ conceptKey = 'big-small', onComplete }: Pr
                         onClick={() => handleRightClick(target.id)}
                         className={`flex-1 py-4 px-3 rounded-2xl text-center transition-all border-[3px] flex flex-col items-center justify-between min-h-[140px] select-none
                           ${isTargetActive
-                            ? 'bg-amber-500/10 border-amber-400/60 animate-pulse text-amber-300'
-                            : 'bg-white/5 border-white/10 text-white/95'}`}
+                            ? 'bg-amber-100/50 border-amber-400/80 animate-pulse text-amber-900'
+                            : 'bg-white border-amber-200/60 text-amber-950 shadow-sm'}`}
                       >
                         {/* Basket title */}
-                        <span className="font-black font-sans text-base sm:text-lg text-white/90 drop-shadow-md">
+                        <span className="font-black font-sans text-sm sm:text-base text-amber-950">
                           {target.label}
                         </span>
 
                         {/* Visual bucket symbol and current contents */}
                         <div className="flex flex-col items-center justify-center gap-2 my-2 min-h-[50px] w-full">
                           {sortedItems.length === 0 ? (
-                            <span className="text-4xl sm:text-5xl opacity-40 filter grayscale">🧺</span>
+                            <span className="text-4xl sm:text-5xl opacity-40">🧺</span>
                           ) : (
-                            <div className="flex flex-wrap justify-center gap-1.5 px-2 py-1 bg-black/30 rounded-xl border border-white/5 max-w-[120px]">
+                            <div className="flex flex-wrap justify-center gap-1.5 px-2 py-1 bg-amber-50 rounded-xl border border-amber-200 max-w-[120px]">
                               {sortedItems.map(item => item && (
                                 <motion.span
                                   initial={{ scale: 0 }}
@@ -802,7 +807,7 @@ export default function PreMathQuiz({ conceptKey = 'big-small', onComplete }: Pr
                         </div>
 
                         {/* Status bar */}
-                        <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/80">
+                        <div className="text-[10px] font-black uppercase tracking-wider text-emerald-600">
                           {sortedItems.length > 0 ? `Loaded (${sortedItems.length})` : 'Empty'}
                         </div>
                       </button>
@@ -826,20 +831,19 @@ export default function PreMathQuiz({ conceptKey = 'big-small', onComplete }: Pr
             <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} className="text-6xl sm:text-7xl">
               🏆
             </motion.div>
-            <div className="flex flex-col items-center gap-2 px-6 py-5 rounded-2xl w-full text-center" style={{ background: 'rgba(255,255,255,0.07)', border: '1.5px solid rgba(255,255,255,0.15)' }}>
-              <p className="text-lg sm:text-xl font-black text-white font-sans">
+            <div className="flex flex-col items-center gap-2 px-6 py-5 rounded-3xl w-full text-center bg-amber-50/40 border-2 border-amber-100">
+              <p className="text-xl sm:text-2xl font-black text-amber-950 font-sans">
                 Awesome! 🎊
               </p>
-              <p className="text-xs text-white/50 font-bold tracking-wide mt-1 font-sans">
+              <p className="text-xs text-amber-900/60 font-bold tracking-wide mt-1 font-sans">
                 You have successfully completed the {concept.title} lesson!
               </p>
-              <p className="text-emerald-400 font-black text-sm font-sans mt-2">
+              <p className="text-emerald-600 font-black text-sm font-sans mt-2">
                 Correct Answers: {concept.quizzes.length + 1} / {concept.quizzes.length + 1}
               </p>
             </div>
             <motion.button whileTap={{ scale: 0.96 }} onClick={handleFinish}
-              className="w-full max-w-xs py-3.5 rounded-2xl font-black text-white text-base tracking-wide shadow-xl active:scale-95 font-sans"
-              style={{ background: 'linear-gradient(135deg, #f97316, #ec4899, #6366f1)', boxShadow: '0 4px 28px rgba(249,115,22,0.5)' }}>
+              className="w-full max-w-xs py-3.5 rounded-2xl font-black text-white text-base tracking-wide shadow-xl active:scale-95 font-sans bg-gradient-to-r from-amber-500 to-orange-500 border-b-4 border-amber-700">
               Next Lesson ➡️
             </motion.button>
           </motion.div>

@@ -186,17 +186,6 @@ const LESSONS: Record<string, NumberLessonConfig> = {
   },
 };
 
-function BoardLines() {
-  return (
-    <svg className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden>
-      {[0.33, 0.66].map((y) => (
-        <line key={y} x1="4%" y1={`${y * 100}%`} x2="96%" y2={`${y * 100}%`}
-          stroke="rgba(255,255,255,0.08)" strokeWidth="1" strokeDasharray="6 5" />
-      ))}
-    </svg>
-  );
-}
-
 interface Props {
   conceptKey?: string;
   onComplete: (data: { score: number; max_score: number; completion_data: Record<string, unknown>; time_taken_seconds: number }) => void;
@@ -334,7 +323,7 @@ export default function NumberAdventureQuiz610({ conceptKey = 'numbers-6-7', onC
             width: i === stepIndex ? 16 : 6,
             height: 6,
             borderRadius: 99,
-            background: i < stepIndex ? '#22c55e' : i === stepIndex ? '#38bdf8' : 'rgba(255,255,255,0.2)',
+            background: i < stepIndex ? '#22c55e' : i === stepIndex ? '#38bdf8' : 'rgba(217, 119, 6, 0.2)',
           }} />
         ))}
       </div>
@@ -349,16 +338,15 @@ export default function NumberAdventureQuiz610({ conceptKey = 'numbers-6-7', onC
             exit={{ opacity: 0 }}
             className="flex flex-col items-center gap-6 w-full max-w-md"
           >
-            <div className="relative w-full rounded-3xl overflow-hidden min-h-[300px] flex flex-col justify-center items-center px-6 py-8 border-[3px] border-[#2d4a2d]"
-              style={{ background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
-              <BoardLines />
+            <div className="relative w-full rounded-3xl overflow-hidden min-h-[300px] flex flex-col justify-center items-center px-6 py-8 border-[3px] border-amber-200 bg-amber-50/40"
+              style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.03)' }}>
               <div className="relative z-10 flex flex-col items-center gap-5 text-center">
-                <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} className="text-6xl sm:text-7xl">
-                  🔟
+                <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} className="w-32 h-32 flex items-center justify-center">
+                  <img src="/assets/quiz/numbers-1-5.png" className="w-full h-full object-contain" alt="Numbers Adventure" />
                 </motion.div>
                 <div className="flex flex-col gap-2">
-                  <h3 className="text-2xl font-black text-white font-sans">{lesson.title} 🚀</h3>
-                  <p className="text-sm text-white/70 font-medium px-4 font-sans leading-relaxed">
+                  <h3 className="text-2xl font-black text-amber-950 font-sans">{lesson.title} 🚀</h3>
+                  <p className="text-sm text-amber-900/70 font-medium px-4 font-sans leading-relaxed">
                     Ready to count numbers 6 to 10? Tap start below!
                   </p>
                 </div>
@@ -388,28 +376,27 @@ export default function NumberAdventureQuiz610({ conceptKey = 'numbers-6-7', onC
                 exit={{ opacity: 0 }}
                 className="flex flex-col items-center gap-4 w-full"
               >
-                {/* Blackboard */}
-                <div className="relative w-full rounded-3xl overflow-hidden px-4 py-5 flex flex-col items-center justify-center gap-4 border-[3px] border-[#2d4a2d] min-h-[180px]"
-                  style={{ background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
-                  <BoardLines />
+                {/* Light Board Card */}
+                <div className="relative w-full rounded-3xl overflow-hidden px-4 py-5 flex flex-col items-center justify-center gap-4 border-[3px] border-amber-200 bg-amber-50/40"
+                  style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.02)' }}>
                   {q.mascotText && (
-                    <p className="relative z-10 text-xs text-emerald-300 font-bold uppercase tracking-wider bg-emerald-950/50 px-3 py-1 rounded-full text-center">
+                    <p className="relative z-10 text-[10px] font-black text-amber-800 uppercase tracking-wider bg-amber-100 px-3 py-1 rounded-full text-center border border-amber-200">
                       {q.mascotText}
                     </p>
                   )}
-                  <h3 className="relative z-10 text-xl sm:text-2xl font-black text-white text-center font-sans px-2 leading-snug">
+                  <h3 className="relative z-10 text-xl sm:text-2xl font-black text-amber-950 text-center font-sans px-2 leading-snug">
                     {q.question}
                   </h3>
-                  <div className="relative z-10 flex gap-1.5 text-xs text-white/50 font-bold bg-black/20 px-3 py-1 rounded-full">
-                    Tapped: <span className="text-sky-400 font-black">{tappedBugs.size}</span> / {q.requiredCount}
+                  <div className="relative z-10 flex gap-1.5 text-xs text-amber-800 font-bold bg-amber-100/60 px-3 py-1 rounded-full border border-amber-200">
+                    Tapped: <span className="text-emerald-600 font-black">{tappedBugs.size}</span> / {q.requiredCount}
                   </div>
                 </div>
 
-                {/* Feedback Overlay inside option area */}
+                {/* Feedback Overlay */}
                 <AnimatePresence>
                   {feedbackMsg && (
-                    <div className="absolute z-20 inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm pointer-events-none rounded-3xl">
-                      <div className="px-6 py-4 rounded-2xl font-black bg-[#163e32]/95 border-2 border-emerald-500 text-white shadow-2xl text-center">
+                    <div className="absolute z-20 inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm pointer-events-none rounded-3xl">
+                      <div className="px-6 py-4 rounded-2xl font-black bg-emerald-50 border-2 border-emerald-300 text-emerald-800 shadow-2xl text-center">
                         <p className="text-lg font-black font-sans">{feedbackMsg}</p>
                       </div>
                     </div>
@@ -425,8 +412,8 @@ export default function NumberAdventureQuiz610({ conceptKey = 'numbers-6-7', onC
                         key={idx}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => handleBugTap(idx)}
-                        className={`w-14 h-14 rounded-full flex items-center justify-center text-4xl border-3 shadow-md transition-all
-                          ${isTapped ? 'bg-emerald-500/20 border-emerald-400 opacity-60 scale-90' : 'bg-white/10 border-white/20 hover:bg-white/15'}`}
+                        className={`w-16 h-16 rounded-2xl flex items-center justify-center text-4xl border-2 shadow-sm transition-all bg-white
+                          ${isTapped ? 'bg-emerald-50 border-emerald-400 opacity-60 scale-90' : 'border-amber-200 hover:bg-amber-50/50'}`}
                       >
                         {isTapped ? '✨' : '🐞'}
                       </motion.button>
@@ -446,34 +433,33 @@ export default function NumberAdventureQuiz610({ conceptKey = 'numbers-6-7', onC
               exit={{ opacity: 0 }}
               className="flex flex-col items-center gap-4 w-full"
             >
-              {/* Blackboard */}
-              <div className="relative w-full rounded-3xl overflow-hidden px-4 py-5 flex flex-col items-center justify-center gap-4 border-[3px] border-[#2d4a2d] min-h-[180px]"
-                style={{ background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
-                <BoardLines />
+              {/* Light Board Card */}
+              <div className="relative w-full rounded-3xl overflow-hidden px-4 py-5 flex flex-col items-center justify-center gap-4 border-[3px] border-amber-200 bg-amber-50/40"
+                style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.02)' }}>
 
                 {q.mascotText && (
-                  <p className="relative z-10 text-[10px] sm:text-xs text-emerald-300 font-bold uppercase tracking-wider bg-emerald-950/50 px-3 py-1 rounded-full text-center">
+                  <p className="relative z-10 text-[10px] sm:text-xs text-amber-800 font-bold uppercase tracking-wider bg-amber-100 px-3 py-1 rounded-full text-center border border-amber-200">
                     {q.mascotText}
                   </p>
                 )}
 
                 {q.visual && (
-                  <div className="relative z-10 text-4xl sm:text-5xl font-mono text-emerald-400 font-bold tracking-widest leading-normal whitespace-pre text-center">
+                  <div className="relative z-10 text-4xl sm:text-5xl font-mono text-amber-950 font-bold tracking-widest leading-normal whitespace-pre text-center">
                     {q.visual}
                   </div>
                 )}
 
-                <h3 className="relative z-10 text-lg sm:text-xl font-black text-white text-center font-sans px-2 leading-snug">
+                <h3 className="relative z-10 text-lg sm:text-xl font-black text-amber-950 text-center font-sans px-2 leading-snug">
                   {q.question}
                 </h3>
               </div>
 
-              {/* Feedback Overlay inside options */}
+              {/* Feedback Overlay */}
               <AnimatePresence>
                 {feedbackMsg && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                    className="absolute z-20 inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm pointer-events-none rounded-3xl">
-                    <div className="px-6 py-4 rounded-2xl font-black bg-[#163e32]/95 border-2 border-emerald-500 text-white shadow-2xl text-center">
+                    className="absolute z-20 inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm pointer-events-none rounded-3xl">
+                    <div className="px-6 py-4 rounded-2xl font-black bg-emerald-50 border-2 border-emerald-300 text-emerald-800 shadow-2xl text-center">
                       <p className="text-lg font-black font-sans">{feedbackMsg}</p>
                     </div>
                   </motion.div>
@@ -489,20 +475,20 @@ export default function NumberAdventureQuiz610({ conceptKey = 'numbers-6-7', onC
                     <button
                       key={opt.id}
                       onClick={() => handleQuizTap(opt)}
-                      className="flex flex-col items-center justify-center gap-2.5 p-4 rounded-2xl transition-all active:scale-95 relative overflow-hidden bg-white/10 hover:bg-white/15 border-2 border-white/10"
+                      className="flex flex-col items-center justify-center gap-2.5 p-4 rounded-2xl transition-all active:scale-95 relative overflow-hidden bg-[#fffdf9] border-2 border-amber-200 hover:bg-amber-50/50 text-amber-950 shadow-sm"
                       style={{
                         ...(isSelected && opt.correct && {
-                          background: 'rgba(34,197,94,0.25)',
-                          borderColor: 'rgba(34,197,94,0.7)',
+                          background: 'rgba(16,185,129,0.1)',
+                          borderColor: 'rgba(16,185,129,0.7)',
                         }),
                         ...(isSelected && !opt.correct && {
-                          background: 'rgba(239,68,68,0.25)',
+                          background: 'rgba(239,68,68,0.1)',
                           borderColor: 'rgba(239,68,68,0.6)',
                         })
                       }}
                     >
                       <span className="text-4xl sm:text-5xl leading-none drop-shadow-md">{opt.emoji}</span>
-                      <span className="text-xs sm:text-sm font-black text-white/95 font-sans">{opt.label}</span>
+                      <span className="text-xs sm:text-sm font-black text-amber-950 font-sans">{opt.label}</span>
                     </button>
                   );
                 })}
@@ -523,15 +509,15 @@ export default function NumberAdventureQuiz610({ conceptKey = 'numbers-6-7', onC
               className="flex flex-col items-center gap-4 w-full"
             >
               <div className="w-full text-center">
-                <h3 className="text-xl sm:text-2xl font-black text-white font-sans">Match the Numbers! ➔</h3>
-                <p className="text-xs text-white/50 font-bold font-sans">Tap a number on the left, then tap its matching fruit basket on the right! 🍎</p>
+                <h3 className="text-xl sm:text-2xl font-black text-amber-950 font-sans">Match the Numbers! ➔</h3>
+                <p className="text-xs text-amber-800/60 font-bold font-sans">Tap a number on the left, then tap its matching fruit basket on the right! 🍎</p>
               </div>
 
-              {/* Feedback Overlay inside matching area */}
+              {/* Feedback Overlay */}
               <AnimatePresence>
                 {feedbackMsg && (
-                  <div className="absolute z-20 inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm pointer-events-none rounded-3xl">
-                    <div className="px-6 py-4 rounded-2xl font-black bg-[#163e32]/95 border-2 border-emerald-500 text-white shadow-2xl text-center">
+                  <div className="absolute z-20 inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm pointer-events-none rounded-3xl">
+                    <div className="px-6 py-4 rounded-2xl font-black bg-emerald-50 border-2 border-emerald-300 text-emerald-800 shadow-2xl text-center">
                       <p className="text-lg font-black font-sans">{feedbackMsg}</p>
                     </div>
                   </div>
@@ -539,9 +525,7 @@ export default function NumberAdventureQuiz610({ conceptKey = 'numbers-6-7', onC
               </AnimatePresence>
 
               {/* Slate board for matches */}
-              <div className="relative w-full rounded-3xl overflow-hidden min-h-[340px] flex gap-8 items-stretch px-4 py-6 border-[3px] border-[#2d4a2d] bg-gradient-to-b from-[#1a2e1a] to-[#0d1f0d] shadow-[0_8px_40px_rgba(0,0,0,0.5)]">
-                <BoardLines />
-
+              <div className="relative w-full rounded-3xl overflow-hidden min-h-[340px] flex gap-8 items-stretch px-4 py-6 border-[3px] border-amber-200 bg-amber-50/40 shadow-[0_8px_30px_rgba(0,0,0,0.02)]">
                 {/* Left Side: Numbers */}
                 <div className="flex-1 flex flex-col justify-around gap-2.5 relative z-10">
                   {m.left.map(leftItem => {
@@ -554,10 +538,10 @@ export default function NumberAdventureQuiz610({ conceptKey = 'numbers-6-7', onC
                         onClick={() => handleLeftMatchClick(leftItem.id)}
                         className={`py-3.5 px-4 rounded-2xl border-2 font-black font-sans text-2xl flex items-center justify-center transition-all active:scale-95
                           ${isMatched 
-                            ? 'bg-emerald-500/20 border-emerald-500/80 text-emerald-300 pointer-events-none' 
+                            ? 'bg-emerald-50 border-emerald-300 text-emerald-700 pointer-events-none' 
                             : isSelected 
-                              ? 'bg-sky-500/30 border-sky-400 text-sky-200 scale-105 shadow-[0_0_15px_rgba(56,189,248,0.3)]' 
-                              : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+                              ? 'bg-sky-50 border-sky-400 text-sky-700 scale-105 shadow-[0_0_15px_rgba(56,189,248,0.2)]' 
+                              : 'bg-[#fffdf9] border-amber-200 text-amber-950 hover:bg-amber-50/50'
                           }`}
                       >
                         {leftItem.label} {isMatched && '✓'}
@@ -579,14 +563,14 @@ export default function NumberAdventureQuiz610({ conceptKey = 'numbers-6-7', onC
                         onClick={() => handleRightMatchClick(rightItem.id)}
                         className={`p-2 min-h-[64px] rounded-2xl border-2 flex flex-col items-center justify-center transition-all active:scale-95
                           ${isMatched 
-                            ? 'bg-emerald-500/20 border-emerald-500/80 text-emerald-300 pointer-events-none' 
+                            ? 'bg-emerald-50 border-emerald-300 text-emerald-700 pointer-events-none' 
                             : isSelectable 
-                              ? 'bg-amber-500/10 border-amber-400/50 text-amber-200 animate-pulse' 
-                              : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+                              ? 'bg-amber-50 border-amber-400/50 text-amber-950 animate-pulse' 
+                              : 'bg-[#fffdf9] border-amber-200 text-amber-950 hover:bg-amber-50/50'
                           }`}
                       >
-                        <span className="text-[10px] leading-tight font-mono whitespace-pre text-emerald-400 font-bold block">{rightItem.label}</span>
-                        <span className="text-[9px] font-black text-white/50 mt-1 uppercase font-sans tracking-wide">Count: {rightItem.count}</span>
+                        <span className="text-[10px] leading-tight font-mono text-amber-950 font-bold block">{rightItem.label}</span>
+                        <span className="text-[9px] font-black text-amber-800/60 mt-1 uppercase font-sans tracking-wide">Count: {rightItem.count}</span>
                       </button>
                     );
                   })}

@@ -597,16 +597,15 @@ export default function ShapesSpatialQuiz({ conceptKey = 'circle-square', onComp
             exit={{ opacity: 0 }}
             className="flex flex-col items-center gap-6 w-full max-w-md"
           >
-            <div className="relative w-full rounded-3xl overflow-hidden min-h-[300px] flex flex-col justify-center items-center px-6 py-8 border-[3px] border-[#2d4a2d]"
-              style={{ background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
-              <BoardLines />
+            <div className="relative w-full rounded-3xl overflow-hidden min-h-[300px] flex flex-col justify-center items-center px-6 py-8 border-[3px] border-amber-200 bg-amber-50/40"
+              style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.03)' }}>
               <div className="relative z-10 flex flex-col items-center gap-5 text-center">
-                <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} className="text-6xl sm:text-7xl">
-                  🧩
+                <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} className="w-32 h-32 flex items-center justify-center">
+                  <img src="/assets/quiz/shapes.png" className="w-full h-full object-contain" alt="Shapes Game" />
                 </motion.div>
                 <div className="flex flex-col gap-2">
-                  <h3 className="text-2xl font-black text-white font-sans">{lesson.title} 🚀</h3>
-                  <p className="text-sm text-white/70 font-medium px-4 font-sans leading-relaxed">
+                  <h3 className="text-2xl font-black text-amber-950 font-sans">{lesson.title} 🚀</h3>
+                  <p className="text-sm text-amber-900/70 font-medium px-4 font-sans leading-relaxed">
                     Ready to play shapes and placement missions? Tap start below!
                   </p>
                 </div>
@@ -634,24 +633,23 @@ export default function ShapesSpatialQuiz({ conceptKey = 'circle-square', onComp
               exit={{ opacity: 0 }}
               className="flex flex-col items-center gap-4 w-full"
             >
-              {/* Blackboard */}
-              <div className="relative w-full rounded-3xl overflow-hidden px-4 py-5 flex flex-col items-center justify-center gap-4 border-[3px] border-[#2d4a2d] min-h-[180px]"
-                style={{ background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
-                <BoardLines />
+              {/* Light Board Card */}
+              <div className="relative w-full rounded-3xl overflow-hidden px-4 py-5 flex flex-col items-center justify-center gap-4 border-[3px] border-amber-200 bg-amber-50/40"
+                style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.02)' }}>
                 
                 {q.promptMascot && (
-                  <p className="relative z-10 text-[11px] font-black text-emerald-300 uppercase tracking-wider bg-emerald-950/50 px-3 py-1 rounded-full text-center">
+                  <p className="relative z-10 text-[10px] font-black text-amber-800 uppercase tracking-wider bg-amber-100 px-3 py-1 rounded-full text-center border border-amber-200">
                     💡 {q.promptMascot}
                   </p>
                 )}
 
                 {q.visual && (
-                  <div className="relative z-10 text-5xl sm:text-6xl font-sans text-center tracking-widest my-2 select-none filter drop-shadow-md leading-loose">
+                  <div className="relative z-10 text-5xl sm:text-6xl font-sans text-amber-950 text-center tracking-widest my-2 select-none filter drop-shadow-sm leading-loose">
                     {q.visual}
                   </div>
                 )}
 
-                <h3 className="relative z-10 text-xl sm:text-2xl font-black text-white text-center font-sans px-2 leading-snug">
+                <h3 className="relative z-10 text-xl sm:text-2xl font-black text-amber-950 text-center font-sans px-2 leading-snug">
                   {q.question}
                 </h3>
               </div>
@@ -660,8 +658,8 @@ export default function ShapesSpatialQuiz({ conceptKey = 'circle-square', onComp
               <AnimatePresence>
                 {feedbackMsg && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                    className="absolute z-20 inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm pointer-events-none rounded-3xl">
-                    <div className="px-6 py-4 rounded-2xl font-black bg-[#163e32]/95 border-2 border-emerald-500 text-white shadow-2xl text-center">
+                    className="absolute z-20 inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm pointer-events-none rounded-3xl">
+                    <div className="px-6 py-4 rounded-2xl font-black bg-emerald-50 border-2 border-emerald-300 text-emerald-800 shadow-2xl text-center">
                       <p className="text-lg font-black font-sans">{feedbackMsg}</p>
                     </div>
                   </motion.div>
@@ -711,13 +709,12 @@ export default function ShapesSpatialQuiz({ conceptKey = 'circle-square', onComp
               className="flex flex-col items-center gap-4 w-full"
             >
               <div className="w-full text-center">
-                <h3 className="text-xl sm:text-2xl font-black text-white font-sans">Sort the Shapes! 🧺</h3>
-                <p className="text-xs text-white/50 font-bold font-sans">Tap a shape at the top, then tap the correct basket at the bottom! 👇</p>
+                <h3 className="text-xl sm:text-2xl font-black text-amber-950 font-sans">Sort the Shapes! 🧺</h3>
+                <p className="text-xs text-amber-800/70 font-bold font-sans">Tap a shape at the top, then tap the correct basket at the bottom! 👇</p>
               </div>
 
-              <div className="relative w-full rounded-3xl overflow-hidden min-h-[300px] flex flex-col justify-between items-center px-4 py-6 border-[3px] border-[#2d4a2d]"
-                style={{ background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
-                <BoardLines />
+              <div className="relative w-full rounded-3xl overflow-hidden min-h-[300px] flex flex-col justify-between items-center px-4 py-6 border-[3px] border-amber-200 bg-amber-50/20"
+                style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.02)' }}>
 
                 {/* Top Shape bubbles */}
                 <div className="relative z-10 flex gap-4 min-h-[80px] justify-center items-center">
@@ -729,8 +726,8 @@ export default function ShapesSpatialQuiz({ conceptKey = 'circle-square', onComp
                       <button
                         key={item.id}
                         onClick={() => handleSortItemClick(item.id)}
-                        className={`w-20 h-20 rounded-full flex items-center justify-center text-5xl border-4 transition-all shadow-md active:scale-95
-                          ${isSelected ? 'bg-sky-500/20 border-sky-400 scale-105 shadow-sky-500/35' : 'bg-white/10 border-white/20'}`}
+                        className={`w-20 h-20 rounded-2xl flex items-center justify-center text-5xl border-2 transition-all shadow-sm active:scale-95 bg-white
+                          ${isSelected ? 'bg-amber-100/60 border-amber-400 scale-105 shadow-md shadow-amber-500/20' : 'border-amber-200'}`}
                       >
                         {item.emoji}
                       </button>
@@ -752,12 +749,12 @@ export default function ShapesSpatialQuiz({ conceptKey = 'circle-square', onComp
                         key={target.id}
                         onClick={() => handleSortTargetClick(target.id)}
                         className={`flex-1 py-4 px-2 rounded-2xl border-[3px] flex flex-col items-center justify-between min-h-[130px] transition-all
-                          ${isActive ? 'bg-amber-500/10 border-amber-400/60 animate-pulse text-amber-300' : 'bg-white/5 border-white/10 text-white/95'}`}
+                          ${isActive ? 'bg-amber-100/50 border-amber-400 animate-pulse text-amber-900' : 'bg-white border-amber-200 text-amber-950 shadow-sm'}`}
                       >
-                        <span className="font-black font-sans text-sm sm:text-base text-white/90">{target.label}</span>
-                        <div className="flex flex-wrap gap-1 bg-black/35 rounded-lg px-2 py-1 min-h-[40px] items-center justify-center">
+                        <span className="font-black font-sans text-sm sm:text-base text-amber-950">{target.label}</span>
+                        <div className="flex flex-wrap gap-1 bg-amber-50 rounded-xl px-2 py-1 min-h-[40px] items-center justify-center border border-amber-200">
                           {sorted.length === 0 ? (
-                            <span className="text-3xl opacity-35 filter grayscale">🧺</span>
+                            <span className="text-3xl opacity-35">🧺</span>
                           ) : (
                             sorted.map(item => item && (
                               <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} key={item.id} className="text-2xl">
@@ -766,7 +763,7 @@ export default function ShapesSpatialQuiz({ conceptKey = 'circle-square', onComp
                             ))
                           )}
                         </div>
-                        <span className="text-[10px] font-bold text-white/45 uppercase">Sort here</span>
+                        <span className="text-[10px] font-bold text-amber-800/60 uppercase">Sort here</span>
                       </button>
                     );
                   })}
@@ -787,20 +784,19 @@ export default function ShapesSpatialQuiz({ conceptKey = 'circle-square', onComp
               exit={{ opacity: 0 }}
               className="flex flex-col items-center gap-4 w-full"
             >
-              {/* Blackboard */}
-              <div className="relative w-full rounded-3xl overflow-hidden px-4 py-6 flex flex-col items-center justify-center gap-5 border-[3px] border-[#2d4a2d] min-h-[180px]"
-                style={{ background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}>
-                <BoardLines />
+              {/* Light Board Card */}
+              <div className="relative w-full rounded-3xl overflow-hidden px-4 py-6 flex flex-col items-center justify-center gap-5 border-[3px] border-amber-200 bg-amber-50/20 min-h-[180px]"
+                style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.02)' }}>
 
                 {/* Render sequence */}
-                <div className="relative z-10 flex gap-3 text-5xl justify-center items-center py-2 bg-black/20 rounded-2xl px-4 border border-white/5">
+                <div className="relative z-10 flex gap-3 text-5xl justify-center items-center py-2 bg-white rounded-2xl px-4 border border-amber-200">
                   {p.sequence.map((emoji, idx) => (
                     <span key={idx}>{emoji}</span>
                   ))}
-                  <span className="text-white animate-pulse">❓</span>
+                  <span className="text-amber-800 animate-pulse">❓</span>
                 </div>
 
-                <h3 className="relative z-10 text-lg sm:text-xl font-black text-white text-center font-sans px-2">
+                <h3 className="relative z-10 text-lg sm:text-xl font-black text-amber-950 text-center font-sans px-2">
                   {p.question}
                 </h3>
               </div>
@@ -809,8 +805,8 @@ export default function ShapesSpatialQuiz({ conceptKey = 'circle-square', onComp
               <AnimatePresence>
                 {feedbackMsg && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                    className="absolute z-20 inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm pointer-events-none rounded-3xl">
-                    <div className="px-6 py-4 rounded-2xl font-black bg-[#163e32]/95 border-2 border-emerald-500 text-white shadow-2xl text-center">
+                    className="absolute z-20 inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm pointer-events-none rounded-3xl">
+                    <div className="px-6 py-4 rounded-2xl font-black bg-emerald-50 border-2 border-emerald-300 text-emerald-800 shadow-2xl text-center">
                       <p className="text-lg font-black font-sans">{feedbackMsg}</p>
                     </div>
                   </motion.div>
@@ -854,14 +850,14 @@ export default function ShapesSpatialQuiz({ conceptKey = 'circle-square', onComp
                           }, 1500);
                         }
                       }}
-                      className="flex flex-col items-center justify-center p-6 rounded-2xl transition-all active:scale-95 bg-white/10 hover:bg-white/15 border-2 border-white/10"
+                      className="flex flex-col items-center justify-center p-6 rounded-2xl transition-all active:scale-95 bg-[#fffdf9] border-2 border-amber-200 shadow-sm"
                       style={{
                         ...(isSelected && opt.correct && {
-                          background: 'rgba(34,197,94,0.25)',
-                          borderColor: 'rgba(34,197,94,0.7)',
+                          background: 'rgba(16,185,129,0.1)',
+                          borderColor: 'rgba(16,185,129,0.7)',
                         }),
                         ...(isSelected && !opt.correct && {
-                          background: 'rgba(239,68,68,0.25)',
+                          background: 'rgba(239,68,68,0.1)',
                           borderColor: 'rgba(239,68,68,0.6)',
                         })
                       }}

@@ -50,18 +50,7 @@ const VOWELS_E_AU: VowelEntry[] = [
 const ALL_VOWELS = [...VOWELS_A_U, ...VOWELS_E_AU];
 const DISTRACTOR_POOL = ALL_VOWELS.map(v => ({ word: v.word, emoji: v.emoji, letter: v.letter }));
 
-function shuffleArray<T>(arr: T[]): T[] {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-/* ─── Sub-components ─── */
-
-/** Chalk-white dotted line (blackboard guide lines) */
+/** Dotted line guide on cream board */
 function BoardLines() {
   return (
     <svg className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden>
@@ -69,21 +58,20 @@ function BoardLines() {
         <line
           key={y}
           x1="4%" y1={`${y * 100}%`} x2="96%" y2={`${y * 100}%`}
-          stroke="rgba(255,255,255,0.12)" strokeWidth="1" strokeDasharray="6 5"
+          stroke="rgba(180, 83, 9, 0.08)" strokeWidth="1.5" strokeDasharray="6 5"
         />
       ))}
     </svg>
   );
 }
 
-/** Big Tamil letter drawn on blackboard (SVG for performance) */
+/** Big Tamil letter drawn on cream board */
 function BoardLetter({ vowel }: { vowel: VowelEntry }) {
   return (
     <div
       className="relative flex items-center justify-center select-none"
       style={{ width: '100%', aspectRatio: '1 / 1', maxWidth: 200 }}
     >
-      {/* Chalk smudge background */}
       <div
         className="absolute inset-0 rounded-full opacity-10 blur-xl"
         style={{ background: vowel.color }}
@@ -93,20 +81,20 @@ function BoardLetter({ vowel }: { vowel: VowelEntry }) {
         className="relative z-10 font-black leading-none"
         style={{
           fontSize: 'clamp(5rem, 18vw, 8.5rem)',
-          color: '#fff',
-          textShadow: `0 0 30px ${vowel.color}80, 0 2px 8px rgba(0,0,0,0.5)`,
+          color: vowel.color,
+          textShadow: '0 2px 8px rgba(180, 83, 9, 0.15)',
           fontFamily: '"Noto Sans Tamil", "Latha", sans-serif',
         }}
       >
         {vowel.letter}
       </span>
-      {/* Stroke trace hint (lightweight SVG, not animated) */}
+      {/* Stroke trace hint */}
       <svg
         viewBox="0 0 100 100"
         className="absolute inset-0 w-full h-full opacity-[0.18] pointer-events-none"
         aria-hidden
       >
-        <path d={vowel.stroke} fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <path d={vowel.stroke} fill="none" stroke="#b45309" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </div>
   );
@@ -146,6 +134,22 @@ function StarBurst() {
   );
 }
 
+function FamilyMedia({ emoji, className = "w-10 h-10 object-contain" }: { emoji: string; className?: string }) {
+  const images: Record<string, string> = {
+    '👩': '/assets/quiz/family-mother.png',
+    '👨': '/assets/quiz/family-father.png',
+    '👧': '/assets/quiz/family-sister.png',
+    '👦': '/assets/quiz/family-brother.png',
+    '👵': '/assets/quiz/family-grandma.png',
+    '👴': '/assets/quiz/family-grandpa.png',
+  };
+  const src = images[emoji];
+  if (src) {
+    return <img src={src} className={className} alt={emoji} />;
+  }
+  return <span className={className.includes('w-') ? 'text-3xl select-none' : ''}>{emoji}</span>;
+}
+
 /* ─── Phase: Showcase ─── */
 
 interface ShowcaseProps {
@@ -166,26 +170,16 @@ function Showcase({ vowel, index, total, onNext }: ShowcaseProps) {
       className="flex flex-col items-center gap-4 w-full"
     >
       {/* Header badge */}
-      <div className="flex items-center gap-2 px-4 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.18)' }}>
-        <span className="text-xs font-black text-white/60 tracking-widest uppercase">உயிர் எழுத்து</span>
-        <span className="text-xs font-bold text-white/40">{index + 1} / {total}</span>
+      <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100/50 border border-amber-200/50">
+        <span className="text-xs font-black text-amber-800 tracking-widest uppercase">உயிர் எழுத்து</span>
+        <span className="text-xs font-bold text-amber-700/60">{index + 1} / {total}</span>
       </div>
 
-      {/* Blackboard panel */}
+      {/* Board panel */}
       <div
-        className="relative w-full rounded-2xl overflow-hidden"
-        style={{
-          background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)',
-          boxShadow: '0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)',
-          border: '3px solid #2d4a2d',
-        }}
+        className="relative w-full rounded-[2rem] border-4 border-[#b45309] shadow-sm bg-[#fffdf9] overflow-hidden"
       >
         <BoardLines />
-
-        {/* Chalk-board texture overlay */}
-        <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
-          style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'4\' height=\'4\'%3E%3Crect width=\'4\' height=\'4\' fill=\'%23ffffff10\'/%3E%3Crect width=\'2\' height=\'2\' fill=\'%23ffffff08\'/%3E%3C/svg%3E")' }}
-        />
 
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center gap-3 px-4 pt-6 pb-5">
@@ -194,8 +188,8 @@ function Showcase({ vowel, index, total, onNext }: ShowcaseProps) {
           {/* Pronunciation name */}
           <div className="flex items-center gap-3">
             <span
-              className="text-2xl sm:text-3xl font-black"
-              style={{ color: vowel.color, textShadow: `0 0 16px ${vowel.color}60`, fontFamily: '"Noto Sans Tamil", sans-serif' }}
+              className="text-2xl sm:text-3xl font-black text-amber-950"
+              style={{ fontFamily: '"Noto Sans Tamil", sans-serif' }}
             >
               {vowel.name}
             </span>
@@ -207,11 +201,11 @@ function Showcase({ vowel, index, total, onNext }: ShowcaseProps) {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.35, duration: 0.3 }}
             className="flex items-center gap-2 px-4 py-2 rounded-xl"
-            style={{ background: `${vowel.color}22`, border: `1px solid ${vowel.color}44` }}
+            style={{ background: `${vowel.color}15`, border: `1px solid ${vowel.color}33` }}
           >
-            <span className="text-2xl sm:text-3xl">{vowel.emoji}</span>
+            <FamilyMedia emoji={vowel.emoji} className="w-8 h-8 object-contain" />
             <span
-              className="text-base sm:text-lg font-black text-white"
+              className="text-base sm:text-lg font-black text-amber-950"
               style={{ fontFamily: '"Noto Sans Tamil", sans-serif' }}
             >
               {vowel.word}
@@ -227,12 +221,7 @@ function Showcase({ vowel, index, total, onNext }: ShowcaseProps) {
         transition={{ delay: 0.5 }}
         whileTap={{ scale: 0.96 }}
         onClick={onNext}
-        className="w-full max-w-xs py-3 rounded-2xl font-black text-white text-sm sm:text-base tracking-wide shadow-xl transition-all active:scale-95"
-        style={{
-          background: `linear-gradient(135deg, ${vowel.color}, ${vowel.color}bb)`,
-          boxShadow: `0 4px 24px ${vowel.color}60, 0 2px 0 ${vowel.color}40`,
-          border: `2px solid ${vowel.color}80`,
-        }}
+        className="w-full max-w-xs py-3.5 rounded-2xl font-black text-white text-sm sm:text-base tracking-wide shadow-md transition-all active:scale-95 bg-gradient-to-r from-emerald-500 to-teal-500 border-b-4 border-emerald-700"
       >
         எழுதிப் பழகுங்கள்! ✏️
       </motion.button>
@@ -252,25 +241,22 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
   const guideCanvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Use refs for drawn points — avoids stale closure in handlers entirely
   const pointsRef = useRef<{ x: number; y: number }[]>([]);
 
-  // Pre-built letter data — computed once after font is confirmed loaded
   const letterDataRef = useRef<{
-    pixels: { x: number; y: number }[];   // sampled letter pixels
+    pixels: { x: number; y: number }[];
     minX: number; maxX: number;
     minY: number; maxY: number;
   } | null>(null);
 
   const [isDrawing, setIsDrawing] = useState(false);
   const [hasDrawn, setHasDrawn] = useState(false);
-  const [pointCount, setPointCount] = useState(0);   // drives button enable/disable only
+  const [pointCount, setPointCount] = useState(0);
   const [done, setDone] = useState(false);
   const [failMsg, setFailMsg] = useState<string | null>(null);
   const [dimensions, setDimensions] = useState({ w: 400, h: 400 });
   const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Build the letter pixel mask. Called after font is confirmed loaded.
   const buildLetterData = useCallback((w: number, h: number) => {
     const off = document.createElement('canvas');
     off.width = w;
@@ -307,7 +293,6 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
     }
   }, [vowel.letter]);
 
-  // Draw guide letter on the visible canvas
   const drawGuide = useCallback((w: number, h: number) => {
     const gc = guideCanvasRef.current;
     if (!gc) return;
@@ -320,9 +305,7 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
     ctx.font = `900 ${fontSize}px "Noto Sans Tamil", "Latha", sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillStyle = 'rgba(255,255,255,0.2)';
-    ctx.shadowColor = 'rgba(255,255,255,0.3)';
-    ctx.shadowBlur = 6;
+    ctx.fillStyle = 'rgba(180, 83, 9, 0.15)';
     ctx.fillText(vowel.letter, w / 2, h / 2);
   }, [vowel.letter]);
 
@@ -338,21 +321,17 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
 
       if (!cancelled) setDimensions({ w, h });
 
-      // Size the drawing canvas
       const dc = canvasRef.current;
       if (dc) { dc.width = w; dc.height = h; }
 
-      // Reset mask
       letterDataRef.current = null;
 
-      // Explicitly load the Tamil font before rendering mask
       try {
         await document.fonts.load(`900 ${Math.round(w * 0.5)}px "Noto Sans Tamil"`);
-      } catch (_) { /* ignore, we'll try anyway */ }
+      } catch (_) {}
 
       if (cancelled) return;
 
-      // Draw guide + build mask (font is now loaded)
       drawGuide(w, h);
       buildLetterData(w, h);
     };
@@ -395,13 +374,14 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
 
     const ctx = canvasRef.current?.getContext('2d');
     if (ctx) {
-      ctx.strokeStyle = 'rgba(255,255,255,0.95)';
-      ctx.lineWidth = 8;
+      ctx.strokeStyle = vowel.color;
+      ctx.lineWidth = 14;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      ctx.shadowBlur = 0;
       ctx.lineTo(pos.x, pos.y);
       ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
     }
   };
 
@@ -428,7 +408,6 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
       return;
     }
 
-    // Calculate letter dimensions
     const letterW = data.maxX - data.minX;
     const letterH = data.maxY - data.minY;
 
@@ -437,12 +416,10 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
       return;
     }
 
-    // ── Grid Setup for Coverage ──
     const GRID_SIZE = 7;
     const cellW = letterW / GRID_SIZE;
     const cellH = letterH / GRID_SIZE;
 
-    // Count how many letter pixels fall into each cell of the 7x7 grid
     const cellPixelCounts = new Map<string, number>();
     for (const p of data.pixels) {
       const col = Math.floor((p.x - data.minX) / cellW);
@@ -453,8 +430,6 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
       cellPixelCounts.set(cellKey, (cellPixelCounts.get(cellKey) || 0) + 1);
     }
 
-    // A cell is only "active" if it contains a significant portion of the letter stroke (>= 8 pixels).
-    // This filters out edge/corner noise cells that are practically impossible to hit.
     const activeCells = new Set<string>();
     for (const [cellKey, count] of cellPixelCounts.entries()) {
       if (count >= 8) {
@@ -462,12 +437,9 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
       }
     }
 
-    // Set tolerance radius (e.g. 28px on a 400px canvas) - friendlier for child fingers
-    const tol = Math.max(26, Math.round(dimensions.w * 0.07));
+    const tol = Math.max(34, Math.round(dimensions.w * 0.11));
     const tolSq = tol * tol;
 
-    // Generate a dense set of points by interpolating between consecutive drawn points
-    // to prevent fast drawing gaps from skipping grid cells.
     const densePoints: { x: number; y: number }[] = [];
     if (pts.length > 0) {
       densePoints.push(pts[0]);
@@ -491,7 +463,6 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
       }
     }
 
-    // Track user containment and which active cells they visit
     let pointsOnLetter = 0;
     const visitedActiveCells = new Set<string>();
 
@@ -508,7 +479,6 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
 
       if (isClose) {
         pointsOnLetter++;
-        // Determine which cell the point is in
         const col = Math.floor((p.x - data.minX) / cellW);
         const row = Math.floor((p.y - data.minY) / cellH);
         const c = Math.max(0, Math.min(GRID_SIZE - 1, col));
@@ -523,15 +493,12 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
     const containment = densePoints.length > 0 ? (pointsOnLetter / densePoints.length) * 100 : 0;
     const coverage = activeCells.size > 0 ? (visitedActiveCells.size / activeCells.size) * 100 : 0;
 
-    // Verdict
-    // Containment must be high (user is drawing on/near the letter, not off-board scribbling)
-    // Coverage must be high (user has traced the majority of the letter's main strokes)
-    const passed = containment >= 70 && coverage >= 70;
+    const passed = containment >= 40 && coverage >= 45;
 
     if (passed) {
       setDone(true);
-      successTimerRef.current = setTimeout(onCorrect, 900);
-    } else if (containment < 70) {
+      successTimerRef.current = setTimeout(onCorrect, 500);
+    } else if (containment < 40) {
       setFailMsg('எழுத்தின் மேல் மட்டும் எழுதவும்! 🎯');
     } else {
       setFailMsg('முழு எழுத்தையும் trace செய்யவும்! ✍️');
@@ -549,20 +516,17 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
     >
       {/* Instruction */}
       <div className="w-full text-center">
-        <p className="text-white/80 text-sm font-bold font-sans">
+        <p className="text-amber-950 text-sm font-bold font-sans">
           &quot;{vowel.letter}&quot; எழுத்தை பலகையில் எழுதி பழகுங்கள்!
         </p>
       </div>
 
-      {/* Blackboard */}
+      {/* Board */}
       <div
         ref={containerRef}
-        className="relative w-full rounded-2xl overflow-hidden touch-none"
+        className="relative w-full rounded-[2rem] border-4 border-[#b45309] shadow-sm bg-[#fffdf9] overflow-hidden touch-none"
         style={{
           height: dimensions.h,
-          background: 'linear-gradient(160deg, #1a2e1a 0%, #0d1f0d 100%)',
-          border: '3px solid #2d4a2d',
-          boxShadow: '0 8px 40px rgba(0,0,0,0.5)',
           touchAction: 'none',
         }}
       >
@@ -574,8 +538,7 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
         {/* Drawing canvas */}
         <canvas
           ref={canvasRef}
-          className="absolute inset-0 z-10 cursor-crosshair touch-none"
-          style={{ width: dimensions.w, height: dimensions.h, touchAction: 'none' }}
+          className="absolute inset-0 z-10 cursor-crosshair touch-none w-full h-full"
           onPointerDown={startDrawing}
           onPointerMove={draw}
           onPointerUp={stopDrawing}
@@ -584,10 +547,10 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
 
         {/* Success overlay */}
         {done && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/30 backdrop-blur-[2px]">
-            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex flex-col items-center">
-              <div className="text-6xl">⭐</div>
-              <p className="text-base font-black text-emerald-400 mt-1 font-sans">அருமை!</p>
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-amber-50/40 backdrop-blur-[2px]">
+            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex flex-col items-center border-2 border-emerald-200 bg-[#fffdf9]/95 rounded-2xl px-6 py-4 shadow-md">
+              <div className="text-6xl animate-bounce">⭐</div>
+              <p className="text-base font-black text-emerald-600 mt-1 font-sans">அருமை!</p>
             </motion.div>
           </div>
         )}
@@ -602,9 +565,9 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
               exit={{ opacity: 0 }}
               className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
             >
-              <div className="bg-red-700/90 text-white rounded-xl px-5 py-3 text-sm font-black shadow-xl text-center max-w-[280px]">
+              <div className="bg-[#fffdf9]/95 text-rose-600 border-2 border-rose-200 rounded-xl px-5 py-3 text-sm font-black shadow-xl text-center max-w-[280px]">
                 <p className="mb-0.5">❌ {failMsg}</p>
-                <p className="text-[11px] text-white/75">மீண்டும் 🔄 button press பண்ணி try பண்ணுங்கள்</p>
+                <p className="text-[11px] text-amber-800">மீண்டும் 🔄 button press பண்ணி try பண்ணுங்கள்</p>
               </div>
             </motion.div>
           )}
@@ -616,14 +579,14 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
         <button
           onClick={handleReset}
           disabled={!hasDrawn || done}
-          className="flex-1 py-3 rounded-2xl font-black text-white text-xs sm:text-sm tracking-wide bg-amber-500 hover:bg-amber-600 disabled:opacity-40 disabled:cursor-not-allowed shadow-md transition-all active:scale-95 font-sans"
+          className="flex-1 py-3.5 rounded-2xl font-black text-white text-xs sm:text-sm tracking-wide bg-gradient-to-r from-amber-500 to-orange-500 shadow-md border-b-4 border-orange-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95 font-sans"
         >
           மீண்டும் 🔄
         </button>
         <button
           onClick={handleFinish}
           disabled={pointCount < 20 || done}
-          className="flex-1 py-3 rounded-2xl font-black text-white text-xs sm:text-sm tracking-wide bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 disabled:cursor-not-allowed shadow-md transition-all active:scale-95 font-sans"
+          className="flex-1 py-3.5 rounded-2xl font-black text-white text-xs sm:text-sm tracking-wide bg-gradient-to-r from-emerald-500 to-teal-500 shadow-md border-b-4 border-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95 font-sans"
         >
           முடிந்தது! ✅
         </button>
@@ -646,21 +609,21 @@ function LetterDone({ vowel, onNext, isLast }: { vowel: VowelEntry; onNext: () =
       className="flex flex-col items-center gap-4 w-full relative"
     >
       <StarBurst />
-      <div className="flex flex-col items-center gap-3 px-6 py-6 rounded-2xl w-full" style={{ background: 'rgba(255,255,255,0.07)', border: '1.5px solid rgba(255,255,255,0.12)' }}>
-        <span className="text-4xl sm:text-5xl">{vowel.emoji}</span>
+      <div className="flex flex-col items-center gap-3 px-6 py-6 rounded-[2rem] border-4 border-amber-200/80 bg-[#fffdf9] w-full shadow-sm">
+        <FamilyMedia emoji={vowel.emoji} className="w-16 h-16 object-contain" />
         <p
-          className="text-xl sm:text-2xl font-black text-white text-center"
+          className="text-xl sm:text-2xl font-black text-amber-950 text-center"
           style={{ fontFamily: '"Noto Sans Tamil", sans-serif' }}
         >
           {vowel.word}
         </p>
-        <p className="text-xs text-white/50 font-bold tracking-wider text-center">
+        <p className="text-xs text-amber-800 font-bold tracking-wider text-center">
           "{vowel.letter}" எழுத்தை கற்றீர்கள்! ⭐
         </p>
         <div className="flex items-center gap-2 mt-1">
           <span
             className="text-5xl sm:text-6xl font-black"
-            style={{ color: vowel.color, textShadow: `0 0 24px ${vowel.color}80`, fontFamily: '"Noto Sans Tamil", sans-serif' }}
+            style={{ color: vowel.color, textShadow: `0 0 24px ${vowel.color}30`, fontFamily: '"Noto Sans Tamil", sans-serif' }}
           >
             {vowel.letter}
           </span>
@@ -670,13 +633,7 @@ function LetterDone({ vowel, onNext, isLast }: { vowel: VowelEntry; onNext: () =
       <motion.button
         whileTap={{ scale: 0.96 }}
         onClick={onNext}
-        className="w-full max-w-xs py-3 rounded-2xl font-black text-white text-sm sm:text-base tracking-wide shadow-xl active:scale-95"
-        style={{
-          background: isLast
-            ? 'linear-gradient(135deg, #f97316, #ec4899)'
-            : `linear-gradient(135deg, ${vowel.color}, ${vowel.color}bb)`,
-          boxShadow: `0 4px 24px ${vowel.color}50`,
-        }}
+        className="w-full max-w-xs py-3.5 rounded-2xl font-black text-white text-sm sm:text-base tracking-wide shadow-md active:scale-95 bg-gradient-to-r from-emerald-500 to-teal-500 border-b-4 border-emerald-700"
       >
         {isLast ? 'முடிந்தது! 🎉' : 'அடுத்த எழுத்து →'}
       </motion.button>
@@ -704,11 +661,11 @@ function AllDone({ vowels, onComplete }: { vowels: VowelEntry[]; onComplete: () 
         🏆
       </motion.div>
 
-      <div className="flex flex-col items-center gap-2 px-6 py-5 rounded-2xl w-full text-center" style={{ background: 'rgba(255,255,255,0.07)', border: '1.5px solid rgba(255,255,255,0.15)' }}>
-        <p className="text-lg sm:text-xl font-black text-white" style={{ fontFamily: '"Noto Sans Tamil", sans-serif' }}>
+      <div className="flex flex-col items-center gap-2 px-6 py-5 rounded-[2rem] border-4 border-amber-200/80 bg-[#fffdf9] w-full text-center shadow-sm">
+        <p className="text-lg sm:text-xl font-black text-amber-950" style={{ fontFamily: '"Noto Sans Tamil", sans-serif' }}>
           அட்டகாசம்! 🎊
         </p>
-        <p className="text-xs text-white/50 font-bold tracking-wide" style={{ fontFamily: '"Noto Sans Tamil", sans-serif' }}>
+        <p className="text-xs text-amber-800 font-bold tracking-wide" style={{ fontFamily: '"Noto Sans Tamil", sans-serif' }}>
           {isSetB ? 'எ, ஏ, ஐ, ஒ, ஓ, ஔ, ஃ — அனைத்தையும் கற்றீர்கள்!' : 'அ, ஆ, இ, ஈ, உ, ஊ — அனைத்தையும் கற்றீர்கள்!'}
         </p>
 
@@ -732,11 +689,7 @@ function AllDone({ vowels, onComplete }: { vowels: VowelEntry[]; onComplete: () 
       <motion.button
         whileTap={{ scale: 0.96 }}
         onClick={onComplete}
-        className="w-full max-w-xs py-3.5 rounded-2xl font-black text-white text-base tracking-wide shadow-xl active:scale-95"
-        style={{
-          background: 'linear-gradient(135deg, #f97316, #ec4899, #6366f1)',
-          boxShadow: '0 4px 28px rgba(249,115,22,0.5)',
-        }}
+        className="w-full max-w-xs py-3.5 rounded-2xl font-black text-white text-base tracking-wide shadow-md active:scale-95 bg-gradient-to-r from-emerald-500 to-teal-500 border-b-4 border-emerald-700"
       >
         அடுத்த பாடம் ➡️
       </motion.button>
@@ -810,10 +763,10 @@ export default function TamilVowelQuiz({ config, onComplete }: Props) {
               height: 8,
               borderRadius: 99,
               background: scores[v.letter]
-                ? '#22c55e'
+                ? '#10b981'
                 : i === vowelIndex
                   ? v.color
-                  : 'rgba(255,255,255,0.2)',
+                  : 'rgba(180, 83, 9, 0.18)',
             }}
           />
         ))}

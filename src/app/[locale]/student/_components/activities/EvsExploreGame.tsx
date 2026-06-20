@@ -12,14 +12,21 @@ const FAMILY_BG: Record<string, string> = {
   '👴': 'bg-amber-600',
 };
 
+interface MatchingItem {
+  id: string;
+  label: string;
+  emoji?: string;
+}
+
 interface Round {
-  type: 'story' | 'learn' | 'question' | 'reward';
+  type: 'story' | 'learn' | 'question' | 'reward' | 'match';
   story?: string;
   showEmoji?: string;
   labels?: string[];
   question?: string;
   options?: { id: string; emoji: string; label: string }[];
   correctId?: string;
+  matchingPairs?: { left: MatchingItem; right: MatchingItem }[];
 }
 
 interface EvsLesson {
@@ -103,6 +110,16 @@ const LESSONS: Record<string, EvsLesson> = {
         correctId: 'legs',
       },
       {
+        type: 'match',
+        question: 'Match the body parts to their names! ➔',
+        matchingPairs: [
+          { left: { id: 'eyes', label: 'Eyes', emoji: '👀' }, right: { id: 'eyes', label: 'Eyes' } },
+          { left: { id: 'nose', label: 'Nose', emoji: '👃' }, right: { id: 'nose', label: 'Nose' } },
+          { left: { id: 'ears', label: 'Ears', emoji: '👂' }, right: { id: 'ears', label: 'Ears' } },
+          { left: { id: 'mouth', label: 'Mouth', emoji: '👄' }, right: { id: 'mouth', label: 'Mouth' } },
+        ]
+      },
+      {
         type: 'reward',
         story: 'You know all your body parts! Eyes, nose, ears, hands, legs!',
       },
@@ -170,6 +187,16 @@ const LESSONS: Record<string, EvsLesson> = {
           { id: 'hearing', emoji: '👂', label: 'Hearing' },
         ],
         correctId: 'touch',
+      },
+      {
+        type: 'match',
+        question: 'Match Senses to Objects! ➔',
+        matchingPairs: [
+          { left: { id: 'sight', label: 'Sight', emoji: '👀' }, right: { id: 'sight', label: 'Rainbow 🌈' } },
+          { left: { id: 'hearing', label: 'Hearing', emoji: '👂' }, right: { id: 'hearing', label: 'Music 🎵' } },
+          { left: { id: 'smell', label: 'Smell', emoji: '👃' }, right: { id: 'smell', label: 'Flower 🌹' } },
+          { left: { id: 'taste', label: 'Taste', emoji: '👅' }, right: { id: 'taste', label: 'Ice Cream 🍦' } },
+        ]
       },
       {
         type: 'reward',
@@ -335,6 +362,16 @@ const LESSONS: Record<string, EvsLesson> = {
           { id: 'mother', emoji: '👩', label: 'Mother' },
         ],
         correctId: 'grandpa',
+      },
+      {
+        type: 'match',
+        question: 'Match family stickers! ➔',
+        matchingPairs: [
+          { left: { id: 'mother', label: 'Mother', emoji: '👩' }, right: { id: 'mother', label: 'Mom' } },
+          { left: { id: 'father', label: 'Father', emoji: '👨' }, right: { id: 'father', label: 'Dad' } },
+          { left: { id: 'sister', label: 'Sister', emoji: '👧' }, right: { id: 'sister', label: 'Sister' } },
+          { left: { id: 'brother', label: 'Brother', emoji: '👦' }, right: { id: 'brother', label: 'Brother' } },
+        ]
       },
       {
         type: 'reward',
@@ -2391,6 +2428,128 @@ type Props = {
   childName?: string;
 };
 
+const shuffleArray = <T,>(arr: T[]): T[] => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
+const getEvsConceptImage = (key: string) => {
+  const k = key ? key.toLowerCase() : '';
+  if (k.includes('body') || k.includes('sense') || k.includes('habit') || k.includes('routine') || k.includes('manner') || k.includes('identity')) {
+    return '/assets/quiz/evs-body-senses.png';
+  }
+  if (k.includes('animal') || k.includes('plant') || k.includes('nature') || k.includes('season') || k.includes('sky') || k.includes('weather') || k.includes('color') || k.includes('bird')) {
+    return '/assets/quiz/evs-animals-nature.png';
+  }
+  return '/assets/quiz/evs-family-home-transport.png';
+};
+
+const getFamilyAvatar = (emoji: string) => {
+  switch (emoji.trim()) {
+    case '👩': return '/assets/quiz/family-mother.png';
+    case '👨': return '/assets/quiz/family-father.png';
+    case '👧': return '/assets/quiz/family-sister.png';
+    case '👦': return '/assets/quiz/family-brother.png';
+    case '👵': return '/assets/quiz/family-grandma.png';
+    case '👴': return '/assets/quiz/family-grandpa.png';
+    default: return null;
+  }
+};
+
+const getDynamicQuestion = (round: any) => {
+  if (round.question) return round.question;
+  
+  const target = round.correctId ? round.correctId.toLowerCase() : '';
+  const emoji = round.showEmoji || '';
+
+  // Body parts
+  if (target === 'eyes') return `Which face part do we use to see? ${emoji}`;
+  if (target === 'nose') return `Which face part do we use to smell? ${emoji}`;
+  if (target === 'ears') return `Which face part do we use to hear sounds? ${emoji}`;
+  if (target === 'mouth') return `Which face part do we use to speak and eat? ${emoji}`;
+  if (target === 'hands') return `Which body part do we use to clap and write? ${emoji}`;
+  if (target === 'legs') return `Which body part do we use to walk and run? ${emoji}`;
+  if (target === 'feet') return `Which body part is inside our shoes? ${emoji}`;
+
+  // Five Senses
+  if (target === 'sight') return `Which sense is used to look at things? ${emoji}`;
+  if (target === 'hearing') return `Which sense is used to listen to sounds? ${emoji}`;
+  if (target === 'smell') return `Which sense is used to sniff? ${emoji}`;
+  if (target === 'taste') return `Which sense is used to enjoy ice cream? ${emoji}`;
+  if (target === 'touch') return `Which sense is used to feel things? ${emoji}`;
+
+  // Keeping Clean / Healthy habits
+  if (target === 'toothbrush') return `What do we use to brush our teeth? ${emoji}`;
+  if (target === 'soap') return `What do we use to wash our hands clean? ${emoji}`;
+  if (target === 'bathtub') return `Where do we take a nice splash bath? ${emoji}`;
+  if (target === 'twice') return `How many times should we brush our teeth? ${emoji}`;
+  if (target === 'sleep') return `What should we do when we are tired? ${emoji}`;
+
+  // Family members
+  if (target === 'mother') return `Can you find Mother? 👩`;
+  if (target === 'father') return `Can you find Father? 👨`;
+  if (target === 'sister') return `Can you find Sister? 👧`;
+  if (target === 'brother') return `Can you find Brother? 👦`;
+  if (target === 'grandma') return `Can you find Grandmother? 👵`;
+  if (target === 'grandpa') return `Can you find Grandfather? 👴`;
+
+  // Rooms in home
+  if (target === 'bedroom') return `Which room is used for sleeping? ${emoji}`;
+  if (target === 'kitchen') return `Which room is used for cooking? ${emoji}`;
+  if (target === 'livingroom') return `Which room has the sofa to relax? ${emoji}`;
+  if (target === 'bathroom') return `Which room has the shower? ${emoji}`;
+  if (target === 'diningroom') return `Which room has the table for meals? ${emoji}`;
+
+  // Animal categories / homes
+  if (target === 'pet') return `Is this animal a PET or WILD? ${emoji}`;
+  if (target === 'wild') return `Is this animal a PET or WILD? ${emoji}`;
+  if (target === 'nest') return `Where does the little bird live? ${emoji}`;
+  if (target === 'water') return `Where does the fish swim and live? ${emoji}`;
+  if (target === 'dhouse') return `Where does the dog live? ${emoji}`;
+  if (target === 'hole') return `Where does the rabbit live? ${emoji}`;
+  if (target === 'cave') return `Where does the lion live? ${emoji}`;
+  if (target === 'hive') return `Where does the bee live? ${emoji}`;
+
+  // Plant parts
+  if (target === 'roots') return `Which part is under the soil? ${emoji}`;
+  if (target === 'leaves') return `Which green part makes food for the plant? ${emoji}`;
+  if (target === 'flower') return `Which colorful part blooms? ${emoji}`;
+  if (target === 'fruit') return `Which yummy part can we eat? ${emoji}`;
+
+  // Nature / Seasons
+  if (target === 'sun') return `What is this hot shining star? ${emoji}`;
+  if (target === 'clouds') return `What are these fluffy white objects? ${emoji}`;
+  if (target === 'rain') return `What is this water falling from the sky? ${emoji}`;
+  if (target === 'rainbow') return `What is this colorful sky arch? ${emoji}`;
+  if (target === 'summer') return `Which season is very hot? ${emoji}`;
+  if (target === 'rainy') return `Which season needs raincoats? ${emoji}`;
+  if (target === 'winter') return `Which season is cold and snowy? ${emoji}`;
+
+  // Transport
+  if (target === 'car') return `What is this four-wheeled vehicle? ${emoji}`;
+  if (target === 'bus') return `What is this big vehicle? ${emoji}`;
+  if (target === 'train') return `What is this vehicle running on tracks? ${emoji}`;
+  if (target === 'bicycle') return `What is this two-wheeled vehicle? ${emoji}`;
+  if (target === 'aeroplane') return `What is this vehicle that flies? ${emoji}`;
+  if (target === 'helicopter') return `What is this vehicle with rotors? ${emoji}`;
+  if (target === 'sailboat') return `What is this boat that sails? ${emoji}`;
+  if (target === 'ship') return `What is this big ship? ${emoji}`;
+
+  // Default fallback questions based on round label matching:
+  if (round.options && round.options.length > 0) {
+    const correctOption = round.options.find((o: any) => o.id === round.correctId);
+    if (correctOption) {
+      return `Which one is the correct match for "${correctOption.label}"? ${emoji}`;
+    }
+  }
+
+  return `Can you find the correct answer? 🤔 ${emoji}`;
+};
+
 export default function EvsExploreGame({ conceptKey, onComplete, childName }: Props) {
   const lesson = useMemo(() => {
     const base = LESSONS[conceptKey];
@@ -2417,21 +2576,32 @@ export default function EvsExploreGame({ conceptKey, onComplete, childName }: Pr
   const [showResult, setShowResult] = useState(false);
   const [wrongIds, setWrongIds] = useState<Set<string>>(new Set());
 
+  // Matching States
+  const [selectedLeftId, setSelectedLeftId] = useState<string | null>(null);
+  const [matchedPairs, setMatchedPairs] = useState<Record<string, string>>({}); // leftId -> rightId
+  const [wrongShake, setWrongShake] = useState(false);
+
   const currentRound = lesson?.rounds[roundIndex];
 
   const isQuestion = currentRound?.type === 'question';
   const isStory = currentRound?.type === 'story';
   const isLearn = currentRound?.type === 'learn';
   const isReward = currentRound?.type === 'reward';
+  const isMatch = currentRound?.type === 'match';
 
   const totalQuestions = useMemo(
-    () => lesson?.rounds.filter((r) => r.type === 'question').length ?? 0,
+    () => lesson?.rounds.filter((r) => r.type === 'question' || r.type === 'match').length ?? 0,
     [lesson],
   );
   const questionsDone = useMemo(
-    () => lesson?.rounds.slice(0, roundIndex).filter((r) => r.type === 'question').length ?? 0,
+    () => lesson?.rounds.slice(0, roundIndex).filter((r) => r.type === 'question' || r.type === 'match').length ?? 0,
     [lesson, roundIndex],
   );
+
+  const shuffledRight = useMemo(() => {
+    if (currentRound?.type !== 'match' || !currentRound.matchingPairs) return [];
+    return shuffleArray(currentRound.matchingPairs.map(p => p.right));
+  }, [roundIndex, currentRound]);
 
   const handleOptionTap = useCallback(
     (optionId: string) => {
@@ -2451,10 +2621,39 @@ export default function EvsExploreGame({ conceptKey, onComplete, childName }: Pr
     [isQuestion, selectedId, currentRound],
   );
 
+  const handleLeftMatchClick = (id: string) => {
+    if (matchedPairs[id]) return;
+    setSelectedLeftId(id);
+  };
+
+  const handleRightMatchClick = (id: string, pairs: { left: { id: string }; right: { id: string } }[]) => {
+    if (!selectedLeftId) return;
+
+    if (selectedLeftId === id) {
+      const nextMatched = { ...matchedPairs, [selectedLeftId]: id };
+      setMatchedPairs(nextMatched);
+      setSelectedLeftId(null);
+      setScore((s) => s + 1);
+
+      if (Object.keys(nextMatched).length >= pairs.length) {
+        setShowResult(true);
+      }
+    } else {
+      setWrongShake(true);
+      setTimeout(() => {
+        setWrongShake(false);
+        setSelectedLeftId(null);
+      }, 500);
+    }
+  };
+
   const handleNext = useCallback(() => {
     setSelectedId(null);
     setShowResult(false);
     setWrongIds(new Set());
+    setSelectedLeftId(null);
+    setMatchedPairs({});
+    setWrongShake(false);
 
     if (roundIndex < (lesson?.rounds.length ?? 1) - 1) {
       setRoundIndex((i) => i + 1);
@@ -2478,20 +2677,17 @@ export default function EvsExploreGame({ conceptKey, onComplete, childName }: Pr
         {lesson.rounds.map((r, i) => (
           <div
             key={i}
-            className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
-              i === roundIndex
-                ? 'bg-emerald-400 scale-125 shadow-[0_0_8px_rgba(52,211,153,0.5)]'
-                : i < roundIndex
-                  ? 'bg-emerald-600/60'
-                  : 'bg-white/20'
-            }`}
+            className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all duration-300"
+            style={{
+              backgroundColor: i < roundIndex ? '#22c55e' : i === roundIndex ? '#38bdf8' : 'rgba(217, 119, 6, 0.2)'
+            }}
           />
         ))}
       </div>
 
       {/* Score */}
       {totalQuestions > 0 && (
-        <div className="text-[10px] sm:text-xs font-bold text-emerald-300/60 mb-3 sm:mb-4 font-sans">
+        <div className="text-[10px] sm:text-xs font-bold text-amber-800/60 mb-3 sm:mb-4 font-sans">
           {questionsDone}/{totalQuestions}
         </div>
       )}
@@ -2506,30 +2702,47 @@ export default function EvsExploreGame({ conceptKey, onComplete, childName }: Pr
           className="w-full max-w-md flex flex-col items-center"
         >
           {/* Story text */}
-          {isStory && currentRound?.story && (
-            <p className="text-sm sm:text-base font-bold text-white/90 text-center mb-6 sm:mb-8 max-w-xs sm:max-w-sm leading-relaxed" style={{ fontFamily: "'Nirmala UI','Noto Sans Devanagari',sans-serif" }}>
-              {currentRound.story}
-            </p>
+          {isStory && (
+            <div className="flex flex-col items-center gap-5 text-center mb-6 w-full">
+              <div className="relative w-full rounded-3xl overflow-hidden min-h-[220px] flex flex-col justify-center items-center px-6 py-6 border-[3px] border-amber-200 bg-amber-50/40"
+                style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.03)' }}>
+                <motion.div animate={{ y: [0, -6, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} className="w-32 h-32 flex items-center justify-center mb-2">
+                  <img src={getEvsConceptImage(conceptKey)} className="w-full h-full object-contain" alt="EVS Adventure" />
+                </motion.div>
+                {currentRound?.story && (
+                  <p className="text-sm sm:text-base font-black text-amber-950 text-center max-w-xs leading-relaxed font-sans">
+                    {currentRound.story}
+                  </p>
+                )}
+              </div>
+            </div>
           )}
 
           {/* Learn / Guide */}
           {isLearn && (
             <div className="flex flex-col items-center gap-4 w-full max-w-xs sm:max-w-sm">
-              <div className="w-full bg-white/5 rounded-2xl sm:rounded-3xl border border-emerald-400/20 p-4 sm:p-6">
+              <div className="w-full bg-[#fffdf9] rounded-2xl sm:rounded-3xl border-3 border-amber-200 p-4 sm:p-6 shadow-sm">
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5 justify-items-center">
-                  {currentRound.showEmoji?.split(' ').filter(Boolean).map((emoji, i) => (
-                    <div key={i} className="flex flex-col items-center gap-1.5">
-                      <span className="text-3xl sm:text-4xl">{emoji}</span>
-                      {currentRound.labels?.[i] && (
-                        <span className="text-[11px] sm:text-xs font-bold text-white/90 tracking-wide uppercase" style={{ fontFamily: "'Nirmala UI','Noto Sans Devanagari',sans-serif" }}>
-                          {currentRound.labels[i]}
-                        </span>
-                      )}
-                    </div>
-                  ))}
+                  {currentRound.showEmoji?.split(' ').filter(Boolean).map((emoji, i) => {
+                    const avatar = getFamilyAvatar(emoji);
+                    return (
+                      <div key={i} className="flex flex-col items-center gap-1.5 p-2 rounded-xl bg-amber-50/30 border border-amber-100 w-full overflow-hidden">
+                        {avatar ? (
+                          <img src={avatar} className="w-12 h-12 object-contain" alt={currentRound.labels?.[i] || 'Family'} />
+                        ) : (
+                          <span className="text-3xl sm:text-4xl">{emoji}</span>
+                        )}
+                        {currentRound.labels?.[i] && (
+                          <span className="text-[10px] sm:text-[11px] font-black text-amber-950 tracking-wide uppercase font-sans text-center">
+                            {currentRound.labels[i]}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
-              <p className="text-[11px] sm:text-xs font-bold text-emerald-300/80 text-center tracking-wider uppercase" style={{ fontFamily: "'Nirmala UI','Noto Sans Devanagari',sans-serif" }}>
+              <p className="text-[11px] sm:text-xs font-black text-amber-800 text-center tracking-wider uppercase font-sans">
                 {currentRound.story}
               </p>
             </div>
@@ -2539,19 +2752,87 @@ export default function EvsExploreGame({ conceptKey, onComplete, childName }: Pr
           {isReward && (
             <div className="flex flex-col items-center gap-3 sm:gap-4">
               <span className="text-6xl sm:text-7xl animate-bounce">⭐</span>
-              <p className="text-lg sm:text-2xl font-black text-yellow-300 text-center font-sans drop-shadow-lg">
+              <p className="text-lg sm:text-2xl font-black text-amber-900 text-center font-sans drop-shadow-sm">
                 Super Star!
               </p>
               {currentRound.story && (
-                <p className="text-sm sm:text-base font-bold text-emerald-100/90 text-center max-w-xs" style={{ fontFamily: "'Nirmala UI','Noto Sans Devanagari',sans-serif" }}>
+                <p className="text-sm sm:text-base font-bold text-amber-950 text-center max-w-xs font-sans">
                   {currentRound.story}
                 </p>
               )}
-              <p className="text-xs sm:text-sm font-bold text-emerald-300/60" style={{ fontFamily: "'Nirmala UI','Noto Sans Devanagari',sans-serif" }}>
+              <p className="text-xs sm:text-sm font-bold text-amber-800/60 font-sans">
                 Score: {score}/{totalQuestions}
               </p>
             </div>
           )}
+
+          {/* Match Round */}
+          {isMatch && currentRound.matchingPairs && (() => {
+            const pairs = currentRound.matchingPairs;
+            return (
+              <div className="flex flex-col items-center gap-4 w-full">
+                <div className="text-center mb-2">
+                  <h3 className="text-lg sm:text-xl font-black text-amber-950 font-sans">
+                    {currentRound.question || "Match the Pairs! ➔"}
+                  </h3>
+                  <p className="text-xs text-amber-800/60 font-bold font-sans">
+                    Tap an item on the left, then tap its partner on the right!
+                  </p>
+                </div>
+
+                <div className="relative w-full rounded-3xl overflow-hidden min-h-[285px] flex gap-6 items-stretch px-3 py-5 border-[3px] border-amber-200 bg-amber-50/40 shadow-sm">
+                  {/* Left Column */}
+                  <div className="flex-1 flex flex-col justify-around gap-2.5 relative z-10">
+                    {pairs.map(pair => {
+                      const isSelected = selectedLeftId === pair.left.id;
+                      const isMatched = !!matchedPairs[pair.left.id];
+                      return (
+                        <button
+                          key={pair.left.id}
+                          onClick={() => handleLeftMatchClick(pair.left.id)}
+                          className={`p-2.5 rounded-xl border-2 font-black font-sans text-sm flex flex-col items-center justify-center transition-all active:scale-95 min-h-[60px]
+                            ${isMatched 
+                              ? 'bg-emerald-50 border-emerald-300 text-emerald-700 pointer-events-none' 
+                              : isSelected 
+                                ? 'bg-sky-50 border-sky-400 text-sky-700 scale-105 shadow-[0_0_10px_rgba(56,189,248,0.2)]' 
+                                : 'bg-[#fffdf9] border-amber-200 text-amber-950 hover:bg-amber-50/50'
+                            }`}
+                        >
+                          {pair.left.emoji && <span className="text-2xl mb-1">{pair.left.emoji}</span>}
+                          <span className="text-[11px] leading-tight text-center">{pair.left.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Right Column */}
+                  <motion.div animate={wrongShake ? { x: [0, -8, 8, -5, 5, 0] } : {}} transition={{ duration: 0.3 }}
+                    className="flex-1 flex flex-col justify-around gap-2.5 relative z-10">
+                    {shuffledRight.map(rightItem => {
+                      const isMatched = Object.values(matchedPairs).includes(rightItem.id);
+                      const isSelectable = !!selectedLeftId;
+                      return (
+                        <button
+                          key={rightItem.id}
+                          onClick={() => handleRightMatchClick(rightItem.id, pairs)}
+                          className={`p-2.5 rounded-xl border-2 font-black font-sans text-sm flex flex-col items-center justify-center transition-all active:scale-95 min-h-[60px]
+                            ${isMatched 
+                              ? 'bg-emerald-50 border-emerald-300 text-emerald-700 pointer-events-none' 
+                              : isSelectable 
+                                ? 'bg-amber-50 border-amber-400/50 text-amber-950 animate-pulse' 
+                                : 'bg-[#fffdf9] border-amber-200 text-amber-950 hover:bg-amber-50/50'
+                            }`}
+                        >
+                          {rightItem.emoji && <span className="text-2xl mb-1">{rightItem.emoji}</span>}
+                          <span className="text-[11px] leading-tight text-center">{rightItem.label}</span>
+                        </button>
+                      );
+                    })}
+                  </motion.div>
+                </div>
+              </div>
+            );
+          })()}
 
           {/* Question */}
           {isQuestion && (
@@ -2559,19 +2840,21 @@ export default function EvsExploreGame({ conceptKey, onComplete, childName }: Pr
               {currentRound.showEmoji && (
                 <motion.div
                   initial={{ scale: 0 }}
-                  animate={{ scale: 1, y: [0, -8, 0] }}
+                  animate={{ scale: 1, y: [0, -4, 0] }}
                   transition={{ scale: { type: 'spring', stiffness: 300 }, y: { duration: 2, repeat: Infinity } }}
-                  className={`${FAMILY_BG[currentRound.showEmoji] ? 'w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center' : 'text-6xl sm:text-7xl'} mb-3 sm:mb-4`}
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center border-2 border-amber-200 bg-[#fffdf9] shadow-sm mb-3 sm:mb-4 overflow-hidden p-2"
                 >
-                  <span className="text-4xl sm:text-5xl">{currentRound.showEmoji}</span>
+                  {getFamilyAvatar(currentRound.showEmoji) ? (
+                    <img src={getFamilyAvatar(currentRound.showEmoji)!} className="w-full h-full object-contain" alt="Question" />
+                  ) : (
+                    <span className="text-4xl sm:text-5xl">{currentRound.showEmoji}</span>
+                  )}
                 </motion.div>
               )}
 
-              {currentRound.question && (
-                <p className="text-sm sm:text-base font-bold text-white mb-4 sm:mb-6 text-center max-w-xs sm:max-w-sm leading-relaxed" style={{ fontFamily: "'Nirmala UI','Noto Sans Devanagari',sans-serif" }}>
-                  {currentRound.question}
-                </p>
-              )}
+              <p className="text-sm sm:text-base font-bold text-amber-950 mb-4 sm:mb-6 text-center max-w-xs sm:max-w-sm leading-relaxed font-sans">
+                {getDynamicQuestion(currentRound)}
+              </p>
 
               {/* Options grid */}
               <div className="grid grid-cols-3 gap-3 sm:gap-4 w-full max-w-xs sm:max-w-sm">
@@ -2584,28 +2867,32 @@ export default function EvsExploreGame({ conceptKey, onComplete, childName }: Pr
                   return (
                     <motion.button
                       key={opt.id}
-                      whileTap={!selectedId ? { scale: 0.92 } : undefined}
+                      whileTap={!selectedId ? { scale: 0.95 } : undefined}
                       onClick={() => handleOptionTap(opt.id)}
                       disabled={!!selectedId}
                       className={`
-                        relative flex flex-col items-center gap-1.5 sm:gap-2 p-3 sm:p-4 rounded-xl sm:rounded-2xl
-                        border-2 transition-all duration-200 font-sans
+                        relative flex flex-col items-center gap-1.5 sm:gap-2 p-3 sm:p-4 rounded-2xl
+                        border-2 transition-all duration-200 font-sans shadow-sm
                         ${isWrong
-                          ? 'border-red-400/60 bg-red-500/20 animate-shake'
+                          ? 'border-red-400 bg-red-500/10 animate-shake'
                           : showCorrect
-                            ? 'border-emerald-400 bg-emerald-500/20 scale-105'
+                            ? 'border-emerald-400 bg-emerald-500/10 scale-105'
                             : isSelected && !showCorrect
-                              ? 'border-red-400/60 bg-red-500/20'
+                              ? 'border-red-400 bg-red-500/10'
                               : selectedId
-                                ? 'border-white/10 bg-white/5 opacity-50'
-                                : 'border-white/20 bg-white/10 hover:bg-white/20 hover:border-white/40 cursor-pointer active:scale-95'
+                                ? 'border-amber-200/50 bg-[#fffdf9] opacity-50'
+                                : 'border-amber-200 bg-[#fffdf9] hover:bg-amber-50/50 cursor-pointer active:scale-95'
                         }
                       `}
                     >
-                      <span className={`inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full ${FAMILY_BG[opt.emoji] ?? 'bg-transparent'}`}>
-                        <span className="text-2xl sm:text-3xl">{opt.emoji}</span>
+                      <span className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-amber-50/60 border border-amber-100 overflow-hidden p-1.5">
+                        {getFamilyAvatar(opt.emoji) ? (
+                          <img src={getFamilyAvatar(opt.emoji)!} className="w-full h-full object-contain" alt={opt.label} />
+                        ) : (
+                          <span className="text-2xl sm:text-3xl">{opt.emoji}</span>
+                        )}
                       </span>
-                      <span className={`text-[11px] sm:text-xs font-bold ${showCorrect ? 'text-emerald-300' : 'text-white/90'}`} style={{ fontFamily: "'Nirmala UI','Noto Sans Devanagari',sans-serif" }}>
+                      <span className={`text-[11px] sm:text-xs font-black ${showCorrect ? 'text-emerald-700' : 'text-amber-950'}`}>
                         {opt.label}
                       </span>
                       {showCorrect && (
@@ -2631,12 +2918,11 @@ export default function EvsExploreGame({ conceptKey, onComplete, childName }: Pr
               animate={{ opacity: 1, y: 0 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleNext}
-              className="mt-6 sm:mt-8 px-6 sm:px-8 py-2.5 sm:py-3 bg-emerald-500/30 hover:bg-emerald-500/50 text-white font-black text-xs sm:text-sm rounded-full border-2 border-emerald-400/50 shadow-lg transition-all font-sans active:scale-95"
+              className="mt-6 sm:mt-8 w-full max-w-xs py-3 rounded-2xl font-black text-white text-xs sm:text-sm tracking-wide bg-gradient-to-r from-emerald-500 to-teal-500 shadow-xl border-b-4 border-emerald-700 active:scale-95 font-sans"
             >
               {isReward ? '🎉 Done!' : isLearn ? 'Got it ✅' : isStory ? 'Let us start!' : 'Next ➡️'}
             </motion.button>
           )}
-
 
         </motion.div>
       </AnimatePresence>

@@ -325,15 +325,15 @@ export default function SortingComparisonQuiz({ conceptKey = 'sort-by-color', on
       {/* Progress bar */}
       {phase === 'game' && (
         <div className="w-full max-w-md flex items-center gap-2 px-1">
-          <div className="flex-1 h-2 bg-white/15 rounded-full overflow-hidden">
+          <div className="flex-1 h-2 bg-amber-100 rounded-full overflow-hidden">
             <motion.div
-              className="h-full rounded-full bg-white/70"
+              className="h-full rounded-full bg-amber-400"
               initial={{ width: 0 }}
               animate={{ width: `${isSortMode ? (placedCount / totalItems) * 100 : (stepIndex / totalItems) * 100}%` }}
               transition={{ duration: 0.4 }}
             />
           </div>
-          <span className="text-xs font-black text-white/60 font-sans">
+          <span className="text-xs font-black text-amber-800/60 font-sans">
             {isSortMode ? `${placedCount}/${totalItems}` : `${stepIndex + 1}/${totalItems}`}
           </span>
         </div>
@@ -342,40 +342,46 @@ export default function SortingComparisonQuiz({ conceptKey = 'sort-by-color', on
       <AnimatePresence mode="wait">
 
         {/* ─── INTRO ─────────────────────────────────────────────────────────── */}
-        {phase === 'intro' && (
-          <motion.div
-            key="intro"
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="flex flex-col items-center gap-5 w-full max-w-md"
-          >
-            <div className="relative w-full rounded-3xl overflow-hidden min-h-[260px] flex flex-col justify-center items-center px-6 py-8"
-              style={{ background: lesson.themeGrad, boxShadow: '0 12px 40px rgba(0,0,0,0.4)' }}>
-              <BoardLines />
-              <div className="relative z-10 flex flex-col items-center gap-4 text-center">
-                <motion.div
-                  animate={{ y: [0, -10, 0], rotate: [0, 5, -5, 0] }}
-                  transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                  className="text-7xl drop-shadow-lg"
-                >
-                  {lesson.icon}
-                </motion.div>
-                <h3 className="text-2xl sm:text-3xl font-black text-white font-sans drop-shadow">{lesson.title}</h3>
-                <p className="text-sm text-white/75 font-semibold px-4 font-sans leading-relaxed">{lesson.subtitle}</p>
-              </div>
-            </div>
+        {phase === 'intro' && (() => {
+          const illustUrl = lesson.id === 'sort-by-color'
+            ? '/assets/quiz/color-balls.png'
+            : lesson.id === 'sort-by-size'
+              ? '/assets/quiz/big-small.png'
+              : '/assets/quiz/shapes.png';
 
-            <motion.button
-              whileTap={{ scale: 0.96 }}
-              onClick={() => setPhase('game')}
-              className="w-full max-w-xs py-4 rounded-2xl font-black text-white text-lg tracking-wide shadow-xl border-b-4 active:scale-95 font-sans transition-all"
-              style={{ background: lesson.themeGrad, borderColor: 'rgba(0,0,0,0.2)' }}
+          return (
+            <motion.div
+              key="intro"
+              initial={{ opacity: 0, scale: 0.94 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="flex flex-col items-center gap-5 w-full max-w-md"
             >
-              Let&apos;s Start! 🚀
-            </motion.button>
-          </motion.div>
-        )}
+              <div className="relative w-full rounded-3xl overflow-hidden min-h-[260px] flex flex-col justify-center items-center px-6 py-8 border-[3px] border-amber-200 bg-amber-50/40"
+                style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.03)' }}>
+                <div className="relative z-10 flex flex-col items-center gap-4 text-center">
+                  <motion.div
+                    animate={{ y: [0, -10, 0], rotate: [0, 5, -5, 0] }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                    className="w-32 h-32 flex items-center justify-center"
+                  >
+                    <img src={illustUrl} className="w-full h-full object-contain" alt={lesson.title} />
+                  </motion.div>
+                  <h3 className="text-2xl sm:text-3xl font-black text-amber-950 font-sans">{lesson.title}</h3>
+                  <p className="text-sm text-amber-900/70 font-semibold px-4 font-sans leading-relaxed">{lesson.subtitle}</p>
+                </div>
+              </div>
+
+              <motion.button
+                whileTap={{ scale: 0.96 }}
+                onClick={() => setPhase('game')}
+                className="w-full max-w-xs py-4 rounded-2xl font-black text-white text-lg tracking-wide shadow-xl border-b-4 active:scale-95 font-sans transition-all bg-gradient-to-r from-amber-500 to-orange-500 border-amber-700"
+              >
+                Let&apos;s Start! 🚀
+              </motion.button>
+            </motion.div>
+          );
+        })()}
 
         {/* ─── SORT MODE ─────────────────────────────────────────────────────── */}
         {phase === 'game' && isSortMode && lesson.sortItems && lesson.sortTargets && (
@@ -387,17 +393,17 @@ export default function SortingComparisonQuiz({ conceptKey = 'sort-by-color', on
             className="flex flex-col items-center gap-4 w-full max-w-md"
           >
             <div className="text-center">
-              <h3 className="text-lg sm:text-xl font-black text-white font-sans">
+              <h3 className="text-lg sm:text-xl font-black text-amber-950 font-sans">
                 {lesson.icon} {lesson.title}
               </h3>
-              <p className="text-xs text-white/55 font-bold font-sans mt-0.5">
+              <p className="text-xs text-amber-800/70 font-bold font-sans mt-0.5">
                 Tap an item 👆, then tap its basket below
               </p>
             </div>
 
             {/* Item Tray */}
-            <div className="relative w-full rounded-2xl overflow-hidden px-4 py-5 border-2 border-white/20"
-              style={{ background: 'rgba(0,0,0,0.25)' }}>
+            <div className="relative w-full rounded-2xl overflow-hidden px-4 py-5 border-[3px] border-amber-200 bg-amber-50/20"
+              style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.02)' }}>
               <div className="flex flex-wrap justify-center gap-3 min-h-[80px] items-center">
                 {lesson.sortItems.map(item => {
                   const isPlaced = !!placed[item.id];
@@ -409,11 +415,11 @@ export default function SortingComparisonQuiz({ conceptKey = 'sort-by-color', on
                       whileTap={{ scale: 0.9 }}
                       animate={popItem === item.id ? { scale: [1, 1.4, 0], opacity: [1, 1, 0] } : isSel ? { scale: 1.1, y: -4 } : { scale: 1, y: 0 }}
                       onClick={() => handleItemClick(item.id)}
-                      className={`w-16 h-16 rounded-2xl flex flex-col items-center justify-center gap-0.5 text-4xl border-[3px] transition-all shadow-md
-                        ${isSel ? 'bg-white/30 border-white scale-110 shadow-white/30' : 'bg-white/10 border-white/20 hover:bg-white/20'}`}
+                      className={`w-16 h-16 rounded-2xl flex flex-col items-center justify-center gap-0.5 text-4xl border-2 transition-all shadow-sm bg-white
+                        ${isSel ? 'bg-amber-100/60 border-amber-400 scale-110 shadow-amber-500/20' : 'border-amber-200 hover:bg-amber-50/50'}`}
                     >
                       {item.emoji}
-                      <span className="text-[9px] font-bold text-white/60 font-sans leading-none">{item.label}</span>
+                      <span className="text-[9px] font-black text-amber-900/60 font-sans leading-none">{item.label}</span>
                     </motion.button>
                   );
                 })}
@@ -421,7 +427,7 @@ export default function SortingComparisonQuiz({ conceptKey = 'sort-by-color', on
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="text-4xl font-black text-white"
+                    className="text-2xl font-black text-amber-950"
                   >
                     🎉 All sorted!
                   </motion.div>
@@ -445,14 +451,13 @@ export default function SortingComparisonQuiz({ conceptKey = 'sort-by-color', on
                     transition={{ duration: 0.35 }}
                     onClick={() => handleTargetClick(target.id)}
                     className={`flex-1 py-4 px-2 rounded-2xl border-[3px] flex flex-col items-center gap-2 min-h-[120px] transition-all
-                      ${isActive ? 'border-white/60 bg-white/10 shadow-lg' : 'border-white/15 bg-white/5'}`}
-                    style={isActive ? { boxShadow: `0 0 20px ${target.color}55` } : {}}
+                      ${isActive ? 'bg-amber-100/50 border-amber-400 animate-pulse text-amber-900' : 'bg-white border-amber-200 text-amber-950 shadow-sm'}`}
                   >
                     <div className="flex items-center gap-1.5">
                       <span className="text-2xl">{target.emoji}</span>
-                      <span className="text-xs font-black text-white/80 font-sans">{target.label}</span>
+                      <span className="text-xs font-black font-sans">{target.label}</span>
                     </div>
-                    <div className="flex flex-wrap gap-1 justify-center bg-black/25 rounded-xl px-2 py-2 min-h-[44px] w-full items-center">
+                    <div className="flex flex-wrap gap-1 justify-center bg-amber-50 rounded-xl px-2 py-2 min-h-[44px] w-full items-center border border-amber-200">
                       {sortedHere.length === 0 ? (
                         <span className="text-2xl opacity-25">🧺</span>
                       ) : (
@@ -477,7 +482,7 @@ export default function SortingComparisonQuiz({ conceptKey = 'sort-by-color', on
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-xs font-bold text-white/60 font-sans text-center"
+                className="text-xs font-bold text-amber-800/60 font-sans text-center animate-bounce"
               >
                 Now tap the correct basket 👇
               </motion.div>
@@ -495,21 +500,20 @@ export default function SortingComparisonQuiz({ conceptKey = 'sort-by-color', on
             className="flex flex-col items-center gap-4 w-full max-w-md"
           >
             {/* Question card */}
-            <div className="relative w-full rounded-3xl overflow-hidden px-5 py-6 flex flex-col items-center gap-3 border-2 border-white/20 min-h-[180px] justify-center"
-              style={{ background: 'rgba(0,0,0,0.28)' }}>
-              <BoardLines />
+            <div className="relative w-full rounded-3xl overflow-hidden px-5 py-6 flex flex-col items-center gap-3 border-[3px] border-amber-200 bg-amber-50/40 min-h-[180px] justify-center"
+              style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.02)' }}>
 
-              <p className="relative z-10 text-xs font-black text-white/50 uppercase tracking-wider font-sans">
+              <p className="relative z-10 text-xs font-black text-amber-800/60 uppercase tracking-wider font-sans">
                 {currentStep.hint}
               </p>
 
               {currentStep.visual && (
-                <div className="relative z-10 text-4xl sm:text-5xl text-center leading-loose font-sans">
+                <div className="relative z-10 text-4xl sm:text-5xl text-amber-950 text-center leading-loose font-sans">
                   {currentStep.visual}
                 </div>
               )}
 
-              <h3 className="relative z-10 text-xl sm:text-2xl font-black text-white text-center font-sans leading-snug">
+              <h3 className="relative z-10 text-xl sm:text-2xl font-black text-amber-950 text-center font-sans leading-snug">
                 {currentStep.question}
               </h3>
             </div>
@@ -522,8 +526,8 @@ export default function SortingComparisonQuiz({ conceptKey = 'sort-by-color', on
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
-                  className={`w-full py-3 rounded-2xl text-center font-black text-white font-sans text-base border-2
-                    ${feedback === 'correct' ? 'bg-emerald-500/80 border-emerald-400' : 'bg-red-500/70 border-red-400'}`}
+                  className={`w-full py-3 rounded-2xl text-center font-black font-sans text-base border-2
+                    ${feedback === 'correct' ? 'bg-emerald-50 border-emerald-300 text-emerald-800' : 'bg-rose-50 border-rose-300 text-rose-800'}`}
                 >
                   {feedback === 'correct' ? '⭐ Great job! Correct!' : '❌ Oops! Try again!'}
                 </motion.div>
@@ -541,14 +545,14 @@ export default function SortingComparisonQuiz({ conceptKey = 'sort-by-color', on
                     key={opt.id}
                     whileTap={{ scale: 0.94 }}
                     onClick={() => handleOptionTap(opt)}
-                    className="flex flex-col items-center justify-center gap-2 py-5 px-3 rounded-2xl border-[3px] transition-all font-sans"
+                    className="flex flex-col items-center justify-center gap-2 py-5 px-3 rounded-2xl border-2 transition-all font-sans bg-[#fffdf9] border-amber-200 hover:bg-amber-50/50 text-amber-950 shadow-sm"
                     style={{
-                      background: showCorrect ? 'rgba(34,197,94,0.25)' : showWrong ? 'rgba(239,68,68,0.25)' : 'rgba(255,255,255,0.1)',
-                      borderColor: showCorrect ? 'rgba(34,197,94,0.8)' : showWrong ? 'rgba(239,68,68,0.7)' : 'rgba(255,255,255,0.15)',
+                      background: showCorrect ? 'rgba(16,185,129,0.1)' : showWrong ? 'rgba(239,68,68,0.1)' : '',
+                      borderColor: showCorrect ? 'rgba(16,185,129,0.7)' : showWrong ? 'rgba(239,68,68,0.6)' : '',
                     }}
                   >
                     <span className="text-4xl sm:text-5xl leading-none drop-shadow">{opt.emoji}</span>
-                    <span className="text-xs sm:text-sm font-black text-white/90">{opt.label}</span>
+                    <span className="text-xs sm:text-sm font-black font-sans">{opt.label}</span>
                   </motion.button>
                 );
               })}
@@ -571,8 +575,8 @@ export default function SortingComparisonQuiz({ conceptKey = 'sort-by-color', on
             >
               🎉
             </motion.div>
-            <h3 className="text-2xl font-black text-white font-sans">{lesson.title}</h3>
-            <p className="text-lg font-bold text-emerald-200 font-sans">
+            <h3 className="text-2xl font-black text-amber-950 font-sans">{lesson.title}</h3>
+            <p className="text-lg font-bold text-emerald-700 font-sans">
               Excellent! You got {score}/{totalItems}! 🌟
             </p>
           </motion.div>

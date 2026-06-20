@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { LayoutDashboard, Compass, Gamepad2, User, Sparkles } from 'lucide-react';
+import { LayoutDashboard, Compass, Gamepad2, User } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/routing';
 
 const NAV_ITEMS = [
@@ -14,6 +14,22 @@ const NAV_ITEMS = [
 
 export default function StudentBottomNav() {
   const pathname = usePathname();
+  const [hideNav, setHideNav] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const observer = new MutationObserver(() => {
+      setHideNav(document.body.classList.contains('no-bottom-nav'));
+    });
+
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    setHideNav(document.body.classList.contains('no-bottom-nav'));
+
+    return () => observer.disconnect();
+  }, []);
+
+  if (hideNav) return null;
 
   return (
     <div className="fixed bottom-0 inset-x-0 z-[100] pointer-events-none flex justify-center">
@@ -38,7 +54,7 @@ export default function StudentBottomNav() {
                     <item.icon size={22} strokeWidth={isActive ? 2.5 : 2} />
                   </div>
 
-                  {(isActive || false) && (
+                  {isActive && (
                     <motion.span
                       initial={{ opacity: 0, width: 0 }}
                       animate={{ opacity: isActive ? 1 : 0, width: isActive ? 'auto' : 0 }}

@@ -1,6 +1,7 @@
 'use client';
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 
 type Props = {
   config: { path?: string; color?: string; thickness?: number; tolerance?: number; mode?: string; isTamil?: boolean; borderless?: boolean };
@@ -8,7 +9,8 @@ type Props = {
   onComplete: (data: { score: number; max_score: number; completion_data: Record<string, unknown>; time_taken_seconds: number }) => void;
 };
 
-const PASS_THRESHOLD = 70;
+const PASS_THRESHOLD = 40; // child-friendly containment threshold
+const COVERAGE_THRESHOLD = 45; // child-friendly coverage threshold
 
 const GUIDE_EMOJIS: Record<string, string> = {
   standing: '🐛', sleeping: '🚗', slanting: '🛷', curved: '🦋', zigzag: '🐇',
@@ -22,35 +24,35 @@ const GUIDE_EMOJIS: Record<string, string> = {
 };
 
 const GUIDE_HEADINGS_EN: Record<string, string> = {
-  standing: '🐛 Trace the Standing Line!',
-  sleeping: '🚗 Trace the Sleeping Line!',
-  slanting: '🛷 Trace the Slanting Line!',
-  curved: '🦋 Trace the Curved Line!',
-  zigzag: '🐇 Trace the Zig Zag!',
-  's-curve': '🐍 Trace the Wavy Path!',
-  circle: '⭕ Trace the Circle!',
-  'left-slanting': '🛷 Trace the Left Slanting Line!',
-  'right-slanting': '🛷 Trace the Right Slanting Line!',
-  'left-curve': '🌀 Trace the Left Curve!',
-  'right-curve': '🌀 Trace the Right Curve!',
-  'up-curve': '🌈 Trace the Up Curve!',
-  'down-curve': '🌈 Trace the Down Curve!',
+  standing: 'Trace the Standing Line! ⬆️',
+  sleeping: 'Trace the Sleeping Line! ➡️',
+  slanting: 'Trace the Slanting Line! 📐',
+  curved: 'Trace the Curved Line! 🌀',
+  zigzag: 'Trace the Zig Zag! ⚡',
+  's-curve': 'Trace the Wavy Path! 〰️',
+  circle: 'Trace the Circle! ⭕',
+  'left-slanting': 'Trace the Left Slanting Line! 📐',
+  'right-slanting': 'Trace the Right Slanting Line! 📐',
+  'left-curve': 'Trace the Left Curve! 🌀',
+  'right-curve': 'Trace the Right Curve! 🌀',
+  'up-curve': 'Trace the Up Curve! 🌈',
+  'down-curve': 'Trace the Down Curve! 🌈',
 };
 
 const GUIDE_HEADINGS_TA: Record<string, string> = {
-  standing: '📏 நேர்கோட்டை வரையுங்கள்!',
-  sleeping: '🛏️ படுக்கைகோட்டை வரையுங்கள்!',
-  slanting: '📐 சாய்வுகோட்டை வரையுங்கள்!',
-  curved: '🌈 வளைவுகோட்டை வரையுங்கள்!',
-  zigzag: '⚡ கோணல்மாணல் கோட்டை வரையுங்கள்!',
-  's-curve': '🐍 வளைந்து நெளிந்து வரையுங்கள்!',
-  circle: '⭕ வட்டத்தை வரையுங்கள்!',
-  'left-slanting': '📐 இடது சாய்வுகோட்டை வரையுங்கள்!',
-  'right-slanting': '📐 வலது சாய்வுகோட்டை வரையுங்கள்!',
-  'left-curve': '🌀 இடது வளைவை வரையுங்கள்!',
-  'right-curve': '🌀 வலது வளைவை வரையுங்கள்!',
-  'up-curve': '🌈 மேல் வளைவை வரையுங்கள்!',
-  'down-curve': '🌈 கீழ் வளைவை வரையுங்கள்!',
+  standing: 'நேர்கோட்டை வரையுங்கள்! 📏',
+  sleeping: 'படுக்கைகோட்டை வரையுங்கள்! 🛏️',
+  slanting: 'சாய்வுகோட்டை வரையுங்கள்! 📐',
+  curved: 'வளைவுகோட்டை வரையுங்கள்! 🌈',
+  zigzag: 'கோணல்மாணல் கோட்டை வரையுங்கள்! ⚡',
+  's-curve': 'வளைந்து நெளிந்து வரையுங்கள்! 🐍',
+  circle: 'வட்டத்தை வரையுங்கள்! ⭕',
+  'left-slanting': 'இடது சாய்வுகோட்டை வரையுங்கள்! 📐',
+  'right-slanting': 'வலது சாய்வுகோட்டை வரையுங்கள்! 📐',
+  'left-curve': 'இடது வளைவை வரையுங்கள்! 🌀',
+  'right-curve': 'வலது வளைவை வரையுங்கள்! 🌀',
+  'up-curve': 'மேல் வளைவை வரையுங்கள்! 🌈',
+  'down-curve': 'கீழ் வளைவை வரையுங்கள்! 🌈',
 };
 
 const LETTER_HEADINGS_TA: Record<string, string> = {
@@ -144,6 +146,20 @@ function generateDottedPath(pathType: string, w: number, h: number) {
   return pts;
 }
 
+function BoardLines() {
+  return (
+    <svg className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden>
+      {[0.33, 0.66].map((y) => (
+        <line
+          key={y}
+          x1="4%" y1={`${y * 100}%`} x2="96%" y2={`${y * 100}%`}
+          stroke="rgba(180, 83, 9, 0.08)" strokeWidth="1.5" strokeDasharray="6 5"
+        />
+      ))}
+    </svg>
+  );
+}
+
 export default function TraceActivity({ config, onComplete }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -156,13 +172,11 @@ export default function TraceActivity({ config, onComplete }: Props) {
   const [dimensions, setDimensions] = useState({ w: 600, h: 200 });
 
   const pathType = (config.path as string) || 'sleeping';
-  const tolerance = (config.tolerance as number) || 20;
+  const drawColor = config.color || '#f97316';
   const isGuide = (config.mode as string) === 'guide';
   const guideEmoji = GUIDE_EMOJIS[pathType] || '⭐';
-  const actualPassThreshold = PASS_THRESHOLD;
   const guideDots = isGuide ? dottedPath.filter((_, i) => i % 4 === 0) : [];
 
-  // Determine if context is Tamil
   const params = useParams();
   const isTamil = config.isTamil || params?.locale === 'ta';
 
@@ -170,7 +184,6 @@ export default function TraceActivity({ config, onComplete }: Props) {
     const updateSize = () => {
       if (containerRef.current) {
         const w = containerRef.current.clientWidth;
-        // Dynamic height based on viewport height to prevent overflow on mobile/landscape
         const isSmallScreen = window.innerHeight < 550;
         const minH = isSmallScreen ? 120 : 180;
         const calculatedH = Math.round(w * 0.38);
@@ -225,40 +238,97 @@ export default function TraceActivity({ config, onComplete }: Props) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Chalk brush texture effect
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
-    ctx.lineWidth = 10;
+    ctx.strokeStyle = drawColor;
+    ctx.lineWidth = 14;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
-    // Shadow to create chalk dust glow effect
-    ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
-    ctx.shadowBlur = 4;
-
     ctx.lineTo(pos.x, pos.y);
     ctx.stroke();
-  }, [isDrawing, done, getCanvasPos]);
+  }, [isDrawing, done, getCanvasPos, drawColor]);
 
   const stopDrawing = useCallback(() => setIsDrawing(false), []);
 
   const handleFinish = () => {
     if (done || points.length < 2) return;
-    let correct = 0;
-    for (const pt of points) {
-      const near = dottedPath.some(d => {
-        const dx = d.x - pt.x, dy = d.y - pt.y;
-        return Math.sqrt(dx * dx + dy * dy) < tolerance;
-      });
-      if (near) correct++;
+
+    const letterW = dimensions.w;
+    const letterH = dimensions.h;
+
+    // Use lenient grid containment calculation like Hindi/English
+    const GRID_SIZE = 7;
+    const cellW = letterW / GRID_SIZE;
+    const cellH = letterH / GRID_SIZE;
+
+    // Active path cell set
+    const activeCells = new Set<string>();
+    for (const p of dottedPath) {
+      const c = Math.max(0, Math.min(GRID_SIZE - 1, Math.floor(p.x / cellW)));
+      const r = Math.max(0, Math.min(GRID_SIZE - 1, Math.floor(p.y / cellH)));
+      activeCells.add(`${c},${r}`);
     }
-    const accuracy = points.length > 0 ? Math.round((correct / points.length) * 100) : 0;
-    const isPass = accuracy >= actualPassThreshold;
+
+    const tol = Math.max(34, Math.round(dimensions.w * 0.11));
+    const tolSq = tol * tol;
+
+    // Interpolate points
+    const densePoints: { x: number; y: number }[] = [];
+    densePoints.push(points[0]);
+    for (let i = 1; i < points.length; i++) {
+      const p1 = points[i - 1];
+      const p2 = points[i];
+      const dx = p2.x - p1.x;
+      const dy = p2.y - p1.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist > 8) {
+        const steps = Math.ceil(dist / 8);
+        for (let s = 1; s <= steps; s++) {
+          densePoints.push({
+            x: p1.x + (dx * s) / steps,
+            y: p1.y + (dy * s) / steps,
+          });
+        }
+      } else {
+        densePoints.push(p2);
+      }
+    }
+
+    let pointsOnLetter = 0;
+    const visitedActiveCells = new Set<string>();
+
+    for (const p of densePoints) {
+      let isClose = false;
+      for (const lp of dottedPath) {
+        const dx = lp.x - p.x;
+        const dy = lp.y - p.y;
+        if (dx * dx + dy * dy < tolSq) {
+          isClose = true;
+          break;
+        }
+      }
+
+      if (isClose) {
+        pointsOnLetter++;
+        const c = Math.max(0, Math.min(GRID_SIZE - 1, Math.floor(p.x / cellW)));
+        const r = Math.max(0, Math.min(GRID_SIZE - 1, Math.floor(p.y / cellH)));
+        const cellKey = `${c},${r}`;
+        if (activeCells.has(cellKey)) {
+          visitedActiveCells.add(cellKey);
+        }
+      }
+    }
+
+    const containment = densePoints.length > 0 ? (pointsOnLetter / densePoints.length) * 100 : 0;
+    const coverage = activeCells.size > 0 ? (visitedActiveCells.size / activeCells.size) * 100 : 0;
+
+    const isPass = containment >= PASS_THRESHOLD && coverage >= COVERAGE_THRESHOLD;
+
     setPassed(isPass);
     setDone(true);
     if (isPass) {
       onComplete({
         score: 100, max_score: 100,
-        completion_data: { accuracy, points_traced: points.length, path_type: pathType },
+        completion_data: { accuracy: Math.round(containment), points_traced: points.length, path_type: pathType },
         time_taken_seconds: Math.round((Date.now() - startTime.current) / 1000),
       });
     }
@@ -268,16 +338,12 @@ export default function TraceActivity({ config, onComplete }: Props) {
     const canvas = canvasRef.current;
     if (canvas) {
       const ctx = canvas.getContext('2d');
-      if (ctx) {
-        ctx.shadowBlur = 0;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
+      if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
     setPoints([]); setDone(false); setPassed(false); setIsDrawing(false);
     startTime.current = Date.now();
   };
 
-  // Heading lookup
   const getHeading = () => {
     if (isTamil) {
       if (pathType.startsWith('letter-')) {
@@ -286,62 +352,33 @@ export default function TraceActivity({ config, onComplete }: Props) {
       return GUIDE_HEADINGS_TA[pathType] || '🖐️ கோட்டை வரையுங்கள்!';
     }
     return isGuide ? GUIDE_HEADINGS_EN[pathType] || `${guideEmoji} Trace the ${pathType} line!`
-      : ({
-        's-curve': '🖐️ Trace the Snake!',
-        'circle': '🖐️ Trace the Circle!',
-        'standing': '📏 Trace the Standing Line!',
-        'sleeping': '🛏️ Trace the Sleeping Line!',
-        'slanting': '📐 Trace the Slanting Line!',
-        'curved': '🌈 Trace the Curved Line!',
-        'zigzag': '⚡ Trace the Zig Zag!',
-        'left-slanting': '📐 Trace the Left Slanting!',
-        'right-slanting': '📐 Trace the Right Slanting!',
-        'left-curve': '🌀 Trace the Left Curve!',
-        'right-curve': '🌀 Trace the Right Curve!',
-        'up-curve': '🌈 Trace the Up Curve!',
-        'down-curve': '🌈 Trace the Down Curve!',
-        'letter-a': '✏️ Trace Letter A!',
-        'letter-b': '✏️ Trace Letter B!',
-        'letter-c': '✏️ Trace Letter C!',
-        'letter-d': '✏️ Trace Letter D!',
-        'letter-e': '✏️ Trace Letter E!',
-        'letter-f': '✏️ Trace Letter F!',
-        'letter-g': '✏️ Trace Letter G!',
-        'letter-h': '✏️ Trace Letter H!',
-        'letter-i': '✏️ Trace Letter I!',
-        'letter-j': '✏️ Trace Letter J!',
-        'letter-k': '✏️ Trace Letter K!',
-        'letter-l': '✏️ Trace Letter L!',
-        'letter-m': '✏️ Trace Letter M!',
-      }[pathType] || '🖐️ Trace the Pattern!');
+      : (GUIDE_HEADINGS_EN[pathType] || '🖐️ Trace the Pattern!');
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 px-3 sm:px-6 pt-4 sm:pt-6 pb-3 sm:pb-5 w-full">
-      {/* Chalkboard Heading */}
-      <h3 className="text-xl sm:text-2xl font-black text-white text-center tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] font-sans">
+    <div className="flex flex-col items-center gap-3 px-3 sm:px-5 pb-4 select-none w-full">
+      {/* Heading badge */}
+      <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100/50 border border-amber-200/50 mb-1">
+        <span className="text-[10px] font-black text-amber-800 tracking-wider uppercase font-sans">
+          {isTamil ? 'அடித்தளப் பயிற்சி' : 'Pre-Writing Trace'}
+        </span>
+      </div>
+
+      <h3 className="text-sm sm:text-base font-black text-amber-950 text-center font-sans">
         {getHeading()}
       </h3>
 
-      <div ref={containerRef} className="w-full relative px-2.5">
-        {/* Wooden Chalkboard Frame */}
+      <div ref={containerRef} className="w-full relative">
+        {/* Wood-bordered cream trace board */}
         <div 
-          className={`relative overflow-hidden touch-none ${config.borderless ? '' : 'rounded-3xl border-[12px] border-[#5a3825] shadow-[0_12px_28px_rgba(0,0,0,0.4),_inset_0_4px_20px_rgba(0,0,0,0.6)]'}`}
-          style={{ 
-            height: dimensions.h, 
-            ...(!config.borderless && {
-              backgroundColor: '#0f3226',
-              backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.08) 12%, transparent 13%)',
-              backgroundSize: '8px 8px',
-            })
-          }}
+          className="relative overflow-hidden rounded-[2rem] border-4 border-[#b45309] shadow-sm bg-[#fffdf9] touch-none"
+          style={{ height: dimensions.h }}
         >
-          {/* Faint Chalk Dust Effect */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-black/25 pointer-events-none" />
+          <BoardLines />
 
           <canvas
             ref={canvasRef}
-            className="absolute inset-0 z-10 cursor-crosshair w-full h-full"
+            className="absolute inset-0 z-10 cursor-crosshair w-full h-full touch-none"
             onPointerDown={startDrawing}
             onPointerMove={draw}
             onPointerUp={stopDrawing}
@@ -353,12 +390,12 @@ export default function TraceActivity({ config, onComplete }: Props) {
               <>
                 {guideDots.map((p, i) => (
                   <circle key={i} cx={p.x} cy={p.y} r={7}
-                    fill={i === 0 ? '#fbbf24' : 'rgba(255,255,255,0.25)'}
-                    stroke={i === 0 ? '#fbbf24' : 'none'} strokeWidth={2}
+                    fill={i === 0 ? '#b45309' : 'rgba(180,83,9,0.12)'}
+                    stroke={i === 0 ? '#b45309' : 'none'} strokeWidth={2}
                   />
                 ))}
                 <text x={guideDots[0]?.x || 0} y={(guideDots[0]?.y || 0) - 16}
-                  fontSize="10" fill="#fbbf24" fontWeight="900" textAnchor="middle" className="font-sans">
+                  fontSize="10" fill="#b45309" fontWeight="900" textAnchor="middle" className="font-sans">
                   {isTamil ? 'துவக்கம் ✓' : 'START ✓'}
                 </text>
                 <text x={guideDots[guideDots.length - 1]?.x || 0} y={(guideDots[guideDots.length - 1]?.y || 0) - 16}
@@ -374,27 +411,27 @@ export default function TraceActivity({ config, onComplete }: Props) {
                   key={i} 
                   cx={p.x} 
                   cy={p.y} 
-                  r={3.5} 
-                  fill="rgba(255, 255, 255, 0.45)" 
+                  r={4} 
+                  fill="rgba(180, 83, 9, 0.22)" 
                 />
               ))
             )}
           </svg>
 
           {done && (
-            <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-              <div className="rounded-2xl px-6 py-4 shadow-2xl text-center border-2 border-white/20 bg-[#163e32]/95 max-w-[280px]">
+            <div className="absolute inset-0 z-20 flex items-center justify-center bg-amber-50/40 backdrop-blur-[2px]">
+              <div className="rounded-2xl px-6 py-4 shadow-md text-center border-2 border-emerald-200 bg-[#fffdf9]/95 max-w-[280px]">
                 {passed ? (
                   <>
-                    <p className="text-3xl mb-1">⭐⭐⭐⭐⭐</p>
-                    <p className="font-black text-white text-base sm:text-lg">
-                      {isTamil ? 'அருமை! நன்கு வரைந்தாய்! 🎉' : (isGuide ? `${guideEmoji} Great job!` : 'Great tracing! 🎉')}
+                    <p className="text-4xl animate-bounce mb-1">⭐</p>
+                    <p className="font-black text-emerald-600 text-sm font-sans">
+                      {isTamil ? 'அருமை! நன்கு வரைந்தாய்! 🎉' : 'Awesome Job! 🎉'}
                     </p>
                   </>
                 ) : (
                   <>
-                    <p className="text-3xl mb-1">💪</p>
-                    <p className="font-black text-amber-200 text-base">
+                    <p className="text-4xl mb-1">💪</p>
+                    <p className="font-black text-rose-600 text-sm font-sans">
                       {isTamil ? 'மீண்டும் முயற்சி செய்! 💪' : 'Almost! Try again!'}
                     </p>
                   </>
@@ -403,40 +440,28 @@ export default function TraceActivity({ config, onComplete }: Props) {
             </div>
           )}
         </div>
-
-        {/* Creative Chalk Tray at the bottom */}
-        {!config.borderless && (
-          <div className="w-[90%] mx-auto h-3 bg-[#4a2e1f] rounded-b-xl shadow-md flex items-center justify-start px-8 gap-3 relative z-10">
-            {/* Yellow Chalk */}
-            <div className="w-7 h-2 bg-yellow-100/90 rounded-sm transform rotate-6 border border-yellow-200/50 shadow-sm" />
-            {/* White Chalk */}
-            <div className="w-8 h-2 bg-white/90 rounded-sm transform -rotate-3 border border-white/20 shadow-sm" />
-            {/* Pink Chalk */}
-            <div className="w-6 h-2 bg-pink-200/90 rounded-sm transform rotate-12 border border-pink-300/30 shadow-sm" />
-          </div>
-        )}
       </div>
 
-      <div className="flex gap-3 mt-1">
+      <div className="flex gap-4 w-full justify-center mt-2">
         {!done ? (
           <button 
             onClick={handleFinish} 
             disabled={points.length < 2}
-            className="px-8 py-3 bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-500 text-white font-black rounded-full shadow-lg transition-all text-sm sm:text-base border-b-4 border-emerald-700 active:scale-95"
+            className="flex-1 py-3.5 rounded-2xl font-black text-white text-xs sm:text-sm bg-gradient-to-r from-emerald-500 to-teal-500 shadow-md border-b-4 border-emerald-700 active:scale-95 transition-all disabled:opacity-50 font-sans"
           >
-            {isTamil ? 'முடிந்தது! ✅' : 'Done! ✅'}
+            {isTamil ? 'முடிந்தது! ✅' : 'Check ✅'}
           </button>
         ) : passed ? (
           <button 
             onClick={() => onComplete({ score: 100, max_score: 100, completion_data: {}, time_taken_seconds: Math.round((Date.now() - startTime.current) / 1000) })}
-            className="px-8 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-black rounded-full shadow-lg transition-all text-sm sm:text-base border-b-4 border-indigo-700 active:scale-95"
+            className="flex-1 py-3.5 rounded-2xl font-black text-white text-xs sm:text-sm bg-gradient-to-r from-indigo-500 to-blue-500 shadow-md border-b-4 border-indigo-700 active:scale-95 transition-all font-sans"
           >
             {isTamil ? 'அடுத்து ➡️' : 'Next ➡️'}
           </button>
         ) : (
           <button 
             onClick={handleReset}
-            className="px-8 py-3 bg-amber-500 hover:bg-amber-600 text-white font-black rounded-full shadow-lg transition-all text-sm sm:text-base border-b-4 border-amber-700 active:scale-95"
+            className="flex-1 py-3.5 rounded-2xl font-black text-white text-xs sm:text-sm bg-gradient-to-r from-amber-500 to-orange-500 shadow-md border-b-4 border-orange-700 active:scale-95 transition-all font-sans"
           >
             {isTamil ? 'மீண்டும் 🔄' : 'Try Again 🔄'}
           </button>

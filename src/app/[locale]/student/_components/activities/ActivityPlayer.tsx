@@ -5,10 +5,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { studentApi, studentKeys, type Activity } from '@/core/services/studentApi';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useParams } from 'next/navigation';
-import VideoSnake from './VideoSnake';
-import VideoCircle from './VideoCircle';
 import TraceActivity from './TraceActivity';
 import DrawCanvas from './DrawCanvas';
+import PreWritingVideo from './PreWritingVideo';
 import LetterShowcase from './LetterShowcase';
 import LetterFindGame from './LetterFindGame';
 import PhonicsShowcase from './PhonicsShowcase';
@@ -25,6 +24,7 @@ import NumberAdventureQuiz from './NumberAdventureQuiz';
 import NumberAdventureQuiz610 from './NumberAdventureQuiz610';
 import SortingComparisonQuiz from './SortingComparisonQuiz';
 import EvsExploreGame from './EvsExploreGame';
+import HindiLetterQuiz from './HindiLetterQuiz';
 import { useData } from '@/context/DataContext';
 
 type Props = {
@@ -285,28 +285,28 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   // ── Concept-based games (skip activities query — they're self-contained) ──
   if (evsConceptKey) {
     return (
-      <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
-        style={{ background: 'rgba(5,15,5,0.75)', backdropFilter: 'blur(10px)' }}>
-        <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-2xl sm:rounded-[2.5rem] shadow-[0_25px_80px_rgba(0,0,0,0.7),0_0_40px_rgba(34,197,94,0.12)]"
-          style={{ background: 'linear-gradient(160deg, #0d2310 0%, #071a09 50%, #020d03 100%)', border: '2px solid rgba(34,197,94,0.25)' }}>
-          <div className="absolute inset-0 opacity-[0.07] pointer-events-none"
-            style={{ backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, #86efac 1px, transparent 0)', backgroundSize: '20px 20px' }} />
-          <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
-            style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(134,239,172,0.6) 28px)', backgroundSize: '100% 28px' }} />
-          <div className="absolute top-[-15%] left-[-8%] w-[45%] h-[55%] bg-emerald-500/10 blur-[80px] rounded-full pointer-events-none" />
+      <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/40 backdrop-blur-md">
+        <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
+          {/* Playful background blobs */}
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[50%] bg-sky-100/50 rounded-full blur-[60px] pointer-events-none" />
 
-          <div className="relative z-10 flex items-center justify-end px-3 sm:px-5 pt-3 sm:pt-5 pb-2 sm:pb-3">
+          <div className="relative z-10 flex items-center justify-end px-4 pt-4 pb-2">
             <button onClick={onClose}
-              className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 hover:bg-emerald-500/30 flex items-center justify-center text-white/50 hover:text-white text-base sm:text-lg font-bold transition-all border border-white/10">
+              className="w-7 h-7 rounded-full bg-amber-500/10 hover:bg-amber-500/20 flex items-center justify-center text-amber-800 text-lg font-bold transition-all border border-amber-200/60 shadow-sm active:scale-90">
               &times;
             </button>
           </div>
 
           <div className="relative z-10">
-            <EvsExploreGame conceptKey={evsConceptKey} onComplete={handleEvsComplete} childName={studentName} />
+            {['hindi-swar-aa', 'hindi-swar-ii-uu', 'hindi-vyanjan-ka', 'hindi-vyanjan-cha'].includes(evsConceptKey) ? (
+              <HindiLetterQuiz conceptKey={evsConceptKey} onComplete={handleEvsComplete} />
+            ) : (
+              <EvsExploreGame conceptKey={evsConceptKey} onComplete={handleEvsComplete} childName={studentName} />
+            )}
           </div>
 
-          <div className="relative z-10 w-[90%] mx-auto mb-4 sm:mb-6 h-3 sm:h-4 bg-[#4a2e1f] rounded-t-lg flex items-center justify-start px-4 sm:px-8 gap-2 sm:gap-4 border-t border-black/20">
+          <div className="relative z-10 w-[90%] mx-auto mb-4 sm:mb-6 h-3 sm:h-4 bg-[#fffdf9] rounded-t-lg flex items-center justify-start px-4 sm:px-8 gap-2 sm:gap-4 border-t border-amber-100">
             <div className="w-6 h-2 sm:w-8 sm:h-2.5 bg-yellow-100 rounded-sm transform rotate-6 border border-yellow-200/50 shadow-sm" />
             <div className="w-7 h-2 sm:w-9 sm:h-2.5 bg-white rounded-sm transform -rotate-3 border border-white/20 shadow-sm" />
             <div className="w-5 h-2 sm:w-7 sm:h-2.5 bg-pink-200 rounded-sm transform rotate-12 border border-pink-300/30 shadow-sm" />
@@ -317,18 +317,15 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   }
   if (sortingComparisonConceptKey) {
     return (
-      <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
-        style={{ background: 'rgba(5,15,5,0.75)', backdropFilter: 'blur(10px)' }}>
-        <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-2xl sm:rounded-[2.5rem] shadow-[0_25px_80px_rgba(0,0,0,0.7),0_0_40px_rgba(34,197,94,0.12)]"
-          style={{ background: 'linear-gradient(160deg, #0d2310 0%, #071a09 50%, #020d03 100%)', border: '2px solid rgba(34,197,94,0.25)' }}>
-          <div className="absolute inset-0 opacity-[0.07] pointer-events-none"
-            style={{ backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, #86efac 1px, transparent 0)', backgroundSize: '20px 20px' }} />
-          <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
-            style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(134,239,172,0.6) 28px)', backgroundSize: '100% 28px' }} />
-          <div className="absolute top-[-15%] left-[-8%] w-[45%] h-[55%] bg-emerald-500/10 blur-[80px] rounded-full pointer-events-none" />
-          <div className="relative z-10 flex items-center justify-end px-3 sm:px-5 pt-3 sm:pt-5 pb-2 sm:pb-3">
+      <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/40 backdrop-blur-md">
+        <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
+          {/* Playful background blobs */}
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[50%] bg-sky-100/50 rounded-full blur-[60px] pointer-events-none" />
+
+          <div className="relative z-10 flex items-center justify-end px-4 pt-4 pb-2">
             <button onClick={onClose}
-              className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 hover:bg-emerald-500/30 flex items-center justify-center text-white/50 hover:text-white text-base sm:text-lg font-bold transition-all border border-white/10">
+              className="w-7 h-7 rounded-full bg-amber-500/10 hover:bg-amber-500/20 flex items-center justify-center text-amber-800 text-lg font-bold transition-all border border-amber-200/60 shadow-sm active:scale-90">
               &times;
             </button>
           </div>
@@ -340,13 +337,108 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
     );
   }
   if (preMathConceptKey) {
-    return <PreMathQuiz conceptKey={preMathConceptKey} onComplete={handlePreMathComplete} />;
+    return (
+      <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/40 backdrop-blur-md">
+        <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
+          {/* Playful background blobs */}
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[50%] bg-sky-100/50 rounded-full blur-[60px] pointer-events-none" />
+
+          <div className="relative z-10 flex items-center justify-end px-4 pt-4 pb-2">
+            <button onClick={onClose}
+              className="w-7 h-7 rounded-full bg-amber-500/10 hover:bg-amber-500/20 flex items-center justify-center text-amber-800 text-lg font-bold transition-all border border-amber-200/60 shadow-sm active:scale-90">
+              &times;
+            </button>
+          </div>
+          <div className="relative z-10">
+            <PreMathQuiz conceptKey={preMathConceptKey} onComplete={handlePreMathComplete} />
+          </div>
+          <div className="relative z-10 w-[90%] mx-auto mb-4 sm:mb-6 h-3 sm:h-4 bg-[#fffdf9] rounded-t-lg flex items-center justify-start px-4 sm:px-8 gap-2 sm:gap-4 border-t border-amber-100">
+            <div className="w-6 h-2 sm:w-8 sm:h-2.5 bg-yellow-100 rounded-sm transform rotate-6 border border-yellow-200/50 shadow-sm" />
+            <div className="w-7 h-2 sm:w-9 sm:h-2.5 bg-white rounded-sm transform -rotate-3 border border-white/20 shadow-sm" />
+            <div className="w-5 h-2 sm:w-7 sm:h-2.5 bg-pink-200 rounded-sm transform rotate-12 border border-pink-300/30 shadow-sm" />
+          </div>
+        </div>
+      </div>
+    );
   }
   if (shapesSpatialConceptKey) {
-    return <ShapesSpatialQuiz conceptKey={shapesSpatialConceptKey} onComplete={handleShapesSpatialComplete} />;
+    return (
+      <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/40 backdrop-blur-md">
+        <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
+          {/* Playful background blobs */}
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[50%] bg-sky-100/50 rounded-full blur-[60px] pointer-events-none" />
+
+          <div className="relative z-10 flex items-center justify-end px-4 pt-4 pb-2">
+            <button onClick={onClose}
+              className="w-7 h-7 rounded-full bg-amber-500/10 hover:bg-amber-500/20 flex items-center justify-center text-amber-800 text-lg font-bold transition-all border border-amber-200/60 shadow-sm active:scale-90">
+              &times;
+            </button>
+          </div>
+          <div className="relative z-10">
+            <ShapesSpatialQuiz conceptKey={shapesSpatialConceptKey} onComplete={handleShapesSpatialComplete} />
+          </div>
+          <div className="relative z-10 w-[90%] mx-auto mb-4 sm:mb-6 h-3 sm:h-4 bg-[#fffdf9] rounded-t-lg flex items-center justify-start px-4 sm:px-8 gap-2 sm:gap-4 border-t border-amber-100">
+            <div className="w-6 h-2 sm:w-8 sm:h-2.5 bg-yellow-100 rounded-sm transform rotate-6 border border-yellow-200/50 shadow-sm" />
+            <div className="w-7 h-2 sm:w-9 sm:h-2.5 bg-white rounded-sm transform -rotate-3 border border-white/20 shadow-sm" />
+            <div className="w-5 h-2 sm:w-7 sm:h-2.5 bg-pink-200 rounded-sm transform rotate-12 border border-pink-300/30 shadow-sm" />
+          </div>
+        </div>
+      </div>
+    );
   }
   if (numberAdventureConceptKey) {
-    return <NumberAdventureQuiz conceptKey={numberAdventureConceptKey} onComplete={handleNumberAdventureComplete} />;
+    return (
+      <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/40 backdrop-blur-md">
+        <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
+          {/* Playful background blobs */}
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[50%] bg-sky-100/50 rounded-full blur-[60px] pointer-events-none" />
+
+          <div className="relative z-10 flex items-center justify-end px-4 pt-4 pb-2">
+            <button onClick={onClose}
+              className="w-7 h-7 rounded-full bg-amber-500/10 hover:bg-amber-500/20 flex items-center justify-center text-amber-800 text-lg font-bold transition-all border border-amber-200/60 shadow-sm active:scale-90">
+              &times;
+            </button>
+          </div>
+          <div className="relative z-10">
+            <NumberAdventureQuiz conceptKey={numberAdventureConceptKey} onComplete={handleNumberAdventureComplete} />
+          </div>
+          <div className="relative z-10 w-[90%] mx-auto mb-4 sm:mb-6 h-3 sm:h-4 bg-[#fffdf9] rounded-t-lg flex items-center justify-start px-4 sm:px-8 gap-2 sm:gap-4 border-t border-amber-100">
+            <div className="w-6 h-2 sm:w-8 sm:h-2.5 bg-yellow-100 rounded-sm transform rotate-6 border border-yellow-200/50 shadow-sm" />
+            <div className="w-7 h-2 sm:w-9 sm:h-2.5 bg-white rounded-sm transform -rotate-3 border border-white/20 shadow-sm" />
+            <div className="w-5 h-2 sm:w-7 sm:h-2.5 bg-pink-200 rounded-sm transform rotate-12 border border-pink-300/30 shadow-sm" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (numberAdventure610ConceptKey) {
+    return (
+      <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/40 backdrop-blur-md">
+        <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
+          {/* Playful background blobs */}
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[50%] bg-sky-100/50 rounded-full blur-[60px] pointer-events-none" />
+
+          <div className="relative z-10 flex items-center justify-end px-4 pt-4 pb-2">
+            <button onClick={onClose}
+              className="w-7 h-7 rounded-full bg-amber-500/10 hover:bg-amber-500/20 flex items-center justify-center text-amber-800 text-lg font-bold transition-all border border-amber-200/60 shadow-sm active:scale-90">
+              &times;
+            </button>
+          </div>
+          <div className="relative z-10">
+            <NumberAdventureQuiz610 conceptKey={numberAdventure610ConceptKey} onComplete={handleNumberAdventure610Complete} />
+          </div>
+          <div className="relative z-10 w-[90%] mx-auto mb-4 sm:mb-6 h-3 sm:h-4 bg-[#fffdf9] rounded-t-lg flex items-center justify-start px-4 sm:px-8 gap-2 sm:gap-4 border-t border-amber-100">
+            <div className="w-6 h-2 sm:w-8 sm:h-2.5 bg-yellow-100 rounded-sm transform rotate-6 border border-yellow-200/50 shadow-sm" />
+            <div className="w-7 h-2 sm:w-9 sm:h-2.5 bg-white rounded-sm transform -rotate-3 border border-white/20 shadow-sm" />
+            <div className="w-5 h-2 sm:w-7 sm:h-2.5 bg-pink-200 rounded-sm transform rotate-12 border border-pink-300/30 shadow-sm" />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (isLoading) {
@@ -400,9 +492,25 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
       case 'video':
         if (act.config?.letter) return <LetterShowcase config={act.config} {...commonProps} />;
         if (act.config?.family) return <PhonicsShowcase config={act.config} {...commonProps} />;
-        return act.name.toLowerCase().includes('circle')
-          ? <VideoCircle {...commonProps} />
-          : <VideoSnake {...commonProps} />;
+        const deducedPath = (() => {
+          if (act.config?.path) return String(act.config.path);
+          const lower = act.name.toLowerCase();
+          if (lower.includes('standing')) return 'standing';
+          if (lower.includes('sleeping')) return 'sleeping';
+          if (lower.includes('left slanting') || lower.includes('left-slanting')) return 'left-slanting';
+          if (lower.includes('right slanting') || lower.includes('right-slanting')) return 'right-slanting';
+          if (lower.includes('slanting')) return 'left-slanting';
+          if (lower.includes('up curve') || lower.includes('up-curve')) return 'up-curve';
+          if (lower.includes('down curve') || lower.includes('down-curve')) return 'down-curve';
+          if (lower.includes('left curve') || lower.includes('left-curve')) return 'left-curve';
+          if (lower.includes('right curve') || lower.includes('right-curve')) return 'right-curve';
+          if (lower.includes('curve')) return 'up-curve';
+          if (lower.includes('zigzag') || lower.includes('zig')) return 'zigzag';
+          if (lower.includes('circle')) return 'circle';
+          if (lower.includes('snake') || lower.includes('wavy') || lower.includes('s-curve')) return 's-curve';
+          return 'standing';
+        })();
+        return <PreWritingVideo config={{ path: deducedPath, isTamil }} {...commonProps} />;
       case 'trace':
         return <TraceActivity config={{ ...act.config, isTamil }} hasAttempt={!!act.attempt} {...commonProps} />;
       case 'draw':
@@ -437,57 +545,55 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
-      style={{ background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(8px)' }}>
-      <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-2xl sm:rounded-[2.5rem] shadow-[0_25px_60px_rgba(0,0,0,0.2)]"
-        style={{ background: 'linear-gradient(145deg, #7dd3fc, #38bdf8, #3b82f6)' }}>
-        <div className="absolute inset-0 opacity-20 pointer-events-none"
-          style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '18px 18px' }} />
-        <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-white/20 to-transparent skew-x-[-20deg] translate-x-32 pointer-events-none" />
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[60%] bg-white/15 blur-[60px] sm:blur-[100px] rounded-full pointer-events-none" />
+    <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/40 backdrop-blur-md">
+      <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
+        {/* Playful background blobs */}
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[50%] bg-sky-100/50 rounded-full blur-[60px] pointer-events-none" />
 
         {/* Header */}
-        <div className="relative z-10 flex items-center justify-between px-3 sm:px-5 pt-3 sm:pt-5 pb-2 sm:pb-3">
-          <span className="text-[10px] sm:text-sm font-bold text-white/60">
-            {currentIndex + 1} / {activities.length}
+        <div className="relative z-10 flex items-center justify-between px-6 pt-5 pb-3 border-b border-amber-100/60 bg-amber-50/30">
+          <span className="text-xs sm:text-sm font-black text-amber-700/80 tracking-wider">
+            {currentIndex + 1} / {activities?.length || 0}
           </span>
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            {activities.map((a, i) => (
+          <div className="flex items-center gap-2">
+            {activities?.map((a, i) => (
               <div key={a.id}
-                className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold transition-all shadow-md
-                  ${completedIds.has(a.id) ? 'bg-green-400 text-white' : i === currentIndex ? 'bg-white/30 text-white border-2 border-white/60' : 'bg-white/15 text-white/50'}`}
+                className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-black transition-all shadow-sm
+                  ${completedIds.has(a.id) ? 'bg-emerald-500 text-white' : i === currentIndex ? 'bg-amber-400 text-amber-950 ring-2 ring-amber-300' : 'bg-amber-100/60 text-amber-700/40'}`}
               >
                 {completedIds.has(a.id) ? '✓' : i + 1}
               </div>
             ))}
           </div>
           <button onClick={onClose}
-            className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/15 hover:bg-white/30 flex items-center justify-center text-white/60 hover:text-white text-base sm:text-lg font-bold transition-all">
+            className="w-8 h-8 rounded-full bg-amber-100/60 hover:bg-amber-200/80 flex items-center justify-center text-amber-800 text-xl font-bold transition-all border border-amber-200/50 active:scale-90">
             &times;
           </button>
         </div>
 
         {/* Activity body */}
-        <div className="relative z-10">
+        <div className="relative z-10 p-4 sm:p-6 min-h-[350px] flex flex-col justify-center">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentActivity?.id || 'done'}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.3 }}
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.2 }}
+              className="w-full"
             >
               {allDone ? (
-                <div className="flex flex-col items-center gap-4 sm:gap-6 px-6 sm:px-10 pb-6 sm:pb-10 pt-2">
-                  <span className="text-5xl sm:text-7xl animate-bounce">🎉</span>
-                  <h2 className="text-xl sm:text-3xl font-black text-white drop-shadow-lg text-center font-sans">{lessonTitle}</h2>
-                  <p className="text-sm sm:text-lg font-bold text-green-200 font-sans">
+                <div className="flex flex-col items-center gap-5 px-4 py-8 text-center">
+                  <span className="text-6xl sm:text-7xl animate-bounce">🎉</span>
+                  <h2 className="text-2xl sm:text-3xl font-black text-amber-950 font-sans">{lessonTitle}</h2>
+                  <p className="text-base sm:text-lg font-black text-emerald-600 font-sans">
                     {isTamil ? 'பாடம் வெற்றிகரமாக முடிந்தது! 🎉' : 'Lesson Complete! 🎉'}
                   </p>
                   <motion.button
                     whileTap={{ scale: 0.95 }}
                     onClick={onComplete}
-                    className="px-6 sm:px-10 py-2.5 sm:py-4 bg-white/25 backdrop-blur-md text-white font-black text-sm sm:text-lg rounded-full shadow-xl border-2 border-white/40 hover:bg-white/35 transition-all border-b-4 border-white/50 active:scale-95 font-sans"
+                    className="px-8 py-3.5 bg-emerald-500 text-white font-black text-base sm:text-lg rounded-full shadow-lg hover:bg-emerald-400 transition-all border-b-4 border-emerald-700 active:scale-95 font-sans"
                   >
                     {isTamil ? 'பாடங்களுக்குத் திரும்பு ➡️' : 'Back to Lessons ➡️'}
                   </motion.button>
