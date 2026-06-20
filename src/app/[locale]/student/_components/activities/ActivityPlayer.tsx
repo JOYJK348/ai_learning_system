@@ -208,14 +208,19 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
     const lower = lessonTitle.toLowerCase();
     // Hindi lessons
     if (subjectName?.toLowerCase().includes('hindi')) {
-      if (lower.includes('पूर्व') || lower.includes('pre') || lower.includes('line') || lower.includes('curve') || lower.includes('standing') || lower.includes('sleeping') || lower.includes('slanting')) return 'hindi-pre-writing';
-      if (lower.includes('स्वर') || lower.includes('vowel') || lower.includes('अ आ')) return 'hindi-swar';
-      if (lower.includes('व्यंजन') || lower.includes('consonant') || lower.includes('क ख')) return 'hindi-vyanjan';
-      if (lower.includes('सरल') || lower.includes('simple') || lower.includes('word') || lower.includes('शब्द') || lower.includes('अनार') || lower.includes('आम')) return 'hindi-simple-words';
-      if (lower.includes('बोलना') || lower.includes('speak') || lower.includes('bolna') || lower.includes('नमस्ते')) return 'hindi-bolna';
-      if (lower.includes('कविता') || lower.includes('rhyme') || lower.includes('कहानी') || lower.includes('stor') || lower.includes('poem')) return 'hindi-kavita';
-      if (lower.includes('picture') || lower.includes('चित्र') || lower.includes('पहचान') || lower.includes('recogni') || lower.includes('हाथी') || lower.includes('बिल्ली')) return 'hindi-picture-recognition';
-      return 'hindi-swar';
+      if ((lower.includes('अ') && lower.includes('आ')) || lower.includes('अनार')) return 'hindi-swar-aa';
+      if (lower.includes('इ से ऊ') || lower.includes('इमली') || lower.includes('ईंट') || lower.includes('उल्लू') || lower.includes('ऊँट')) return 'hindi-swar-ii-uu';
+      if (lower.includes('क ख ग घ') || lower.includes('कबूतर') || lower.includes('खरगोश')) return 'hindi-vyanjan-ka';
+      if (lower.includes('च छ ज') || lower.includes('चिड़िया') || lower.includes('छाता') || lower.includes('जहाज़')) return 'hindi-vyanjan-cha';
+      if (lower.includes('घर और फल') || lower.includes('घर') && lower.includes('फल')) return 'hindi-simple-words-ghar';
+      if (lower.includes('जल और वन') || lower.includes('जल') && lower.includes('वन')) return 'hindi-simple-words-jal';
+      if (lower.includes('नमस्ते') || lower.includes('परिचय')) return 'hindi-bolna-namaste';
+      if (lower.includes('मेरा परिवार') || lower.includes('मम्मी') || lower.includes('पापा') || lower.includes('परिवार')) return 'hindi-bolna-parivar';
+      if (lower.includes('प्रिय कविता') || lower.includes('कविताएँ') || lower.includes('कविता')) return 'hindi-kavita-rhymes';
+      if (lower.includes('कहानी') || lower.includes('कहानियाँ') || lower.includes('moral') || lower.includes('stor') || lower.includes('छोटी')) return 'hindi-kavita-stories';
+      if (lower.includes('जानवर') || lower.includes('हाथी') || lower.includes('बिल्ली') || lower.includes('कुत्ता')) return 'hindi-pictures-animals';
+      if (lower.includes('आस-पास') || lower.includes('चीज़ें') || lower.includes('गाड़ी') || lower.includes('पेड़')) return 'hindi-pictures-things';
+      return 'hindi-swar-aa';
     }
     // GK lessons (checked first to avoid EVS conflicts)
     if (lower.includes('name') && lower.includes('identity')) return 'gk-my-name-identity';
@@ -277,6 +282,73 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   const currentActivity: Activity | undefined = activities?.[currentIndex];
   const allDone = completedIds.size > 0 && activities && completedIds.size >= activities.length;
 
+  // ── Concept-based games (skip activities query — they're self-contained) ──
+  if (evsConceptKey) {
+    return (
+      <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
+        style={{ background: 'rgba(5,15,5,0.75)', backdropFilter: 'blur(10px)' }}>
+        <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-2xl sm:rounded-[2.5rem] shadow-[0_25px_80px_rgba(0,0,0,0.7),0_0_40px_rgba(34,197,94,0.12)]"
+          style={{ background: 'linear-gradient(160deg, #0d2310 0%, #071a09 50%, #020d03 100%)', border: '2px solid rgba(34,197,94,0.25)' }}>
+          <div className="absolute inset-0 opacity-[0.07] pointer-events-none"
+            style={{ backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, #86efac 1px, transparent 0)', backgroundSize: '20px 20px' }} />
+          <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
+            style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(134,239,172,0.6) 28px)', backgroundSize: '100% 28px' }} />
+          <div className="absolute top-[-15%] left-[-8%] w-[45%] h-[55%] bg-emerald-500/10 blur-[80px] rounded-full pointer-events-none" />
+
+          <div className="relative z-10 flex items-center justify-end px-3 sm:px-5 pt-3 sm:pt-5 pb-2 sm:pb-3">
+            <button onClick={onClose}
+              className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 hover:bg-emerald-500/30 flex items-center justify-center text-white/50 hover:text-white text-base sm:text-lg font-bold transition-all border border-white/10">
+              &times;
+            </button>
+          </div>
+
+          <div className="relative z-10">
+            <EvsExploreGame conceptKey={evsConceptKey} onComplete={handleEvsComplete} childName={studentName} />
+          </div>
+
+          <div className="relative z-10 w-[90%] mx-auto mb-4 sm:mb-6 h-3 sm:h-4 bg-[#4a2e1f] rounded-t-lg flex items-center justify-start px-4 sm:px-8 gap-2 sm:gap-4 border-t border-black/20">
+            <div className="w-6 h-2 sm:w-8 sm:h-2.5 bg-yellow-100 rounded-sm transform rotate-6 border border-yellow-200/50 shadow-sm" />
+            <div className="w-7 h-2 sm:w-9 sm:h-2.5 bg-white rounded-sm transform -rotate-3 border border-white/20 shadow-sm" />
+            <div className="w-5 h-2 sm:w-7 sm:h-2.5 bg-pink-200 rounded-sm transform rotate-12 border border-pink-300/30 shadow-sm" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (sortingComparisonConceptKey) {
+    return (
+      <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
+        style={{ background: 'rgba(5,15,5,0.75)', backdropFilter: 'blur(10px)' }}>
+        <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-2xl sm:rounded-[2.5rem] shadow-[0_25px_80px_rgba(0,0,0,0.7),0_0_40px_rgba(34,197,94,0.12)]"
+          style={{ background: 'linear-gradient(160deg, #0d2310 0%, #071a09 50%, #020d03 100%)', border: '2px solid rgba(34,197,94,0.25)' }}>
+          <div className="absolute inset-0 opacity-[0.07] pointer-events-none"
+            style={{ backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, #86efac 1px, transparent 0)', backgroundSize: '20px 20px' }} />
+          <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
+            style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(134,239,172,0.6) 28px)', backgroundSize: '100% 28px' }} />
+          <div className="absolute top-[-15%] left-[-8%] w-[45%] h-[55%] bg-emerald-500/10 blur-[80px] rounded-full pointer-events-none" />
+          <div className="relative z-10 flex items-center justify-end px-3 sm:px-5 pt-3 sm:pt-5 pb-2 sm:pb-3">
+            <button onClick={onClose}
+              className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 hover:bg-emerald-500/30 flex items-center justify-center text-white/50 hover:text-white text-base sm:text-lg font-bold transition-all border border-white/10">
+              &times;
+            </button>
+          </div>
+          <div className="relative z-10">
+            <SortingComparisonQuiz conceptKey={sortingComparisonConceptKey} onComplete={handleSortingComparisonComplete} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (preMathConceptKey) {
+    return <PreMathQuiz conceptKey={preMathConceptKey} onComplete={handlePreMathComplete} />;
+  }
+  if (shapesSpatialConceptKey) {
+    return <ShapesSpatialQuiz conceptKey={shapesSpatialConceptKey} onComplete={handleShapesSpatialComplete} />;
+  }
+  if (numberAdventureConceptKey) {
+    return <NumberAdventureQuiz conceptKey={numberAdventureConceptKey} onComplete={handleNumberAdventureComplete} />;
+  }
+
   if (isLoading) {
     return (
       <div className="fixed inset-0 z-[200] flex items-center justify-center"
@@ -313,209 +385,6 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   }
 
 
-
-  // ── EVS EXPLORE GAME ──
-  if (evsConceptKey) {
-    return (
-      <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
-        style={{ background: 'rgba(5,15,5,0.75)', backdropFilter: 'blur(10px)' }}>
-        <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-2xl sm:rounded-[2.5rem] shadow-[0_25px_80px_rgba(0,0,0,0.7),0_0_40px_rgba(34,197,94,0.12)]"
-          style={{ background: 'linear-gradient(160deg, #0d2310 0%, #071a09 50%, #020d03 100%)', border: '2px solid rgba(34,197,94,0.25)' }}>
-          <div className="absolute inset-0 opacity-[0.07] pointer-events-none"
-            style={{ backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, #86efac 1px, transparent 0)', backgroundSize: '20px 20px' }} />
-          <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
-            style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(134,239,172,0.6) 28px)', backgroundSize: '100% 28px' }} />
-          <div className="absolute top-[-15%] left-[-8%] w-[45%] h-[55%] bg-emerald-500/10 blur-[80px] rounded-full pointer-events-none" />
-
-          <div className="relative z-10 flex items-center justify-end px-3 sm:px-5 pt-3 sm:pt-5 pb-2 sm:pb-3">
-            <button onClick={onClose}
-              className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 hover:bg-emerald-500/30 flex items-center justify-center text-white/50 hover:text-white text-base sm:text-lg font-bold transition-all border border-white/10">
-              &times;
-            </button>
-          </div>
-
-          <div className="relative z-10">
-            <EvsExploreGame
-              conceptKey={evsConceptKey}
-              onComplete={handleEvsComplete}
-              childName={studentName}
-            />
-          </div>
-
-          {/* Chalk tray */}
-          <div className="relative z-10 w-[90%] mx-auto mb-4 sm:mb-6 h-3 sm:h-4 bg-[#4a2e1f] rounded-t-lg flex items-center justify-start px-4 sm:px-8 gap-2 sm:gap-4 border-t border-black/20">
-            <div className="w-6 h-2 sm:w-8 sm:h-2.5 bg-yellow-100 rounded-sm transform rotate-6 border border-yellow-200/50 shadow-sm" />
-            <div className="w-7 h-2 sm:w-9 sm:h-2.5 bg-white rounded-sm transform -rotate-3 border border-white/20 shadow-sm" />
-            <div className="w-5 h-2 sm:w-7 sm:h-2.5 bg-pink-200 rounded-sm transform rotate-12 border border-pink-300/30 shadow-sm" />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // ── SORTING & COMPARISON must be checked BEFORE shapes to prevent collision ──
-  if (sortingComparisonConceptKey) {
-    return (
-      <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
-        style={{ background: 'rgba(5,15,5,0.75)', backdropFilter: 'blur(10px)' }}>
-        <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-2xl sm:rounded-[2.5rem] shadow-[0_25px_80px_rgba(0,0,0,0.7),0_0_40px_rgba(34,197,94,0.12)]"
-          style={{ background: 'linear-gradient(160deg, #0d2310 0%, #071a09 50%, #020d03 100%)', border: '2px solid rgba(34,197,94,0.25)' }}>
-          {/* chalk dot texture */}
-          <div className="absolute inset-0 opacity-[0.07] pointer-events-none"
-            style={{ backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, #86efac 1px, transparent 0)', backgroundSize: '20px 20px' }} />
-          {/* chalk horizontal lines */}
-          <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
-            style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(134,239,172,0.6) 28px)', backgroundSize: '100% 28px' }} />
-          {/* green glow top-left */}
-          <div className="absolute top-[-15%] left-[-8%] w-[45%] h-[55%] bg-emerald-500/10 blur-[80px] rounded-full pointer-events-none" />
-
-          {/* Header with just close button */}
-          <div className="relative z-10 flex items-center justify-end px-3 sm:px-5 pt-3 sm:pt-5 pb-2 sm:pb-3">
-            <button onClick={onClose}
-              className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 hover:bg-emerald-500/30 flex items-center justify-center text-white/50 hover:text-white text-base sm:text-lg font-bold transition-all border border-white/10">
-              &times;
-            </button>
-          </div>
-
-          {/* Activity body */}
-          <div className="relative z-10">
-            <SortingComparisonQuiz
-              conceptKey={sortingComparisonConceptKey}
-              onComplete={handleSortingComparisonComplete}
-            />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (preMathConceptKey) {
-    return (
-      <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
-        style={{ background: 'rgba(5,15,5,0.75)', backdropFilter: 'blur(10px)' }}>
-        <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-2xl sm:rounded-[2.5rem] shadow-[0_25px_80px_rgba(0,0,0,0.7),0_0_40px_rgba(34,197,94,0.12)]"
-          style={{ background: 'linear-gradient(160deg, #0d2310 0%, #071a09 50%, #020d03 100%)', border: '2px solid rgba(34,197,94,0.25)' }}>
-          <div className="absolute inset-0 opacity-[0.07] pointer-events-none"
-            style={{ backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, #86efac 1px, transparent 0)', backgroundSize: '20px 20px' }} />
-          <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
-            style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(134,239,172,0.6) 28px)', backgroundSize: '100% 28px' }} />
-          <div className="absolute top-[-15%] left-[-8%] w-[45%] h-[55%] bg-emerald-500/10 blur-[80px] rounded-full pointer-events-none" />
-
-          {/* Header with just close button */}
-          <div className="relative z-10 flex items-center justify-end px-3 sm:px-5 pt-3 sm:pt-5 pb-2 sm:pb-3">
-            <button onClick={onClose}
-              className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 hover:bg-emerald-500/30 flex items-center justify-center text-white/50 hover:text-white text-base sm:text-lg font-bold transition-all border border-white/10">
-              &times;
-            </button>
-          </div>
-
-          {/* Activity body */}
-          <div className="relative z-10">
-            <PreMathQuiz
-              conceptKey={preMathConceptKey}
-              onComplete={handlePreMathComplete}
-            />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (shapesSpatialConceptKey) {
-    return (
-      <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
-        style={{ background: 'rgba(5,15,5,0.75)', backdropFilter: 'blur(10px)' }}>
-        <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-2xl sm:rounded-[2.5rem] shadow-[0_25px_80px_rgba(0,0,0,0.7),0_0_40px_rgba(34,197,94,0.12)]"
-          style={{ background: 'linear-gradient(160deg, #0d2310 0%, #071a09 50%, #020d03 100%)', border: '2px solid rgba(34,197,94,0.25)' }}>
-          <div className="absolute inset-0 opacity-[0.07] pointer-events-none"
-            style={{ backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, #86efac 1px, transparent 0)', backgroundSize: '20px 20px' }} />
-          <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
-            style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(134,239,172,0.6) 28px)', backgroundSize: '100% 28px' }} />
-          <div className="absolute top-[-15%] left-[-8%] w-[45%] h-[55%] bg-emerald-500/10 blur-[80px] rounded-full pointer-events-none" />
-
-          {/* Header with just close button */}
-          <div className="relative z-10 flex items-center justify-end px-3 sm:px-5 pt-3 sm:pt-5 pb-2 sm:pb-3">
-            <button onClick={onClose}
-              className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 hover:bg-emerald-500/30 flex items-center justify-center text-white/50 hover:text-white text-base sm:text-lg font-bold transition-all border border-white/10">
-              &times;
-            </button>
-          </div>
-
-          {/* Activity body */}
-          <div className="relative z-10">
-            <ShapesSpatialQuiz
-              conceptKey={shapesSpatialConceptKey}
-              onComplete={handleShapesSpatialComplete}
-            />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (numberAdventureConceptKey) {
-    return (
-      <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
-        style={{ background: 'rgba(5,15,5,0.75)', backdropFilter: 'blur(10px)' }}>
-        <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-2xl sm:rounded-[2.5rem] shadow-[0_25px_80px_rgba(0,0,0,0.7),0_0_40px_rgba(34,197,94,0.12)]"
-          style={{ background: 'linear-gradient(160deg, #0d2310 0%, #071a09 50%, #020d03 100%)', border: '2px solid rgba(34,197,94,0.25)' }}>
-          <div className="absolute inset-0 opacity-[0.07] pointer-events-none"
-            style={{ backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, #86efac 1px, transparent 0)', backgroundSize: '20px 20px' }} />
-          <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
-            style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(134,239,172,0.6) 28px)', backgroundSize: '100% 28px' }} />
-          <div className="absolute top-[-15%] left-[-8%] w-[45%] h-[55%] bg-emerald-500/10 blur-[80px] rounded-full pointer-events-none" />
-
-          {/* Header with just close button */}
-          <div className="relative z-10 flex items-center justify-end px-3 sm:px-5 pt-3 sm:pt-5 pb-2 sm:pb-3">
-            <button onClick={onClose}
-              className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 hover:bg-emerald-500/30 flex items-center justify-center text-white/50 hover:text-white text-base sm:text-lg font-bold transition-all border border-white/10">
-              &times;
-            </button>
-          </div>
-
-          {/* Activity body */}
-          <div className="relative z-10">
-            <NumberAdventureQuiz
-              conceptKey={numberAdventureConceptKey}
-              onComplete={handleNumberAdventureComplete}
-            />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (numberAdventure610ConceptKey) {
-    return (
-      <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
-        style={{ background: 'rgba(5,15,5,0.75)', backdropFilter: 'blur(10px)' }}>
-        <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-2xl sm:rounded-[2.5rem] shadow-[0_25px_80px_rgba(0,0,0,0.7),0_0_40px_rgba(34,197,94,0.12)]"
-          style={{ background: 'linear-gradient(160deg, #0d2310 0%, #071a09 50%, #020d03 100%)', border: '2px solid rgba(34,197,94,0.25)' }}>
-          <div className="absolute inset-0 opacity-[0.07] pointer-events-none"
-            style={{ backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, #86efac 1px, transparent 0)', backgroundSize: '20px 20px' }} />
-          <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
-            style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(134,239,172,0.6) 28px)', backgroundSize: '100% 28px' }} />
-          <div className="absolute top-[-15%] left-[-8%] w-[45%] h-[55%] bg-emerald-500/10 blur-[80px] rounded-full pointer-events-none" />
-
-          {/* Header with just close button */}
-          <div className="relative z-10 flex items-center justify-end px-3 sm:px-5 pt-3 sm:pt-5 pb-2 sm:pb-3">
-            <button onClick={onClose}
-              className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 hover:bg-emerald-500/30 flex items-center justify-center text-white/50 hover:text-white text-base sm:text-lg font-bold transition-all border border-white/10">
-              &times;
-            </button>
-          </div>
-
-          {/* Activity body */}
-          <div className="relative z-10">
-            <NumberAdventureQuiz610
-              conceptKey={numberAdventure610ConceptKey}
-              onComplete={handleNumberAdventure610Complete}
-            />
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   // (sortingComparisonConceptKey block moved above to run before shapesSpatial — see fix above)
 

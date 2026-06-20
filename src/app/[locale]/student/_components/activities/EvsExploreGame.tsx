@@ -1963,73 +1963,15 @@ const LESSONS: Record<string, EvsLesson> = {
   // ══════════════════════════════════════════════════════════════════
   // HINDI 🇮🇳
   // ══════════════════════════════════════════════════════════════════
-  'hindi-pre-writing': {
-    id: 'hindi-pre-writing',
-    rounds: [
-      { type: 'story', story: 'Let us practice our pre-writing strokes!' },
-      {
-        type: 'learn',
-        showEmoji: '📏 🛌 🌊',
-        labels: ['खड़ी रेखा (Standing)', 'लेटी रेखा (Sleeping)', 'वक्र रेखा (Curve)'],
-        story: 'Basic Strokes',
-      },
-      {
-        type: 'learn',
-        showEmoji: '↗️ ⭕ ⚡',
-        labels: ['तिरछी रेखा (Slanting)', 'वृत्त (Circle)', 'टेढ़ी रेखा (Zigzag)'],
-        story: 'More Strokes',
-      },
-      {
-        type: 'question',
-        showEmoji: '📐',
-        question: 'Which line stands UP?',
-        options: [
-          { id: 'standing', emoji: '📏', label: 'खड़ी रेखा' },
-          { id: 'sleeping', emoji: '🛌', label: 'लेटी रेखा' },
-          { id: 'curve', emoji: '🌊', label: 'वक्र रेखा' },
-        ],
-        correctId: 'standing',
-      },
-      {
-        type: 'question',
-        showEmoji: '🛏️',
-        question: 'Which line is SLEEPING / horizontal?',
-        options: [
-          { id: 'sleeping', emoji: '🛌', label: 'लेटी रेखा' },
-          { id: 'standing', emoji: '📏', label: 'खड़ी रेखा' },
-          { id: 'zigzag', emoji: '⚡', label: 'टेढ़ी रेखा' },
-        ],
-        correctId: 'sleeping',
-      },
-      {
-        type: 'question',
-        showEmoji: '🌉',
-        question: 'Which one is a CURVE?',
-        options: [
-          { id: 'curve', emoji: '🌊', label: 'वक्र रेखा' },
-          { id: 'standing', emoji: '📏', label: 'खड़ी रेखा' },
-          { id: 'sleeping', emoji: '🛌', label: 'लेटी रेखा' },
-        ],
-        correctId: 'curve',
-      },
-      { type: 'reward', story: 'Shabash! You know your strokes!' },
-    ],
-  },
-  'hindi-swar': {
-    id: 'hindi-swar',
+  'hindi-swar-aa': {
+    id: 'hindi-swar-aa',
     rounds: [
       { type: 'story', story: 'अ से अनार, आ से आम — Hindi vowels!' },
       {
         type: 'learn',
-        showEmoji: 'अ आ इ',
-        labels: ['अनार 🍎', 'आम 🥭', 'इमली 🍈'],
-        story: 'स्वर (Vowels)',
-      },
-      {
-        type: 'learn',
-        showEmoji: 'ई उ ऊ',
-        labels: ['ईंट 🧱', 'उल्लू 🦉', 'ऊँट 🐪'],
-        story: 'More Vowels',
+        showEmoji: 'अ आ',
+        labels: ['अनार 🍎', 'आम 🥭'],
+        story: 'स्वर अ और आ',
       },
       {
         type: 'question',
@@ -2038,7 +1980,7 @@ const LESSONS: Record<string, EvsLesson> = {
         options: [
           { id: 'anar', emoji: '🍎', label: 'अनार' },
           { id: 'aam', emoji: '🥭', label: 'आम' },
-          { id: 'ullu', emoji: '🦉', label: 'उल्लू' },
+          { id: 'imli', emoji: '🍈', label: 'इमली' },
         ],
         correctId: 'anar',
       },
@@ -2049,9 +1991,22 @@ const LESSONS: Record<string, EvsLesson> = {
         options: [
           { id: 'aam', emoji: '🥭', label: 'आम' },
           { id: 'anar', emoji: '🍎', label: 'अनार' },
-          { id: 'oont', emoji: '🐪', label: 'ऊँट' },
+          { id: 'ullu', emoji: '🦉', label: 'उल्लू' },
         ],
         correctId: 'aam',
+      },
+      { type: 'reward', story: 'Excellent! अ और आ सीख लिए!' },
+    ],
+  },
+  'hindi-swar-ii-uu': {
+    id: 'hindi-swar-ii-uu',
+    rounds: [
+      { type: 'story', story: 'इ से इमली, ऊ से ऊँट — more vowels!' },
+      {
+        type: 'learn',
+        showEmoji: 'इ ई उ ऊ',
+        labels: ['इमली 🍈', 'ईंट 🧱', 'उल्लू 🦉', 'ऊँट 🐪'],
+        story: 'स्वर इ से ऊ',
       },
       {
         type: 'question',
@@ -2059,29 +2014,45 @@ const LESSONS: Record<string, EvsLesson> = {
         question: 'Which word starts with इ?',
         options: [
           { id: 'imli', emoji: '🍈', label: 'इमली' },
-          { id: 'aam', emoji: '🥭', label: 'आम' },
-          { id: 'anar', emoji: '🍎', label: 'अनार' },
+          { id: 'eent', emoji: '🧱', label: 'ईंट' },
+          { id: 'ullu', emoji: '🦉', label: 'उल्लू' },
         ],
         correctId: 'imli',
       },
-      { type: 'reward', story: 'Excellent! आपने स्वर सीख लिए!' },
+      {
+        type: 'question',
+        showEmoji: 'उ',
+        question: 'Which word starts with उ?',
+        options: [
+          { id: 'ullu', emoji: '🦉', label: 'उल्लू' },
+          { id: 'imli', emoji: '🍈', label: 'इमली' },
+          { id: 'oont', emoji: '🐪', label: 'ऊँट' },
+        ],
+        correctId: 'ullu',
+      },
+      {
+        type: 'question',
+        showEmoji: 'ऊ',
+        question: 'Which word starts with ऊ?',
+        options: [
+          { id: 'oont', emoji: '🐪', label: 'ऊँट' },
+          { id: 'ullu', emoji: '🦉', label: 'उल्लू' },
+          { id: 'eent', emoji: '🧱', label: 'ईंट' },
+        ],
+        correctId: 'oont',
+      },
+      { type: 'reward', story: 'Shabash! इ से ऊ तक सीख गए!' },
     ],
   },
-  'hindi-vyanjan': {
-    id: 'hindi-vyanjan',
+  'hindi-vyanjan-ka': {
+    id: 'hindi-vyanjan-ka',
     rounds: [
-      { type: 'story', story: 'क से कबूतर, ख से खरगोश — Hindi consonants!' },
+      { type: 'story', story: 'क से कबूतर, ख से खरगोश, ग से गाय, घ से घर!' },
       {
         type: 'learn',
         showEmoji: 'क ख ग घ',
         labels: ['कबूतर 🕊️', 'खरगोश 🐇', 'गाय 🐄', 'घर 🏠'],
-        story: 'व्यंजन Set 1',
-      },
-      {
-        type: 'learn',
-        showEmoji: 'च छ ज',
-        labels: ['चिड़िया 🐦', 'छाता 🌂', 'जहाज़ 🚢'],
-        story: 'व्यंजन Set 2',
+        story: 'क वर्ग',
       },
       {
         type: 'question',
@@ -2107,6 +2078,30 @@ const LESSONS: Record<string, EvsLesson> = {
       },
       {
         type: 'question',
+        showEmoji: '🐄',
+        question: 'Which letter is for GAAY (cow)?',
+        options: [
+          { id: 'ga', emoji: 'ग', label: 'ग गाय' },
+          { id: 'ka', emoji: 'क', label: 'क कबूतर' },
+          { id: 'gha', emoji: 'घ', label: 'घ घर' },
+        ],
+        correctId: 'ga',
+      },
+      { type: 'reward', story: 'बहुत अच्छे! क ख ग घ सीख गए!' },
+    ],
+  },
+  'hindi-vyanjan-cha': {
+    id: 'hindi-vyanjan-cha',
+    rounds: [
+      { type: 'story', story: 'च से चिड़िया, छ से छाता, ज से जहाज़!' },
+      {
+        type: 'learn',
+        showEmoji: 'च छ ज',
+        labels: ['चिड़िया 🐦', 'छाता 🌂', 'जहाज़ 🚢'],
+        story: 'च वर्ग',
+      },
+      {
+        type: 'question',
         showEmoji: '🐦',
         question: 'Which letter is for CHIDIYA (bird)?',
         options: [
@@ -2116,18 +2111,40 @@ const LESSONS: Record<string, EvsLesson> = {
         ],
         correctId: 'cha',
       },
-      { type: 'reward', story: 'बहुत अच्छे! आपने व्यंजन सीखे!' },
+      {
+        type: 'question',
+        showEmoji: '🌂',
+        question: 'Which letter is for CHHATA (umbrella)?',
+        options: [
+          { id: 'chha', emoji: 'छ', label: 'छ छाता' },
+          { id: 'cha', emoji: 'च', label: 'च चिड़िया' },
+          { id: 'ja', emoji: 'ज', label: 'ज जहाज़' },
+        ],
+        correctId: 'chha',
+      },
+      {
+        type: 'question',
+        showEmoji: '🚢',
+        question: 'Which letter is for JAHAZ (ship)?',
+        options: [
+          { id: 'ja', emoji: 'ज', label: 'ज जहाज़' },
+          { id: 'cha', emoji: 'च', label: 'च चिड़िया' },
+          { id: 'chha', emoji: 'छ', label: 'छ छाता' },
+        ],
+        correctId: 'ja',
+      },
+      { type: 'reward', story: 'Wah! च छ ज सीख गए!' },
     ],
   },
-  'hindi-simple-words': {
-    id: 'hindi-simple-words',
+  'hindi-simple-words-ghar': {
+    id: 'hindi-simple-words-ghar',
     rounds: [
-      { type: 'story', story: 'घर, फल, जल, वन — simple Hindi words!' },
+      { type: 'story', story: 'घर और फल — simple Hindi words!' },
       {
         type: 'learn',
-        showEmoji: '🏠 🍎 💧 🌲',
-        labels: ['घर', 'फल', 'जल', 'वन'],
-        story: 'सरल शब्द',
+        showEmoji: '🏠 🍎',
+        labels: ['घर', 'फल'],
+        story: 'घर और फल',
       },
       {
         type: 'question',
@@ -2151,6 +2168,19 @@ const LESSONS: Record<string, EvsLesson> = {
         ],
         correctId: 'phal',
       },
+      { type: 'reward', story: 'Wah! घर और फल सीख लिए!' },
+    ],
+  },
+  'hindi-simple-words-jal': {
+    id: 'hindi-simple-words-jal',
+    rounds: [
+      { type: 'story', story: 'जल और वन — more simple Hindi words!' },
+      {
+        type: 'learn',
+        showEmoji: '💧 🌲',
+        labels: ['जल', 'वन'],
+        story: 'जल और वन',
+      },
       {
         type: 'question',
         showEmoji: '💧',
@@ -2162,24 +2192,29 @@ const LESSONS: Record<string, EvsLesson> = {
         ],
         correctId: 'jal',
       },
-      { type: 'reward', story: 'Wah! आपने सरल शब्द सीख लिए!' },
+      {
+        type: 'question',
+        showEmoji: '🌲',
+        question: 'Which word means FOREST?',
+        options: [
+          { id: 'van', emoji: '🌲', label: 'वन' },
+          { id: 'ghar', emoji: '🏠', label: 'घर' },
+          { id: 'jal', emoji: '💧', label: 'जल' },
+        ],
+        correctId: 'van',
+      },
+      { type: 'reward', story: 'Shabash! जल और वन सीख लिए!' },
     ],
   },
-  'hindi-bolna': {
-    id: 'hindi-bolna',
+  'hindi-bolna-namaste': {
+    id: 'hindi-bolna-namaste',
     rounds: [
-      { type: 'story', story: 'Let us learn to speak in Hindi!' },
+      { type: 'story', story: 'नमस्ते — let us learn to greet in Hindi!' },
       {
         type: 'learn',
-        showEmoji: '🙏 👩 👨',
-        labels: ['नमस्ते', 'मम्मी', 'पापा'],
-        story: 'बोलना (Speaking)',
-      },
-      {
-        type: 'learn',
-        showEmoji: '👋 🗣️',
-        labels: ['मेरा नाम...', 'नमस्ते कहो'],
-        story: 'More Phrases',
+        showEmoji: '🙏 🗣️',
+        labels: ['नमस्ते', 'मेरा नाम...'],
+        story: 'बोलना',
       },
       {
         type: 'question',
@@ -2191,6 +2226,19 @@ const LESSONS: Record<string, EvsLesson> = {
           { id: 'papa', emoji: '👨', label: 'पापा' },
         ],
         correctId: 'namaste',
+      },
+      { type: 'reward', story: 'बहुत अच्छे! You can say नमस्ते!' },
+    ],
+  },
+  'hindi-bolna-parivar': {
+    id: 'hindi-bolna-parivar',
+    rounds: [
+      { type: 'story', story: 'मम्मी और पापा — family words in Hindi!' },
+      {
+        type: 'learn',
+        showEmoji: '👩 👨',
+        labels: ['मम्मी', 'पापा'],
+        story: 'मेरा परिवार',
       },
       {
         type: 'question',
@@ -2214,34 +2262,47 @@ const LESSONS: Record<string, EvsLesson> = {
         ],
         correctId: 'papa',
       },
-      { type: 'reward', story: 'बहुत अच्छे! You can speak Hindi!' },
+      { type: 'reward', story: 'Wah! मम्मी और पापा — you know your family!' },
     ],
   },
-  'hindi-kavita': {
-    id: 'hindi-kavita',
+  'hindi-kavita-rhymes': {
+    id: 'hindi-kavita-rhymes',
     rounds: [
-      { type: 'story', story: 'Rhymes and stories make learning fun!' },
+      { type: 'story', story: 'कविताएँ — rhymes make learning fun!' },
       {
         type: 'learn',
         showEmoji: '🎵 📖',
         labels: ['कविताएँ (Rhymes)', 'कहानियाँ (Stories)'],
-        story: 'कविताएँ और कहानियाँ',
+        story: 'कविताएँ',
       },
       {
         type: 'question',
         showEmoji: '🎵',
-        question: 'What do we SING?',
+        question: 'What do we call a RHYME in Hindi?',
         options: [
           { id: 'kavita', emoji: '🎵', label: 'कविता' },
           { id: 'kahani', emoji: '📖', label: 'कहानी' },
-          { id: 'chitra', emoji: '🖼️', label: 'चित्र' },
+          { id: 'shabd', emoji: '📝', label: 'शब्द' },
         ],
         correctId: 'kavita',
+      },
+      { type: 'reward', story: 'मज़ा आया! Rhymes are fun!' },
+    ],
+  },
+  'hindi-kavita-stories': {
+    id: 'hindi-kavita-stories',
+    rounds: [
+      { type: 'story', story: 'कहानियाँ — small moral stories!' },
+      {
+        type: 'learn',
+        showEmoji: '📖',
+        labels: ['कहानियाँ (Stories)'],
+        story: 'छोटी कहानियाँ',
       },
       {
         type: 'question',
         showEmoji: '📖',
-        question: 'What do we READ and enjoy?',
+        question: 'What do we call a STORY in Hindi?',
         options: [
           { id: 'kahani', emoji: '📖', label: 'कहानी' },
           { id: 'kavita', emoji: '🎵', label: 'कविता' },
@@ -2249,39 +2310,22 @@ const LESSONS: Record<string, EvsLesson> = {
         ],
         correctId: 'kahani',
       },
-      {
-        type: 'question',
-        showEmoji: '🎤',
-        question: 'Which one is a RHYME we sing?',
-        options: [
-          { id: 'kavita', emoji: '🎵', label: 'कविता' },
-          { id: 'kahani', emoji: '📖', label: 'कहानी' },
-          { id: 'ghar', emoji: '🏠', label: 'घर' },
-        ],
-        correctId: 'kavita',
-      },
-      { type: 'reward', story: 'मज़ा आया! Rhymes and stories are fun!' },
+      { type: 'reward', story: 'बहुत खूब! Stories are fun to read!' },
     ],
   },
-  'hindi-picture-recognition': {
-    id: 'hindi-picture-recognition',
+  'hindi-pictures-animals': {
+    id: 'hindi-pictures-animals',
     rounds: [
-      { type: 'story', story: 'Picture देखो और सही शब्द बताओ!' },
+      { type: 'story', story: 'Picture देखो और जानवर पहचानो!' },
       {
         type: 'learn',
         showEmoji: '🐘 🐱 🌸',
         labels: ['हाथी', 'बिल्ली', 'फूल'],
-        story: 'चित्र पहचान',
-      },
-      {
-        type: 'learn',
-        showEmoji: '🚗 🏠 🌳',
-        labels: ['गाड़ी', 'घर', 'पेड़'],
-        story: 'More Pictures',
+        story: 'जानवर पहचान',
       },
       {
         type: 'question',
-        showEmoji: '❓',
+        showEmoji: '🐘',
         question: 'यह कौन है? (Who is this?)',
         options: [
           { id: 'hathi', emoji: '🐘', label: 'हाथी' },
@@ -2292,27 +2336,51 @@ const LESSONS: Record<string, EvsLesson> = {
       },
       {
         type: 'question',
-        showEmoji: '❓',
-        question: 'यह क्या है? (What is this?)',
+        showEmoji: '🐱',
+        question: 'यह कौन है? (Who is this?)',
         options: [
           { id: 'billi', emoji: '🐱', label: 'बिल्ली' },
           { id: 'hathi', emoji: '🐘', label: 'हाथी' },
-          { id: 'ped', emoji: '🌳', label: 'पेड़' },
+          { id: 'kutta', emoji: '🐕', label: 'कुत्ता' },
         ],
         correctId: 'billi',
       },
+      { type: 'reward', story: 'बहुत खूब! You know animals in Hindi!' },
+    ],
+  },
+  'hindi-pictures-things': {
+    id: 'hindi-pictures-things',
+    rounds: [
+      { type: 'story', story: 'आस-पास की चीज़ें पहचानो!' },
+      {
+        type: 'learn',
+        showEmoji: '🚗 🌳',
+        labels: ['गाड़ी', 'पेड़'],
+        story: 'चीज़ें पहचान',
+      },
       {
         type: 'question',
-        showEmoji: '❓',
+        showEmoji: '🚗',
         question: 'यह क्या है? (What is this?)',
         options: [
-          { id: 'phool', emoji: '🌸', label: 'फूल' },
           { id: 'gadi', emoji: '🚗', label: 'गाड़ी' },
           { id: 'ghar', emoji: '🏠', label: 'घर' },
+          { id: 'ped', emoji: '🌳', label: 'पेड़' },
         ],
-        correctId: 'phool',
+        correctId: 'gadi',
       },
-      { type: 'reward', story: 'बहुत खूब! You recognized all pictures!' },
+      {
+        type: 'question',
+        showEmoji: '🌳',
+        question: 'यह क्या है? (What is this?)',
+        options: [
+          { id: 'ped', emoji: '🌳', label: 'पेड़' },
+          { id: 'phool', emoji: '🌸', label: 'फूल' },
+          { id: 'gadi', emoji: '🚗', label: 'गाड़ी' },
+        ],
+        correctId: 'ped',
+      },
+      { type: 'reward', story: 'Wah! Everything in Hindi!' },
     ],
   },
 };
@@ -2439,7 +2507,7 @@ export default function EvsExploreGame({ conceptKey, onComplete, childName }: Pr
         >
           {/* Story text */}
           {isStory && currentRound?.story && (
-            <p className="text-sm sm:text-base font-bold text-white/80 text-center mb-6 sm:mb-8 max-w-xs sm:max-w-sm font-sans leading-relaxed">
+            <p className="text-sm sm:text-base font-bold text-white/90 text-center mb-6 sm:mb-8 max-w-xs sm:max-w-sm leading-relaxed" style={{ fontFamily: "'Nirmala UI','Noto Sans Devanagari',sans-serif" }}>
               {currentRound.story}
             </p>
           )}
@@ -2453,7 +2521,7 @@ export default function EvsExploreGame({ conceptKey, onComplete, childName }: Pr
                     <div key={i} className="flex flex-col items-center gap-1.5">
                       <span className="text-3xl sm:text-4xl">{emoji}</span>
                       {currentRound.labels?.[i] && (
-                        <span className="text-[10px] sm:text-xs font-bold text-emerald-200/80 font-sans tracking-wide uppercase">
+                        <span className="text-[11px] sm:text-xs font-bold text-white/90 tracking-wide uppercase" style={{ fontFamily: "'Nirmala UI','Noto Sans Devanagari',sans-serif" }}>
                           {currentRound.labels[i]}
                         </span>
                       )}
@@ -2461,7 +2529,7 @@ export default function EvsExploreGame({ conceptKey, onComplete, childName }: Pr
                   ))}
                 </div>
               </div>
-              <p className="text-[11px] sm:text-xs font-bold text-emerald-300/60 text-center font-sans tracking-wider uppercase">
+              <p className="text-[11px] sm:text-xs font-bold text-emerald-300/80 text-center tracking-wider uppercase" style={{ fontFamily: "'Nirmala UI','Noto Sans Devanagari',sans-serif" }}>
                 {currentRound.story}
               </p>
             </div>
@@ -2475,11 +2543,11 @@ export default function EvsExploreGame({ conceptKey, onComplete, childName }: Pr
                 Super Star!
               </p>
               {currentRound.story && (
-                <p className="text-sm sm:text-base font-bold text-emerald-100/80 text-center max-w-xs font-sans">
+                <p className="text-sm sm:text-base font-bold text-emerald-100/90 text-center max-w-xs" style={{ fontFamily: "'Nirmala UI','Noto Sans Devanagari',sans-serif" }}>
                   {currentRound.story}
                 </p>
               )}
-              <p className="text-xs sm:text-sm font-bold text-emerald-300/60 font-sans">
+              <p className="text-xs sm:text-sm font-bold text-emerald-300/60" style={{ fontFamily: "'Nirmala UI','Noto Sans Devanagari',sans-serif" }}>
                 Score: {score}/{totalQuestions}
               </p>
             </div>
@@ -2500,7 +2568,7 @@ export default function EvsExploreGame({ conceptKey, onComplete, childName }: Pr
               )}
 
               {currentRound.question && (
-                <p className="text-sm sm:text-base font-bold text-white mb-4 sm:mb-6 text-center max-w-xs sm:max-w-sm font-sans leading-relaxed">
+                <p className="text-sm sm:text-base font-bold text-white mb-4 sm:mb-6 text-center max-w-xs sm:max-w-sm leading-relaxed" style={{ fontFamily: "'Nirmala UI','Noto Sans Devanagari',sans-serif" }}>
                   {currentRound.question}
                 </p>
               )}
@@ -2537,7 +2605,7 @@ export default function EvsExploreGame({ conceptKey, onComplete, childName }: Pr
                       <span className={`inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full ${FAMILY_BG[opt.emoji] ?? 'bg-transparent'}`}>
                         <span className="text-2xl sm:text-3xl">{opt.emoji}</span>
                       </span>
-                      <span className={`text-[10px] sm:text-xs font-bold ${showCorrect ? 'text-emerald-300' : 'text-white/70'}`}>
+                      <span className={`text-[11px] sm:text-xs font-bold ${showCorrect ? 'text-emerald-300' : 'text-white/90'}`} style={{ fontFamily: "'Nirmala UI','Noto Sans Devanagari',sans-serif" }}>
                         {opt.label}
                       </span>
                       {showCorrect && (
