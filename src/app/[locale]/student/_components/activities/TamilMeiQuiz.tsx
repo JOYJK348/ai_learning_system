@@ -234,6 +234,9 @@ function TraceBoard({ mei, onCorrect }: TraceBoardProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const pointsRef = useRef<{ x: number; y: number }[]>([]);
+  const templateGridRef = useRef<Uint8Array | null>(null);
+  const templateGridWideRef = useRef<Uint8Array | null>(null);
+  const clustersRef = useRef<{ x: number; y: number }[][]>([]);
 
   const letterDataRef = useRef<{
     pixels: { x: number; y: number }[];
@@ -267,7 +270,7 @@ function TraceBoard({ mei, onCorrect }: TraceBoardProps) {
     const pixels: { x: number; y: number }[] = [];
     let minX = w, maxX = 0, minY = h, maxY = 0;
 
-    const step = 4;
+    const step = 2;
     for (let py = 0; py < h; py += step) {
       for (let px = 0; px < w; px += step) {
         if (img.data[(py * w + px) * 4] > 100) {
@@ -282,6 +285,82 @@ function TraceBoard({ mei, onCorrect }: TraceBoardProps) {
 
     if (pixels.length > 0) {
       letterDataRef.current = { pixels, minX, maxX, minY, maxY };
+
+      // Pre-compute template distance grid
+      const grid = new Uint8Array(w * h);
+      const wideGrid = new Uint8Array(w * h);
+      const tol = Math.max(15, Math.round(w * 0.05)); // narrow corridor (e.g. 15px)
+      const wideTol = Math.max(28, Math.round(w * 0.095)); // wide corridor (e.g. 28px)
+
+      for (const lp of pixels) {
+        // Narrow grid
+        const startX = Math.max(0, lp.x - tol);
+        const endX = Math.min(w - 1, lp.x + tol);
+        const startY = Math.max(0, lp.y - tol);
+        const endY = Math.min(h - 1, lp.y + tol);
+
+        for (let y = startY; y <= endY; y++) {
+          for (let x = startX; x <= endX; x++) {
+            const dx = x - lp.x;
+            const dy = y - lp.y;
+            if (dx * dx + dy * dy < tol * tol) {
+              grid[y * w + x] = 1;
+            }
+          }
+        }
+
+        // Wide grid
+        const wStartX = Math.max(0, lp.x - wideTol);
+        const wEndX = Math.min(w - 1, lp.x + wideTol);
+        const wStartY = Math.max(0, lp.y - wideTol);
+        const wEndY = Math.min(h - 1, lp.y + wideTol);
+
+        for (let y = wStartY; y <= wEndY; y++) {
+          for (let x = wStartX; x <= wEndX; x++) {
+            const dx = x - lp.x;
+            const dy = y - lp.y;
+            if (dx * dx + dy * dy < wideTol * wideTol) {
+              wideGrid[y * w + x] = 1;
+            }
+          }
+        }
+      }
+      templateGridRef.current = grid;
+      templateGridWideRef.current = wideGrid;
+
+      // Connected components clustering for dots/strokes
+      const clusters: { x: number; y: number }[][] = [];
+      const visited = new Uint8Array(pixels.length);
+      const distThreshold = Math.max(16, Math.round(w * 0.055));
+      const distThresSq = distThreshold * distThreshold;
+
+      for (let i = 0; i < pixels.length; i++) {
+        if (visited[i]) continue;
+        const cluster: { x: number; y: number }[] = [];
+        const queue: number[] = [i];
+        visited[i] = 1;
+        let qHead = 0;
+        while (qHead < queue.length) {
+          const idx = queue[qHead++];
+          const p1 = pixels[idx];
+          cluster.push(p1);
+          for (let j = 0; j < pixels.length; j++) {
+            if (!visited[j]) {
+              const p2 = pixels[j];
+              const dx = p1.x - p2.x;
+              const dy = p1.y - p2.y;
+              if (dx * dx + dy * dy < distThresSq) {
+                visited[j] = 1;
+                queue.push(j);
+              }
+            }
+          }
+        }
+        if (cluster.length > 5) {
+          clusters.push(cluster);
+        }
+      }
+      clustersRef.current = clusters;
     }
   }, [mei.letter]);
 
@@ -317,6 +396,9 @@ function TraceBoard({ mei, onCorrect }: TraceBoardProps) {
       if (dc) { dc.width = w; dc.height = h; }
 
       letterDataRef.current = null;
+      templateGridRef.current = null;
+      templateGridWideRef.current = null;
+      clustersRef.current = [];
 
       try {
         await document.fonts.load(`900 ${Math.round(w * 0.5)}px "Noto Sans Tamil"`);
@@ -392,17 +474,25 @@ function TraceBoard({ mei, onCorrect }: TraceBoardProps) {
 
   const handleFinish = () => {
     const pts = pointsRef.current;
-    if (pts.length < 20) return;
+    const canvas = canvasRef.current;
+    if (pts.length < 20 || !canvas) return;
 
     const data = letterDataRef.current;
-    if (!data || data.pixels.length === 0) {
+    const grid = templateGridRef.current;
+    const wideGrid = templateGridWideRef.current;
+    if (!data || !grid || !wideGrid || data.pixels.length === 0) {
       setFailMsg('மீண்டும் முயற்சி செய்க.');
       return;
     }
 
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const w = canvas.width;
+    const h = canvas.height;
+    const userImg = ctx.getImageData(0, 0, w, h);
+
     const letterW = data.maxX - data.minX;
     const letterH = data.maxY - data.minY;
-
     if (letterW <= 0 || letterH <= 0) {
       setFailMsg('மீண்டும் முயற்சி செய்க.');
       return;
@@ -424,76 +514,93 @@ function TraceBoard({ mei, onCorrect }: TraceBoardProps) {
 
     const activeCells = new Set<string>();
     for (const [cellKey, count] of cellPixelCounts.entries()) {
-      if (count >= 8) {
+      if (count >= 6) {
         activeCells.add(cellKey);
       }
     }
 
-    const tol = Math.max(34, Math.round(dimensions.w * 0.11));
-    const tolSq = tol * tol;
-
-    const densePoints: { x: number; y: number }[] = [];
-    if (pts.length > 0) {
-      densePoints.push(pts[0]);
-      for (let i = 1; i < pts.length; i++) {
-        const p1 = pts[i - 1];
-        const p2 = pts[i];
-        const dx = p2.x - p1.x;
-        const dy = p2.y - p1.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist > 8) {
-          const steps = Math.ceil(dist / 8);
-          for (let s = 1; s <= steps; s++) {
-            densePoints.push({
-              x: p1.x + (dx * s) / steps,
-              y: p1.y + (dy * s) / steps,
-            });
-          }
-        } else {
-          densePoints.push(p2);
-        }
-      }
-    }
-
-    let pointsOnLetter = 0;
+    let totalDrawn = 0;
+    let correctDrawn = 0;
+    let farDrawn = 0;
     const visitedActiveCells = new Set<string>();
+    let userMinX = w, userMaxX = 0, userMinY = h, userMaxY = 0;
 
-    for (const p of densePoints) {
-      let isClose = false;
-      for (const lp of data.pixels) {
-        const dx = lp.x - p.x;
-        const dy = lp.y - p.y;
-        if (dx * dx + dy * dy < tolSq) {
-          isClose = true;
-          break;
-        }
-      }
+    for (let y = 0; y < h; y += 2) {
+      for (let x = 0; x < w; x += 2) {
+        const idx = (y * w + x) * 4;
+        const alpha = userImg.data[idx + 3];
+        if (alpha > 40) {
+          totalDrawn++;
+          if (x < userMinX) userMinX = x;
+          if (x > userMaxX) userMaxX = x;
+          if (y < userMinY) userMinY = y;
+          if (y > userMaxY) userMaxY = y;
 
-      if (isClose) {
-        pointsOnLetter++;
-        const col = Math.floor((p.x - data.minX) / cellW);
-        const row = Math.floor((p.y - data.minY) / cellH);
-        const c = Math.max(0, Math.min(GRID_SIZE - 1, col));
-        const r = Math.max(0, Math.min(GRID_SIZE - 1, row));
-        const cellKey = `${c},${r}`;
-        if (activeCells.has(cellKey)) {
-          visitedActiveCells.add(cellKey);
+          if (grid[y * w + x] === 1) {
+            correctDrawn++;
+            const col = Math.floor((x - data.minX) / cellW);
+            const row = Math.floor((y - data.minY) / cellH);
+            const c = Math.max(0, Math.min(GRID_SIZE - 1, col));
+            const r = Math.max(0, Math.min(GRID_SIZE - 1, row));
+            const cellKey = `${c},${r}`;
+            if (activeCells.has(cellKey)) {
+              visitedActiveCells.add(cellKey);
+            }
+          } else if (wideGrid[y * w + x] === 0) {
+            farDrawn++;
+          }
         }
       }
     }
 
-    const containment = densePoints.length > 0 ? (pointsOnLetter / densePoints.length) * 100 : 0;
+    if (totalDrawn < 25) {
+      setFailMsg('எழுதிப் பழகுங்கள்! ✏️');
+      return;
+    }
+
+    const containment = (correctDrawn / totalDrawn) * 100;
     const coverage = activeCells.size > 0 ? (visitedActiveCells.size / activeCells.size) * 100 : 0;
 
-    const passed = containment >= 40 && coverage >= 45;
+    const userW = userMaxX - userMinX;
+    const userH = userMaxY - userMinY;
+    const templateW = data.maxX - data.minX;
+    const templateH = data.maxY - data.minY;
+
+    const widthRatio = templateW > 0 ? userW / templateW : 0;
+    const heightRatio = templateH > 0 ? userH / templateH : 0;
+
+    // Verify all template clusters (dots/strokes) are covered at least 20%
+    let allClustersCovered = true;
+    for (const cluster of (clustersRef.current || [])) {
+      let coveredCount = 0;
+      for (const lp of cluster) {
+        const idx = (lp.y * w + lp.x) * 4;
+        if (userImg.data[idx + 3] > 40) {
+          coveredCount++;
+        }
+      }
+      const clusterCoverage = (coveredCount / cluster.length) * 100;
+      if (clusterCoverage < 6) {
+        allClustersCovered = false;
+        break;
+      }
+    }
+
+    const minDim = Math.max(45, w * 0.12);
+    const widthRatioPassed = templateW < minDim || widthRatio >= 0.75;
+    const heightRatioPassed = templateH < minDim || heightRatio >= 0.75;
+    const maxFarDrawn = Math.max(15, Math.round(w * 0.05));
+
+    // Strict validation thresholds: containment >= 75%, coverage >= 70%, bounding box size (if large enough), no far-away drawings, and all clusters (dots) covered
+    const passed = containment >= 75 && coverage >= 70 && widthRatioPassed && heightRatioPassed && farDrawn <= maxFarDrawn && allClustersCovered;
 
     if (passed) {
       setDone(true);
       successTimerRef.current = setTimeout(onCorrect, 500);
-    } else if (containment < 40) {
+    } else if (containment < 75 || farDrawn > maxFarDrawn) {
       setFailMsg('எழுத்தின் மேல் மட்டும் எழுதவும்! 🎯');
     } else {
-      setFailMsg('முழு எழுத்தையும் trace செய்யவும்! ✍️');
+      setFailMsg('முழு எழுத்தையும் சரியாக எழுதவும்! ✍️');
     }
   };
 

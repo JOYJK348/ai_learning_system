@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Trophy, Star, Play, Lock, CheckCircle2, ArrowLeft, RotateCcw, 
@@ -417,29 +417,178 @@ function FamilyMedia({ emojiOrPath, className = "w-10 h-10 object-contain" }: { 
 
 function SimpleTraceCanvas({ letter, onComplete }: { letter: string; onComplete: () => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const guideCanvasRef = useRef<HTMLCanvasElement>(null);
+  const pointsRef = useRef<{ x: number; y: number }[]>([]);
+  const templateGridRef = useRef<Uint8Array | null>(null);
+  const templateGridWideRef = useRef<Uint8Array | null>(null);
+  const clustersRef = useRef<{ x: number; y: number }[][]>([]);
+  const letterDataRef = useRef<{
+    pixels: { x: number; y: number }[];
+    minX: number; maxX: number;
+    minY: number; maxY: number;
+  } | null>(null);
+
   const [isDrawing, setIsDrawing] = useState(false);
   const [hasDrawn, setHasDrawn] = useState(false);
+  const [failMsg, setFailMsg] = useState<string | null>(null);
+  const [dimensions, setDimensions] = useState({ w: 300, h: 280 });
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    canvas.width = canvas.parentElement?.clientWidth || 300;
-    canvas.height = 280;
-    const ctx = canvas.getContext('2d');
-    if (ctx) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = 'rgba(180, 83, 9, 0.06)';
-      ctx.lineWidth = 1.5;
-      ctx.setLineDash([6, 5]);
-      [0.33, 0.66].forEach(y => {
-        ctx.beginPath();
-        ctx.moveTo(10, y * canvas.height);
-        ctx.lineTo(canvas.width - 10, y * canvas.height);
-        ctx.stroke();
-      });
-      ctx.setLineDash([]);
+  const buildLetterData = useCallback((w: number, h: number) => {
+    const off = document.createElement('canvas');
+    off.width = w;
+    off.height = h;
+    const ctx = off.getContext('2d');
+    if (!ctx) return;
+
+    const fontSize = Math.min(220, Math.max(120, Math.round(w * 0.45)));
+    ctx.font = `900 ${fontSize}px "Noto Sans Tamil", "Latha", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#ff0000';
+    ctx.fillText(letter, w / 2, h / 2);
+
+    const img = ctx.getImageData(0, 0, w, h);
+    const pixels: { x: number; y: number }[] = [];
+    let minX = w, maxX = 0, minY = h, maxY = 0;
+
+    const step = 2;
+    for (let py = 0; py < h; py += step) {
+      for (let px = 0; px < w; px += step) {
+        if (img.data[(py * w + px) * 4] > 100) {
+          pixels.push({ x: px, y: py });
+          if (px < minX) minX = px;
+          if (px > maxX) maxX = px;
+          if (py < minY) minY = py;
+          if (py > maxY) maxY = py;
+        }
+      }
+    }
+
+    if (pixels.length > 0) {
+      letterDataRef.current = { pixels, minX, maxX, minY, maxY };
+
+      // Pre-compute template distance grid
+      const grid = new Uint8Array(w * h);
+      const wideGrid = new Uint8Array(w * h);
+      const tol = Math.max(15, Math.round(w * 0.05)); // narrow corridor (e.g. 15px)
+      const wideTol = Math.max(28, Math.round(w * 0.095)); // wide corridor (e.g. 28px)
+
+      for (const lp of pixels) {
+        // Narrow grid
+        const startX = Math.max(0, lp.x - tol);
+        const endX = Math.min(w - 1, lp.x + tol);
+        const startY = Math.max(0, lp.y - tol);
+        const endY = Math.min(h - 1, lp.y + tol);
+
+        for (let y = startY; y <= endY; y++) {
+          for (let x = startX; x <= endX; x++) {
+            const dx = x - lp.x;
+            const dy = y - lp.y;
+            if (dx * dx + dy * dy < tol * tol) {
+              grid[y * w + x] = 1;
+            }
+          }
+        }
+
+        // Wide grid
+        const wStartX = Math.max(0, lp.x - wideTol);
+        const wEndX = Math.min(w - 1, lp.x + wideTol);
+        const wStartY = Math.max(0, lp.y - wideTol);
+        const wEndY = Math.min(h - 1, lp.y + wideTol);
+
+        for (let y = wStartY; y <= wEndY; y++) {
+          for (let x = wStartX; x <= wEndX; x++) {
+            const dx = x - lp.x;
+            const dy = y - lp.y;
+            if (dx * dx + dy * dy < wideTol * wideTol) {
+              wideGrid[y * w + x] = 1;
+            }
+          }
+        }
+      }
+      templateGridRef.current = grid;
+      templateGridWideRef.current = wideGrid;
+
+      // Connected components clustering for dots/strokes
+      const clusters: { x: number; y: number }[][] = [];
+      const visited = new Uint8Array(pixels.length);
+      const distThreshold = Math.max(16, Math.round(w * 0.055));
+      const distThresSq = distThreshold * distThreshold;
+
+      for (let i = 0; i < pixels.length; i++) {
+        if (visited[i]) continue;
+        const cluster: { x: number; y: number }[] = [];
+        const queue: number[] = [i];
+        visited[i] = 1;
+        let qHead = 0;
+        while (qHead < queue.length) {
+          const idx = queue[qHead++];
+          const p1 = pixels[idx];
+          cluster.push(p1);
+          for (let j = 0; j < pixels.length; j++) {
+            if (!visited[j]) {
+              const p2 = pixels[j];
+              const dx = p1.x - p2.x;
+              const dy = p1.y - p2.y;
+              if (dx * dx + dy * dy < distThresSq) {
+                visited[j] = 1;
+                queue.push(j);
+              }
+            }
+          }
+        }
+        if (cluster.length > 5) {
+          clusters.push(cluster);
+        }
+      }
+      clustersRef.current = clusters;
     }
   }, [letter]);
+
+  const drawGuide = useCallback((w: number, h: number) => {
+    const gc = guideCanvasRef.current;
+    if (!gc) return;
+    gc.width = w;
+    gc.height = h;
+    const ctx = gc.getContext('2d');
+    if (!ctx) return;
+    const fontSize = Math.min(220, Math.max(120, Math.round(w * 0.45)));
+    ctx.clearRect(0, 0, w, h);
+    ctx.font = `900 ${fontSize}px "Noto Sans Tamil", "Latha", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(180, 83, 9, 0.15)';
+    ctx.fillText(letter, w / 2, h / 2);
+  }, [letter]);
+
+  useEffect(() => {
+    const setup = async () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const w = canvas.parentElement?.clientWidth || 300;
+      const h = 280;
+      setDimensions({ w, h });
+
+      canvas.width = w;
+      canvas.height = h;
+
+      letterDataRef.current = null;
+      templateGridRef.current = null;
+      templateGridWideRef.current = null;
+      clustersRef.current = [];
+
+      try {
+        await document.fonts.load(`900 ${Math.round(w * 0.45)}px "Noto Sans Tamil"`);
+      } catch (_) {}
+
+      drawGuide(w, h);
+      buildLetterData(w, h);
+    };
+
+    setup();
+    window.addEventListener('resize', setup);
+    return () => window.removeEventListener('resize', setup);
+  }, [letter, drawGuide, buildLetterData]);
 
   const getCoordinates = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
@@ -459,7 +608,9 @@ function SimpleTraceCanvas({ letter, onComplete }: { letter: string; onComplete:
     e.currentTarget.setPointerCapture(e.pointerId);
     setIsDrawing(true);
     setHasDrawn(true);
+    setFailMsg(null);
     const coords = getCoordinates(e);
+    pointsRef.current.push(coords);
     const ctx = canvas.getContext('2d');
     if (ctx) {
       ctx.beginPath();
@@ -472,10 +623,11 @@ function SimpleTraceCanvas({ letter, onComplete }: { letter: string; onComplete:
     const canvas = canvasRef.current;
     if (!canvas) return;
     const coords = getCoordinates(e);
+    pointsRef.current.push(coords);
     const ctx = canvas.getContext('2d');
     if (ctx) {
       ctx.strokeStyle = '#b45309'; // Cream board dark brown stroke
-      ctx.lineWidth = 12;
+      ctx.lineWidth = 14;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
       ctx.lineTo(coords.x, coords.y);
@@ -493,32 +645,183 @@ function SimpleTraceCanvas({ letter, onComplete }: { letter: string; onComplete:
     const ctx = canvas.getContext('2d');
     if (ctx) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = 'rgba(180, 83, 9, 0.06)';
-      ctx.lineWidth = 1.5;
-      ctx.setLineDash([6, 5]);
-      [0.33, 0.66].forEach(y => {
-        ctx.beginPath();
-        ctx.moveTo(10, y * canvas.height);
-        ctx.lineTo(canvas.width - 10, y * canvas.height);
-        ctx.stroke();
-      });
-      ctx.setLineDash([]);
     }
+    pointsRef.current = [];
     setHasDrawn(false);
+    setFailMsg(null);
+  };
+
+  const handleFinish = () => {
+    const pts = pointsRef.current;
+    const canvas = canvasRef.current;
+    if (pts.length < 15 || !canvas) {
+      setFailMsg('எழுதிப் பழகுங்கள்! ✏️');
+      return;
+    }
+
+    const data = letterDataRef.current;
+    const grid = templateGridRef.current;
+    const wideGrid = templateGridWideRef.current;
+    if (!data || !grid || !wideGrid || data.pixels.length === 0) {
+      onComplete(); // fallback if sampling fails
+      return;
+    }
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const w = canvas.width;
+    const h = canvas.height;
+    const userImg = ctx.getImageData(0, 0, w, h);
+
+    const letterW = data.maxX - data.minX;
+    const letterH = data.maxY - data.minY;
+    if (letterW <= 0 || letterH <= 0) {
+      onComplete();
+      return;
+    }
+
+    const GRID_SIZE = 7;
+    const cellW = letterW / GRID_SIZE;
+    const cellH = letterH / GRID_SIZE;
+
+    const cellPixelCounts = new Map<string, number>();
+    for (const p of data.pixels) {
+      const col = Math.floor((p.x - data.minX) / cellW);
+      const row = Math.floor((p.y - data.minY) / cellH);
+      const c = Math.max(0, Math.min(GRID_SIZE - 1, col));
+      const r = Math.max(0, Math.min(GRID_SIZE - 1, row));
+      const cellKey = `${c},${r}`;
+      cellPixelCounts.set(cellKey, (cellPixelCounts.get(cellKey) || 0) + 1);
+    }
+
+    const activeCells = new Set<string>();
+    for (const [cellKey, count] of cellPixelCounts.entries()) {
+      if (count >= 6) {
+        activeCells.add(cellKey);
+      }
+    }
+
+    let totalDrawn = 0;
+    let correctDrawn = 0;
+    let farDrawn = 0;
+    const visitedActiveCells = new Set<string>();
+    let userMinX = w, userMaxX = 0, userMinY = h, userMaxY = 0;
+
+    // Scan user drawn pixels on canvas (step by 2 for performance)
+    for (let y = 0; y < h; y += 2) {
+      for (let x = 0; x < w; x += 2) {
+        const idx = (y * w + x) * 4;
+        const alpha = userImg.data[idx + 3];
+        if (alpha > 40) { // pixel is drawn
+          totalDrawn++;
+          if (x < userMinX) userMinX = x;
+          if (x > userMaxX) userMaxX = x;
+          if (y < userMinY) userMinY = y;
+          if (y > userMaxY) userMaxY = y;
+
+          if (grid[y * w + x] === 1) {
+            correctDrawn++;
+            const col = Math.floor((x - data.minX) / cellW);
+            const row = Math.floor((y - data.minY) / cellH);
+            const c = Math.max(0, Math.min(GRID_SIZE - 1, col));
+            const r = Math.max(0, Math.min(GRID_SIZE - 1, row));
+            const cellKey = `${c},${r}`;
+            if (activeCells.has(cellKey)) {
+              visitedActiveCells.add(cellKey);
+            }
+          } else if (wideGrid[y * w + x] === 0) {
+            farDrawn++;
+          }
+        }
+      }
+    }
+
+    if (totalDrawn < 25) {
+      setFailMsg('எழுதிப் பழகுங்கள்! ✏️');
+      return;
+    }
+
+    const containment = (correctDrawn / totalDrawn) * 100;
+    const coverage = activeCells.size > 0 ? (visitedActiveCells.size / activeCells.size) * 100 : 0;
+
+    const userW = userMaxX - userMinX;
+    const userH = userMaxY - userMinY;
+    const templateW = data.maxX - data.minX;
+    const templateH = data.maxY - data.minY;
+
+    const widthRatio = templateW > 0 ? userW / templateW : 0;
+    const heightRatio = templateH > 0 ? userH / templateH : 0;
+
+    // Verify all template clusters (dots/strokes) are covered at least 20%
+    let allClustersCovered = true;
+    for (const cluster of (clustersRef.current || [])) {
+      let coveredCount = 0;
+      for (const lp of cluster) {
+        const idx = (lp.y * w + lp.x) * 4;
+        if (userImg.data[idx + 3] > 40) {
+          coveredCount++;
+        }
+      }
+      const clusterCoverage = (coveredCount / cluster.length) * 100;
+      if (clusterCoverage < 6) {
+        allClustersCovered = false;
+        break;
+      }
+    }
+
+    const minDim = Math.max(45, w * 0.12);
+    const widthRatioPassed = templateW < minDim || widthRatio >= 0.75;
+    const heightRatioPassed = templateH < minDim || heightRatio >= 0.75;
+    const maxFarDrawn = Math.max(15, Math.round(w * 0.05));
+
+    // Strict validation thresholds: containment >= 75%, coverage >= 70%, bounding box size (if large enough), no far-away drawings, and all clusters (dots) covered
+    const passed = containment >= 75 && coverage >= 70 && widthRatioPassed && heightRatioPassed && farDrawn <= maxFarDrawn && allClustersCovered;
+
+    if (passed) {
+      onComplete();
+    } else if (containment < 75 || farDrawn > maxFarDrawn) {
+      setFailMsg('எழுத்தின் மேல் மட்டும் எழுதவும்! 🎯');
+    } else {
+      setFailMsg('முழு எழுத்தையும் சரியாக எழுதவும்! ✍️');
+    }
   };
 
   return (
     <div className="flex flex-col items-center gap-4 w-full">
       {/* Cream Slate Board */}
       <div className="relative w-full h-[280px] rounded-[2rem] border-4 border-[#b45309] shadow-inner bg-[#fffdf9] overflow-hidden touch-none">
+        {/* Guide Letter Canvas */}
+        <canvas
+          ref={guideCanvasRef}
+          className="absolute inset-0 pointer-events-none touch-none w-full h-full"
+        />
+        {/* Drawing Canvas */}
         <canvas
           ref={canvasRef}
-          className="absolute inset-0 cursor-crosshair touch-none w-full h-full"
+          className="absolute inset-0 cursor-crosshair touch-none w-full h-full z-10"
           onPointerDown={startDrawing}
           onPointerMove={draw}
           onPointerUp={stopDrawing}
           onPointerLeave={stopDrawing}
         />
+
+        {/* Fail overlay */}
+        <AnimatePresence>
+          {failMsg && (
+            <motion.div
+              key="fail"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
+            >
+              <div className="bg-[#fffdf9]/95 text-rose-600 border-2 border-rose-200 rounded-xl px-5 py-3 text-sm font-black shadow-xl text-center max-w-[280px]">
+                <p className="mb-0.5">❌ {failMsg}</p>
+                <p className="text-[11px] text-amber-800">மீண்டும் 🔄 button press பண்ணி try பண்ணுங்கள்</p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
       <div className="flex gap-4 w-full max-w-xs justify-center font-sans">
         <button
@@ -528,7 +831,7 @@ function SimpleTraceCanvas({ letter, onComplete }: { letter: string; onComplete:
           மீண்டும் 🔄
         </button>
         <button
-          onClick={onComplete}
+          onClick={handleFinish}
           disabled={!hasDrawn}
           className="flex-1 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-2xl shadow active:scale-95 transition-all text-sm disabled:opacity-40"
         >
@@ -557,7 +860,6 @@ export default function QuizArena() {
 
   // Tamil Quiz Levels state
   const [activeLevel, setActiveLevel] = useState<Level | null>(null);
-  const [unlockedLevels, setUnlockedLevels] = useState<number[]>([1]); // Levels 1 unlocked initially
   const [levelScores, setLevelScores] = useState<Record<number, number>>({});
   
   // Quiz Player state
@@ -565,32 +867,58 @@ export default function QuizArena() {
   const [scores, setScores] = useState<number[]>([]);
   const [selectedOptionText, setSelectedOptionText] = useState<string | null>(null);
 
-  // Load state from localStorage based on Student Profile
-  useEffect(() => {
-    setMounted(true);
-    const profileId = studentProfile?.id || 'guest';
-    
-    // Load unlocked levels
-    const storedUnlocked = localStorage.getItem(`lkg_tamil_quiz_unlocked_${profileId}`);
-    if (storedUnlocked) {
-      try {
-        setUnlockedLevels(JSON.parse(storedUnlocked));
-      } catch (e) {
-        console.error(e);
-      }
-    } else {
-      setUnlockedLevels([1]);
+  // Dynamically compute unlocked quiz levels based on completed chapters in Database
+  const unlockedLevels = useMemo(() => {
+    const tamilSubject = subjects.find(s => 
+      s.name.toLowerCase().includes('tamil') || 
+      s.name.includes('தமிழ்')
+    );
+    if (!tamilSubject) {
+      return [1]; // fallback default
     }
 
-    // Load levels best scores
-    const scoresMap: Record<number, number> = {};
-    TAMIL_LEVELS.forEach(lvl => {
-      const storedScore = localStorage.getItem(`lkg_tamil_quiz_score_${profileId}_level_${lvl.id}`);
-      if (storedScore !== null) {
-        scoresMap[lvl.id] = parseInt(storedScore, 10);
-      }
-    });
-    setLevelScores(scoresMap);
+    const chs = tamilSubject.chapters;
+    const isChCompleted = (keywords: string[], defaultIfMissing = false): boolean => {
+      const chapter = chs.find(c => 
+        keywords.some(kw => c.name.toLowerCase().includes(kw.toLowerCase()))
+      );
+      if (!chapter) return defaultIfMissing;
+      return chapter.completion_percentage >= 100 || chapter.completed_lessons >= chapter.total_lessons;
+    };
+
+    const unlocked: number[] = [];
+    // Level 1: Unlocked if Chapter 1 (முன் எழுத்து பயிற்சிகள்) is completed, or default if missing
+    if (isChCompleted(['முன்', 'pre-writing', 'pre writing', 'pattern'], true)) {
+      unlocked.push(1);
+    }
+    // Level 2: Unlocked if Chapter 2 (உயிர் எழுத்துக்கள் அ-ஊ) is completed
+    if (isChCompleted(['அ-ஊ', 'அ - ஊ', 'vowels part 1', 'vowels 1'])) {
+      unlocked.push(2);
+    }
+    // Level 3: Unlocked if Chapter 3 (உயிர் எழுத்துக்கள் எ-ஃ or எ-ஔ) is completed
+    if (isChCompleted(['எ-ஃ', 'எ-ஔ', 'எ - ஃ', 'vowels part 2', 'vowels 2'])) {
+      unlocked.push(3);
+    }
+    // Level 4: Unlocked if Chapter 4 (மெய் எழுத்துக்கள் - வரிசை 1) is completed
+    if (isChCompleted(['வரிசை 1', 'வரிசை1', 'consonants 1', 'consonants part 1'])) {
+      unlocked.push(4);
+    }
+    // Level 5: Unlocked if Chapter 5 (மெய் எழுத்துக்கள் - வரிசை 2) is completed
+    if (isChCompleted(['வரிசை 2', 'வரிசை2', 'consonants 2', 'consonants part 2'])) {
+      unlocked.push(5);
+    }
+    // Level 6: Unlocked if Chapter 6 (எளிய சொற்கள்) is completed
+    if (isChCompleted(['எளிய சொற்கள்', 'எளிய', 'words'])) {
+      unlocked.push(6);
+    }
+
+    return unlocked;
+  }, [subjects]);
+
+  // Set mounted state and reset levelScores when student profile changes (prevent cross-child score bleed)
+  useEffect(() => {
+    setMounted(true);
+    setLevelScores({});
   }, [studentProfile]);
 
   useEffect(() => {
@@ -698,26 +1026,14 @@ export default function QuizArena() {
         // Final Score calculation
         const finalScore = scores.reduce((a, b) => a + b, 0) + (isCorrect ? 1 : 0);
         
-        const profileId = studentProfile?.id || 'guest';
         if (activeLevel) {
-          // Save score if it's the highest
+          // Save score if it's the highest in component state
           const currentBest = levelScores[activeLevel.id] || 0;
           if (finalScore > currentBest) {
-            localStorage.setItem(`lkg_tamil_quiz_score_${profileId}_level_${activeLevel.id}`, finalScore.toString());
             setLevelScores(prev => ({
               ...prev,
               [activeLevel.id]: finalScore
             }));
-          }
-
-          // Unlock next level only on perfect score (5 out of 5)
-          if (finalScore === 5) {
-            const nextId = activeLevel.id + 1;
-            if (nextId <= TAMIL_LEVELS.length && !unlockedLevels.includes(nextId)) {
-              const newUnlocked = [...unlockedLevels, nextId];
-              setUnlockedLevels(newUnlocked);
-              localStorage.setItem(`lkg_tamil_quiz_unlocked_${profileId}`, JSON.stringify(newUnlocked));
-            }
           }
         }
       }
