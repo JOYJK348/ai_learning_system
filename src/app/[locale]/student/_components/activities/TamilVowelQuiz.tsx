@@ -339,7 +339,7 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
       // Connected components clustering for dots/strokes
       const clusters: { x: number; y: number }[][] = [];
       const visited = new Uint8Array(pixels.length);
-      const distThreshold = Math.max(16, Math.round(w * 0.055));
+      const distThreshold = Math.max(8, Math.round(w * 0.025));
       const distThresSq = distThreshold * distThreshold;
 
       for (let i = 0; i < pixels.length; i++) {
@@ -588,7 +588,7 @@ function TraceBoard({ vowel, onCorrect }: TraceBoardProps) {
         }
       }
       const clusterCoverage = (coveredCount / cluster.length) * 100;
-      if (clusterCoverage < 6) {
+      if (clusterCoverage < 25) {
         allClustersCovered = false;
         break;
       }

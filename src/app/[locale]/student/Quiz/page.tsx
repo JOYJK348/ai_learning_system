@@ -514,7 +514,7 @@ function SimpleTraceCanvas({ letter, onComplete }: { letter: string; onComplete:
       // Connected components clustering for dots/strokes
       const clusters: { x: number; y: number }[][] = [];
       const visited = new Uint8Array(pixels.length);
-      const distThreshold = Math.max(16, Math.round(w * 0.055));
+      const distThreshold = Math.max(8, Math.round(w * 0.025));
       const distThresSq = distThreshold * distThreshold;
 
       for (let i = 0; i < pixels.length; i++) {
@@ -765,7 +765,7 @@ function SimpleTraceCanvas({ letter, onComplete }: { letter: string; onComplete:
         }
       }
       const clusterCoverage = (coveredCount / cluster.length) * 100;
-      if (clusterCoverage < 6) {
+      if (clusterCoverage < 25) {
         allClustersCovered = false;
         break;
       }
@@ -1330,7 +1330,7 @@ export default function QuizArena() {
                 <div className="flex items-center gap-1.5 px-3.5 py-2 bg-amber-50 border border-amber-200 rounded-full shadow-inner select-none shrink-0">
                   <span className="text-base">⭐</span>
                   <span className="text-xs font-black text-amber-800 font-sans leading-none pt-0.5">
-                    {Object.values(levelScores).reduce((a, b) => a + b, 0)} / 30
+                    {Object.keys(levelScores).reduce((acc, lvlId) => acc + Math.min(levelScores[Number(lvlId)] || 0, 5), 0)} / 30
                   </span>
                 </div>
               </div>
@@ -1339,7 +1339,7 @@ export default function QuizArena() {
               <div className="flex flex-col gap-5 relative z-10">
                 {TAMIL_LEVELS.map((level, index) => {
                   const unlocked = unlockedLevels.includes(level.id);
-                  const bestScore = levelScores[level.id] || 0;
+                  const bestScore = Math.min(levelScores[level.id] || 0, 5);
                   const isCompleted = levelScores[level.id] !== undefined;
 
                   return (

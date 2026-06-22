@@ -11,7 +11,7 @@ type Props = {
   studentName?: string;
 };
 
-const PASS_THRESHOLD = 55;
+const PASS_THRESHOLD = 70;
 const TRACE_TOLERANCE = 24;
 const MIN_TRACE_RATIO = 0.5;
 

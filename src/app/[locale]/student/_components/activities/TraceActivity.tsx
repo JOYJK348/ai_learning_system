@@ -9,8 +9,8 @@ type Props = {
   onComplete: (data: { score: number; max_score: number; completion_data: Record<string, unknown>; time_taken_seconds: number }) => void;
 };
 
-const PASS_THRESHOLD = 40; // child-friendly containment threshold
-const COVERAGE_THRESHOLD = 45; // child-friendly coverage threshold
+const PASS_THRESHOLD = 70; // child-friendly containment threshold
+const COVERAGE_THRESHOLD = 70; // child-friendly coverage threshold
 
 const GUIDE_EMOJIS: Record<string, string> = {
   standing: '🐛', sleeping: '🚗', slanting: '🛷', curved: '🦋', zigzag: '🐇',
@@ -268,7 +268,7 @@ export default function TraceActivity({ config, onComplete }: Props) {
       activeCells.add(`${c},${r}`);
     }
 
-    const tol = Math.max(34, Math.round(dimensions.w * 0.11));
+    const tol = Math.max(20, Math.round(dimensions.w * 0.05));
     const tolSq = tol * tol;
 
     // Interpolate points
