@@ -34,6 +34,8 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const AUTH_TOKEN_KEY = 'zhi_auth_token';
+
 function loadCachedUser(): AuthUser | null {
   if (typeof window === 'undefined') return null;
   try {
@@ -50,8 +52,28 @@ function saveCachedUser(user: AuthUser | null) {
   } catch {}
 }
 
+function loadCachedToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    return sessionStorage.getItem(AUTH_TOKEN_KEY);
+  } catch { return null; }
+}
+
+function saveCachedToken(token: string | null) {
+  if (typeof window === 'undefined') return;
+  try {
+    if (token) sessionStorage.setItem(AUTH_TOKEN_KEY, token);
+    else sessionStorage.removeItem(AUTH_TOKEN_KEY);
+  } catch {}
+}
+
 async function api(path: string, options: RequestInit = {}) {
-  const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+  const token = loadCachedToken();
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+    ...(options.headers || {})
+  };
   const res = await fetch(`${API_BASE}${path}`, { credentials: 'include', ...options, headers });
   return res;
 }
@@ -67,12 +89,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const res = await api('/api/auth/me');
       if (!res.ok) {
         saveCachedUser(null);
+        saveCachedToken(null);
         setUser(null);
         return;
       }
       const data = (await res.json()) as AuthResponse & { plan_expired?: boolean };
       if (data.plan_expired) {
         saveCachedUser(null);
+        saveCachedToken(null);
         setUser(null);
         document.cookie = 'zhi_user_role=; path=/; max-age=0';
         window.location.href = `${window.location.origin}/${window.location.pathname.split('/')[1] || 'en'}/login?expired=1`;
@@ -92,10 +116,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setError(null);
     try {
       const res = await api('/api/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) });
-      const data = (await res.json()) as AuthResponse;
+      const data = (await res.json()) as AuthResponse & { access_token?: string };
       if (!res.ok) { setError(data.error || 'Login failed'); return null; }
       if (!data.user) { setError('Login failed'); return null; }
       saveCachedUser(data.user);
+      saveCachedToken(data.access_token || null);
+      clearPersistedCache();
       setUser(data.user);
       document.cookie = `zhi_user_role=${data.user.role}; path=/; max-age=${60 * 60 * 24 * 30}`;
       // Warm admin or student cache immediately after login
@@ -119,6 +145,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           qc.prefetchQuery({ queryKey: studentKeys.me, queryFn: studentApi.getMe, staleTime: 10 * 60 * 1000 });
           qc.prefetchQuery({ queryKey: studentKeys.dashboard, queryFn: studentApi.getDashboard, staleTime: 5 * 60 * 1000 });
           qc.prefetchQuery({ queryKey: studentKeys.lessons, queryFn: studentApi.getLessons, staleTime: 5 * 60 * 1000 });
+        }).catch(() => {});
+      } else if (data.user.role === 'parent') {
+        Promise.all([
+          import('@/core/services/parentApi'),
+          import('@/core/constants/queryKeys'),
+        ]).then(([{ parentApi }, { parentKeys }]) => {
+          const qc = queryClientSingleton;
+          qc.prefetchQuery({ queryKey: parentKeys.me, queryFn: parentApi.me, staleTime: 5 * 60 * 1000 });
+          qc.prefetchQuery({ queryKey: parentKeys.children, queryFn: parentApi.children, staleTime: 5 * 60 * 1000 });
+          qc.prefetchQuery({ queryKey: parentKeys.dashboard, queryFn: parentApi.dashboard, staleTime: 5 * 60 * 1000 });
         }).catch(() => {});
       }
       return data.user;
@@ -150,6 +186,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch { setError('Unable to reach auth server'); }
     finally {
       saveCachedUser(null);
+      saveCachedToken(null);
       setUser(null);
       document.cookie = 'zhi_user_role=; path=/; max-age=0';
       clearPersistedCache();

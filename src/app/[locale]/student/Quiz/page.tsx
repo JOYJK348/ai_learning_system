@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { 
   Trophy, Star, Play, Lock, CheckCircle2, ArrowLeft, RotateCcw, 
   HelpCircle, Calendar, Target, Award, Cloud, Gamepad2, ChevronRight, X
@@ -1125,6 +1125,725 @@ const EVS_LEVELS: Level[] = [
   }
 ];
 
+
+const GK_LEVELS: Level[] = [
+  {
+    id: 1,
+    title: 'Myself & My World',
+    titleEn: 'My Name & Identity',
+    mascot: '🧒',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      {
+        type: 'choice',
+        instruction: 'What do we use to SEE?',
+        instructionTa: 'நாம் எதை வைத்துப் பார்க்கிறோம்? 👁️',
+        options: [
+          { text: 'Eyes', emoji: '👁️', correct: true },
+          { text: 'Ears', emoji: '👂', correct: false },
+          { text: 'Nose', emoji: '👃', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'How many hands do you have?',
+        instructionTa: 'உனக்கு எத்தனை கைகள் உள்ளன? ✋',
+        options: [
+          { text: 'Two', emoji: '✋✋', correct: true },
+          { text: 'One', emoji: '✋', correct: false },
+          { text: 'Three', emoji: '✋✋✋', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'When do we wake up?',
+        instructionTa: 'நாம் எப்போது தூங்கி எழுகிறோம்? ☀️',
+        options: [
+          { text: 'Morning', emoji: '☀️', correct: true },
+          { text: 'Night', emoji: '🌙', correct: false },
+          { text: 'Afternoon', emoji: '☁️', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'What do you do at school?',
+        instructionTa: 'பள்ளியில் நீங்கள் என்ன செய்வீர்கள்? 📚',
+        options: [
+          { text: 'Study', emoji: '📚', correct: true },
+          { text: 'Sleep', emoji: '🛌', correct: false },
+          { text: 'Bathe', emoji: '🛁', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'What do we wear on our feet?',
+        instructionTa: 'காலில் நாம் என்ன அணிவோம்? 👟',
+        options: [
+          { text: 'Shoes', emoji: '👟', correct: true },
+          { text: 'Hat', emoji: '🎩', correct: false },
+          { text: 'Gloves', emoji: '🧤', correct: false }
+        ]
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: 'Colors Around Us',
+    titleEn: 'Basic Colors & Matching',
+    mascot: '🎨',
+    color: 'from-purple-400 to-fuchsia-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      {
+        type: 'choice',
+        instruction: 'What color is an apple?',
+        instructionTa: 'ஆப்பிளின் நிறம் என்ன? 🍎',
+        options: [
+          { text: 'Red', emoji: '🔴', correct: true },
+          { text: 'Blue', emoji: '🔵', correct: false },
+          { text: 'Yellow', emoji: '🟡', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'What color is the sun?',
+        instructionTa: 'சூரியனின் நிறம் என்ன? ☀️',
+        options: [
+          { text: 'Yellow', emoji: '🟡', correct: true },
+          { text: 'Green', emoji: '🟢', correct: false },
+          { text: 'Purple', emoji: '🟣', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'What color is grass?',
+        instructionTa: 'புல்லின் நிறம் என்ன? 🌿',
+        options: [
+          { text: 'Green', emoji: '🟢', correct: true },
+          { text: 'Red', emoji: '🔴', correct: false },
+          { text: 'Black', emoji: '⚫', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'What color is the sky?',
+        instructionTa: 'வானத்தின் நிறம் என்ன? ☁️',
+        options: [
+          { text: 'Blue', emoji: '🔵', correct: true },
+          { text: 'Orange', emoji: '🟠', correct: false },
+          { text: 'White', emoji: '⚪', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'What color is milk?',
+        instructionTa: 'பாலின் நிறம் என்ன? 🥛',
+        options: [
+          { text: 'White', emoji: '⚪', correct: true },
+          { text: 'Yellow', emoji: '🟡', correct: false },
+          { text: 'Pink', emoji: '💗', correct: false }
+        ]
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: 'Animal World',
+    titleEn: 'Animals & Birds',
+    mascot: '🦁',
+    color: 'from-green-400 to-emerald-500',
+    borderColor: 'border-green-300',
+    questions: [
+      {
+        type: 'choice',
+        instruction: 'Which animal is the king of the jungle?',
+        instructionTa: 'காட்டின் ராஜா யார்? 🦁',
+        options: [
+          { text: 'Lion', emoji: '🦁', correct: true },
+          { text: 'Cat', emoji: '🐱', correct: false },
+          { text: 'Rabbit', emoji: '🐰', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'Which animal gives us milk?',
+        instructionTa: 'நமக்குப் பால் தரும் விலங்கு எது? 🥛',
+        options: [
+          { text: 'Cow', emoji: '🐄', correct: true },
+          { text: 'Lion', emoji: '🦁', correct: false },
+          { text: 'Tiger', emoji: '🐯', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'Which is the tallest animal?',
+        instructionTa: 'மிக உயரமான விலங்கு எது? 🦒',
+        options: [
+          { text: 'Giraffe', emoji: '🦒', correct: true },
+          { text: 'Dog', emoji: '🐶', correct: false },
+          { text: 'Pig', emoji: '🐷', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'Which animal has a trunk?',
+        instructionTa: 'தும்பிக்கை கொண்ட விலங்கு எது? 🐘',
+        options: [
+          { text: 'Elephant', emoji: '🐘', correct: true },
+          { text: 'Monkey', emoji: '🐒', correct: false },
+          { text: 'Horse', emoji: '🐴', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'Which animal barks?',
+        instructionTa: 'குரைக்கும் விலங்கு எது? 🐶',
+        options: [
+          { text: 'Dog', emoji: '🐶', correct: true },
+          { text: 'Cat', emoji: '🐱', correct: false },
+          { text: 'Cow', emoji: '🐄', correct: false }
+        ]
+      }
+    ]
+  },
+  {
+    id: 4,
+    title: 'Around The World',
+    titleEn: 'Places & Helpers',
+    mascot: '🌍',
+    color: 'from-blue-400 to-sky-500',
+    borderColor: 'border-blue-300',
+    questions: [
+      {
+        type: 'choice',
+        instruction: 'Where do we go when we are sick?',
+        instructionTa: 'உடல்நிலை சரியில்லாத போது நாம் எங்கு செல்வோம்? 🏥',
+        options: [
+          { text: 'Hospital', emoji: '🏥', correct: true },
+          { text: 'Toy Shop', emoji: '🧸', correct: false },
+          { text: 'Park', emoji: '🛝', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'Who teaches you at school?',
+        instructionTa: 'பள்ளியில் உங்களுக்கு பாடம் நடத்துபவர் யார்? 👩‍🏫',
+        options: [
+          { text: 'Teacher', emoji: '👩‍🏫', correct: true },
+          { text: 'Police', emoji: '👮', correct: false },
+          { text: 'Chef', emoji: 'Chef', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'Who catches thieves?',
+        instructionTa: 'திருடர்களைப் பிடிப்பவர் யார்? 👮',
+        options: [
+          { text: 'Police', emoji: '👮', correct: true },
+          { text: 'Doctor', emoji: '🧑‍⚕️', correct: false },
+          { text: 'Postman', emoji: '📬', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'Where do we go to buy toys?',
+        instructionTa: 'பொம்மைகள் வாங்க நாம் எங்கு செல்வோம்? 🛍️',
+        options: [
+          { text: 'Shop', emoji: '🛍️', correct: true },
+          { text: 'Hospital', emoji: '🏥', correct: false },
+          { text: 'School', emoji: '🏫', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'Who flies an aeroplane?',
+        instructionTa: 'விமானத்தை ஓட்டுபவர் யார்? ✈️',
+        options: [
+          { text: 'Pilot', emoji: '🧑‍✈️', correct: true },
+          { text: 'Driver', emoji: '🚗', correct: false },
+          { text: 'Sailor', emoji: '⛵', correct: false }
+        ]
+      }
+    ]
+  },
+  {
+    id: 5,
+    title: 'Safety & Rules',
+    titleEn: 'Road Safety & Manners',
+    mascot: '🚦',
+    color: 'from-rose-400 to-red-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      {
+        type: 'choice',
+        instruction: 'What does RED light say?',
+        instructionTa: 'சிகப்பு விளக்கு என்ன சொல்கிறது? 🔴',
+        options: [
+          { text: 'Stop', emoji: '🛑', correct: true },
+          { text: 'Go', emoji: '🟢', correct: false },
+          { text: 'Wait', emoji: '🟡', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'What does GREEN light say?',
+        instructionTa: 'பச்சை விளக்கு என்ன சொல்கிறது? 🟢',
+        options: [
+          { text: 'Go', emoji: '🟢', correct: true },
+          { text: 'Stop', emoji: '🛑', correct: false },
+          { text: 'Wait', emoji: '🟡', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'Where should we cross the road?',
+        instructionTa: 'நாம் சாலையை எங்கே கடக்க வேண்டும்? 🦓',
+        options: [
+          { text: 'Zebra Crossing', emoji: '🦓', correct: true },
+          { text: 'Middle of road', emoji: '🛣️', correct: false },
+          { text: 'Anywhere', emoji: '🤷', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'What do you say when you get a gift?',
+        instructionTa: 'அன்பளிப்பு கிடைக்கும்போது என்ன சொல்ல வேண்டும்? 🙏',
+        options: [
+          { text: 'Thank You', emoji: '🙏', correct: true },
+          { text: 'Sorry', emoji: '😢', correct: false },
+          { text: 'Please', emoji: '🥺', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'What do you say when you make a mistake?',
+        instructionTa: 'தவறு செய்யும்போது என்ன சொல்ல வேண்டும்? 😢',
+        options: [
+          { text: 'Sorry', emoji: '😢', correct: true },
+          { text: 'Thank You', emoji: '🙏', correct: false },
+          { text: 'Bye', emoji: '👋', correct: false }
+        ]
+      }
+    ]
+  },
+  {
+    id: 6,
+    title: 'Fun Knowledge',
+    titleEn: 'Sky & Celebrations',
+    mascot: '✨',
+    color: 'from-yellow-400 to-amber-500',
+    borderColor: 'border-yellow-300',
+    questions: [
+      {
+        type: 'choice',
+        instruction: 'What do we see in the sky during the day?',
+        instructionTa: 'பகலில் வானத்தில் நாம் எதைப் பார்க்கிறோம்? ☀️',
+        options: [
+          { text: 'Sun', emoji: '☀️', correct: true },
+          { text: 'Stars', emoji: '⭐', correct: false },
+          { text: 'Moon', emoji: '🌙', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'Which shape has three sides?',
+        instructionTa: 'மூன்று பக்கங்களைக் கொண்ட வடிவம் எது? 🔺',
+        options: [
+          { text: 'Triangle', emoji: '🔺', correct: true },
+          { text: 'Circle', emoji: '🔴', correct: false },
+          { text: 'Square', emoji: '🟩', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'What is the shape of a coin?',
+        instructionTa: 'நாணயத்தின் வடிவம் என்ன? 🪙',
+        options: [
+          { text: 'Circle', emoji: '🪙', correct: true },
+          { text: 'Triangle', emoji: '🔺', correct: false },
+          { text: 'Star', emoji: '⭐', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'When do we see stars in the sky?',
+        instructionTa: 'வானத்தில் நட்சத்திரங்களை எப்போது பார்க்கிறோம்? 🌙',
+        options: [
+          { text: 'Night', emoji: '🌙', correct: true },
+          { text: 'Morning', emoji: '☀️', correct: false },
+          { text: 'Afternoon', emoji: '☁️', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'Which festival is the festival of lights?',
+        instructionTa: 'விளக்குகளின் திருவிழா எது? 🪔',
+        options: [
+          { text: 'Diwali', emoji: '🪔', correct: true },
+          { text: 'Christmas', emoji: '🎄', correct: false },
+          { text: 'Birthday', emoji: '🎂', correct: false }
+        ]
+      }
+    ]
+  }
+];
+
+
+const HINDI_LEVELS: Level[] = [
+  {
+    id: 1,
+    title: 'पूर्व लेखन अभ्यास',
+    titleEn: 'Pre-writing Strokes',
+    mascot: '✏️',
+    color: 'from-blue-400 to-indigo-500',
+    borderColor: 'border-blue-300',
+    questions: [
+      {
+        type: 'choice',
+        instruction: 'What does a Standing Line look like?',
+        instructionTa: 'खड़ी रेखा (Standing Line) कैसी दिखती है? ✏️',
+        options: [
+          { text: 'Standing Line', emoji: '┃', correct: true },
+          { text: 'Sleeping Line', emoji: '━', correct: false },
+          { text: 'Slanting Line', emoji: '╱', correct: false }
+        ]
+      },
+      {
+        type: 'trace',
+        instruction: 'Trace the Standing Line stroke',
+        instructionTa: 'खड़ी रेखा (Standing Line) को बोर्ड पर लिखें! ✏️',
+        letter: '┃',
+        options: []
+      },
+      {
+        type: 'choice',
+        instruction: 'What does a Sleeping Line look like?',
+        instructionTa: 'लेटी रेखा (Sleeping Line) कैसी दिखती है? ✏️',
+        options: [
+          { text: 'Sleeping Line', emoji: '━', correct: true },
+          { text: 'Standing Line', emoji: '┃', correct: false },
+          { text: 'Slanting Line', emoji: '╱', correct: false }
+        ]
+      },
+      {
+        type: 'trace',
+        instruction: 'Trace the Sleeping Line stroke',
+        instructionTa: 'लेटी रेखा (Sleeping Line) को बोर्ड पर लिखें! ✏️',
+        letter: '━',
+        options: []
+      },
+      {
+        type: 'sequence',
+        instruction: 'Complete the pattern:',
+        instructionTa: 'पैटर्न को पूरा करें! 🧩',
+        sequence: ['┃', '━', '┃', '_'],
+        options: [
+          { text: '━ (Sleeping)', correct: true },
+          { text: '┃ (Standing)', correct: false },
+          { text: '╱ (Slanting)', correct: false }
+        ]
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: 'स्वर',
+    titleEn: 'Hindi Vowels',
+    mascot: '🅰️',
+    color: 'from-rose-400 to-red-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      {
+        type: 'choice',
+        instruction: "Which word starts with 'अ' (A)?",
+        instructionTa: "'अ' से शुरू होने वाला शब्द कौन सा है? 🍎",
+        options: [
+          { text: 'Anar (Pomegranate)', emoji: '🍎', correct: true },
+          { text: 'Aam (Mango)', emoji: '🥭', correct: false },
+          { text: 'Imli (Tamarind)', emoji: '🍇', correct: false }
+        ]
+      },
+      {
+        type: 'trace',
+        instruction: "Trace the vowel 'अ'",
+        instructionTa: "स्वर 'अ' को बोर्ड पर लिखें! ✏️",
+        letter: 'अ',
+        options: []
+      },
+      {
+        type: 'match',
+        instruction: "Match Aam (Mango) to its correct starting letter",
+        instructionTa: "'आम' - सही पहले अक्षर को छुएं! 🥭",
+        matchImage: '/assets/quiz/fruit-mango.png', // Fallback or using custom image if available, otherwise handled gracefully
+        options: [
+          { text: 'आ', correct: true },
+          { text: 'अ', correct: false },
+          { text: 'इ', correct: false }
+        ]
+      },
+      {
+        type: 'sequence',
+        instruction: 'Complete the vowel sequence:',
+        instructionTa: 'खाली जगह भरें! 🧩',
+        sequence: ['अ', 'आ', '_', 'ई'],
+        options: [
+          { text: 'इ', correct: true },
+          { text: 'उ', correct: false },
+          { text: 'ए', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: "Which word starts with 'उ' (U)?",
+        instructionTa: "'उ' से शुरू होने वाला शब्द कौन सा है? 🦉",
+        options: [
+          { text: 'Ullu (Owl)', emoji: '🦉', correct: true },
+          { text: 'Aam (Mango)', emoji: '🥭', correct: false },
+          { text: 'Imli (Tamarind)', emoji: '🍇', correct: false }
+        ]
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: 'व्यंजन',
+    titleEn: 'Hindi Consonants',
+    mascot: '🦁',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      {
+        type: 'choice',
+        instruction: "Which word starts with 'क' (Ka)?",
+        instructionTa: "'क' से शुरू होने वाला शब्द कौन सा है? 🐦",
+        options: [
+          { text: 'Kabootar (Pigeon)', emoji: '🐦', correct: true },
+          { text: 'Khargosh (Rabbit)', emoji: '🐇', correct: false },
+          { text: 'Gamla (Flowerpot)', emoji: '🪴', correct: false }
+        ]
+      },
+      {
+        type: 'trace',
+        instruction: "Trace the consonant 'क'",
+        instructionTa: "व्यंजन 'क' को बोर्ड पर लिखें! ✏️",
+        letter: 'क',
+        options: []
+      },
+      {
+        type: 'match',
+        instruction: "Match Khargosh (Rabbit) to its correct starting letter",
+        instructionTa: "'खरगोश' - सही पहले अक्षर को छुएं! 🐇",
+        matchImage: '/assets/quiz/animal-rabbit.png',
+        options: [
+          { text: 'ख', correct: true },
+          { text: 'क', correct: false },
+          { text: 'ग', correct: false }
+        ]
+      },
+      {
+        type: 'sequence',
+        instruction: 'Complete the consonant sequence:',
+        instructionTa: 'खाली जगह भरें! 🧩',
+        sequence: ['क', 'ख', '_', 'घ'],
+        options: [
+          { text: 'ग', correct: true },
+          { text: 'च', correct: false },
+          { text: 'ज', correct: false }
+        ]
+      },
+      {
+        type: 'find',
+        instruction: "Which letter is 'घ' (Gha)?",
+        instructionTa: "व्यंजन 'घ' कौन सा है? 🏠",
+        options: [
+          { text: 'घ', correct: true },
+          { text: 'ध', correct: false },
+          { text: 'प', correct: false }
+        ]
+      }
+    ]
+  },
+  {
+    id: 4,
+    title: 'सरल शब्द',
+    titleEn: 'Simple Hindi Words',
+    mascot: '🏠',
+    color: 'from-lime-400 to-green-500',
+    borderColor: 'border-lime-300',
+    questions: [
+      {
+        type: 'choice',
+        instruction: "What is the meaning of 'घर' (Ghar)?",
+        instructionTa: "'घर' (Ghar) का मतलब क्या है? 🏠",
+        options: [
+          { text: 'House', emoji: '🏠', correct: true },
+          { text: 'Water', emoji: '💧', correct: false },
+          { text: 'Fruit', emoji: '🍎', correct: false }
+        ]
+      },
+      {
+        type: 'trace',
+        instruction: "Trace the letter 'म' (Ma)",
+        instructionTa: "अक्षर 'म' को बोर्ड पर लिखें! ✏️",
+        letter: 'म',
+        options: []
+      },
+      {
+        type: 'match',
+        instruction: "Match Mother (Maa) to its starting letter",
+        instructionTa: "'माँ' - सही पहले अक्षर को छुएं! 👩",
+        matchImage: '/assets/quiz/family-mother.png',
+        options: [
+          { text: 'म', correct: true },
+          { text: 'प', correct: false },
+          { text: 'द', correct: false }
+        ]
+      },
+      {
+        type: 'sequence',
+        instruction: "Complete the Hindi word 'फ_'",
+        instructionTa: "हिंदी शब्द 'फ_' को पूरा करें! 🍎",
+        sequence: ['फ', '_'],
+        options: [
+          { text: 'ल', correct: true },
+          { text: 'र', correct: false },
+          { text: 'क', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: "What is the meaning of 'बस' (Bus)?",
+        instructionTa: "'बस' (Bus) का मतलब क्या है? 🚌",
+        options: [
+          { text: 'Bus', emoji: '🚌', correct: true },
+          { text: 'House', emoji: '🏠', correct: false },
+          { text: 'Water', emoji: '💧', correct: false }
+        ]
+      }
+    ]
+  },
+  {
+    id: 5,
+    title: 'बोलना',
+    titleEn: 'Greetings & Manners',
+    mascot: '🙏',
+    color: 'from-cyan-400 to-blue-500',
+    borderColor: 'border-cyan-300',
+    questions: [
+      {
+        type: 'choice',
+        instruction: "What do we do when saying 'Namaste'?",
+        instructionTa: "नमस्ते (Namaste) करते समय क्या करते हैं? 🙏",
+        options: [
+          { text: 'Fold Hands', emoji: '🙏', correct: true },
+          { text: 'Run', emoji: '🏃', correct: false },
+          { text: 'Sleep', emoji: '🛌', correct: false }
+        ]
+      },
+      {
+        type: 'trace',
+        instruction: "Trace the letter 'न' (Na)",
+        instructionTa: "अक्षर 'न' को बोर्ड पर लिखें! ✏️",
+        letter: 'न',
+        options: []
+      },
+      {
+        type: 'match',
+        instruction: "Match Father (Pitaji) to its starting letter",
+        instructionTa: "'पिताजी' - सही पहले अक्षर को छुएं! 👨",
+        matchImage: '/assets/quiz/family-father.png',
+        options: [
+          { text: 'प', correct: true },
+          { text: 'म', correct: false },
+          { text: 'त', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: 'What do we say when someone helps us?',
+        instructionTa: 'जब कोई हमारी मदद करता है तो क्या बोलते हैं? 🙏',
+        options: [
+          { text: 'Dhanyavad (Thank You)', emoji: '🙏', correct: true },
+          { text: 'Namaste', emoji: '🙏', correct: false },
+          { text: 'Suprabhat', emoji: '☀️', correct: false }
+        ]
+      },
+      {
+        type: 'sequence',
+        instruction: 'Complete the night greeting:',
+        instructionTa: 'रात के समय का अभिवादन पूरा करें! 🌙',
+        sequence: ['शुभ', '_'],
+        options: [
+          { text: 'रात्रि', correct: true },
+          { text: 'प्रभात', correct: false },
+          { text: 'दुपहर', correct: false }
+        ]
+      }
+    ]
+  },
+  {
+    id: 6,
+    title: 'कविताएँ और कहानियाँ',
+    titleEn: 'Poems & Stories',
+    mascot: '🎶',
+    color: 'from-teal-400 to-emerald-500',
+    borderColor: 'border-teal-300',
+    questions: [
+      {
+        type: 'choice',
+        instruction: "What is the life of 'Machhli' (Fish)?",
+        instructionTa: "'मछली जल की रानी है', उसका जीवन क्या है? 💧",
+        options: [
+          { text: 'Pani (Water)', emoji: '💧', correct: true },
+          { text: 'Hawa (Air)', emoji: '💨', correct: false },
+          { text: 'Mitti (Soil)', emoji: '🪵', correct: false }
+        ]
+      },
+      {
+        type: 'trace',
+        instruction: "Trace the letter 'ल' (La)",
+        instructionTa: "अक्षर 'ल' को बोर्ड पर लिखें! ✏️",
+        letter: 'ल',
+        options: []
+      },
+      {
+        type: 'match',
+        instruction: "Match Grandma (Dadi) to its starting letter",
+        instructionTa: "'दादी' - सही पहले अक्षर को छुएं! 👵",
+        matchImage: '/assets/quiz/family-grandma.png',
+        options: [
+          { text: 'द', correct: true },
+          { text: 'म', correct: false },
+          { text: 'प', correct: false }
+        ]
+      },
+      {
+        type: 'choice',
+        instruction: "Where does 'Chanda Mama' live?",
+        instructionTa: "चंदा मामा कहाँ रहते हैं? 🌌",
+        options: [
+          { text: 'Aasman (Sky)', emoji: '🌌', correct: true },
+          { text: 'Pani (Water)', emoji: '💧', correct: false },
+          { text: 'Ghar (House)', emoji: '🏠', correct: false }
+        ]
+      },
+      {
+        type: 'sequence',
+        instruction: 'Complete the poem phrase:',
+        instructionTa: 'कविता की पंक्ति पूरी करें! 🧩',
+        sequence: ['मछली', 'जल', 'की', '_', 'है'],
+        options: [
+          { text: 'रानी', correct: true },
+          { text: 'राजा', correct: false },
+          { text: 'सहेली', correct: false }
+        ]
+      }
+    ]
+  }
+];
+
+
 const MATH_LEVELS: Level[] = [
 
   {
@@ -2058,13 +2777,13 @@ function SimpleTraceCanvas({ letter, onComplete }: { letter: string; onComplete:
         />
 
         {/* Fail overlay */}
-        <AnimatePresence>
+        
           {failMsg && (
-            <motion.div
+            <div
               key="fail"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              
+              
+              
               className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
             >
               <div className="bg-[#fffdf9]/95 text-rose-600 border-2 border-rose-200 rounded-xl px-5 py-3 text-sm font-black shadow-xl text-center max-w-[280px]">
@@ -2073,9 +2792,9 @@ function SimpleTraceCanvas({ letter, onComplete }: { letter: string; onComplete:
                   {isTamil ? 'மீண்டும் 🔄 button press பண்ணி try பண்ணுங்கள்' : 'Press Try Again 🔄 button to try again'}
                 </p>
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        
       </div>
       <div className="flex gap-4 w-full max-w-xs justify-center font-sans">
         <button
@@ -2104,8 +2823,8 @@ function CountBubble({ emoji }: { emoji: string }) {
   }, [emoji]);
 
   return (
-    <motion.button
-      whileTap={{ scale: 0.9 }}
+    <button
+      
       onClick={() => setTapped(t => !t)}
       className={`w-14 h-14 rounded-2xl flex items-center justify-center text-3.5xl border-2 shadow-md relative transition-all
         ${tapped 
@@ -2118,7 +2837,7 @@ function CountBubble({ emoji }: { emoji: string }) {
           ✓
         </div>
       )}
-    </motion.button>
+    </button>
   );
 }
 
@@ -2140,7 +2859,7 @@ export default function QuizArena() {
   const [activeGame, setActiveGame] = useState<string | null>(null);
 
   // Subject Quiz Levels state
-  const [activeSubject, setActiveSubject] = useState<'tamil' | 'english' | 'math' | 'evs'>('tamil');
+  const [activeSubject, setActiveSubject] = useState<'tamil' | 'english' | 'math' | 'evs' | 'gk' | 'hindi'>('tamil');
   const [activeLevel, setActiveLevel] = useState<Level | null>(null);
   const [levelScores, setLevelScores] = useState<Record<number, number>>({});
   
@@ -2156,6 +2875,15 @@ export default function QuizArena() {
   useEffect(() => {
     setSelectedLetter(null);
   }, [currentQuestionIndex, activeLevel]);
+
+  // Shuffle options for the current question to avoid predictable choices (e.g. Option 1 always being correct)
+  const shuffledOptions = useMemo(() => {
+    if (!activeLevel) return [];
+    const question = activeLevel.questions[currentQuestionIndex];
+    if (!question || !question.options) return [];
+    // Perform a seed-stable or simple shuffle when question index changes
+    return [...question.options].sort(() => Math.random() - 0.5);
+  }, [activeLevel, currentQuestionIndex]);
 
   // Dynamically compute unlocked quiz levels based on completed chapters in Database
   const unlockedLevels = useMemo(() => {
@@ -2175,7 +2903,7 @@ export default function QuizArena() {
         return lesson?.progress?.status === 'completed';
       };
 
-      const unlocked: number[] = [];
+      const unlocked: number[] = [1];
       const mappings: Record<number, string> = {
         1: 'f750d0ef-3fc2-44b5-89a5-0abfcc618479',
         2: 'e9efc803-66fe-4574-a4e0-ef8ce18f104a',
@@ -2189,10 +2917,7 @@ export default function QuizArena() {
           unlocked.push(Number(lvlId));
         }
       });
-      if (unlocked.length === 0) {
-        unlocked.push(1);
-      }
-      return unlocked;
+      return Array.from(new Set(unlocked));
     } else if (activeSubject === 'english') {
       const englishSubject = subjects.find(s => 
         s.name.toLowerCase().includes('english') || 
@@ -2209,7 +2934,7 @@ export default function QuizArena() {
         return lesson?.progress?.status === 'completed';
       };
 
-      const unlocked: number[] = [];
+      const unlocked: number[] = [1];
       const mappings: Record<number, string> = {
         1: '389a705c-d602-4f1e-bae6-7fdb736f3e53',
         2: 'b90f5a71-dcef-4a2b-925a-3e6d33be6364',
@@ -2223,10 +2948,7 @@ export default function QuizArena() {
           unlocked.push(Number(lvlId));
         }
       });
-      if (unlocked.length === 0) {
-        unlocked.push(1);
-      }
-      return unlocked;
+      return Array.from(new Set(unlocked));
 
     } else if (activeSubject === 'evs') {
       const evsSubject = subjects.find(s => 
@@ -2244,7 +2966,7 @@ export default function QuizArena() {
         return lesson?.progress?.status === 'completed';
       };
 
-      const unlocked: number[] = [];
+      const unlocked: number[] = [1];
       const mappings: Record<number, string> = {
         1: '0d6b2ccc-01e0-4496-b30f-e6f7f5be3d21',
         2: 'a22e6df2-ff59-418b-89b2-2c39d7d72901',
@@ -2258,10 +2980,69 @@ export default function QuizArena() {
           unlocked.push(Number(lvlId));
         }
       });
-      if (unlocked.length === 0) {
-        unlocked.push(1);
+      return Array.from(new Set(unlocked));
+    } else if (activeSubject === 'gk') {
+      const gkSubject = subjects.find(s => 
+        s.name.toLowerCase().includes('gk') || 
+        s.name.toLowerCase().includes('general knowledge')
+      );
+      if (!gkSubject) {
+        return [1];
       }
-      return unlocked;
+
+      const isLessonCompleted = (lessonId: string): boolean => {
+        const lesson = gkSubject.chapters
+          .flatMap(c => c.lessons)
+          .find(l => l.id === lessonId);
+        return lesson?.progress?.status === 'completed';
+      };
+
+      const unlocked: number[] = [1];
+      const mappings: Record<number, string> = {
+        1: '03aebd95-bb93-4bc6-b798-bd6a633479e3',
+        2: 'ea05392e-4a72-493b-bad7-340a97f55a33',
+        3: 'a8ae08aa-2adb-454e-b591-d57edc838ee7',
+        4: '88fcbba2-8e90-4e22-b5a2-1b78ace2b249',
+        5: '45bcf53f-e78c-4844-a154-c4154cd2fbf5',
+        6: 'c41443c3-2451-443b-90cc-cd2aa6894c22',
+      };
+      Object.entries(mappings).forEach(([lvlId, lesId]) => {
+        if (isLessonCompleted(lesId)) {
+          unlocked.push(Number(lvlId));
+        }
+      });
+      return Array.from(new Set(unlocked));
+    } else if (activeSubject === 'hindi') {
+      const hindiSubject = subjects.find(s => 
+        s.name.toLowerCase().includes('hindi') || 
+        s.name.includes('हिन्दी')
+      );
+      if (!hindiSubject) {
+        return [1];
+      }
+
+      const isLessonCompleted = (lessonId: string): boolean => {
+        const lesson = hindiSubject.chapters
+          .flatMap(c => c.lessons)
+          .find(l => l.id === lessonId);
+        return lesson?.progress?.status === 'completed';
+      };
+
+      const unlocked: number[] = [1];
+      const mappings: Record<number, string> = {
+        1: 'd5bafdc2-6180-46cf-b84a-883c2b0dad08',
+        2: 'f6fe8926-03ac-4a54-85ca-46359d2fcb88',
+        3: 'a698e1c8-50d0-43c0-9cb5-882718447740',
+        4: '4fc361c1-d830-4ebe-b0e2-e4cfb7085c92',
+        5: 'd5ae93a6-0786-4d66-a59a-06c5eb0ca029',
+        6: '5a169e75-fb5f-40d9-a1f2-eaa4f18435d3',
+      };
+      Object.entries(mappings).forEach(([lvlId, lesId]) => {
+        if (isLessonCompleted(lesId)) {
+          unlocked.push(Number(lvlId));
+        }
+      });
+      return Array.from(new Set(unlocked));
     } else {
       const mathSubject = subjects.find(s => 
 
@@ -2280,7 +3061,7 @@ export default function QuizArena() {
         return lesson?.progress?.status === 'completed';
       };
 
-      const unlocked: number[] = [];
+      const unlocked: number[] = [1];
       const mappings: Record<number, string> = {
         1: '1bebe881-2bb2-4b9e-817f-67739b354c78',
         2: '44ddcd38-4a6b-4eca-b7ee-12d4ce9fe6f4',
@@ -2294,10 +3075,7 @@ export default function QuizArena() {
           unlocked.push(Number(lvlId));
         }
       });
-      if (unlocked.length === 0) {
-        unlocked.push(1);
-      }
-      return unlocked;
+      return Array.from(new Set(unlocked));
     }
   }, [subjects, activeSubject]);
 
@@ -2349,9 +3127,29 @@ export default function QuizArena() {
       6: '092a2e60-8ab5-4833-b948-056641af9df7',
     };
 
+    const gkMappings: Record<number, string> = {
+      1: '03aebd95-bb93-4bc6-b798-bd6a633479e3',
+      2: 'ea05392e-4a72-493b-bad7-340a97f55a33',
+      3: 'a8ae08aa-2adb-454e-b591-d57edc838ee7',
+      4: '88fcbba2-8e90-4e22-b5a2-1b78ace2b249',
+      5: '45bcf53f-e78c-4844-a154-c4154cd2fbf5',
+      6: 'c41443c3-2451-443b-90cc-cd2aa6894c22',
+    };
+
+    const hindiMappings: Record<number, string> = {
+      1: 'd5bafdc2-6180-46cf-b84a-883c2b0dad08',
+      2: 'f6fe8926-03ac-4a54-85ca-46359d2fcb88',
+      3: 'a698e1c8-50d0-43c0-9cb5-882718447740',
+      4: '4fc361c1-d830-4ebe-b0e2-e4cfb7085c92',
+      5: 'd5ae93a6-0786-4d66-a59a-06c5eb0ca029',
+      6: '5a169e75-fb5f-40d9-a1f2-eaa4f18435d3',
+    };
+
     const mappings = activeSubject === 'tamil' ? tamilMappings 
                      : activeSubject === 'english' ? englishMappings 
                      : activeSubject === 'evs' ? evsMappings
+                     : activeSubject === 'gk' ? gkMappings
+                     : activeSubject === 'hindi' ? hindiMappings
                      : mathMappings;
 
     Object.entries(mappings).forEach(([levelId, lessonId]) => {
@@ -2395,44 +3193,149 @@ export default function QuizArena() {
 
   const allLessonsFlat = subjects.flatMap(s => s.chapters.flatMap(c => c.lessons));
 
-  // Process categories from API, ensuring custom attributes for Tamil
-  const categoriesFromAPI = subjects.map((s, idx) => {
-    const isTamilQuiz = s.name.toLowerCase().includes('tamil') || s.name === 'Tamil' || s.name.includes('தமிழ்');
-    const isEnglishQuiz = s.name.toLowerCase().includes('english') || s.name === 'English' || s.name.includes('ஆங்கிலம்');
-    const isMathQuiz = s.name.toLowerCase().includes('math') || s.name.toLowerCase().includes('mathe') || s.name.includes('கணிதம்');
-    const isEvsQuiz = s.name.toLowerCase().includes('environmental') || s.name.toLowerCase().includes('evs');
-    return {
-      id: s.id,
-      title: s.name,
-      icon: null,
-      color: isTamilQuiz ? 'bg-emerald-100 text-emerald-600' : isEnglishQuiz ? 'bg-amber-105 text-amber-600' : isMathQuiz ? 'bg-indigo-100 text-indigo-650' : isEvsQuiz ? 'bg-lime-100 text-lime-650' : ['bg-rose-100 text-rose-500', 'bg-blue-100 text-blue-500', 'bg-emerald-100 text-emerald-500', 'bg-amber-100 text-amber-500'][idx % 4],
-      border: isTamilQuiz ? 'border-emerald-300' : isEnglishQuiz ? 'border-amber-300' : isMathQuiz ? 'border-indigo-300' : isEvsQuiz ? 'border-lime-300' : ['border-rose-200', 'border-blue-200', 'border-emerald-200', 'border-amber-200'][idx % 4],
-      progress: s.chapters.length > 0 ? Math.round(s.chapters.filter(c => c.completion_percentage >= 100).length / s.chapters.length * 100) : 0,
-      lessons: s.chapters.flatMap(c => c.lessons).length,
-      isTamilQuiz: isTamilQuiz,
-      isEnglishQuiz: isEnglishQuiz,
-      isMathQuiz: isMathQuiz,
-      isEvsQuiz: isEvsQuiz
-    };
-  });
+  const displayedCategories = useMemo(() => {
+    const DEFAULT_CATEGORIES = [
+      {
+        id: 'tamil_custom',
+        title: 'Tamil',
+        icon: null,
+        color: 'bg-emerald-100 text-emerald-600',
+        border: 'border-emerald-300',
+        progress: 0,
+        lessons: 6,
+        isTamilQuiz: true,
+        isEnglishQuiz: false,
+        isMathQuiz: false,
+        isEvsQuiz: false,
+        isGkQuiz: false,
+        isHindiQuiz: false
+      },
+      {
+        id: 'english_custom',
+        title: 'English',
+        icon: null,
+        color: 'bg-amber-105 text-amber-600',
+        border: 'border-amber-300',
+        progress: 0,
+        lessons: 6,
+        isTamilQuiz: false,
+        isEnglishQuiz: true,
+        isMathQuiz: false,
+        isEvsQuiz: false,
+        isGkQuiz: false,
+        isHindiQuiz: false
+      },
+      {
+        id: 'math_custom',
+        title: 'Mathematics',
+        icon: null,
+        color: 'bg-indigo-100 text-indigo-650',
+        border: 'border-indigo-300',
+        progress: 0,
+        lessons: 6,
+        isTamilQuiz: false,
+        isEnglishQuiz: false,
+        isMathQuiz: true,
+        isEvsQuiz: false,
+        isGkQuiz: false,
+        isHindiQuiz: false
+      },
+      {
+        id: 'evs_custom',
+        title: 'Environmental Studies',
+        icon: null,
+        color: 'bg-lime-100 text-lime-650',
+        border: 'border-lime-300',
+        progress: 0,
+        lessons: 6,
+        isTamilQuiz: false,
+        isEnglishQuiz: false,
+        isMathQuiz: false,
+        isEvsQuiz: true,
+        isGkQuiz: false,
+        isHindiQuiz: false
+      },
+      {
+        id: 'gk_custom',
+        title: 'General Knowledge',
+        icon: null,
+        color: 'bg-purple-100 text-purple-650',
+        border: 'border-purple-300',
+        progress: 0,
+        lessons: 6,
+        isTamilQuiz: false,
+        isEnglishQuiz: false,
+        isMathQuiz: false,
+        isEvsQuiz: false,
+        isGkQuiz: true,
+        isHindiQuiz: false
+      },
+      {
+        id: 'hindi_custom',
+        title: 'Hindi',
+        icon: null,
+        color: 'bg-rose-100 text-rose-600',
+        border: 'border-rose-300',
+        progress: 0,
+        lessons: 6,
+        isTamilQuiz: false,
+        isEnglishQuiz: false,
+        isMathQuiz: false,
+        isEvsQuiz: false,
+        isGkQuiz: false,
+        isHindiQuiz: true
+      }
+    ];
 
-  // Fallback: If Tamil is not in the subjects list, append it manually so it is always present
-  const hasTamil = categoriesFromAPI.some(c => c.isTamilQuiz);
-  const displayedCategories = [...categoriesFromAPI];
-  if (!hasTamil && mounted) {
-    displayedCategories.push({
-      id: 'tamil_custom',
-      title: 'Tamil',
-      icon: null,
-      color: 'bg-emerald-100 text-emerald-600',
-      border: 'border-emerald-300',
-      progress: 0,
-      lessons: 4,
-      isTamilQuiz: true,
-      isEnglishQuiz: false,
-      isMathQuiz: false
+    if (!mounted) return DEFAULT_CATEGORIES;
+
+    const matchedApiIds = new Set<string>();
+
+    const merged = DEFAULT_CATEGORIES.map(defCat => {
+      const apiSubject = subjects.find(s => {
+        const nameLower = s.name.toLowerCase();
+        if (defCat.isTamilQuiz) return nameLower.includes('tamil') || nameLower.includes('தமிழ்');
+        if (defCat.isEnglishQuiz) return nameLower.includes('english') || nameLower.includes('ஆங்கிலம்');
+        if (defCat.isMathQuiz) return nameLower.includes('math') || nameLower.includes('mathe') || nameLower.includes('கணிதம்');
+        if (defCat.isEvsQuiz) return nameLower.includes('environmental') || nameLower.includes('evs');
+        if (defCat.isGkQuiz) return nameLower.includes('gk') || nameLower.includes('general knowledge');
+        if (defCat.isHindiQuiz) return nameLower.includes('hindi') || nameLower.includes('हिन्दी');
+        return false;
+      });
+
+      if (apiSubject) {
+        matchedApiIds.add(apiSubject.id);
+        return {
+          ...defCat,
+          id: apiSubject.id,
+          title: apiSubject.name,
+          progress: apiSubject.chapters.length > 0 ? Math.round(apiSubject.chapters.filter(c => c.completion_percentage >= 100).length / apiSubject.chapters.length * 100) : 0,
+          lessons: apiSubject.chapters.flatMap(c => c.lessons).length,
+        };
+      }
+      return defCat;
     });
-  }
+
+    const extraSubjects = subjects.filter(s => !matchedApiIds.has(s.id)).map((s, idx) => {
+      return {
+        id: s.id,
+        title: s.name,
+        icon: null,
+        color: ['bg-rose-100 text-rose-500', 'bg-blue-100 text-blue-500', 'bg-emerald-100 text-emerald-500', 'bg-amber-100 text-amber-500'][idx % 4],
+        border: ['border-rose-200', 'border-blue-200', 'border-emerald-200', 'border-amber-200'][idx % 4],
+        progress: s.chapters.length > 0 ? Math.round(s.chapters.filter(c => c.completion_percentage >= 100).length / s.chapters.length * 100) : 0,
+        lessons: s.chapters.flatMap(c => c.lessons).length,
+        isTamilQuiz: false,
+        isEnglishQuiz: false,
+        isMathQuiz: false,
+        isEvsQuiz: false,
+        isGkQuiz: false,
+        isHindiQuiz: false
+      };
+    });
+
+    return [...merged, ...extraSubjects];
+  }, [subjects, mounted]);
 
   const startDailyThree = () => {
     const randomLesson = allLessonsFlat[Math.floor(Math.random() * allLessonsFlat.length)];
@@ -2482,53 +3385,116 @@ export default function QuizArena() {
         const finalScore = scores.reduce((a, b) => a + b, 0) + (isCorrect ? 1 : 0);
         
         if (activeLevel) {
-          // Save score if it's the highest in component state
+          // Always update best score in local state
           const currentBest = levelScores[activeLevel.id] || 0;
           if (finalScore > currentBest) {
             setLevelScores(prev => ({
               ...prev,
               [activeLevel.id]: finalScore
             }));
+          }
 
-            // Sync with backend database
-            const tamilMappings: Record<number, string> = {
-              1: 'f750d0ef-3fc2-44b5-89a5-0abfcc618479',
-              2: 'e9efc803-66fe-4574-a4e0-ef8ce18f104a',
-              3: 'c6035e74-6b37-409e-a0c0-c58bb4f64fee',
-              4: '27869c1b-70c6-4019-965f-619c799eb0e0',
-              5: '260d91dd-1d8b-4964-8311-3ff589c38e5a',
-              6: '45b61435-fe57-4e0c-a893-68bc25d96d53',
-            };
-            const englishMappings: Record<number, string> = {
-              1: '389a705c-d602-4f1e-bae6-7fdb736f3e53',
-              2: 'b90f5a71-dcef-4a2b-925a-3e6d33be6364',
-              3: 'fba5b58b-a115-4c45-ad62-34c3589575eb',
-              4: 'c02f1643-7c13-450a-9004-d57ac6857ac3',
-              5: '60569fa2-ef55-4902-80a0-e98c9d7c95ed',
-              6: 'c1381ec5-b99a-49e0-84e2-21aad7a10ab7',
-            };
-            const mathMappings: Record<number, string> = {
-              1: '1bebe881-2bb2-4b9e-817f-67739b354c78',
-              2: '44ddcd38-4a6b-4eca-b7ee-12d4ce9fe6f4',
-              3: 'e2fa68cf-10d2-4772-9814-aeb72f529bdf',
-              4: '5f7d8cee-3073-4174-ab82-401fedb3fa44',
-              5: '2ebb61ce-1133-4a74-b8d5-5265319ffd07',
-              6: '252dd393-ece6-4561-863d-194e9b292f9b',
-            };
-            const evsMappings: Record<number, string> = {
-              1: '0d6b2ccc-01e0-4496-b30f-e6f7f5be3d21',
-              2: 'a22e6df2-ff59-418b-89b2-2c39d7d72901',
-              3: '5cc91f99-b121-4baa-813d-61260abbdffa',
-              4: '2b200e99-464a-45df-839b-ac3282fb07a1',
-              5: '66df4a08-281d-4aa3-917a-722de6658a79',
-              6: '092a2e60-8ab5-4833-b948-056641af9df7',
-            };
-            const mappings = activeSubject === 'tamil' ? tamilMappings 
-                             : activeSubject === 'english' ? englishMappings 
-                             : activeSubject === 'evs' ? evsMappings
-                             : mathMappings;
-            const lessonId = mappings[activeLevel.id];
-            if (lessonId) {
+          // Lesson ID mappings for lesson_progress update
+          const tamilLessonMappings: Record<number, string> = {
+            1: 'f750d0ef-3fc2-44b5-89a5-0abfcc618479',
+            2: 'e9efc803-66fe-4574-a4e0-ef8ce18f104a',
+            3: 'c6035e74-6b37-409e-a0c0-c58bb4f64fee',
+            4: '27869c1b-70c6-4019-965f-619c799eb0e0',
+            5: '260d91dd-1d8b-4964-8311-3ff589c38e5a',
+            6: '45b61435-fe57-4e0c-a893-68bc25d96d53',
+          };
+          const englishLessonMappings: Record<number, string> = {
+            1: '389a705c-d602-4f1e-bae6-7fdb736f3e53',
+            2: 'b90f5a71-dcef-4a2b-925a-3e6d33be6364',
+            3: 'fba5b58b-a115-4c45-ad62-34c3589575eb',
+            4: 'c02f1643-7c13-450a-9004-d57ac6857ac3',
+            5: '60569fa2-ef55-4902-80a0-e98c9d7c95ed',
+            6: 'c1381ec5-b99a-49e0-84e2-21aad7a10ab7',
+          };
+          const mathLessonMappings: Record<number, string> = {
+            1: '1bebe881-2bb2-4b9e-817f-67739b354c78',
+            2: '44ddcd38-4a6b-4eca-b7ee-12d4ce9fe6f4',
+            3: 'e2fa68cf-10d2-4772-9814-aeb72f529bdf',
+            4: '5f7d8cee-3073-4174-ab82-401fedb3fa44',
+            5: '2ebb61ce-1133-4a74-b8d5-5265319ffd07',
+            6: '252dd393-ece6-4561-863d-194e9b292f9b',
+          };
+          const evsLessonMappings: Record<number, string> = {
+            1: '0d6b2ccc-01e0-4496-b30f-e6f7f5be3d21',
+            2: 'a22e6df2-ff59-418b-89b2-2c39d7d72901',
+            3: '5cc91f99-b121-4baa-813d-61260abbdffa',
+            4: '2b200e99-464a-45df-839b-ac3282fb07a1',
+            5: '66df4a08-281d-4aa3-917a-722de6658a79',
+            6: '092a2e60-8ab5-4833-b948-056641af9df7',
+          };
+          const gkLessonMappings: Record<number, string> = {
+            1: '03aebd95-bb93-4bc6-b798-bd6a633479e3',
+            2: 'ea05392e-4a72-493b-bad7-340a97f55a33',
+            3: 'a8ae08aa-2adb-454e-b591-d57edc838ee7',
+            4: '88fcbba2-8e90-4e22-b5a2-1b78ace2b249',
+            5: '45bcf53f-e78c-4844-a154-c4154cd2fbf5',
+            6: 'c41443c3-2451-443b-90cc-cd2aa6894c22',
+          };
+          const hindiLessonMappings: Record<number, string> = {
+            1: 'd5bafdc2-6180-46cf-b84a-883c2b0dad08',
+            2: 'f6fe8926-03ac-4a54-85ca-46359d2fcb88',
+            3: 'a698e1c8-50d0-43c0-9cb5-882718447740',
+            4: '4fc361c1-d830-4ebe-b0e2-e4cfb7085c92',
+            5: 'd5ae93a6-0786-4d66-a59a-06c5eb0ca029',
+            6: '5a169e75-fb5f-40d9-a1f2-eaa4f18435d3',
+          };
+
+          // Quiz ID mappings (lesson_id -> quiz_id) for quiz_attempts tracking
+          const lessonToQuizId: Record<string, string> = {
+            'f750d0ef-3fc2-44b5-89a5-0abfcc618479': 'bba383c9-f361-49ee-9120-80b316d3b656', // உயிர் எழுத்துக்கள் 1 வினா
+            'e9efc803-66fe-4574-a4e0-ef8ce18f104a': 'bbb47af9-98bb-41e3-a830-f2056a3b0686', // எ ஏ ஐ ஒ ஓ ஔ ஃ Quiz
+            'c6035e74-6b37-409e-a0c0-c58bb4f64fee': '0158c95e-ae42-4c63-bb82-767e619bde91', // க் ங் ச் ஞ் Quiz
+            '27869c1b-70c6-4019-965f-619c799eb0e0': '23c1cff2-6d47-47c1-a837-387a937cdc5d', // ட் ண் த் ந் Quiz
+            '260d91dd-1d8b-4964-8311-3ff589c38e5a': '0235ea86-fb0d-4694-ac8d-e7e4e8238faa', // ப் ம் Quiz
+            '45b61435-fe57-4e0c-a893-68bc25d96d53': 'e3369193-b3e6-4cdc-86b0-a6b295fe5945', // உயிரெழுத்து சார்ந்த சொற்கள் Quiz
+            '389a705c-d602-4f1e-bae6-7fdb736f3e53': '0fa7eb99-d9c6-4072-87b7-80cc7113e77b', // Pre-Writing Exam Quiz
+            'b90f5a71-dcef-4a2b-925a-3e6d33be6364': '0d155284-9adb-42ac-8bd5-489ac177a64f', // Letter M - Mango Quiz
+            'fba5b58b-a115-4c45-ad62-34c3589575eb': '76b635cb-74bc-4c2d-916d-8a76dcbf7b6e', // Pick the Card Quiz
+            'c02f1643-7c13-450a-9004-d57ac6857ac3': '2c35659c-d262-4710-9d5f-a2389d8b1acd', // Simple Words: Cat, Dog, Sun, Moon Quiz
+            '60569fa2-ef55-4902-80a0-e98c9d7c95ed': 'c3afd736-cce8-4e8f-80d1-fecb5b91335f', // My Name Writing Quiz
+            'c1381ec5-b99a-49e0-84e2-21aad7a10ab7': 'ad80173f-ab56-4f02-a130-25a7c93dee5f', // Little Red Riding Hood Quiz
+            '1bebe881-2bb2-4b9e-817f-67739b354c78': '6b795e3c-5804-4aa7-b694-6ed96c73cc52', // Same & Different Quiz
+            '44ddcd38-4a6b-4eca-b7ee-12d4ce9fe6f4': '656dad63-a603-4cd5-bc96-1a867f8d3bdb', // Shape Sorting Quiz
+            'e2fa68cf-10d2-4772-9814-aeb72f529bdf': '74eaf6ce-ed6e-4954-b8a1-d0f57c6ab905', // Numbers 1-5 Review Quiz
+            '5f7d8cee-3073-4174-ab82-401fedb3fa44': '79f4d6f4-e426-478b-b95e-bbf783e0e841', // Before & After Quiz
+            '2ebb61ce-1133-4a74-b8d5-5265319ffd07': '3aa6c98e-a2cc-4c7e-9d5e-a8430ecaf0f3', // Open & Close Quiz
+            '252dd393-ece6-4561-863d-194e9b292f9b': '7a2e23bf-bbc7-4db0-9a97-b438b74fff05', // Patterns Final Quiz
+            '0d6b2ccc-01e0-4496-b30f-e6f7f5be3d21': 'd3309997-0e81-46c9-b354-0da523b645aa', // My Body Quiz
+            'a22e6df2-ff59-418b-89b2-2c39d7d72901': '672b2074-ec9f-4fad-b985-f732a38c3a01', // Family Quiz
+            '5cc91f99-b121-4baa-813d-61260abbdffa': '7b6a5788-dee2-41b9-90e1-f4f74a4f419d', // Pet & Wild Quiz
+            '2b200e99-464a-45df-839b-ac3282fb07a1': '0835020d-c5a3-4b6d-9279-1f7ff7d06c94', // Parts of a Plant Quiz
+            '66df4a08-281d-4aa3-917a-722de6658a79': 'f5a800b2-9f1c-480f-89cb-32a1b0f2e2f7', // Land Transport Quiz
+            '092a2e60-8ab5-4833-b948-056641af9df7': '7c429cee-b456-4c34-a5f2-75785945349e', // Clean Habits Quiz
+            '03aebd95-bb93-4bc6-b798-bd6a633479e3': 'e4be2404-244d-45c1-9cb5-bf89778db520', // My Name & Identity Quiz
+            'ea05392e-4a72-493b-bad7-340a97f55a33': 'e3846c53-9e05-4aa9-8490-2f2579f86ffc', // Basic Colors Quiz
+            'a8ae08aa-2adb-454e-b591-d57edc838ee7': 'd9bfe7f5-bde2-4857-8896-c770f448e385', // Animal Names Quiz
+            '88fcbba2-8e90-4e22-b5a2-1b78ace2b249': 'a10dda7a-04d7-4522-8b7d-66a26fdc5ace', // Places Quiz
+            '45bcf53f-e78c-4844-a154-c4154cd2fbf5': '093b85a8-03bf-487d-a657-dc2a19f0236f', // Road Safety Quiz
+            'c41443c3-2451-443b-90cc-cd2aa6894c22': 'd1610c41-e2bd-4ddc-a7e6-7fc5e48f6e6d', // Sky Objects Quiz
+            'd5bafdc2-6180-46cf-b84a-883c2b0dad08': '89fad8b3-9ff7-45d6-ba02-04742c65dce2', // खड़ी और लेटी रेखा (रेखा पहचान)
+            'f6fe8926-03ac-4a54-85ca-46359d2fcb88': '6c7fa009-861e-4c60-82a2-aaf2b82f15b1', // अ और आ पहचान
+            'a698e1c8-50d0-43c0-9cb5-882718447740': '9e11dfb6-cb50-45c0-9b84-a621aeb71670', // क वर्ग पहचान
+            '4fc361c1-d830-4ebe-b0e2-e4cfb7085c92': 'b7cd60e2-f856-43bb-b452-7767f7c4b659', // सरल शब्द पहचान
+            'd5ae93a6-0786-4d66-a59a-06c5eb0ca029': 'ceb3c6fb-f8fe-4500-9284-b9000a50f57b', // बोलना अभ्यास
+            '5a169e75-fb5f-40d9-a1f2-eaa4f18435d3': 'da126a2f-aac8-4f26-a958-92fde6da6058', // कविता प्रश्न
+          };
+
+          const lessonMappings = activeSubject === 'tamil' ? tamilLessonMappings 
+                           : activeSubject === 'english' ? englishLessonMappings 
+                           : activeSubject === 'evs' ? evsLessonMappings
+                           : activeSubject === 'gk' ? gkLessonMappings
+                           : activeSubject === 'hindi' ? hindiLessonMappings
+                           : mathLessonMappings;
+          const lessonId = lessonMappings[activeLevel.id];
+
+          if (lessonId) {
+            // Always update lesson progress (best score)
+            if (finalScore >= currentBest) {
               studentApi.updateProgress(lessonId, {
                 status: 'completed',
                 completion_percentage: 100,
@@ -2540,7 +3506,26 @@ export default function QuizArena() {
                 queryClient.invalidateQueries({ queryKey: studentKeys.dashboard });
                 queryClient.invalidateQueries({ queryKey: studentKeys.me });
               }).catch((err) => {
-                console.error("Failed to sync score to DB:", err);
+                console.error("Failed to sync progress to DB:", err);
+              });
+            }
+
+             // ALWAYS record quiz_attempt (so parent portal sees every attempt)
+            const quizId = lessonToQuizId[lessonId];
+            if (quizId) {
+              studentApi.submitQuizScore(lessonId, quizId, {
+                score: finalScore,
+                max_score: 5,
+              }).then(() => {
+                queryClient.invalidateQueries({ queryKey: studentKeys.lessons });
+                queryClient.invalidateQueries({ queryKey: studentKeys.dashboard });
+                queryClient.invalidateQueries({ queryKey: studentKeys.me });
+                // Also trigger parent keys just in case they share cache context on same browser/tab
+                queryClient.invalidateQueries({ queryKey: ['parent'] });
+                queryClient.invalidateQueries({ queryKey: ['parent', 'children'] });
+                queryClient.invalidateQueries({ queryKey: ['parent', 'child'] });
+              }).catch((err) => {
+                console.error("Failed to record quiz attempt:", err);
               });
             }
           }
@@ -2548,6 +3533,7 @@ export default function QuizArena() {
       }
     }, 500);
   };
+
 
   return (
     <div className="relative overflow-hidden min-h-screen pb-12 kids-font selection:bg-teal-350">
@@ -2568,15 +3554,15 @@ export default function QuizArena() {
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6">
         
-        <AnimatePresence mode="wait">
+        
 
           {/* 1. MAIN DASHBOARD VIEW */}
           {view === 'dashboard' && (
-            <motion.div
+            <div
               key="dashboard"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
+              
+              
+              
               className="w-full"
             >
               {/* Hero Quest Banner */}
@@ -2665,8 +3651,15 @@ export default function QuizArena() {
                               } else if (zone.isEvsQuiz) {
                                 setActiveSubject('evs');
                                 setView('levels');
+                              } else if (zone.isGkQuiz) {
+                                setActiveSubject('gk');
+                                setView('levels');
+                              } else if (zone.isHindiQuiz) {
+                                setActiveSubject('hindi');
+                                setView('levels');
                               } else {
-                               const zoneLessons = allLessonsFlat.filter(l => zone.id === subjects[idx]?.id);
+                               const matchingSubject = subjects.find(s => s.id === zone.id);
+                               const zoneLessons = matchingSubject ? matchingSubject.chapters.flatMap(c => c.lessons) : [];
                                if (zoneLessons.length > 0) {
                                  setActiveQuiz({
                                    id: zoneLessons[0].id,
@@ -2691,14 +3684,18 @@ export default function QuizArena() {
                              <div className="min-h-[280px] flex flex-col items-center justify-center p-8 relative overflow-hidden text-center">
                                 <div className="w-24 h-24 flex items-center justify-center mb-6 drop-shadow-[0_20px_20px_rgba(0,0,0,0.1)] group-hover:scale-110 transition-transform duration-700">
                                    {isTamilCloud ? (
-                                     <span className="text-6xl select-none">🐯</span>
-                                   ) : zone.isMathQuiz ? (
-                                     <span className="text-6xl select-none">🔢</span>
-                                   ) : zone.isEnglishQuiz ? (
-                                     <span className="text-6xl select-none">🍎</span>
-                                   ) : zone.isEvsQuiz ? (
-                                     <span className="text-6xl select-none">🌍</span>
-                                   ) : (
+                                      <span className="text-6xl select-none">🐯</span>
+                                    ) : zone.isMathQuiz ? (
+                                      <span className="text-6xl select-none">🔢</span>
+                                    ) : zone.isEnglishQuiz ? (
+                                      <span className="text-6xl select-none">🍎</span>
+                                    ) : zone.isEvsQuiz ? (
+                                      <span className="text-6xl select-none">🌍</span>
+                                    ) : zone.isGkQuiz ? (
+                                      <span className="text-6xl select-none">💡</span>
+                                    ) : zone.isHindiQuiz ? (
+                                      <span className="text-6xl select-none">📙</span>
+                                    ) : (
                                      <img 
                                         src={`/assets/portals/${['alphabet', 'numbers', 'colors', 'animals'][idx % 4]}-removebg-preview.png`}
                                         className="w-full h-full object-contain"
@@ -2707,12 +3704,12 @@ export default function QuizArena() {
                                    )}
                                 </div>
                                 <h3 className="text-xl font-black text-indigo-950 uppercase tracking-tight leading-none mb-1 font-sans">{zone.title}</h3>
-                                {(isTamilCloud || zone.isEnglishQuiz || zone.isMathQuiz || zone.isEvsQuiz) && (
+                                {(isTamilCloud || zone.isEnglishQuiz || zone.isMathQuiz || zone.isEvsQuiz || zone.isGkQuiz || zone.isHindiQuiz) && (
                                   <p className="text-[11px] font-black text-emerald-800/80 uppercase tracking-widest mb-6 font-sans">
                                     Fun Activities
                                   </p>
                                 )}
-                                {!(isTamilCloud || zone.isEnglishQuiz || zone.isMathQuiz || zone.isEvsQuiz) && <div className="h-6" />}
+                                {!(isTamilCloud || zone.isEnglishQuiz || zone.isMathQuiz || zone.isEvsQuiz || zone.isGkQuiz || zone.isHindiQuiz) && <div className="h-6" />}
                                 <div className="px-8 py-3 bg-indigo-600 rounded-2xl text-[10px] font-black text-white shadow-xl hover:bg-indigo-700 transition-colors uppercase tracking-widest font-sans">
                                    JUMP IN!
                                 </div>
@@ -2743,9 +3740,9 @@ export default function QuizArena() {
                       { id: 'sequence', title: 'Sequence', emoji: '🧩', color: 'bg-purple-500' },
                       { id: 'memory', title: 'Memory', emoji: '🧠', color: 'bg-rose-500' },
                     ].map((game) => (
-                      <motion.button key={game.id}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                      <button key={game.id}
+                        
+                        
                         onClick={() => setActiveGame(game.id)}
                         className="bg-white/95 rounded-[3rem] p-8 text-left border-2 border-white/60 shadow-2xl flex items-center gap-8 transition-all group hover:bg-white w-full"
                       >
@@ -2757,21 +3754,21 @@ export default function QuizArena() {
                            <span className="text-xs font-black text-indigo-900/40 uppercase tracking-[0.2em] font-sans">Start Training</span>
                          </div>
                          <ChevronRight className="ml-auto text-indigo-900/20 group-hover:text-indigo-900 group-hover:translate-x-2 transition-all" size={32} />
-                      </motion.button>
+                      </button>
                     ))}
                  </div>
               </div>
 
-            </motion.div>
+            </div>
           )}
 
           {/* 2. TAMIL LEVELS SELECTION (NEAT KID-FRIENDLY ROADMAP) */}
           {view === 'levels' && (
-            <motion.div
+            <div
               key="levels"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -30 }}
+              
+              
+              
               className="w-full flex flex-col gap-6 max-w-2xl mx-auto pt-6 px-4 pb-20 min-h-screen relative"
             >
               {/* Back navigation & Game Status Bar */}
@@ -2790,10 +3787,14 @@ export default function QuizArena() {
                   <h2 className="text-base sm:text-lg font-black text-indigo-950 leading-tight">                    {activeSubject === 'tamil' ? 'தமிழ் வினாடி-வினா' 
                      : activeSubject === 'english' ? 'English Quiz Arena' 
                      : activeSubject === 'evs' ? 'Environmental Studies'
+                     : activeSubject === 'gk' ? 'General Knowledge'
+                     : activeSubject === 'hindi' ? 'Hindi Quiz Arena'
                      : 'கணித சவால் (Math Quiz)'}                  </h2>
                   <span className="text-[9px] font-bold text-indigo-900/40 uppercase tracking-widest block leading-none mt-0.5 font-sans">                    {activeSubject === 'tamil' ? 'Tamil Quiz Arena' 
                      : activeSubject === 'english' ? 'Fun Spelling & Sorting' 
                      : activeSubject === 'evs' ? 'Nature, Health & Living'
+                     : activeSubject === 'gk' ? 'Discover & Learn'
+                     : activeSubject === 'hindi' ? 'Learn Hindi Vowels & Words'
                      : 'Playful Math Adventures'}                  </span>
                 </div>
 
@@ -2808,17 +3809,17 @@ export default function QuizArena() {
 
               {/* Grid / Staggered road of cards */}
               <div className="flex flex-col gap-5 relative z-10">
-                {(activeSubject === 'tamil' ? TAMIL_LEVELS : activeSubject === 'english' ? ENGLISH_LEVELS : activeSubject === 'evs' ? EVS_LEVELS : MATH_LEVELS).map((level, index) => {
+                {(activeSubject === 'tamil' ? TAMIL_LEVELS : activeSubject === 'english' ? ENGLISH_LEVELS : activeSubject === 'evs' ? EVS_LEVELS : activeSubject === 'gk' ? GK_LEVELS : activeSubject === 'hindi' ? HINDI_LEVELS : MATH_LEVELS).map((level, index) => {
                   const unlocked = unlockedLevels.includes(level.id);
                   const bestScore = Math.min(levelScores[level.id] || 0, 5);
                   const isCompleted = levelScores[level.id] !== undefined;
 
                   return (
-                    <motion.div
+                    <div
                       key={level.id}
-                      initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
+                      
+                      
+                      
                       className="w-full"
                     >
                       <button
@@ -2894,20 +3895,20 @@ export default function QuizArena() {
                           </div>
                         </div>
                       </button>
-                    </motion.div>
+                    </div>
                   );
                 })}
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* 3. ACTIVE QUIZ PLAYER VIEW */}
           {view === 'quiz_player' && activeLevel && (
-            <motion.div
+            <div
               key="player"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
+              
+              
+              
               className="w-full flex flex-col gap-6 max-w-xl mx-auto pt-4"
             >
               {/* Quiz Header Info */}
@@ -2977,7 +3978,7 @@ export default function QuizArena() {
                     {/* Math Compare: Size, weight, quantity choices side-by-side */}
                     {question.type === 'math_compare' && (
                       <div className="flex flex-col sm:flex-row gap-6 w-full max-w-lg justify-center items-stretch mt-4">
-                        {question.options.map((opt, i) => {
+                        {shuffledOptions.map((opt, i) => {
                           const isSelected = selectedOptionText === opt.text;
                           const isElephant = opt.text.toLowerCase().includes('elephant') || opt.emoji === '🐘';
                           const isRock = opt.text.toLowerCase().includes('rock') || opt.emoji === '🪨';
@@ -2987,10 +3988,10 @@ export default function QuizArena() {
                           const isLarge = isElephant || isRock || isPineTree || isMore;
                           
                           return (
-                            <motion.button
+                            <button
                               key={i}
-                              whileHover={{ scale: 1.05, y: -4 }}
-                              whileTap={{ scale: 0.95 }}
+                              
+                              
                               onClick={() => handleAnswer(opt)}
                               disabled={selectedOptionText !== null}
                               className={`flex-1 flex flex-col items-center justify-between p-8 rounded-[2.5rem] border-4 shadow-lg transition-all active:scale-95 text-center min-h-[220px] relative overflow-hidden
@@ -3001,14 +4002,14 @@ export default function QuizArena() {
                               <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-amber-100/30 to-transparent rounded-full pointer-events-none" />
                               
                               <div className="flex-1 flex items-center justify-center min-h-[100px]">
-                                <motion.div 
-                                  animate={isLarge ? { scale: [1, 1.05, 1] } : {}}
-                                  transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                                <div 
+                                  
+                                  
                                   className={`select-none transition-transform duration-350 drop-shadow-md
                                     ${isLarge ? 'text-7xl sm:text-8xl' : 'text-4xl sm:text-5xl'}`}
                                 >
                                   {opt.emoji || '📦'}
-                                </motion.div>
+                                </div>
                               </div>
                               
                               <div className="mt-4">
@@ -3016,7 +4017,7 @@ export default function QuizArena() {
                                   {opt.text}
                                 </span>
                               </div>
-                            </motion.button>
+                            </button>
                           );
                         })}
                       </div>
@@ -3036,13 +4037,13 @@ export default function QuizArena() {
                         </p>
 
                         <div className="grid grid-cols-3 gap-4 w-full max-w-sm justify-center">
-                          {question.options.map((opt, i) => {
+                          {shuffledOptions.map((opt, i) => {
                             const isSelected = selectedOptionText === opt.text;
                             return (
-                              <motion.button
+                              <button
                                 key={i}
-                                whileHover={{ scale: 1.08 }}
-                                whileTap={{ scale: 0.92 }}
+                                
+                                
                                 onClick={() => handleAnswer(opt)}
                                 disabled={selectedOptionText !== null}
                                 className={`py-4 rounded-[1.8rem] text-2xl font-black border-4 shadow-md transition-all active:scale-95 flex items-center justify-center
@@ -3051,7 +4052,7 @@ export default function QuizArena() {
                                     : 'bg-white border-amber-200 text-amber-800 hover:bg-amber-50 hover:border-amber-450'}`}
                               >
                                 {opt.text}
-                              </motion.button>
+                              </button>
                             );
                           })}
                         </div>
@@ -3070,16 +4071,16 @@ export default function QuizArena() {
                               return (
                                 <div key={idx} className="flex items-center gap-2">
                                   {idx > 0 && <span className="text-slate-350 font-black">➔</span>}
-                                  <motion.div
-                                    animate={isTarget ? { scale: [1, 1.1, 1] } : {}}
-                                    transition={isTarget ? { repeat: Infinity, duration: 1.5 } : {}}
+                                  <div
+                                    
+                                    
                                     className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm border-2 text-3xl select-none
                                       ${isTarget 
                                         ? 'bg-amber-100 border-dashed border-amber-450 text-amber-700 font-black animate-pulse' 
                                         : 'bg-white border-slate-150'}`}
                                   >
                                     {isTarget ? '?' : item}
-                                  </motion.div>
+                                  </div>
                                 </div>
                               );
                             })}
@@ -3087,13 +4088,13 @@ export default function QuizArena() {
                         </div>
 
                         <div className="grid grid-cols-3 gap-3 w-full max-w-md justify-center">
-                          {question.options.map((opt, i) => {
+                          {shuffledOptions.map((opt, i) => {
                             const isSelected = selectedOptionText === opt.text;
                             return (
-                              <motion.button
+                              <button
                                 key={i}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
+                                
+                                
                                 onClick={() => handleAnswer(opt)}
                                 disabled={selectedOptionText !== null}
                                 className={`flex flex-col items-center gap-2 py-4 px-2 rounded-2xl border-2 shadow transition-all active:scale-95
@@ -3107,7 +4108,7 @@ export default function QuizArena() {
                                 <span className={`text-[10px] sm:text-xs font-black mt-1 ${isSelected ? 'text-white' : 'text-slate-700'}`}>
                                   {opt.text.split(' ')[0]}
                                 </span>
-                              </motion.button>
+                              </button>
                             );
                           })}
                         </div>
@@ -3138,7 +4139,7 @@ export default function QuizArena() {
 
                         {/* Options Selection Grid */}
                         <div className="grid grid-cols-3 gap-3 w-full max-w-md justify-center mt-2">
-                          {question.options.map((opt, i) => {
+                          {shuffledOptions.map((opt, i) => {
                             const isSelected = selectedOptionText === opt.text;
                             return (
                               <button
@@ -3170,7 +4171,7 @@ export default function QuizArena() {
                     {/* 3. Find and Mark */}
                     {question.type === 'find' && (
                       <div className="grid grid-cols-2 gap-3 w-full max-w-sm justify-center">
-                        {question.options.map((opt, i) => {
+                        {shuffledOptions.map((opt, i) => {
                           const isSelected = selectedOptionText === opt.text;
                           return (
                             <button
@@ -3197,7 +4198,7 @@ export default function QuizArena() {
                         </div>
 
                         <div className="grid grid-cols-3 gap-2.5 w-full max-w-xs justify-center">
-                          {question.options.map((opt, i) => {
+                          {shuffledOptions.map((opt, i) => {
                             const isSelected = selectedOptionText === opt.text;
                             return (
                               <button
@@ -3220,7 +4221,7 @@ export default function QuizArena() {
                     {/* 5. Choice Game */}
                     {question.type === 'choice' && (
                       <div className="grid grid-cols-3 gap-2 w-full max-w-md justify-center">
-                        {question.options.map((opt, i) => {
+                        {shuffledOptions.map((opt, i) => {
                           const isSelected = selectedOptionText === opt.text;
                           return (
                             <button
@@ -3254,9 +4255,9 @@ export default function QuizArena() {
                           {question.letter?.split('').map((char, charIdx) => {
                             const isBlank = char === '_';
                             return (
-                              <motion.div
+                              <div
                                 key={charIdx}
-                                animate={isBlank && selectedLetter ? { scale: [1, 1.1, 1], y: [0, -5, 0] } : {}}
+                                
                                 className={`w-12 h-14 rounded-2xl flex items-center justify-center font-bold text-2xl border-2 shadow-sm
                                   ${isBlank 
                                     ? 'bg-amber-50 border-dashed border-amber-400 text-amber-600 font-extrabold min-w-[3rem]' 
@@ -3264,14 +4265,14 @@ export default function QuizArena() {
                                   }`}
                               >
                                 {isBlank ? (selectedLetter || '?') : char}
-                              </motion.div>
+                              </div>
                             );
                           })}
                         </div>
 
                         {/* Letter Tiles to select from */}
                         <div className="grid grid-cols-3 gap-3 w-full max-w-sm justify-center">
-                          {question.options.map((opt, i) => {
+                          {shuffledOptions.map((opt, i) => {
                             const isSelected = selectedOptionText === opt.text;
                             return (
                               <button
@@ -3305,7 +4306,7 @@ export default function QuizArena() {
                         )}
                         
                         <div className="grid grid-cols-2 gap-4 w-full max-w-md justify-center py-2">
-                          {question.options.map((opt, i) => {
+                          {shuffledOptions.map((opt, i) => {
                             const isSelected = selectedOptionText === opt.text;
                             const colors = ['bg-rose-50 border-rose-200 text-rose-600', 'bg-blue-50 border-blue-200 text-blue-600'];
                             return (
@@ -3329,7 +4330,7 @@ export default function QuizArena() {
                     {/* 8. Order Sequence Game */}
                     {question.type === 'order' && (
                       <div className="flex flex-col gap-4 w-full font-sans">
-                        {question.options.map((opt, i) => {
+                        {shuffledOptions.map((opt, i) => {
                           const isSelected = selectedOptionText === opt.text;
                           const steps = opt.text.split('➔').map(s => s.trim());
                           return (
@@ -3362,16 +4363,16 @@ export default function QuizArena() {
                   </div>
                 );
               })()}
-            </motion.div>
+            </div>
           )}
 
           {/* 4. SCORE CARD VIEW */}
           {view === 'score_card' && activeLevel && (
-            <motion.div
+            <div
               key="score"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
+              
+              
+              
               className="w-full max-w-md mx-auto bg-[#fffdf9] border-4 border-[#b45309] rounded-[3rem] p-8 text-center shadow-2xl relative overflow-hidden"
             >
               <div className="absolute top-[-20%] left-[-20%] w-[50%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
@@ -3379,13 +4380,13 @@ export default function QuizArena() {
 
               <div className="relative z-10 flex flex-col items-center gap-6">
                 
-                <motion.div
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                <div
+                  
+                  
                   className="text-7xl sm:text-8xl drop-shadow"
                 >
                   🏆
-                </motion.div>
+                </div>
 
                 <div>
                   <h2 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight">
@@ -3416,24 +4417,24 @@ export default function QuizArena() {
                   </span>
                 </div>
 
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
+                <button
+                  
                   onClick={() => setView('levels')}
                   className="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-black text-base sm:text-lg rounded-2xl shadow-lg border-b-4 border-teal-750 active:scale-95"
                 >
                   நிலைகளுக்குத் திரும்பு ➡️
-                </motion.button>
+                </button>
 
               </div>
-            </motion.div>
+            </div>
           )}
 
-        </AnimatePresence>
+        
 
       </div>
 
       {/* OVERLAY WRAPPERS FOR OTHER SUBJECTS */}
-      <AnimatePresence>
+      
         {activeQuiz && (
           <div className="fixed inset-0 z-[200] bg-white overflow-y-auto magic-scroll font-sans">
             <QuizEngine lesson={activeQuiz} onClose={() => setActiveQuiz(null)} onComplete={() => {}} />
@@ -3449,7 +4450,7 @@ export default function QuizArena() {
             </div>
           </div>
         )}
-      </AnimatePresence>
+      
 
     </div>
   );

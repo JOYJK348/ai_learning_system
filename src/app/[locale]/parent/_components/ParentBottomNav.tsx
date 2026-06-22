@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   BookOpen,
   LayoutDashboard,
@@ -18,9 +18,9 @@ import styles from './ParentBottomNav.module.css';
 
 const allNavItems = [
   { label: 'Hub', icon: LayoutDashboard, href: 'parent' },
-  { label: 'Quizzes', icon: BookOpen, href: 'parent/quizzes' },
+  { label: 'Quizzes', icon: BookOpen, href: 'parent?tab=quizzes' },
   { label: 'Mentor', icon: MessageSquare, href: 'parent/mentor' },
-  { label: 'Profile', icon: Users, href: 'parent/profile' },
+  { label: 'Profile', icon: Users, href: 'parent?tab=profile' },
 ];
 
 const SPLIT_INDEX = 3;
@@ -29,6 +29,7 @@ export default function ParentBottomNav({ onLogout }: { onLogout?: () => void })
   const params = useParams();
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const locale = (params?.locale as string) || 'en';
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -43,12 +44,24 @@ export default function ParentBottomNav({ onLogout }: { onLogout?: () => void })
     return () => window.removeEventListener('keydown', handler);
   }, [drawerOpen, closeDrawer]);
 
+  const activeTab = searchParams.get('tab');
+
   const isActive = (href: string) => {
+    if (href.includes('tab=')) {
+      const tab = href.split('tab=')[1];
+      return activeTab === tab;
+    }
     const path = `/${locale}/${href}`;
-    return href === 'parent' ? pathname === path : pathname.startsWith(path);
+    if (href === 'parent') {
+      return pathname === path && !activeTab;
+    }
+    return pathname.startsWith(path);
   };
 
-  const prefetch = (href: string) => router.prefetch(`/${locale}/${href}`);
+  const prefetch = (href: string) => {
+    const target = href.includes('?') ? `/${locale}/${href}` : `/${locale}/${href}`;
+    router.prefetch(target);
+  };
 
   const handleLogout = async () => {
     closeDrawer();

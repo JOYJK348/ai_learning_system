@@ -6,14 +6,15 @@ import { BookOpen, CheckCircle2, Clock, ChevronRight, Lock, Unlock } from 'lucid
 import { parentApi, type ChapterProgress } from '@/core/services/parentApi';
 
 export default function ChapterProgressSection({ childId }: { childId?: string | null }) {
-  const [data, setData] = useState<ChapterProgress | null>(null);
+  const [data, setData] = useState<any[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [expandedSubject, setExpandedSubject] = useState<string | null>(null);
 
   useEffect(() => {
     if (!childId) return;
+    setLoading(true);
     parentApi.childChapterProgress(childId)
-      .then(d => setData(Array.isArray(d) ? d[0] : d))
+      .then(d => setData(Array.isArray(d) ? d : []))
       .catch(() => setData(null))
       .finally(() => setLoading(false));
   }, [childId]);
@@ -31,7 +32,7 @@ export default function ChapterProgressSection({ childId }: { childId?: string |
     );
   }
 
-  if (!data || !data.subjects || data.subjects.length === 0) {
+  if (!data || data.length === 0) {
     return (
       <div className="bg-white rounded-[2.5rem] border border-slate-100 p-10 shadow-sm text-center">
         <BookOpen size={40} className="mx-auto text-slate-300 mb-4" />
@@ -41,8 +42,8 @@ export default function ChapterProgressSection({ childId }: { childId?: string |
     );
   }
 
-  const totalChapters = data.subjects.reduce((sum, s) => sum + s.chapters.length, 0);
-  const completedChapters = data.subjects.reduce((sum, s) => sum + s.chapters.filter(c => c.is_complete).length, 0);
+  const totalChapters = data.reduce((sum, s) => sum + (s.chapters?.length || 0), 0);
+  const completedChapters = data.reduce((sum, s) => sum + (s.chapters?.filter((c: any) => c.is_complete).length || 0), 0);
   const overallPercentage = totalChapters > 0 ? Math.round((completedChapters / totalChapters) * 100) : 0;
 
   return (
@@ -79,9 +80,9 @@ export default function ChapterProgressSection({ childId }: { childId?: string |
 
       {/* Subjects */}
       <div className="divide-y divide-slate-50">
-        {data.subjects.map((subject) => {
-          const subCompleted = subject.chapters.filter(c => c.is_complete).length;
-          const subTotal = subject.chapters.length;
+        {data.map((subject) => {
+          const subCompleted = subject.chapters?.filter((c: any) => c.is_complete).length || 0;
+          const subTotal = subject.chapters?.length || 0;
           const isExpanded = expandedSubject === subject.id;
 
           return (
@@ -114,9 +115,9 @@ export default function ChapterProgressSection({ childId }: { childId?: string |
               </button>
 
               {/* Chapter list */}
-              {isExpanded && (
+              {isExpanded && subject.chapters && (
                 <div className="px-8 pb-5 space-y-2">
-                  {subject.chapters.map((chapter) => (
+                  {subject.chapters.map((chapter: any) => (
                     <div
                       key={chapter.id}
                       className="flex items-center justify-between px-5 py-3 rounded-xl bg-slate-50 border border-slate-100"

@@ -1,7 +1,12 @@
 const BASE = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, '') ?? '';
 
 async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, { credentials: 'include', ...init });
+  const token = typeof window !== 'undefined' ? sessionStorage.getItem('zhi_auth_token') : null;
+  const headers = {
+    ...(init?.headers || {}),
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+  };
+  const res = await fetch(`${BASE}${path}`, { credentials: 'include', ...init, headers });
   const payload = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(payload.error || `Failed to load ${path}`);
   return payload.data ?? payload;
@@ -51,7 +56,9 @@ export const adminApi = {
     fetchJson<unknown>('/api/admin/parents'),
 
   parentDirectory: async (): Promise<ParentDirectory> => {
-    const res = await fetch(`${BASE}/api/admin/parents`, { credentials: 'include' });
+    const token = typeof window !== 'undefined' ? sessionStorage.getItem('zhi_auth_token') : null;
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined;
+    const res = await fetch(`${BASE}/api/admin/parents`, { credentials: 'include', headers });
     const payload = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(payload.error || 'Failed to load parents');
     const items = Array.isArray(payload.data) ? payload.data : [];

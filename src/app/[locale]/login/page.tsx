@@ -79,12 +79,7 @@ export default function LoginPage() {
     }
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      const route = user.role === 'super_admin' ? 'admin' : user.role === 'school_admin' ? 'school-admin' : user.role;
-      router.push(`/${locale}/${route}`);
-    }
-  }, [user, locale, router]);
+
 
   useEffect(() => {
     if (authError) setErrorMessage(authError);

@@ -1,7 +1,12 @@
 const BASE = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, '') ?? '';
 
 async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, { credentials: 'include', ...init });
+  const token = typeof window !== 'undefined' ? sessionStorage.getItem('zhi_auth_token') : null;
+  const headers = {
+    ...(init?.headers || {}),
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+  };
+  const res = await fetch(`${BASE}${path}`, { credentials: 'include', ...init, headers });
   const payload = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(payload.error || `Failed to load ${path}`);
   return payload.data ?? payload;
@@ -142,6 +147,19 @@ export const studentApi = {
     completion_data?: Record<string, unknown>;
   }) =>
     fetchJson(`/api/student/lessons/${lessonId}/activities/${activityId}/attempt`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }),
+
+  // Submit a quiz score — creates a quiz_attempts row so parent portal can see it.
+  // Uses pre-computed score (for custom Quiz page with local hardcoded questions).
+  submitQuizScore: (lessonId: string, quizId: string, body: {
+    score: number;
+    max_score: number;
+    time_taken_seconds?: number;
+  }) =>
+    fetchJson(`/api/student/lessons/${lessonId}/quizzes/${quizId}/score`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),

@@ -3,7 +3,12 @@ import type { ParentProfile, ChildSummary, ChildProgress, QuizAttempt, Badge, Su
 const BASE = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, '') ?? '';
 
 async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, { credentials: 'include', ...init });
+  const token = typeof window !== 'undefined' ? sessionStorage.getItem('zhi_auth_token') : null;
+  const headers = {
+    ...(init?.headers || {}),
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+  };
+  const res = await fetch(`${BASE}${path}`, { credentials: 'include', ...init, headers });
   const payload = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(payload.error || `Failed to load ${path}`);
   return payload.data ?? payload;
