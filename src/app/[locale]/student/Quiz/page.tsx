@@ -2229,7 +2229,39 @@ export default function QuizArena() {
       return unlocked;
 
     } else if (activeSubject === 'evs') {
-      return [1, 2, 3, 4, 5, 6];
+      const evsSubject = subjects.find(s => 
+        s.name.toLowerCase().includes('evs') || 
+        s.name.toLowerCase().includes('environmental')
+      );
+      if (!evsSubject) {
+        return [1];
+      }
+
+      const isLessonCompleted = (lessonId: string): boolean => {
+        const lesson = evsSubject.chapters
+          .flatMap(c => c.lessons)
+          .find(l => l.id === lessonId);
+        return lesson?.progress?.status === 'completed';
+      };
+
+      const unlocked: number[] = [];
+      const mappings: Record<number, string> = {
+        1: '0d6b2ccc-01e0-4496-b30f-e6f7f5be3d21',
+        2: 'a22e6df2-ff59-418b-89b2-2c39d7d72901',
+        3: '5cc91f99-b121-4baa-813d-61260abbdffa',
+        4: '2b200e99-464a-45df-839b-ac3282fb07a1',
+        5: '66df4a08-281d-4aa3-917a-722de6658a79',
+        6: '092a2e60-8ab5-4833-b948-056641af9df7',
+      };
+      Object.entries(mappings).forEach(([lvlId, lesId]) => {
+        if (isLessonCompleted(lesId)) {
+          unlocked.push(Number(lvlId));
+        }
+      });
+      if (unlocked.length === 0) {
+        unlocked.push(1);
+      }
+      return unlocked;
     } else {
       const mathSubject = subjects.find(s => 
 
@@ -2308,9 +2340,18 @@ export default function QuizArena() {
       6: '252dd393-ece6-4561-863d-194e9b292f9b',
     };
 
+    const evsMappings: Record<number, string> = {
+      1: '0d6b2ccc-01e0-4496-b30f-e6f7f5be3d21',
+      2: 'a22e6df2-ff59-418b-89b2-2c39d7d72901',
+      3: '5cc91f99-b121-4baa-813d-61260abbdffa',
+      4: '2b200e99-464a-45df-839b-ac3282fb07a1',
+      5: '66df4a08-281d-4aa3-917a-722de6658a79',
+      6: '092a2e60-8ab5-4833-b948-056641af9df7',
+    };
+
     const mappings = activeSubject === 'tamil' ? tamilMappings 
                      : activeSubject === 'english' ? englishMappings 
-                     : activeSubject === 'evs' ? {}
+                     : activeSubject === 'evs' ? evsMappings
                      : mathMappings;
 
     Object.entries(mappings).forEach(([levelId, lessonId]) => {
@@ -2474,9 +2515,17 @@ export default function QuizArena() {
               5: '2ebb61ce-1133-4a74-b8d5-5265319ffd07',
               6: '252dd393-ece6-4561-863d-194e9b292f9b',
             };
+            const evsMappings: Record<number, string> = {
+              1: '0d6b2ccc-01e0-4496-b30f-e6f7f5be3d21',
+              2: 'a22e6df2-ff59-418b-89b2-2c39d7d72901',
+              3: '5cc91f99-b121-4baa-813d-61260abbdffa',
+              4: '2b200e99-464a-45df-839b-ac3282fb07a1',
+              5: '66df4a08-281d-4aa3-917a-722de6658a79',
+              6: '092a2e60-8ab5-4833-b948-056641af9df7',
+            };
             const mappings = activeSubject === 'tamil' ? tamilMappings 
                              : activeSubject === 'english' ? englishMappings 
-                             : activeSubject === 'evs' ? {}
+                             : activeSubject === 'evs' ? evsMappings
                              : mathMappings;
             const lessonId = mappings[activeLevel.id];
             if (lessonId) {
