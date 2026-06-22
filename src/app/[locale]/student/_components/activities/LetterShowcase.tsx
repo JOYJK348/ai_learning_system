@@ -367,7 +367,11 @@ function TraceBoard({ letter, color, onCorrect }: TraceBoardProps) {
   const handleFinish = () => {
     const pts = pointsRef.current;
     const canvas = canvasRef.current;
-    if (pts.length < 15 || !canvas) return;
+    if (!canvas) return;
+    if (pts.length < 15) {
+      setFailMsg('Trace the letter! ✏️');
+      return;
+    }
 
     const data = letterDataRef.current;
     const grid = templateGridRef.current;
@@ -483,13 +487,18 @@ function TraceBoard({ letter, color, onCorrect }: TraceBoardProps) {
     const heightRatioPassed = templateH < minDim || heightRatio >= 0.75;
     const maxFarDrawn = Math.max(15, Math.round(w * 0.05));
 
-    // Strict validation thresholds: containment >= 75%, coverage >= 70%, bounding box size (if large enough), no far-away drawings, and all clusters (dots) covered
-    const passed = containment >= 75 && coverage >= 70 && widthRatioPassed && heightRatioPassed && farDrawn <= maxFarDrawn && allClustersCovered;
+    // Relaxed kid-friendly thresholds (especially for vertical lines like 'I')
+    const isLetterI = letter.toLowerCase() === 'i';
+    const reqContainment = isLetterI ? 40 : 50;
+    const reqCoverage = isLetterI ? 30 : 40;
+    const reqFarDrawn = isLetterI ? maxFarDrawn * 3.5 : maxFarDrawn * 1.8;
+
+    const passed = containment >= reqContainment && coverage >= reqCoverage && widthRatioPassed && heightRatioPassed && farDrawn <= reqFarDrawn && (isLetterI || allClustersCovered);
 
     if (passed) {
       setDone(true);
       successTimerRef.current = setTimeout(onCorrect, 1000);
-    } else if (containment < 75 || farDrawn > maxFarDrawn) {
+    } else if (containment < reqContainment || farDrawn > reqFarDrawn) {
       setFailMsg('Stay on the letter lines! 🎯');
     } else {
       setFailMsg('Trace the whole letter! ✍️');
@@ -625,17 +634,6 @@ export default function LetterShowcase({ config, onComplete, nextLessonId }: Pro
     setPhase('quiz');
   }, []);
 
-  const handleQuizTap = useCallback((opt: { id: string; correct: boolean }) => {
-    if (selectedId) return;
-    setSelectedId(opt.id);
-    if (opt.correct) {
-      setTimeout(() => setPhase('done'), 800);
-    } else {
-      setWrongTap(true);
-      setTimeout(() => { setWrongTap(false); setSelectedId(null); }, 600);
-    }
-  }, [selectedId]);
-
   const handleComplete = useCallback(() => {
     onComplete({
       score: 100,
@@ -644,6 +642,17 @@ export default function LetterShowcase({ config, onComplete, nextLessonId }: Pro
       time_taken_seconds: Math.round((Date.now() - startTime.current) / 1000),
     });
   }, [onComplete, letter, word, emoji]);
+
+  const handleQuizTap = useCallback((opt: { id: string; correct: boolean }) => {
+    if (selectedId) return;
+    setSelectedId(opt.id);
+    if (opt.correct) {
+      setTimeout(handleComplete, 800);
+    } else {
+      setWrongTap(true);
+      setTimeout(() => { setWrongTap(false); setSelectedId(null); }, 600);
+    }
+  }, [selectedId, handleComplete]);
 
   return (
     <div className="flex flex-col items-center justify-center gap-3 px-3 sm:px-5 pb-4 select-none w-full">

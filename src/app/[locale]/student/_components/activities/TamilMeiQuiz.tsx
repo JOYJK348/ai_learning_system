@@ -591,8 +591,8 @@ function TraceBoard({ mei, onCorrect }: TraceBoardProps) {
     const heightRatioPassed = templateH < minDim || heightRatio >= 0.75;
     const maxFarDrawn = Math.max(15, Math.round(w * 0.05));
 
-    // Strict validation thresholds: containment >= 75%, coverage >= 70%, bounding box size (if large enough), no far-away drawings, and all clusters (dots) covered
-    const passed = containment >= 75 && coverage >= 70 && widthRatioPassed && heightRatioPassed && farDrawn <= maxFarDrawn && allClustersCovered;
+    // Strict validation thresholds: containment >= 75%, coverage >= 50%, bounding box size (if large enough), no far-away drawings, and all clusters (dots) covered
+    const passed = containment >= 75 && coverage >= 50 && widthRatioPassed && heightRatioPassed && farDrawn <= maxFarDrawn && allClustersCovered;
 
     if (passed) {
       setDone(true);

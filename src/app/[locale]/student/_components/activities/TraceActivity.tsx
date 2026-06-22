@@ -10,7 +10,7 @@ type Props = {
 };
 
 const PASS_THRESHOLD = 70; // child-friendly containment threshold
-const COVERAGE_THRESHOLD = 70; // child-friendly coverage threshold
+const COVERAGE_THRESHOLD = 45; // child-friendly coverage threshold
 
 const GUIDE_EMOJIS: Record<string, string> = {
   standing: '🐛', sleeping: '🚗', slanting: '🛷', curved: '🦋', zigzag: '🐇',

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { studentApi, studentKeys, type Activity } from '@/core/services/studentApi';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -26,6 +26,7 @@ import SortingComparisonQuiz from './SortingComparisonQuiz';
 import EvsExploreGame from './EvsExploreGame';
 import HindiLetterQuiz from './HindiLetterQuiz';
 import { useData } from '@/context/DataContext';
+import { getLetterData } from '@/core/data/letterData';
 
 type Props = {
   lessonId: string;
@@ -47,6 +48,8 @@ const ACTIVITY_TYPE_MAP: Record<number, string> = {
   9: 'vowel_quiz',
   10: 'mei_quiz',
   11: 'word_showcase',
+  12: 'balloon_pop',
+  13: 'quiz',
 };
 
 export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onClose, studentName, subjectName }: Props) {
@@ -56,12 +59,127 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const queryClient = useQueryClient();
 
-  const { data: activities, isLoading, isError } = useQuery({
+  const { data: rawActivities, isLoading, isError } = useQuery({
     queryKey: studentKeys.activities(lessonId),
     queryFn: () => studentApi.getLessonActivities(lessonId),
     staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
   });
+
+  const activities = useMemo(() => {
+    if (!rawActivities) return undefined;
+    
+    const isEnglish = subjectName?.toLowerCase().includes('english') || lessonTitle.toLowerCase().includes('letter');
+    
+    if (rawActivities.length > 0) {
+      return rawActivities;
+    }
+
+    if (isEnglish) {
+      const lowerTitle = lessonTitle.toLowerCase();
+      if (lowerTitle.includes('pop') && lowerTitle.includes('balloon')) {
+        return [
+          {
+            id: `${lessonId}-pop`,
+            name: 'Pop the Balloon',
+            activity_type_id: 12,
+            config: {
+              letters: ['A', 'B', 'C', 'D', 'E', 'F'],
+            },
+            sort_order: 1,
+            attempt: null,
+          }
+        ] as Activity[];
+      }
+      if (lowerTitle.includes('pick') && lowerTitle.includes('card')) {
+        return [
+          {
+            id: `${lessonId}-pick`,
+            name: 'Pick the Card',
+            activity_type_id: 13,
+            config: {
+              letters: ['A', 'B', 'C', 'D', 'E', 'F'],
+            },
+            sort_order: 1,
+            attempt: null,
+          }
+        ] as Activity[];
+      }
+      if (lowerTitle.startsWith('letter ') && lowerTitle.includes(' - ')) {
+        const match = lessonTitle.match(/Letter\s+([A-Za-z])/i);
+        const letter = match ? match[1].toUpperCase() : '';
+        if (letter) {
+          const letterData = getLetterData(letter);
+          return [
+            {
+              id: `${lessonId}-showcase`,
+              name: `Showcase: Letter ${letter}`,
+              activity_type_id: 5,
+              config: {
+                letter,
+                word: letterData.word,
+                emoji: letterData.emoji,
+                color: letterData.color,
+              },
+              sort_order: 1,
+              attempt: null,
+            }
+          ] as Activity[];
+        }
+      }
+      if (lowerTitle.includes('small') && lowerTitle.includes('a-m')) {
+        return [
+          {
+            id: `${lessonId}-showcase`,
+            name: 'Small Letters a-m Showcase',
+            activity_type_id: 5,
+            config: { family: true, set: 'a-m' },
+            sort_order: 1,
+            attempt: null,
+          }
+        ] as Activity[];
+      }
+      if (lowerTitle.includes('small') && lowerTitle.includes('n-z')) {
+        return [
+          {
+            id: `${lessonId}-showcase`,
+            name: 'Small Letters n-z Showcase',
+            activity_type_id: 5,
+            config: { family: true, set: 'n-z' },
+            sort_order: 1,
+            attempt: null,
+          }
+        ] as Activity[];
+      }
+      if (lowerTitle.includes('phonics')) {
+        const parts = lessonTitle.split(':');
+        const familySet = parts[1] ? parts[1].trim().replace(/\s+/g, '') : 'at,am,an';
+        return [
+          {
+            id: `${lessonId}-phonics`,
+            name: lessonTitle,
+            activity_type_id: 5,
+            config: { family: true, path: familySet },
+            sort_order: 1,
+            attempt: null,
+          }
+        ] as Activity[];
+      }
+      if (lowerTitle.includes('star') || lowerTitle.includes('johnny') || lowerTitle.includes('rain') || lowerTitle.includes('sheep') || lowerTitle.includes('humpty') || lowerTitle.includes('jack') || lowerTitle.includes('lion') || lowerTitle.includes('crow') || lowerTitle.includes('hare') || lowerTitle.includes('duckling') || lowerTitle.includes('gingerbread') || lowerTitle.includes('riding')) {
+        return [
+          {
+            id: `${lessonId}-rhyme`,
+            name: lessonTitle,
+            activity_type_id: 5,
+            config: { path: lowerTitle.replace(/[^a-z0-9]/g, '-') },
+            sort_order: 1,
+            attempt: null,
+          }
+        ] as Activity[];
+      }
+    }
+    return rawActivities;
+  }, [rawActivities, lessonId, lessonTitle, subjectName]);
 
   const submitMutation = useMutation({
     mutationFn: ({ activityId, body }: { activityId: string; body: Parameters<typeof studentApi.submitActivityAttempt>[2] }) =>
@@ -520,7 +638,9 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
       case 'tap_select':
         return <TapSelect config={act.config} {...commonProps} />;
       case 'quiz':
-        return <LetterFindGame config={act.config} {...commonProps} />;
+        return <LetterFindGame config={act.config as any} {...commonProps} />;
+      case 'balloon_pop':
+        return <BalloonPop config={act.config as any} {...commonProps} />;
       case 'name':
         return <NameTraceActivity config={act.config} studentName={act.config?.name as string} {...commonProps} />;
       case 'vowel_quiz':
