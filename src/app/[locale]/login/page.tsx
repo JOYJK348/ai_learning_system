@@ -1,57 +1,20 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { Link } from '@/i18n/routing';
+import { useParams } from 'next/navigation';
+import { Link, useRouter } from '@/i18n/routing';
 import { useAuth } from '@/context/AuthContext';
-import { Compass, Activity, Building2, Mail, Lock, ShieldCheck, Sparkles, ChevronRight, ArrowLeft } from 'lucide-react';
+import { Manrope } from 'next/font/google';
+import { Mail, Lock, ShieldCheck, AlertCircle, ArrowLeft, Award, GraduationCap, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 
-const portals = [
-  {
-    id: 'student',
-    label: 'Student',
-    desc: 'Child-safe learning environment',
-    icon: Compass,
-    color: 'bg-sky-500',
-    ring: 'ring-sky-200',
-    path: 'student',
-    creds: { email: 'demo1@zhi.sg', pass: 'demo123' }
-  },
-  {
-    id: 'parent',
-    label: 'Parent',
-    desc: "Track your child's progress",
-    icon: Activity,
-    color: 'bg-amber-500',
-    ring: 'ring-amber-200',
-    path: 'parent',
-    creds: { email: 'kumar@parent.sg', pass: 'parent123' }
-  },
-  {
-    id: 'school-admin',
-    label: 'School Admin',
-    desc: 'School command center',
-    icon: Building2,
-    color: 'bg-emerald-500',
-    ring: 'ring-emerald-200',
-    path: 'school-admin',
-    creds: { email: '', pass: '' }
-  },
-  {
-    id: 'super-admin',
-    label: 'Super Admin',
-    desc: 'System & administration hub',
-    icon: ShieldCheck,
-    color: 'bg-violet-500',
-    ring: 'ring-violet-200',
-    path: 'admin',
-    creds: { email: 'admin@zhilearn.sg', pass: 'admin123' }
-  },
-];
+const adminFont = Manrope({
+  subsets: ['latin'],
+  variable: '--admin-font',
+  display: 'swap',
+});
 
 export default function LoginPage() {
-  const [selectedPortal, setSelectedPortal] = useState('student');
   const [isRegister, setIsRegister] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -67,7 +30,6 @@ export default function LoginPage() {
   const router = useRouter();
   const params = useParams();
   const locale = (params?.locale as string) || 'en';
-  const portal = portals.find(p => p.id === selectedPortal)!;
   const { user, login, registerParent, loading: authLoading, error: authError } = useAuth();
 
   useEffect(() => {
@@ -123,237 +85,306 @@ export default function LoginPage() {
 
     if (loggedIn) {
       const route = loggedIn.role === 'super_admin' ? 'admin' : loggedIn.role === 'school_admin' ? 'school-admin' : loggedIn.role;
-      router.push(`/${locale}/${route}`);
+      router.push(`/${route}`);
     } else {
       setErrorMessage(authError || 'Invalid email or password.');
     }
   };
 
-  const autofill = () => {
-    setEmail(portal.creds.email);
-    setPassword(portal.creds.pass);
+  const shellStyle: React.CSSProperties = {
+    minHeight: '100vh',
+    background: `
+      radial-gradient(circle at 8% 4%,  rgba(125,211,252,0.34), transparent 24rem),
+      radial-gradient(circle at 88% 6%, rgba(251,207,232,0.46), transparent 28rem),
+      radial-gradient(circle at 52% 42%,rgba(187,247,208,0.34), transparent 26rem),
+      linear-gradient(135deg, #f8fbff 0%, #f7fff8 45%, #fff7ed 100%)
+    `,
+    fontFamily: 'var(--admin-font), "Segoe UI", system-ui, sans-serif',
+    fontFeatureSettings: '"cv02","cv03","cv04","ss01"',
+  };
+
+  const cardBackgroundStyle: React.CSSProperties = {
+    background: 'linear-gradient(135deg, rgba(248, 250, 252, 0.95), rgba(239, 246, 255, 0.92), rgba(236, 253, 245, 0.92))',
+    backdropFilter: 'blur(24px)',
+    border: '1px solid rgba(22, 160, 133, 0.12)',
+    boxShadow: '0 30px 60px rgba(18, 49, 47, 0.08)',
+  };
+
+  const primaryBtnStyle: React.CSSProperties = {
+    background: 'linear-gradient(135deg, #12312f, #16a085 48%, #38bdf8)',
+    boxShadow: '0 12px 24px rgba(22, 160, 133, 0.18)',
   };
 
   return (
-    <div className="min-h-screen flex flex-col sm:items-center sm:justify-center bg-slate-50 font-sans p-0 sm:px-6 sm:py-12 relative overflow-x-hidden">
+    <div className={`${adminFont.variable} w-full flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 lg:p-12 overflow-x-hidden`} style={shellStyle}>
       
-      {/* Back to Home Button */}
-      <Link 
-        href="/"
-        className="absolute sm:fixed top-4 left-4 sm:top-6 sm:left-6 z-50 flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 bg-white/60 hover:bg-white backdrop-blur-xl border border-slate-200 rounded-none text-slate-600 hover:text-indigo-600 font-bold text-[10px] sm:text-xs uppercase tracking-widest transition-all shadow-sm hover:shadow-md group"
-      >
-        <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform sm:w-4 sm:h-4" />
-        <span>Home</span>
-      </Link>
+      {/* 2-Column Split Layout - Form is first on mobile, branding below */}
+      <div className="w-full max-w-6xl flex flex-col-reverse lg:flex-row gap-8 lg:gap-12 items-center justify-center">
+        
+        {/* LEFT COLUMN: Brand Presentation (Appears at bottom on mobile, left side on desktop) */}
+        <div className="w-full lg:w-1/2 flex flex-col justify-center space-y-6 sm:space-y-8 pr-0 lg:pr-4 mt-8 lg:mt-0">
+          
+          {/* Subtle separator line for mobile view */}
+          <div className="w-full h-px bg-slate-200/80 lg:hidden mb-2" />
 
-      {/* Background decoration - hidden on mobile for pure white box feel */}
-      <div className="hidden sm:block absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-100/30 rounded-full blur-[120px] -mr-48 -mt-48" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-slate-200/50 rounded-full blur-[120px] -ml-48 -mb-48" />
-      </div>
-
-      <div className="w-full sm:max-w-md relative z-10 flex flex-col items-center">
-        <div className="w-full min-h-screen sm:min-h-0">
-          {isSuccess ? (
-            <div
-              className="bg-white p-8 sm:p-10 border-none sm:border border-slate-200 shadow-none sm:shadow-xl text-center rounded-none min-h-screen sm:min-h-0 flex flex-col justify-center"
-            >
-              <div className="w-16 h-16 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-emerald-100">
-                <ShieldCheck size={32} />
-              </div>
-              <h2 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">Request Submitted</h2>
-              <p className="text-slate-500 text-xs leading-relaxed mb-8 px-8">
-                Your enrolment data has been received. The admin team will review and approve your account shortly.
-              </p>
-              <button
-                onClick={() => { setIsSuccess(false); setIsRegister(false); }}
-                className="w-full py-4 bg-slate-900 text-white rounded-none font-semibold text-sm hover:bg-slate-800 transition-colors shadow-lg shadow-slate-900/10 uppercase"
-              >
-                Back to Sign In
-              </button>
+          <div className="space-y-4 text-center lg:text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/15 text-emerald-700 text-xs font-black uppercase tracking-wider mx-auto lg:mx-0 w-fit">
+              <Award size={14} /> Leading AI-Driven Portal
             </div>
-          ) : (
-            <div 
-              className="bg-white p-6 sm:p-10 border-none sm:border border-slate-200 shadow-none sm:shadow-2xl relative overflow-hidden rounded-none min-h-screen sm:min-h-0 flex flex-col"
-            >
-              {/* Visual Top Bar */}
-              <div className={`absolute top-0 left-0 w-full h-1.5 transition-colors duration-500 ${portal.id === 'student' ? 'bg-sky-500' : portal.id === 'parent' ? 'bg-amber-500' : 'bg-violet-500'}`} />
+            <h2 className="text-3xl sm:text-4xl xl:text-5xl font-black text-slate-900 leading-tight tracking-tight px-2 sm:px-0">
+              Welcome back to ZHI LearnAI.
+            </h2>
+            <p className="text-slate-505 text-slate-500 font-semibold leading-relaxed text-xs sm:text-sm xl:text-base px-3 sm:px-0">
+              Sign in to access your customized dashboard, complete learning activities, view dynamic charts, and proceed with your educational progress.
+            </p>
+          </div>
 
-              {/* Internal Logo Section - Mobile Centered, Desktop Row */}
-              <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 sm:gap-6 mb-6 pb-6 border-b border-slate-50 pt-12 sm:pt-0">
-                <div className="shrink-0">
-                  <Image src="/assets/img/logo-removebg-preview.png" alt="ZHI" width={72} height={72} className="object-contain sm:w-[88px] sm:h-[88px]" />
+          {/* Feature List Cards */}
+          <div className="space-y-3 sm:space-y-4 px-2 sm:px-0">
+            {[
+              {
+                title: "Gamified Learning System",
+                desc: "Interactive educational lessons and challenges designed to keep student learning loops engaging and rewarding.",
+                icon: "award",
+                color: "bg-amber-500/10 text-amber-600 border-amber-500/15"
+              },
+              {
+                title: "AI-Powered Adaptive Curriculum",
+                desc: "Smart pathways adjusting lesson difficulties to students' individual milestones automatically.",
+                icon: "graduation",
+                color: "bg-emerald-500/10 text-emerald-600 border-emerald-500/15"
+              },
+              {
+                title: "Multi-Role Dashboards",
+                desc: "Bespoke portals for students, parents, and school administrators to check attempts and schedules in real-time.",
+                icon: "reports",
+                color: "bg-blue-500/10 text-blue-600 border-blue-500/15"
+              }
+            ].map((f, i) => (
+              <div key={i} className="flex gap-4 p-4 rounded-xl sm:rounded-2xl bg-white/40 border border-slate-200/50 backdrop-blur-sm hover:bg-white/60 transition-colors duration-200 text-left">
+                <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 border ${f.color}`}>
+                  {f.icon === 'award' && <Award size={18} />}
+                  {f.icon === 'graduation' && <GraduationCap size={18} />}
+                  {f.icon === 'reports' && <ShieldCheck size={18} />}
                 </div>
-                <div className="flex flex-col">
-                  <p className="text-slate-900 font-black text-2xl sm:text-3xl leading-none tracking-tighter">ZHI <span className="text-blue-600">LearnAI</span></p>
-                  <p className="text-indigo-600/60 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] mt-2 sm:mt-2.5 whitespace-nowrap">Learn While Playing</p>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-black text-slate-800">{f.title}</h4>
+                  <p className="text-[11px] sm:text-xs text-slate-500 leading-relaxed mt-1 font-medium">{f.desc}</p>
                 </div>
               </div>
+            ))}
+          </div>
 
-              {/* Portal Selector */}
-              <div className="flex gap-2 mb-6 bg-slate-50 p-1.5 border border-slate-100">
-                {portals.map((p) => {
-                  const Icon = p.icon;
-                  const active = selectedPortal === p.id;
-                  return (
-                    <button
-                      key={p.id}
-                      type="button"
-                      suppressHydrationWarning
-                      disabled={isRegister}
-                      onClick={() => { setSelectedPortal(p.id); setEmail(''); setPassword(''); }}
-                      className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[10px] sm:text-xs font-bold transition-all duration-300 ${
-                        active
-                          ? 'bg-white text-slate-900 shadow-md ring-1 ring-slate-100'
-                          : 'text-slate-400 hover:text-slate-600'
-                      } ${isRegister && !active ? 'opacity-30' : ''}`}
-                    >
-                      <Icon size={ active ? 14 : 12 } className={active ? 'text-indigo-600' : ''} />
-                      <span>{p.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Form */}
-              <form onSubmit={handleSubmit} className="space-y-4" suppressHydrationWarning>
-                {isRegister && (
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="block text-xs font-semibold text-slate-600">Parent Name</label>
-                      <input
-                        suppressHydrationWarning
-                        required
-                        type="text"
-                        value={parentName}
-                        onChange={e => setParentName(e.target.value)}
-                        placeholder="Full name"
-                        className="w-full px-4 py-3 bg-slate-50 border border-slate-100 outline-none text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all shadow-inner rounded-none"
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="block text-xs font-semibold text-slate-600">Child Name</label>
-                      <input
-                        suppressHydrationWarning
-                        required
-                        type="text"
-                        value={childName}
-                        onChange={e => setChildName(e.target.value)}
-                        placeholder="Full name"
-                        className="w-full px-4 py-3 bg-slate-50 border border-slate-100 outline-none text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all shadow-inner rounded-none"
-                      />
-                    </div>
-                    <div className="col-span-2 space-y-1.5">
-                      <label className="block text-xs font-semibold text-slate-600">Grade</label>
-                      <select
-                        value={childGrade}
-                        onChange={e => setChildGrade(e.target.value)}
-                        className="w-full px-4 py-3 bg-slate-50 border border-slate-100 outline-none text-sm text-slate-900 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all appearance-none shadow-inner rounded-none"
-                      >
-                        <option>LKG</option><option>UKG</option><option>Grade 1</option><option>Grade 2</option>
-                      </select>
-                    </div>
-                  </div>
-                )}
-
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-semibold text-slate-600">Email Address</label>
-                  <div className="relative">
-                    <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                    <input
-                      suppressHydrationWarning
-                      required
-                      type="email"
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      placeholder="you@example.com"
-                      className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-100 outline-none text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all shadow-inner rounded-none"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-semibold text-slate-600">Password</label>
-                  <div className="relative">
-                    <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                    <input
-                      suppressHydrationWarning
-                      required
-                      type="password"
-                      value={password}
-                      onChange={e => setPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-100 outline-none text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all tracking-wider shadow-inner rounded-none"
-                    />
-                  </div>
-                </div>
-
-                {trialExpired && (
-                  <div className="bg-red-50 border border-red-200 p-4 text-center">
-                    <p className="text-xs font-bold text-red-700 uppercase tracking-widest mb-1">Trial Ended</p>
-                    <p className="text-sm text-red-600 font-semibold">Your 14-day trial has expired. Please contact support to renew your plan.</p>
-                  </div>
-                )}
-                {sessionClosed && (
-                  <div className="bg-amber-50 border border-amber-200 p-4 text-center">
-                    <p className="text-xs font-bold text-amber-700 uppercase tracking-widest mb-1">Session Ended</p>
-                    <p className="text-sm text-amber-600 font-semibold">Your session has expired. Please log in again to continue.</p>
-                  </div>
-                )}
-                {errorMessage && (
-                  <p className="text-sm text-rose-600 font-semibold">{errorMessage}</p>
-                )}
-
-                <button
-                  suppressHydrationWarning
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-none font-semibold text-sm tracking-wide transition-all shadow-lg shadow-slate-900/20 hover:shadow-xl hover:shadow-slate-900/25 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed uppercase"
-                >
-                  {isLoading
-                    ? 'Working...'
-                    : isRegister ? 'Create Parent Account' : `Sign in as ${portal.label}`}
-                </button>
-
-                {!isRegister && (
-                  <button
-                    suppressHydrationWarning
-                    type="button"
-                    onClick={autofill}
-                    className="w-full py-3 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-none flex items-center justify-between border border-indigo-100 hover:border-indigo-200 transition-all group"
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <Sparkles size={14} className="text-indigo-500" />
-                      <div className="text-left">
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 leading-none mb-0.5">Demo Mode</p>
-                        <p className="text-xs font-semibold text-indigo-700">Use {portal.label} credentials</p>
-                      </div>
-                    </div>
-                    <ChevronRight size={15} className="text-indigo-400 group-hover:translate-x-0.5 transition-transform" />
-                  </button>
-                )}
-              </form>
-
-              {/* Footer Toggle */}
-              <p className="mt-6 text-center text-sm text-slate-500">
-                {isRegister ? 'Prefer to sign in? ' : "Don't have an account? "}
-                <Link
-                  href="/register"
-                  className="font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
-                >
-                  Register as Parent
-                </Link>
-              </p>
-
+          {/* System stats info */}
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-5 border-t border-slate-200/60 text-center lg:text-left px-2 sm:px-0">
+            <div>
+              <p className="text-xl sm:text-2xl font-black text-slate-900">15k+</p>
+              <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-wider mt-0.5">Active Students</p>
             </div>
-          )}
+            <div>
+              <p className="text-xl sm:text-2xl font-black text-slate-900">200+</p>
+              <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-wider mt-0.5">Partner Schools</p>
+            </div>
+            <div>
+              <p className="text-xl sm:text-2xl font-black text-slate-900">98%</p>
+              <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-wider mt-0.5">Satisfaction Rate</p>
+            </div>
+          </div>
         </div>
 
-        {/* Footer */}
-        <p className="mt-12 text-xs text-slate-400 text-center uppercase tracking-widest font-medium opacity-60">
-          © 2025 ZHI LearnAI · Singapore · <span className="text-indigo-600">v2.4.1</span>
-        </p>
+        {/* RIGHT COLUMN: The Login Card Shell (Appears at top on mobile, right side on desktop) */}
+        <div className="w-full lg:w-1/2 flex flex-col items-center">
+          
+          {/* Upper Nav Link */}
+          <div className="w-full max-w-md flex items-center justify-between px-2 mb-4">
+            <Link href="/" className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-slate-500 hover:text-emerald-600 transition-colors">
+              <ArrowLeft size={14} /> Home
+            </Link>
+          </div>
+
+          {/* Form Card */}
+          <div className="w-full max-w-md border rounded-[1.8rem] sm:rounded-[2.2rem] p-6 sm:p-10 backdrop-blur-xl" style={cardBackgroundStyle}>
+            
+            {/* Top accent bar */}
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-emerald-500 rounded-t-[1.8rem] sm:rounded-t-[2.2rem]" />
+
+            {isSuccess ? (
+              <div className="flex flex-col items-center text-center py-4">
+                <div className="w-16 h-16 rounded-full bg-emerald-55 bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 mb-4 shadow-sm">
+                  <ShieldCheck size={32} />
+                </div>
+                <h2 className="text-xl font-black text-slate-900 mb-3">Request Submitted</h2>
+                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed mb-6 px-4">
+                  Your enrolment data has been received. The admin team will review and approve your account shortly.
+                </p>
+                <button
+                  onClick={() => { setIsSuccess(false); setIsRegister(false); }}
+                  className="w-full min-h-[3.25rem] rounded-full text-white font-black text-sm tracking-wide transition-all active:scale-[0.98] uppercase"
+                  style={primaryBtnStyle}
+                >
+                  Back to Sign In
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-col">
+                
+                {/* Centered Header: Horizontal row for Logo + Text title, centered with big logo */}
+                <div className="flex flex-row items-center gap-4 sm:gap-6 justify-center mb-6 pb-5 border-b border-slate-200/50 pt-4">
+                  <div className="relative w-20 h-20 sm:w-28 sm:h-28 shrink-0 flex items-center justify-center">
+                    {/* Backdrop Glow behind logo */}
+                    <div className="absolute inset-1 rounded-full bg-gradient-to-tr from-emerald-500/10 to-blue-500/10 blur-lg animate-pulse" />
+                    <Image
+                      src="/assets/img/logo-removebg-preview.png"
+                      alt="ZHI LearnAI Logo"
+                      fill
+                      className="object-contain relative z-10"
+                      priority
+                    />
+                  </div>
+                  <div className="flex flex-col text-left">
+                    <h1 className="text-xl sm:text-3xl font-black tracking-tight text-slate-900 leading-tight">
+                      ZHI <span className="text-emerald-600">LearnAI</span>
+                    </h1>
+                    <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mt-1.5 leading-none">
+                      Learn While Playing
+                    </p>
+                  </div>
+                </div>
+
+                {/* Form Fields */}
+                <form onSubmit={handleSubmit} className="space-y-4" suppressHydrationWarning>
+                  {isRegister && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">Parent Name</label>
+                        <input
+                          suppressHydrationWarning
+                          required
+                          type="text"
+                          value={parentName}
+                          onChange={e => setParentName(e.target.value)}
+                          placeholder="Full name"
+                          className="w-full py-3.5 px-4 bg-emerald-500/[0.03] border border-emerald-500/20 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none rounded-xl text-sm font-semibold text-slate-950 placeholder-slate-450"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">Child Name</label>
+                        <input
+                          suppressHydrationWarning
+                          required
+                          type="text"
+                          value={childName}
+                          onChange={e => setChildName(e.target.value)}
+                          placeholder="Full name"
+                          className="w-full py-3.5 px-4 bg-emerald-500/[0.03] border border-emerald-500/20 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none rounded-xl text-sm font-semibold text-slate-955 placeholder-slate-450"
+                        />
+                      </div>
+                      <div className="sm:col-span-2">
+                        <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">Grade</label>
+                        <select
+                          value={childGrade}
+                          onChange={e => setChildGrade(e.target.value)}
+                          className="w-full py-3.5 px-4 bg-emerald-500/[0.03] border border-emerald-500/20 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none appearance-none rounded-xl text-sm font-semibold text-slate-955"
+                        >
+                          <option>LKG</option>
+                          <option>UKG</option>
+                          <option>Grade 1</option>
+                          <option>Grade 2</option>
+                        </select>
+                      </div>
+                    </div>
+                  )}
+
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">Email Address</label>
+                    <div className="relative flex items-center">
+                      <Mail size={16} className="absolute left-4 text-slate-400 pointer-events-none" />
+                      <input
+                        suppressHydrationWarning
+                        required
+                        type="email"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        placeholder="you@example.com"
+                        className="w-full py-3.5 pl-11 pr-4 bg-emerald-500/[0.03] border border-emerald-500/20 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none rounded-xl text-sm font-semibold text-slate-955 placeholder-slate-450"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">Password</label>
+                    <div className="relative flex items-center">
+                      <Lock size={16} className="absolute left-4 text-slate-400 pointer-events-none" />
+                      <input
+                        suppressHydrationWarning
+                        required
+                        type="password"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        placeholder="••••••••"
+                        className="w-full py-3.5 pl-11 pr-4 bg-emerald-500/[0.03] border border-emerald-500/20 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none rounded-xl text-sm font-semibold text-slate-955 placeholder-slate-450"
+                      />
+                    </div>
+                  </div>
+
+                  {trialExpired && (
+                    <div className="bg-rose-500/10 border border-rose-500/15 rounded-xl p-4 text-center">
+                      <p className="text-xs font-black text-rose-700 uppercase tracking-widest mb-1">Trial Ended</p>
+                      <p className="text-xs text-rose-600 font-semibold leading-relaxed">Your 14-day trial has expired. Please contact support to renew your plan.</p>
+                    </div>
+                  )}
+
+                  {sessionClosed && (
+                    <div className="bg-amber-500/10 border border-amber-500/15 rounded-xl p-4 text-center">
+                      <p className="text-xs font-black text-amber-700 uppercase tracking-widest mb-1">Session Ended</p>
+                      <p className="text-xs text-amber-600 font-semibold leading-relaxed">Your session has expired. Please log in again to continue.</p>
+                    </div>
+                  )}
+
+                  {errorMessage && (
+                    <div className="bg-rose-500/10 border border-rose-500/15 rounded-xl p-3.5 flex items-center gap-2.5">
+                      <AlertCircle size={16} className="text-rose-600 shrink-0" />
+                      <p className="text-xs font-bold text-rose-700 leading-normal">{errorMessage}</p>
+                    </div>
+                  )}
+
+                  {/* Login submit CTA */}
+                  <button
+                    suppressHydrationWarning
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full min-h-[3.25rem] rounded-full text-white font-black text-sm tracking-wider transition-all active:scale-[0.98] uppercase disabled:opacity-60 disabled:cursor-not-allowed"
+                    style={primaryBtnStyle}
+                  >
+                    {isLoading ? 'Working...' : 'Sign In'}
+                  </button>
+                </form>
+
+                {/* Toggle Registration link */}
+                <p className="mt-6 text-center text-xs font-bold text-slate-555">
+                  Don't have an account?{' '}
+                  <Link
+                    href="/register"
+                    className="font-black text-emerald-600 hover:text-emerald-700 transition-colors"
+                  >
+                    Create an Account
+                  </Link>
+                </p>
+
+              </div>
+            )}
+
+          </div>
+
+        </div>
+
       </div>
+
+      {/* Footer Copy */}
+      <p className="mt-12 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+        © 2026 ZHI LearnAI · Singapore · <span className="text-slate-500">v2.5.0</span>
+      </p>
+
     </div>
   );
 }

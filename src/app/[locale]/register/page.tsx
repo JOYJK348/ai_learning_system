@@ -4,25 +4,33 @@ import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Link } from '@/i18n/routing';
 import { useQuery } from '@tanstack/react-query';
+import { Manrope } from 'next/font/google';
 import {
-  Users, Mail, Phone, GraduationCap, ArrowRight, CheckCircle2, AlertCircle,
-  Compass, ArrowLeft, ShieldCheck, User
+  Mail, Phone, GraduationCap, ArrowRight, CheckCircle2, AlertCircle,
+  ArrowLeft, ShieldCheck, User, Building, MapPin, Award, ChevronRight,
 } from 'lucide-react';
 import Image from 'next/image';
 
+const adminFont = Manrope({
+  subsets: ['latin'],
+  variable: '--admin-font',
+  display: 'swap',
+});
+
 const BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 
-export default function RegisterParentPage() {
+export default function RegisterPage() {
   const params = useParams();
   const locale = (params?.locale as string) || 'en';
-  const [step, setStep] = useState<'form' | 'submitting' | 'success'>('form');
+
+  const [step, setStep] = useState<'type' | 'details' | 'setup' | 'submitting' | 'success'>('type');
+  const [regType, setRegType] = useState<'parent' | 'school'>('parent');
   const [error, setError] = useState('');
+
   const [form, setForm] = useState({
-    parent_name: '',
-    parent_email: '',
-    parent_phone: '',
-    child_name: '',
-    child_grade_id: '',
+    name: '', email: '', phone: '',
+    child_name: '', child_grade_id: '',
+    school_name: '', address: '', city: '', board_name: '',
   });
 
   const { data: gradesData } = useQuery({
@@ -32,268 +40,580 @@ export default function RegisterParentPage() {
   });
   const grades = Array.isArray(gradesData) ? gradesData : [];
 
+  const handleNextStep = () => {
+    setError('');
+    if (step === 'type') { setStep('details'); return; }
+    if (step === 'details') {
+      if (!form.name.trim() || !form.email.trim()) { setError('Please fill in your name and email.'); return; }
+      setStep('setup');
+    }
+  };
+
+  const handlePrevStep = () => {
+    setError('');
+    if (step === 'details') setStep('type');
+    else if (step === 'setup') setStep('details');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    if (regType === 'parent') {
+      if (!form.child_name.trim() || !form.child_grade_id) { setError("Please enter your child's name and grade."); return; }
+    } else {
+      if (!form.school_name.trim()) { setError("Please enter your school's name."); return; }
+    }
     setStep('submitting');
-
     try {
-      const res = await fetch(`${BASE}/api/auth/register-parent`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          parent_name: form.parent_name,
-          parent_email: form.parent_email,
-          parent_phone: form.parent_phone || null,
-          child_name: form.child_name,
-          child_grade_id: form.child_grade_id ? form.child_grade_id : null,
-          school_id: null,
-        }),
-      });
-
+      const endpoint = regType === 'parent' ? `${BASE}/api/auth/register-parent` : `${BASE}/api/auth/register-school`;
+      const body = regType === 'parent'
+        ? { parent_name: form.name.trim(), parent_email: form.email.trim().toLowerCase(), parent_phone: form.phone.trim() || null, child_name: form.child_name.trim(), child_grade_id: form.child_grade_id || null, school_id: null }
+        : { school_name: form.school_name.trim(), admin_name: form.name.trim(), admin_email: form.email.trim().toLowerCase(), admin_phone: form.phone.trim() || null, address: form.address.trim() || null, city: form.city.trim() || null, board_name: form.board_name.trim() || null };
+      const res = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Registration failed');
       setStep('success');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
-      setStep('form');
+      setStep('setup');
     }
   };
 
-  if (step === 'success') {
-    return (
-      <div className="min-h-screen flex flex-col sm:items-center sm:justify-center bg-slate-50 font-sans p-0 sm:px-6 sm:py-12 relative overflow-x-hidden">
-        {/* Back to Home Button */}
-        <Link
-          href="/"
-          className="absolute sm:fixed top-4 left-4 sm:top-6 sm:left-6 z-50 flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 bg-white/60 hover:bg-white backdrop-blur-xl border border-slate-200 rounded-none text-slate-600 hover:text-indigo-600 font-bold text-[10px] sm:text-xs uppercase tracking-widest transition-all shadow-sm hover:shadow-md group"
-        >
-          <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform sm:w-4 sm:h-4" />
-          <span>Home</span>
-        </Link>
+  const stepNum = step === 'type' ? 1 : step === 'details' ? 2 : 3;
+  const stepLabel = step === 'type' ? 'Account Type' : step === 'details' ? 'Profile Details' : 'Curriculum Setup';
+  const stepPct = step === 'type' ? '33%' : step === 'details' ? '66%' : '100%';
+  const accentColor = regType === 'parent' ? '#f59e0b' : '#16a085';
+  
+  const activeInputClass = regType === 'parent'
+    ? 'bg-amber-500/[0.03] border-amber-500/20 focus:bg-white focus:border-amber-500 focus:ring-amber-500/10'
+    : 'bg-emerald-500/[0.03] border-emerald-500/20 focus:bg-white focus:border-emerald-500 focus:ring-emerald-500/10';
 
-        <div className="hidden sm:block absolute inset-0 z-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-100/30 rounded-full blur-[120px] -mr-48 -mt-48" />
-          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-slate-200/50 rounded-full blur-[120px] -ml-48 -mb-48" />
-        </div>
+  const shellStyle: React.CSSProperties = {
+    minHeight: '100vh',
+    background: `
+      radial-gradient(circle at 8% 4%,  rgba(125,211,252,0.34), transparent 24rem),
+      radial-gradient(circle at 88% 6%, rgba(251,207,232,0.46), transparent 28rem),
+      radial-gradient(circle at 52% 42%,rgba(187,247,208,0.34), transparent 26rem),
+      linear-gradient(135deg, #f8fbff 0%, #f7fff8 45%, #fff7ed 100%)
+    `,
+    fontFamily: 'var(--admin-font), "Segoe UI", system-ui, sans-serif',
+    fontFeatureSettings: '"cv02","cv03","cv04","ss01"',
+  };
 
-        <div className="w-full sm:max-w-md relative z-10 flex flex-col items-center">
-          <div className="w-full min-h-screen sm:min-h-0">
-            <div className="bg-white p-8 sm:p-10 border-none sm:border border-slate-200 shadow-none sm:shadow-xl text-center rounded-none min-h-screen sm:min-h-0 flex flex-col justify-center">
-              <div className="w-16 h-16 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-emerald-100">
-                <ShieldCheck size={32} />
-              </div>
-              <h2 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">Registration Submitted!</h2>
-              <p className="text-slate-500 text-xs leading-relaxed mb-6 px-4">
-                Thank you, <strong>{form.parent_name}</strong>! Your registration for <strong>{form.child_name}</strong> has been submitted for approval.
-              </p>
+  const cardBackgroundStyle: React.CSSProperties = {
+    background: 'linear-gradient(135deg, rgba(248, 250, 252, 0.95), rgba(239, 246, 255, 0.92), rgba(236, 253, 245, 0.92))',
+    backdropFilter: 'blur(24px)',
+    border: '1px solid rgba(22, 160, 133, 0.12)',
+    boxShadow: '0 30px 60px rgba(18, 49, 47, 0.08)',
+  };
 
-              <div className="bg-amber-50 border border-amber-100 p-5 text-left mb-6">
-                <p className="text-xs font-bold text-amber-800 uppercase tracking-widest mb-3">What happens next?</p>
-                <div className="flex items-start gap-3 mb-2.5">
-                  <span className="w-5 h-5 rounded-full bg-amber-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
-                  <span className="text-xs text-amber-900 font-semibold">Admin reviews your application</span>
-                </div>
-                <div className="flex items-start gap-3 mb-2.5">
-                  <span className="w-5 h-5 rounded-full bg-amber-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
-                  <span className="text-xs text-amber-900 font-semibold">You receive login credentials via email</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="w-5 h-5 rounded-full bg-amber-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
-                  <span className="text-xs text-amber-900 font-semibold">Start tracking your child&apos;s learning!</span>
-                </div>
-              </div>
-
-              <p className="text-xs text-slate-500 font-semibold mb-6">We&apos;ll notify you at <strong className="text-slate-800">{form.parent_email}</strong></p>
-
-              <Link
-                href="/login"
-                className="w-full py-4 bg-slate-900 text-white rounded-none font-semibold text-sm hover:bg-slate-800 transition-colors shadow-lg shadow-slate-900/10 uppercase text-center block"
-              >
-                Go to Login
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const primaryBtnStyle: React.CSSProperties = {
+    background: 'linear-gradient(135deg, #12312f, #16a085 48%, #38bdf8)',
+    boxShadow: '0 12px 24px rgba(22, 160, 133, 0.18)',
+  };
 
   return (
-    <div className="min-h-screen flex flex-col sm:items-center sm:justify-center bg-slate-50 font-sans p-0 sm:px-6 sm:py-12 relative overflow-x-hidden">
+    <div className={`${adminFont.variable} w-full flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 lg:p-12 overflow-x-hidden`} style={shellStyle}>
+      
+      {/* 2-Column Split Layout - flex-col-reverse swaps order on mobile so Form is first and branding is below */}
+      <div className="w-full max-w-6xl flex flex-col-reverse lg:flex-row gap-8 lg:gap-12 items-center justify-center">
+        
+        {/* LEFT COLUMN: Brand Presentation (Appears at bottom on mobile, left side on desktop) */}
+        <div className="w-full lg:w-1/2 flex flex-col justify-center space-y-6 sm:space-y-8 pr-0 lg:pr-4 mt-8 lg:mt-0">
+          
+          {/* Subtle separator line for mobile view */}
+          <div className="w-full h-px bg-slate-200/80 lg:hidden mb-2" />
 
-      {/* Back to Home Button */}
-      <Link
-        href="/"
-        className="absolute sm:fixed top-4 left-4 sm:top-6 sm:left-6 z-50 flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 bg-white/60 hover:bg-white backdrop-blur-xl border border-slate-200 rounded-none text-slate-600 hover:text-indigo-600 font-bold text-[10px] sm:text-xs uppercase tracking-widest transition-all shadow-sm hover:shadow-md group"
-      >
-        <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform sm:w-4 sm:h-4" />
-        <span>Home</span>
-      </Link>
-
-      {/* Background decoration */}
-      <div className="hidden sm:block absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-100/30 rounded-full blur-[120px] -mr-48 -mt-48" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-slate-200/50 rounded-full blur-[120px] -ml-48 -mb-48" />
-      </div>
-
-      <div className="w-full sm:max-w-md relative z-10 flex flex-col items-center">
-        <div className="w-full min-h-screen sm:min-h-0">
-          <div className="bg-white p-6 sm:p-10 border-none sm:border border-slate-200 shadow-none sm:shadow-2xl relative overflow-hidden rounded-none min-h-screen sm:min-h-0 flex flex-col">
-
-            {/* Visual Top Bar */}
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-amber-500" />
-
-            {/* Logo Section */}
-            <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 sm:gap-6 mb-6 pb-6 border-b border-slate-50 pt-12 sm:pt-0">
-              <div className="shrink-0">
-                <Image src="/assets/img/logo-removebg-preview.png" alt="ZHI" width={72} height={72} className="object-contain sm:w-[88px] sm:h-[88px]" />
-              </div>
-              <div className="flex flex-col">
-                <p className="text-slate-900 font-black text-2xl sm:text-3xl leading-none tracking-tighter">ZHI <span className="text-blue-600">LearnAI</span></p>
-                <p className="text-indigo-600/60 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] mt-2 sm:mt-2.5 whitespace-nowrap">Learn While Playing</p>
-              </div>
+          <div className="space-y-4 text-center lg:text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/15 text-emerald-700 text-xs font-black uppercase tracking-wider mx-auto lg:mx-0 w-fit">
+              <Award size={14} /> Leading AI-Driven Portal
             </div>
-
-            {/* Title */}
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-amber-50 text-amber-600 rounded-none flex items-center justify-center border border-amber-100">
-                <Users size={18} />
-              </div>
-              <div>
-                <h2 className="text-lg font-bold text-slate-900 tracking-tight">Register as Parent</h2>
-                <p className="text-xs text-slate-500 font-medium">Fill in your details below</p>
-              </div>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
-
-              {/* Parent Details */}
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-slate-600">Your Name *</label>
-                <input
-                  suppressHydrationWarning
-                  required
-                  type="text"
-                  value={form.parent_name}
-                  onChange={e => setForm(f => ({ ...f, parent_name: e.target.value }))}
-                  placeholder="Enter your full name"
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 outline-none text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all shadow-inner rounded-none"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-slate-600">Email *</label>
-                <div className="relative">
-                  <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input
-                    suppressHydrationWarning
-                    required
-                    type="email"
-                    value={form.parent_email}
-                    onChange={e => setForm(f => ({ ...f, parent_email: e.target.value }))}
-                    placeholder="your@email.com"
-                    className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-100 outline-none text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all shadow-inner rounded-none"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-slate-600">Phone</label>
-                <div className="relative">
-                  <Phone size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input
-                    suppressHydrationWarning
-                    type="tel"
-                    value={form.parent_phone}
-                    onChange={e => setForm(f => ({ ...f, parent_phone: e.target.value }))}
-                    placeholder="+91 98765 43210"
-                    className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-100 outline-none text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all shadow-inner rounded-none"
-                  />
-                </div>
-              </div>
-
-              {/* Child Details */}
-              <div className="pt-2">
-                <div className="flex items-center gap-2 mb-3">
-                  <GraduationCap size={15} className="text-amber-500" />
-                  <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">Child Details</span>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-semibold text-slate-600">Child Name *</label>
-                  <input
-                    suppressHydrationWarning
-                    required
-                    type="text"
-                    value={form.child_name}
-                    onChange={e => setForm(f => ({ ...f, child_name: e.target.value }))}
-                    placeholder="Enter child's full name"
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-100 outline-none text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all shadow-inner rounded-none"
-                  />
-                </div>
-
-                <div className="mt-4 space-y-1.5">
-                  <label className="block text-xs font-semibold text-slate-600">Grade</label>
-                  <select
-                    value={form.child_grade_id}
-                    onChange={e => setForm(f => ({ ...f, child_grade_id: e.target.value }))}
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-100 outline-none text-sm text-slate-900 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all appearance-none shadow-inner rounded-none"
-                  >
-                    <option value="">Select Grade</option>
-                    {grades.map((g: any) => (
-                      <option key={g.id} value={g.id}>{g.name}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {error && (
-                <div className="bg-red-50 border border-red-200 p-4">
-                  <p className="text-xs font-bold text-red-700 flex items-center gap-2">
-                    <AlertCircle size={14} /> {error}
-                  </p>
-                </div>
-              )}
-
-              <div className="bg-amber-50 border border-amber-100 p-4">
-                <p className="text-xs text-amber-800 font-semibold flex items-start gap-2">
-                  <AlertCircle size={14} className="shrink-0 mt-0.5" />
-                  <span>Your account will be activated after admin approval. You&apos;ll receive login credentials via email.</span>
-                </p>
-              </div>
-
-              <button
-                suppressHydrationWarning
-                type="submit"
-                disabled={step === 'submitting'}
-                className="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-none font-semibold text-sm tracking-wide transition-all shadow-lg shadow-slate-900/20 hover:shadow-xl hover:shadow-slate-900/25 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed uppercase flex items-center justify-center gap-2"
-              >
-                {step === 'submitting' ? 'Submitting...' : 'Submit for Approval'}
-                {step !== 'submitting' && <ArrowRight size={16} />}
-              </button>
-            </form>
-
-            {/* Footer Toggle */}
-            <p className="mt-6 text-center text-sm text-slate-500">
-              Already have an account?{' '}
-              <Link
-                href="/login"
-                className="font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
-              >
-                Sign In
-              </Link>
+            <h2 className="text-3xl sm:text-4xl xl:text-5xl font-black text-slate-900 leading-tight tracking-tight px-2 sm:px-0">
+              Empower your students with ZHI LearnAI.
+            </h2>
+            <p className="text-slate-550 font-semibold leading-relaxed text-xs sm:text-sm xl:text-base px-3 sm:px-0">
+              A comprehensive educational platform designed to make learning engaging, personalized, and interactive. Join thousands of parents and school networks.
             </p>
+          </div>
 
+          {/* Feature List Cards */}
+          <div className="space-y-3 sm:space-y-4 px-2 sm:px-0">
+            {[
+              {
+                title: "Gamified Learning System",
+                desc: "Engaging interactive quizzes, badges, and levels designed to maintain student focus and drive.",
+                icon: "award",
+                color: "bg-amber-500/10 text-amber-600 border-amber-500/15"
+              },
+              {
+                title: "Personalized AI Tutoring",
+                desc: "Real-time automated guidance catering to student capabilities and individual learning curve.",
+                icon: "graduation",
+                color: "bg-emerald-500/10 text-emerald-600 border-emerald-500/15"
+              },
+              {
+                title: "School & Parent Reports",
+                desc: "Complete insights on quiz attempts, learning time, success rate, and category performance.",
+                icon: "reports",
+                color: "bg-blue-500/10 text-blue-600 border-blue-500/15"
+              }
+            ].map((f, i) => (
+              <div key={i} className="flex gap-4 p-4 rounded-xl sm:rounded-2xl bg-white/40 border border-slate-200/50 backdrop-blur-sm hover:bg-white/60 transition-colors duration-200 text-left">
+                <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 border ${f.color}`}>
+                  {f.icon === 'award' && <Award size={18} />}
+                  {f.icon === 'graduation' && <GraduationCap size={18} />}
+                  {f.icon === 'reports' && <ShieldCheck size={18} />}
+                </div>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-black text-slate-800">{f.title}</h4>
+                  <p className="text-[11px] sm:text-xs text-slate-500 leading-relaxed mt-1 font-medium">{f.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Live stats strip */}
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-5 border-t border-slate-200/60 text-center lg:text-left px-2 sm:px-0">
+            <div>
+              <p className="text-xl sm:text-2xl font-black text-slate-900">15k+</p>
+              <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-wider mt-0.5">Active Students</p>
+            </div>
+            <div>
+              <p className="text-xl sm:text-2xl font-black text-slate-900">200+</p>
+              <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-wider mt-0.5">Partner Schools</p>
+            </div>
+            <div>
+              <p className="text-xl sm:text-2xl font-black text-slate-900">98%</p>
+              <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-wider mt-0.5">Satisfaction Rate</p>
+            </div>
           </div>
         </div>
 
-        {/* Footer */}
-        <p className="mt-12 text-xs text-slate-400 text-center uppercase tracking-widest font-medium opacity-60">
-          © 2025 ZHI LearnAI · Singapore · <span className="text-indigo-600">v2.4.1</span>
-        </p>
+        {/* RIGHT COLUMN: The Registration Card Shell (Appears at top on mobile, right side on desktop) */}
+        <div className="w-full lg:w-1/2 flex flex-col items-center">
+          
+          {/* Upper Nav Links for the card */}
+          <div className="w-full max-w-xl flex items-center justify-between px-2 mb-4">
+            <Link href="/" className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-slate-500 hover:text-emerald-600 transition-colors">
+              <ArrowLeft size={14} /> Home
+            </Link>
+            <Link href="/login" className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-slate-500 hover:text-emerald-600 transition-colors">
+              Sign In <ChevronRight size={14} />
+            </Link>
+          </div>
+
+          {/* The form wizard card */}
+          <div className="w-full max-w-xl border rounded-[1.8rem] sm:rounded-[2.2rem] p-6 sm:p-10 backdrop-blur-xl" style={cardBackgroundStyle}>
+            
+            {/* Centered Header: Horizontal row for Logo + Text title, centered with big logo */}
+            <div className="flex flex-row items-center gap-4 sm:gap-6 justify-center mb-6 pb-5 border-b border-slate-200/50">
+              <div className="relative w-20 h-20 sm:w-28 sm:h-28 shrink-0 flex items-center justify-center">
+                {/* Backdrop Glow behind logo */}
+                <div className="absolute inset-1 rounded-full bg-gradient-to-tr from-emerald-500/10 to-amber-500/10 blur-lg animate-pulse" />
+                <Image
+                  src="/assets/img/logo-removebg-preview.png"
+                  alt="ZHI LearnAI Logo"
+                  fill
+                  className="object-contain relative z-10"
+                  priority
+                />
+              </div>
+              <div className="flex flex-col text-left">
+                <h1 className="text-xl sm:text-3xl font-black tracking-tight text-slate-900 leading-tight">
+                  ZHI <span className="text-emerald-600">LearnAI</span>
+                </h1>
+                <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 mt-1.5 leading-none">
+                  Learn While Playing
+                </p>
+              </div>
+            </div>
+
+            {/* Success screen */}
+            {step === 'success' && (
+              <div className="flex flex-col items-center text-center py-4">
+                {/* Glowing Success Badge */}
+                <div className="relative mb-6">
+                  <div className="absolute inset-0 rounded-full bg-emerald-400/20 blur-xl animate-pulse scale-150" />
+                  <div className="relative w-20 h-20 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-600 border border-emerald-400/30 flex items-center justify-center text-white shadow-[0_12px_30px_rgba(22,160,133,0.3)]">
+                    <ShieldCheck size={38} />
+                  </div>
+                </div>
+
+                <p className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.25em] mb-1">Registration Received</p>
+                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">Onboarding Initiated</h2>
+                
+                <div className="mt-4 mb-6 p-4.5 rounded-2xl bg-white/40 border border-slate-200/40 text-slate-600 text-xs sm:text-sm leading-relaxed max-w-md">
+                  Thank you, <strong className="text-slate-900 font-extrabold">{form.name}</strong>! Your registration request for <strong className="text-slate-900 font-extrabold">{regType === 'parent' ? form.child_name : form.school_name}</strong> has been successfully received and queued for review.
+                </div>
+
+                {/* Pipeline / Next Steps */}
+                <div className="w-full bg-gradient-to-b from-white/80 to-white/40 border border-slate-200/40 shadow-sm rounded-[2rem] p-6 mb-6 text-left">
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 pb-2.5 border-b border-slate-100">Next Steps & Workflow</p>
+                  <div className="space-y-4">
+                    {[
+                      { 
+                        title: 'Validation & Verification', 
+                        desc: 'Our administrators verify school credentials or parent details and approve the account.',
+                        icon: ShieldCheck,
+                        color: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'
+                      },
+                      { 
+                        title: 'Credentials Email Dispatch', 
+                        desc: 'Once approved, secure system login details are auto-generated and dispatched to your email.',
+                        icon: Mail,
+                        color: 'bg-blue-500/10 text-blue-600 border-blue-500/20'
+                      },
+                      { 
+                        title: 'Interactive Curriculum Launch', 
+                        desc: 'Sign in to access personalized adaptive quests, tutorials, rewards, and real-time reports.',
+                        icon: GraduationCap,
+                        color: 'bg-amber-500/10 text-amber-600 border-amber-500/20'
+                      }
+                    ].map((item, idx) => (
+                      <div key={idx} className="flex gap-4 items-start group">
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border transition-transform duration-200 group-hover:scale-105 ${item.color}`}>
+                          <item.icon size={18} />
+                        </div>
+                        <div>
+                          <p className="text-xs font-black text-slate-800 uppercase tracking-wide">{item.title}</p>
+                          <p className="text-[11px] text-slate-500 leading-relaxed mt-1 font-medium">{item.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-emerald-500/[0.03] border border-emerald-500/10 rounded-2xl py-3 px-5 mb-8 text-center max-w-sm">
+                  <p className="text-[11px] text-slate-500 font-medium">
+                    Onboarding updates will be sent to <strong className="text-emerald-700 font-bold">{form.email}</strong>
+                  </p>
+                </div>
+
+                <Link href="/login" className="w-full flex items-center justify-center gap-2.5 min-h-[3.5rem] rounded-full text-white font-black text-sm tracking-wider uppercase transition-all duration-200 active:scale-[0.98]" style={primaryBtnStyle}>
+                  Go to Login <ArrowRight size={16} />
+                </Link>
+              </div>
+            )}
+
+            {/* Submitting screen */}
+            {step === 'submitting' && (
+              <div className="flex flex-col items-center justify-center py-12">
+                <div className="w-10 h-10 rounded-full border-4 border-slate-200 border-t-emerald-600 animate-spin mb-4" />
+                <p className="text-sm font-bold text-slate-700">Submitting request to database...</p>
+              </div>
+            )}
+
+            {/* Main Stepper Form */}
+            {step !== 'success' && step !== 'submitting' && (
+              <div>
+                {/* Progress bar */}
+                <div className="w-full h-1.5 bg-slate-200/40 rounded-full mb-5 overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all duration-300"
+                    style={{
+                      width: stepPct,
+                      background: `linear-gradient(90deg, #12312f, ${accentColor})`
+                    }}
+                  />
+                </div>
+
+                <div className="flex justify-between items-center mb-6">
+                  <span className="text-[10px] font-black text-slate-455 uppercase tracking-widest">Step {stepNum} of 3</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: accentColor }}>{stepLabel}</span>
+                </div>
+
+                {/* Step 1: Select Type */}
+                {step === 'type' && (
+                  <div className="space-y-5">
+                    <div className="text-center sm:text-left">
+                      <h2 className="text-lg font-black text-slate-900 tracking-tight">Onboarding Pathway</h2>
+                      <p className="text-xs text-slate-500 mt-1">Please select the type of account you want to register.</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* Parent Option Card */}
+                      <button
+                        type="button"
+                        onClick={() => setRegType('parent')}
+                        className="flex flex-col items-start p-5 border-2 rounded-2xl transition-all duration-350 hover:scale-[1.02] active:scale-[0.98] text-left"
+                        style={{
+                          borderColor: regType === 'parent' ? '#f59e0b' : 'rgba(245, 158, 11, 0.15)',
+                          background: regType === 'parent' ? 'rgba(245, 158, 11, 0.08)' : 'rgba(245, 158, 11, 0.02)',
+                          boxShadow: regType === 'parent' ? '0 12px 24px rgba(245,158,11,0.12)' : 'none'
+                        }}
+                      >
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3 shadow-sm" style={{ background: '#f59e0b', color: '#ffffff' }}>
+                          <User size={18} />
+                        </div>
+                        <span className="text-sm font-black text-slate-800">Home Study</span>
+                        <span className="text-[11px] text-slate-500 mt-1.5 leading-relaxed font-semibold">
+                          For individual home learning. Track individual student progress & scores.
+                        </span>
+                      </button>
+
+                      {/* School Option Card */}
+                      <button
+                        type="button"
+                        onClick={() => setRegType('school')}
+                        className="flex flex-col items-start p-5 border-2 rounded-2xl transition-all duration-350 hover:scale-[1.02] active:scale-[0.98] text-left"
+                        style={{
+                          borderColor: regType === 'school' ? '#16a085' : 'rgba(22, 160, 133, 0.15)',
+                          background: regType === 'school' ? 'rgba(22, 160, 133, 0.08)' : 'rgba(22, 160, 133, 0.02)',
+                          boxShadow: regType === 'school' ? '0 12px 24px rgba(22, 160, 133, 0.12)' : 'none'
+                        }}
+                      >
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3 shadow-sm" style={{ background: '#16a085', color: '#ffffff' }}>
+                          <Building size={18} />
+                        </div>
+                        <span className="text-sm font-black text-slate-800">School Program</span>
+                        <span className="text-[11px] text-slate-500 mt-1.5 leading-relaxed font-semibold">
+                          For principals or school administrators looking to register their institution.
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Step 2: Profile Details */}
+                {step === 'details' && (
+                  <div className="space-y-4">
+                    <div className="text-center sm:text-left">
+                      <h2 className="text-lg font-black text-slate-900 tracking-tight">Profile Details</h2>
+                      <p className="text-xs text-slate-500 mt-1">Provide your credentials to establish ownership of the account.</p>
+                    </div>
+
+                    <div className="space-y-3.5">
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-450 uppercase tracking-wider mb-1.5">Your Name *</label>
+                        <input
+                          required
+                          type="text"
+                          value={form.name}
+                          onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                          placeholder="Enter your full name"
+                          className={`w-full py-3.5 px-4 border rounded-xl text-sm font-semibold text-slate-955 placeholder-slate-450 transition-all outline-none ${activeInputClass}`}
+                          suppressHydrationWarning
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">Email Address *</label>
+                        <div className="relative flex items-center">
+                          <Mail size={16} className="absolute left-4 text-slate-400 pointer-events-none" />
+                          <input
+                            required
+                            type="email"
+                            value={form.email}
+                            onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                            placeholder="you@domain.com"
+                            className={`w-full py-3.5 pl-11 pr-4 border rounded-xl text-sm font-semibold text-slate-955 placeholder-slate-455 transition-all outline-none ${activeInputClass}`}
+                            suppressHydrationWarning
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">Phone / Mobile</label>
+                        <div className="relative flex items-center">
+                          <Phone size={16} className="absolute left-4 text-slate-400 pointer-events-none" />
+                          <input
+                            type="tel"
+                            value={form.phone}
+                            onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                            placeholder="Mobile connection number"
+                            className={`w-full py-3.5 pl-11 pr-4 border rounded-xl text-sm font-semibold text-slate-955 placeholder-slate-450 transition-all outline-none ${activeInputClass}`}
+                            suppressHydrationWarning
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Step 3: Setup details */}
+                {step === 'setup' && (
+                  <div className="space-y-4">
+                    {regType === 'parent' ? (
+                      <>
+                        <div className="text-center sm:text-left">
+                          <h2 className="text-lg font-black text-slate-900 tracking-tight">Child Details</h2>
+                          <p className="text-xs text-slate-500 mt-1">Link your child's name and grade level to generate lessons.</p>
+                        </div>
+
+                        <div className="space-y-3.5">
+                          <div>
+                            <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">Child Name *</label>
+                            <input
+                              required
+                              type="text"
+                              value={form.child_name}
+                              onChange={e => setForm(f => ({ ...f, child_name: e.target.value }))}
+                              placeholder="Enter child's full name"
+                              className={`w-full py-3.5 px-4 border rounded-xl text-sm font-semibold text-slate-955 placeholder-slate-450 transition-all outline-none ${activeInputClass}`}
+                              suppressHydrationWarning
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">Grade Level *</label>
+                            <select
+                              required
+                              value={form.child_grade_id}
+                              onChange={e => setForm(f => ({ ...f, child_grade_id: e.target.value }))}
+                              className={`w-full py-3.5 px-4 border rounded-xl text-sm font-semibold text-slate-955 transition-all outline-none appearance-none ${activeInputClass}`}
+                            >
+                              <option value="">Select Grade</option>
+                              {grades.map((g: any) => (
+                                <option key={g.id} value={g.id}>{g.name}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="text-center sm:text-left">
+                          <h2 className="text-lg font-black text-slate-900 tracking-tight">Institution Details</h2>
+                          <p className="text-xs text-slate-500 mt-1">Onboard your school. Fill out official institution parameters.</p>
+                        </div>
+
+                        <div className="space-y-3.5">
+                          <div>
+                            <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">School / Institution Name *</label>
+                            <div className="relative flex items-center">
+                              <Building size={16} className="absolute left-4 text-slate-400 pointer-events-none" />
+                              <input
+                                required
+                                type="text"
+                                value={form.school_name}
+                                onChange={e => setForm(f => ({ ...f, school_name: e.target.value }))}
+                                placeholder="Official school name"
+                                className={`w-full py-3.5 pl-11 pr-4 border rounded-xl text-sm font-semibold text-slate-955 placeholder-slate-455 transition-all outline-none ${activeInputClass}`}
+                                suppressHydrationWarning
+                              />
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                            <div>
+                              <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">Board Affiliation</label>
+                              <div className="relative flex items-center">
+                                <Award size={16} className="absolute left-4 text-slate-400 pointer-events-none" />
+                                <input
+                                  type="text"
+                                  value={form.board_name}
+                                  onChange={e => setForm(f => ({ ...f, board_name: e.target.value }))}
+                                  placeholder="e.g. CBSE, ICSE"
+                                  className={`w-full py-3.5 pl-11 pr-4 border rounded-xl text-sm font-semibold text-slate-955 placeholder-slate-450 transition-all outline-none ${activeInputClass}`}
+                                  suppressHydrationWarning
+                                />
+                              </div>
+                            </div>
+
+                            <div>
+                              <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">City</label>
+                              <div className="relative flex items-center">
+                                <MapPin size={16} className="absolute left-4 text-slate-400 pointer-events-none" />
+                                <input
+                                  type="text"
+                                  value={form.city}
+                                  onChange={e => setForm(f => ({ ...f, city: e.target.value }))}
+                                  placeholder="School Location City"
+                                  className={`w-full py-3.5 pl-11 pr-4 border rounded-xl text-sm font-semibold text-slate-955 placeholder-slate-450 transition-all outline-none ${activeInputClass}`}
+                                  suppressHydrationWarning
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">Address</label>
+                            <input
+                              type="text"
+                              value={form.address}
+                              onChange={e => setForm(f => ({ ...f, address: e.target.value }))}
+                              placeholder="Complete physical street address"
+                              className={`w-full py-3.5 px-4 border rounded-xl text-sm font-semibold text-slate-955 transition-all outline-none ${activeInputClass}`}
+                              suppressHydrationWarning
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
+
+                {/* Error field */}
+                {error && (
+                  <div className="mt-5 bg-rose-50 border border-rose-100 rounded-xl p-3.5 flex items-center gap-2.5">
+                    <AlertCircle size={16} className="text-rose-600 shrink-0" />
+                    <p className="text-xs font-bold text-rose-700 leading-normal">{error}</p>
+                  </div>
+                )}
+
+                {/* Action CTA */}
+                <div className="mt-8 flex flex-col gap-3">
+                  <div className="flex gap-3">
+                    {step !== 'type' && (
+                      <button
+                        type="button"
+                        onClick={handlePrevStep}
+                        className="flex-1 min-h-[3.25rem] inline-flex items-center justify-center gap-1.5 rounded-full border border-slate-200/80 bg-white/50 text-slate-600 hover:bg-white/80 active:scale-[0.98] font-black uppercase tracking-wider text-xs transition-all duration-200"
+                      >
+                        <ArrowLeft size={14} /> Back
+                      </button>
+                    )}
+                    
+                    {step !== 'setup' ? (
+                      <button
+                        type="button"
+                        onClick={handleNextStep}
+                        className="flex-1 min-h-[3.25rem] inline-flex items-center justify-center gap-1.5 rounded-full text-white active:scale-[0.98] font-black uppercase tracking-wider text-xs transition-all duration-200"
+                        style={primaryBtnStyle}
+                      >
+                        Continue <ArrowRight size={14} />
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleSubmit}
+                        className="flex-1 min-h-[3.25rem] inline-flex items-center justify-center gap-1.5 rounded-full text-white active:scale-[0.98] font-black uppercase tracking-wider text-xs transition-all duration-200"
+                        style={{
+                          background: regType === 'parent' ? '#f59e0b' : '#16a085',
+                          boxShadow: regType === 'parent' ? '0 12px 24px rgba(245, 158, 11, 0.18)' : '0 12px 24px rgba(22, 160, 133, 0.18)'
+                        }}
+                      >
+                        Submit <CheckCircle2 size={14} />
+                      </button>
+                    )}
+                  </div>
+
+                  <p className="text-center text-xs font-bold text-slate-550 mt-2">
+                    Already have an account?{' '}
+                    <Link
+                      href="/login"
+                      className="transition-colors hover:opacity-80"
+                      style={{ color: accentColor }}
+                    >
+                      Sign In
+                    </Link>
+                  </p>
+                </div>
+
+              </div>
+            )}
+
+          </div>
+
+        </div>
+
       </div>
+
+      {/* Footer Copy */}
+      <p className="mt-12 text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">
+        © 2026 ZHI LearnAI · Singapore · <span className="text-slate-500">v2.5.0</span>
+      </p>
+
     </div>
   );
 }

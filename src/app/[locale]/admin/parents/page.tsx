@@ -118,6 +118,19 @@ export default function ParentsAdminPage() {
   const parents = parentsData?.parents ?? [];
   const monthlyRevenue = parentsData?.monthlyRevenue ?? 0;
 
+  const { data: regData } = useQuery<any[]>({
+    queryKey: ['admin', 'pending-registrations', 'list'],
+    queryFn: () => fetch(`${API_BASE}/api/admin/pending-registrations`, { credentials: 'include' })
+      .then(r => r.json()).then(d => d.data ?? []),
+    enabled: !loading && Boolean(user),
+    staleTime: 30_000,
+  });
+
+  const pendingParentsCount = useMemo(() => {
+    if (!Array.isArray(regData)) return 0;
+    return regData.filter((r: any) => !r.is_school && r.status === 'pending').length;
+  }, [regData]);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [filterPlan, setFilterPlan] = useState('');
   const [filterApproval, setFilterApproval] = useState('');
@@ -164,12 +177,54 @@ export default function ParentsAdminPage() {
 
   useEffect(() => { if (!loading && !user) router.push(`/${locale}/login`); }, [loading, user]);
 
+  /* pending registration actions state */
+  const [selectedPendingReg, setSelectedPendingReg] = useState<any | null>(null);
+  const [confirmModal, setConfirmModal] = useState<{ type: 'approve' | 'reject'; id: string; name: string; childName: string } | null>(null);
+  const [rejectionReason, setRejectionReason] = useState('');
+  const [credentials, setCredentials] = useState<any>(null);
+
   /* hydrate for client-side rendering */
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => { setHydrated(true); }, []);
 
+  const combinedParents = useMemo(() => {
+    const list: Parent[] = [...parents];
+    
+    if (Array.isArray(regData)) {
+      regData.forEach((reg: any) => {
+        if (!reg.is_school) {
+          // If status is 'pending' or 'rejected', show it as pending/rejected registration
+          if (reg.status === 'pending' || reg.status === 'rejected') {
+            list.push({
+              id: `reg_${reg.id}`,
+              name: reg.parent_name,
+              email: reg.parent_email,
+              phone: reg.parent_phone || undefined,
+              plan_type_id: 1,
+              plan_name: 'Free',
+              plan_code: 'free',
+              plan_status_id: reg.status === 'pending' ? 3 : 2,
+              plan_status_name: reg.status === 'pending' ? 'Pending' : 'Expired',
+              approval_status_id: reg.status === 'pending' ? 1 : 3,
+              approval_status_name: reg.status === 'pending' ? 'Pending' : 'Rejected',
+              approval_status_code: reg.status,
+              status_id: 2, // Inactive
+              children_count: 1,
+              children_names: reg.child_name ? [reg.child_name] : [],
+              created_at: reg.created_at,
+              is_pending_registration: true,
+              raw_registration_id: reg.id,
+            } as any);
+          }
+        }
+      });
+    }
+    
+    return list.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  }, [parents, regData]);
+
   const filteredParents = useMemo(() => {
-    let f = [...parents];
+    let f = [...combinedParents];
 
     if (filterPlan) f = f.filter(p => (p.plan_code || 'free') === filterPlan);
     if (filterApproval) f = f.filter(p => (p.approval_status_code || 'approved') === filterApproval);
@@ -184,7 +239,67 @@ export default function ParentsAdminPage() {
       );
     }
     return f;
-  }, [parents, filterPlan, filterApproval, filterStatus, searchQuery]);
+  }, [combinedParents, filterPlan, filterApproval, filterStatus, searchQuery]);
+
+  const openPendingDetail = (item: any) => {
+    const reg = regData?.find((r: any) => r.id === item.raw_registration_id);
+    setSelectedPendingReg(reg || item);
+  };
+
+  const handleApprovePending = (item: any) => {
+    setConfirmModal({
+      type: 'approve',
+      id: item.raw_registration_id,
+      name: item.name || item.parent_name,
+      childName: item.child_name || item.children_names?.[0] || '',
+    });
+  };
+
+  const handleRejectPending = (item: any) => {
+    setConfirmModal({
+      type: 'reject',
+      id: item.raw_registration_id,
+      name: item.name || item.parent_name,
+      childName: item.child_name || item.children_names?.[0] || '',
+    });
+    setRejectionReason('');
+  };
+
+  const confirmPendingAction = async () => {
+    if (!confirmModal) return;
+    setIsSaving(true);
+    try {
+      const url = `${API_BASE}/api/admin/pending-registrations/${confirmModal.id}`;
+      const body = confirmModal.type === 'approve' 
+        ? { action: 'approve' }
+        : { action: 'reject', rejection_reason: rejectionReason };
+
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        credentials: 'include',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showFeedback(data.error || 'Operation failed');
+      } else {
+        if (confirmModal.type === 'approve') {
+          setCredentials(data.data);
+          showFeedback('Registration approved successfully!');
+        } else {
+          showFeedback('Registration rejected successfully!');
+        }
+        queryClient.invalidateQueries({ queryKey: ['admin', 'pending-registrations'] });
+        queryClient.invalidateQueries({ queryKey: adminKeys.parentDirectory });
+        setConfirmModal(null);
+      }
+    } catch (e) {
+      showFeedback('Network error occurred');
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const openDetail = (id: string) => {
     setSelectedParentId(id);
@@ -331,7 +446,7 @@ export default function ParentsAdminPage() {
 
   const statCards = useMemo(() => [
     { label: 'Total Parents', value: stats.total, sub: `${stats.active} active`, icon: <Users size={18} />, color: '#2563eb', iconClass: styles.statIconAccent1 },
-    { label: 'Pending Approval', value: stats.pending, sub: 'Need review', icon: <Clock size={18} />, color: stats.pending > 0 ? '#d97706' : '#64748b', iconClass: styles.statIconAccent2, link: `/${locale}/admin/pending-registrations` },
+    { label: 'Pending Approval', value: stats.pending, sub: 'Need review', icon: <Clock size={18} />, color: stats.pending > 0 ? '#d97706' : '#64748b', iconClass: styles.statIconAccent2, link: `/${locale}/admin/pending-registrations?type=parent` },
     { label: 'Plan Type', value: `${stats.free} Free / ${stats.paid} Paid`, sub: 'All parents', icon: <GraduationCap size={18} />, color: '#64748b', iconClass: styles.statIconAccent3 },
     { label: 'Monthly Revenue', value: `₹${monthlyRevenue.toLocaleString()}`, sub: 'This month (INR)', icon: <IndianRupee size={18} />, color: '#059669', iconClass: styles.statIconAccent4 },
     { label: 'Expiring Soon', value: stats.expiringSoon, sub: 'Within 7 days', icon: <AlertTriangle size={18} />, color: stats.expiringSoon > 0 ? '#dc2626' : '#64748b', iconClass: styles.statIconAccent5 },
@@ -355,6 +470,25 @@ export default function ParentsAdminPage() {
           </button>
         </div>
       </header>
+
+      {pendingParentsCount > 0 && (
+        <div className="bg-amber-500/10 border border-amber-500/15 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex gap-3 items-center">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-500 flex items-center justify-center shrink-0">
+              <Clock size={20} />
+            </div>
+            <div>
+              <p className="text-sm font-black text-slate-800 uppercase tracking-wide font-sans">Pending Parent Onboarding</p>
+              <p className="text-[11px] text-slate-500 mt-0.5 font-semibold font-sans">
+                There {pendingParentsCount === 1 ? 'is 1 parent registration request' : `are ${pendingParentsCount} parent registration requests`} waiting for platform admin approval.
+              </p>
+            </div>
+          </div>
+          <Link href={`/${locale}/admin/pending-registrations?type=parent`} className="text-xs font-black uppercase tracking-widest px-6 py-3 rounded-full text-white bg-amber-600 hover:bg-amber-700 transition-all flex items-center gap-2 font-sans">
+            Review Approvals <ChevronRight size={14} />
+          </Link>
+        </div>
+      )}
 
       {/* ── STATS ROW ── */}
       <div className={styles.statsRow}>
@@ -553,11 +687,25 @@ export default function ParentsAdminPage() {
 
                   {/* Actions */}
                   <div className={styles.cellActions}>
-                    <button type="button" className={styles.actionBtn} onClick={() => openDetail(item.id)} onMouseEnter={() => prefetchDetail(item.id)} title="View Details"><Eye size={14} /></button>
-                    <button type="button" className={styles.actionBtn} onClick={() => openEdit(item)} title="Edit"><Pencil size={14} /></button>
-                    <button type="button" className={styles.actionBtn} onClick={() => openPayment(item)} title="Add Payment" style={{ color: '#059669' }}><CreditCard size={14} /></button>
-                    <button type="button" className={styles.actionBtn} onClick={() => openEmail(item)} title="Send Email"><Send size={14} /></button>
-                    <button type="button" className={`${styles.actionBtn} ${styles.actionBtnDanger}`} onClick={() => deleteParent(item)} title="Delete"><Trash2 size={14} /></button>
+                    {item.is_pending_registration ? (
+                      <>
+                        <button type="button" className={styles.actionBtn} onClick={() => openPendingDetail(item)} title="View Details"><Eye size={14} /></button>
+                        {item.approval_status_code === 'pending' && (
+                          <>
+                            <button type="button" className={styles.actionBtn} onClick={() => handleApprovePending(item)} title="Approve" style={{ color: '#16a34a' }}><CheckCircle2 size={14} /></button>
+                            <button type="button" className={styles.actionBtn} onClick={() => handleRejectPending(item)} title="Reject" style={{ color: '#dc2626' }}><XCircle size={14} /></button>
+                          </>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        <button type="button" className={styles.actionBtn} onClick={() => openDetail(item.id)} onMouseEnter={() => prefetchDetail(item.id)} title="View Details"><Eye size={14} /></button>
+                        <button type="button" className={styles.actionBtn} onClick={() => openEdit(item)} title="Edit"><Pencil size={14} /></button>
+                        <button type="button" className={styles.actionBtn} onClick={() => openPayment(item)} title="Add Payment" style={{ color: '#059669' }}><CreditCard size={14} /></button>
+                        <button type="button" className={styles.actionBtn} onClick={() => openEmail(item)} title="Send Email"><Send size={14} /></button>
+                        <button type="button" className={`${styles.actionBtn} ${styles.actionBtnDanger}`} onClick={() => deleteParent(item)} title="Delete"><Trash2 size={14} /></button>
+                      </>
+                    )}
                   </div>
                 </motion.div>
               );
@@ -566,26 +714,100 @@ export default function ParentsAdminPage() {
         </section>
       )}
 
+      {/* Credentials display box */}
+      {credentials && (
+        <div className="bg-emerald-500/10 border border-emerald-500/15 rounded-3xl p-6 my-6 shadow-sm font-sans max-w-4xl mx-auto">
+          <p className="text-sm font-black text-emerald-800 uppercase tracking-wide">✅ Credentials Generated Successfully</p>
+          <p className="text-[11px] text-slate-500 mt-1 mb-4 font-semibold">Share these login details with the parent:</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="bg-white/60 border border-slate-200/50 rounded-2xl p-4">
+              <p className="text-xs font-black text-slate-800 uppercase tracking-wider mb-2">Parent Login</p>
+              <div className="flex flex-col gap-1 text-[11.5px] text-slate-600 font-semibold">
+                <span>Email: <strong className="text-slate-850 select-all">{credentials.parent_credentials?.email}</strong></span>
+                <span>Password: <strong className="text-slate-850 select-all">{credentials.parent_credentials?.password}</strong></span>
+              </div>
+            </div>
+            <div className="bg-white/60 border border-slate-200/50 rounded-2xl p-4">
+              <p className="text-xs font-black text-slate-800 uppercase tracking-wider mb-2">Child Login ({credentials.child_credentials?.name})</p>
+              <div className="flex flex-col gap-1 text-[11.5px] text-slate-600 font-semibold">
+                <span>Email: <strong className="text-slate-850 select-all">{credentials.child_credentials?.email}</strong></span>
+                <span>Password: <strong className="text-slate-850 select-all">{credentials.child_credentials?.password}</strong></span>
+              </div>
+            </div>
+          </div>
+          <div className="flex gap-3 mt-4">
+            <button 
+              className="px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-600 hover:bg-emerald-700 text-white transition-all"
+              onClick={() => { 
+                const text = `Parent Email: ${credentials.parent_credentials?.email}\nPassword: ${credentials.parent_credentials?.password}\nChild Email: ${credentials.child_credentials?.email}\nPassword: ${credentials.child_credentials?.password}`;
+                navigator.clipboard.writeText(text); 
+                showFeedback('Copied details to clipboard!'); 
+              }}
+            >
+              📋 Copy Details
+            </button>
+            <button className="px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider bg-slate-200 hover:bg-slate-300 text-slate-700 transition-all" onClick={() => setCredentials(null)}>
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className={styles.bottomPad} />
 
       {/* ══════════════════════════ DETAIL MODAL ══════════════════════════ */}
-        {(selectedParentId) && (
-        <div className={styles.drawerOverlay} onClick={closeDetail}>
+      {(selectedParentId || selectedPendingReg) && (
+        <div className={styles.drawerOverlay} onClick={() => { closeDetail(); setSelectedPendingReg(null); }}>
           <div className={styles.drawer} onClick={e => e.stopPropagation()}>
             <div className={styles.drawerHeader}>
               <div className={styles.drawerTitle}>
                 <div className={styles.drawerLogo}>
-                  {detailParent ? detailParent.name.charAt(0).toUpperCase() : '?'}
+                  {selectedPendingReg ? selectedPendingReg.parent_name?.charAt(0).toUpperCase() : detailParent ? detailParent.name.charAt(0).toUpperCase() : '?'}
                 </div>
                 <div>
-                  <h2>{detailParent?.name || 'Loading...'}</h2>
-                  {detailParent && <span className={styles.planBadge} style={{background:'rgba(22,163,74,0.1)',color:'#166534'}}>{detailParent.plan_name || 'Free'}</span>}
+                  <h2>{selectedPendingReg ? selectedPendingReg.parent_name : (detailParent?.name || 'Loading...')}</h2>
+                  <span className={styles.planBadge} style={{background: selectedPendingReg ? 'rgba(245,158,11,0.1)' : 'rgba(22,163,74,0.1)', color: selectedPendingReg ? '#d97706' : '#166534'}}>
+                    {selectedPendingReg ? 'Pending Onboarding' : (detailParent?.plan_name || 'Free')}
+                  </span>
                 </div>
               </div>
-              <button className={styles.closeButton} onClick={closeDetail}><X size={20} /></button>
+              <button className={styles.closeButton} onClick={() => { closeDetail(); setSelectedPendingReg(null); }}><X size={20} /></button>
             </div>
             <div className={styles.drawerBody}>
-              {detailLoading ? (
+              {selectedPendingReg ? (
+                <>
+                  <section className={styles.drawerSection}>
+                    <h3><User size={16} /> Registration Details</h3>
+                    <div className={styles.drawerGrid}>
+                      <div><label>Parent Name</label><p>{selectedPendingReg.parent_name}</p></div>
+                      <div><label>Email</label><p>{selectedPendingReg.parent_email}</p></div>
+                      <div><label>Phone</label><p>{selectedPendingReg.parent_phone || '—'}</p></div>
+                      <div><label>Status</label><p style={{color: selectedPendingReg.status === 'rejected' ? '#dc2626' : '#f59e0b', fontWeight: 800}}>{selectedPendingReg.status === 'rejected' ? 'Rejected' : 'Pending Review'}</p></div>
+                      {selectedPendingReg.rejection_reason && <div><label>Rejection Reason</label><p className="text-red-600 font-semibold">{selectedPendingReg.rejection_reason}</p></div>}
+                      <div><label>Submitted</label><p>{new Date(selectedPendingReg.created_at).toLocaleDateString('en-IN')}</p></div>
+                    </div>
+                  </section>
+
+                  <section className={styles.drawerSection}>
+                    <h3><GraduationCap size={16} /> Child details</h3>
+                    <div className={styles.drawerGrid}>
+                      <div><label>Child Name</label><p>{selectedPendingReg.child_name}</p></div>
+                      <div><label>Grade Level</label><p>{selectedPendingReg.grade || '—'}</p></div>
+                    </div>
+                  </section>
+
+                  {selectedPendingReg.status === 'pending' && (
+                    <div className="flex gap-3 mt-8">
+                      <button className="flex-1 bg-emerald-650 hover:bg-emerald-700 text-white font-black uppercase tracking-wider py-3.5 rounded-full text-xs transition-all flex items-center justify-center gap-2" onClick={() => { handleApprovePending({ raw_registration_id: selectedPendingReg.id, parent_name: selectedPendingReg.parent_name, child_name: selectedPendingReg.child_name }); setSelectedPendingReg(null); }}>
+                        <CheckCircle2 size={15} /> Approve
+                      </button>
+                      <button className="flex-1 bg-red-650 hover:bg-red-750 text-white font-black uppercase tracking-wider py-3.5 rounded-full text-xs transition-all flex items-center justify-center gap-2" onClick={() => { handleRejectPending({ raw_registration_id: selectedPendingReg.id, parent_name: selectedPendingReg.parent_name, child_name: selectedPendingReg.child_name }); setSelectedPendingReg(null); }}>
+                        <XCircle size={15} /> Reject
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : detailLoading ? (
                 <div style={{padding:'3rem',textAlign:'center',color:'#64748b'}}>Loading...</div>
               ) : detailParent && (
                 <>
@@ -644,6 +866,52 @@ export default function ParentsAdminPage() {
                   </div>
                 </>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Confirm Action Modal for Pending Registrations */}
+      {confirmModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setConfirmModal(null)} />
+          <div className="relative bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 font-sans">
+            <div className="flex flex-col items-center text-center">
+              <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-4 ${confirmModal.type === 'approve' ? 'bg-emerald-500/10 text-emerald-600' : 'bg-red-500/10 text-red-600'}`}>
+                {confirmModal.type === 'approve' ? <ShieldCheck size={24} /> : <AlertTriangle size={24} />}
+              </div>
+              <h3 className="text-lg font-black text-slate-955">{confirmModal.type === 'approve' ? 'Confirm Approval' : 'Confirm Rejection'}</h3>
+              <p className="text-xs font-semibold text-slate-500 mt-2 leading-relaxed">
+                {confirmModal.type === 'approve'
+                  ? `Are you sure you want to approve ${confirmModal.name} and create student accounts for ${confirmModal.childName}?`
+                  : `Are you sure you want to reject registration request from ${confirmModal.name}?`}
+              </p>
+            </div>
+
+            {confirmModal.type === 'reject' && (
+              <div className="mt-4">
+                <label className="block text-[10px] font-black text-slate-450 uppercase tracking-wider mb-1.5">Rejection Reason</label>
+                <textarea
+                  className="w-full p-3 border border-slate-200 rounded-xl text-xs font-semibold placeholder-slate-400 focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none resize-none"
+                  placeholder="Enter rejection reason..."
+                  value={rejectionReason}
+                  onChange={e => setRejectionReason(e.target.value)}
+                  rows={3}
+                />
+              </div>
+            )}
+
+            <div className="flex gap-3 mt-6">
+              <button className="flex-1 py-3 rounded-full text-xs font-black uppercase tracking-wider bg-slate-100 hover:bg-slate-200 text-slate-655 transition-all font-sans" onClick={() => setConfirmModal(null)}>
+                Cancel
+              </button>
+              <button
+                className={`flex-1 py-3 rounded-full text-xs font-black uppercase tracking-wider text-white transition-all font-sans ${confirmModal.type === 'approve' ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-red-600 hover:bg-red-750'}`}
+                onClick={confirmPendingAction}
+                disabled={isSaving}
+              >
+                {isSaving ? 'Processing...' : confirmModal.type === 'approve' ? 'Yes, Approve' : 'Yes, Reject'}
+              </button>
             </div>
           </div>
         </div>

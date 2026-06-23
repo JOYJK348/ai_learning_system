@@ -170,10 +170,28 @@ export default function SchoolsAdminPage() {
     staleTime: 60_000,
   });
 
+  const { data: regData } = useQuery<any[]>({
+    queryKey: ['admin', 'pending-registrations', 'list'],
+    queryFn: () => fetch(`${API_BASE}/api/admin/pending-registrations`, { credentials: 'include' })
+      .then(r => r.json()).then(d => d.data ?? []),
+    enabled: !loading && Boolean(user),
+    staleTime: 30_000,
+  });
+
+  const pendingSchoolsCount = useMemo(() => {
+    if (!Array.isArray(regData)) return 0;
+    return regData.filter((r: any) => r.is_school && r.status === 'pending').length;
+  }, [regData]);
+
   const schools = Array.isArray(schoolsData?.schools) ? schoolsData.schools : [];
   const stats = schoolsData?.stats ?? null;
 
   
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [planFilter, setPlanFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -721,7 +739,7 @@ export default function SchoolsAdminPage() {
     return styles.expiryGood;
   };
 
-  if (loading || !user) return null;
+  if (!mounted || loading || !user) return null;
 
   return (
     <main className={`${adminFont.variable} ${styles.shell}`}>
@@ -746,6 +764,25 @@ export default function SchoolsAdminPage() {
           </button>
         </div>
       </div>
+
+      {pendingSchoolsCount > 0 && (
+        <div className="bg-amber-500/10 border border-amber-500/15 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex gap-3 items-center">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-500 flex items-center justify-center shrink-0">
+              <Clock size={20} />
+            </div>
+            <div>
+              <p className="text-sm font-black text-slate-800 uppercase tracking-wide">Pending School Onboarding</p>
+              <p className="text-[11px] text-slate-500 mt-0.5 font-semibold">
+                There {pendingSchoolsCount === 1 ? 'is 1 school registration request' : `are ${pendingSchoolsCount} school registration requests`} waiting for platform admin approval.
+              </p>
+            </div>
+          </div>
+          <Link href={`/${locale}/admin/pending-registrations?type=school`} className="text-xs font-black uppercase tracking-widest px-6 py-3 rounded-full text-white bg-amber-600 hover:bg-amber-700 transition-all flex items-center gap-2">
+            Review Approvals <ArrowUpRight size={14} />
+          </Link>
+        </div>
+      )}
 
       {/* KPI Cards */}
       {stats && (

@@ -1,7 +1,8 @@
 'use client';
 
 import { ReactNode, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
+import { useParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import ParentTopNav from './_components/ParentTopNav';
 import ParentBottomNav from './_components/ParentBottomNav';
@@ -18,13 +19,13 @@ export default function ParentLayout({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!loading) {
       if (!user) {
-        router.replace(`/${locale}/login`);
+        router.replace('/login');
       } else if (user.role !== 'parent') {
         const route = user.role === 'super_admin' ? 'admin' : user.role === 'school_admin' ? 'school-admin' : user.role;
-        router.replace(`/${locale}/${route}`);
+        router.replace(`/${route}`);
       }
     }
-  }, [user, loading, router, locale]);
+  }, [user, loading, router]);
 
   useEffect(() => {
     if (user && user.role === 'parent') {
@@ -67,7 +68,7 @@ export default function ParentLayout({ children }: { children: ReactNode }) {
 
   const handleLogout = async () => {
     await authLogout();
-    router.push(`/${locale}/login`);
+    router.push('/login');
   };
 
   return (

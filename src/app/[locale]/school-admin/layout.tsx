@@ -2,7 +2,8 @@
 
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
+import { useParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { usePrefetchSchoolData } from '@/hooks/useSchoolParents';
 import { usePrefetchSchoolActivities } from '@/hooks/useSchoolActivities';
@@ -26,9 +27,9 @@ export default function SchoolAdminLayout({ children }: { children: ReactNode })
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'school_admin')) {
-      router.replace(`/${locale}/login`);
+      router.replace('/login');
     }
-  }, [loading, locale, router, user]);
+  }, [loading, router, user]);
 
   if (loading || !user) {
     return (

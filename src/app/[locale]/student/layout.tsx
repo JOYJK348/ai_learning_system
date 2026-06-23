@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { usePathname } from '@/i18n/routing';
-import { useRouter, useParams } from 'next/navigation';
+import { usePathname, useRouter } from '@/i18n/routing';
+import { useParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import StudentBottomNav from './_components/StudentBottomNav';
 import { audioEngine } from '@/core/utils/audio';
@@ -34,13 +34,13 @@ export default function StudentLayout({
   useEffect(() => {
     if (!loading) {
       if (!user) {
-        router.replace(`/${locale}/login`);
+        router.replace('/login');
       } else if (user.role !== 'student') {
         const route = user.role === 'super_admin' ? 'admin' : user.role === 'school_admin' ? 'school-admin' : user.role;
-        router.replace(`/${locale}/${route}`);
+        router.replace(`/${route}`);
       }
     }
-  }, [user, loading, router, locale]);
+  }, [user, loading, router]);
 
   useEffect(() => {
     // Force absolute scroll reset on any internal navigation
