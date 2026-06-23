@@ -80,7 +80,7 @@ async function api(path: string, options: RequestInit = {}) {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(() => loadCachedUser());
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => !loadCachedUser());
   const [error, setError] = useState<string | null>(null);
 
   const refreshUser = async () => {
@@ -150,11 +150,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         Promise.all([
           import('@/core/services/parentApi'),
           import('@/core/constants/queryKeys'),
-        ]).then(([{ parentApi }, { parentKeys }]) => {
+        ]).then(async ([{ parentApi }, { parentKeys }]) => {
           const qc = queryClientSingleton;
           qc.prefetchQuery({ queryKey: parentKeys.me, queryFn: parentApi.me, staleTime: 5 * 60 * 1000 });
-          qc.prefetchQuery({ queryKey: parentKeys.children, queryFn: parentApi.children, staleTime: 5 * 60 * 1000 });
           qc.prefetchQuery({ queryKey: parentKeys.dashboard, queryFn: parentApi.dashboard, staleTime: 5 * 60 * 1000 });
+          
+          try {
+            const childrenResult = await qc.fetchQuery({
+              queryKey: parentKeys.children,
+              queryFn: parentApi.children,
+              staleTime: 5 * 60 * 1000,
+            });
+            const children = childrenResult?.children || [];
+            if (children.length > 0) {
+              const firstChildId = children[0].id;
+              qc.prefetchQuery({
+                queryKey: parentKeys.childProgress(firstChildId),
+                queryFn: () => parentApi.childProgress(firstChildId),
+                staleTime: 60 * 1000,
+              });
+              qc.prefetchQuery({
+                queryKey: parentKeys.childQuizzes(firstChildId),
+                queryFn: () => parentApi.childQuizzes(firstChildId),
+                staleTime: 60 * 1000,
+              });
+              qc.prefetchQuery({
+                queryKey: parentKeys.childChapterProgress(firstChildId),
+                queryFn: () => parentApi.childChapterProgress(firstChildId),
+                staleTime: 60 * 1000,
+              });
+            }
+          } catch (err) {
+            console.error('Failed to prefetch parent child data:', err);
+          }
         }).catch(() => {});
       }
       return data.user;
@@ -175,23 +203,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = async () => {
-    setLoading(true);
+    saveCachedUser(null);
+    saveCachedToken(null);
+    setUser(null);
+    document.cookie = 'zhi_user_role=; path=/; max-age=0';
+    clearPersistedCache();
+    setLoading(false);
     setError(null);
-    try {
-      const res = await api('/api/auth/logout', { method: 'POST' });
-      if (!res.ok) {
-        const data = (await res.json().catch(() => ({}))) as AuthResponse;
-        setError(data.error || 'Logout failed');
-      }
-    } catch { setError('Unable to reach auth server'); }
-    finally {
-      saveCachedUser(null);
-      saveCachedToken(null);
-      setUser(null);
-      document.cookie = 'zhi_user_role=; path=/; max-age=0';
-      clearPersistedCache();
-      setLoading(false);
-    }
+    
+    // Call server logout in background without blocking redirect/UI
+    api('/api/auth/logout', { method: 'POST' }).catch(() => {});
   };
 
   useEffect(() => {

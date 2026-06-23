@@ -79,8 +79,6 @@ export default function LoginPage() {
     }
   }, []);
 
-
-
   useEffect(() => {
     if (authError) setErrorMessage(authError);
   }, [authError]);
@@ -309,10 +307,10 @@ export default function LoginPage() {
                 <button
                   suppressHydrationWarning
                   type="submit"
-                  disabled={isLoading || authLoading}
+                  disabled={isLoading}
                   className="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-none font-semibold text-sm tracking-wide transition-all shadow-lg shadow-slate-900/20 hover:shadow-xl hover:shadow-slate-900/25 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed uppercase"
                 >
-                  {isLoading || authLoading
+                  {isLoading
                     ? 'Working...'
                     : isRegister ? 'Create Parent Account' : `Sign in as ${portal.label}`}
                 </button>

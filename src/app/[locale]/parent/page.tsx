@@ -42,27 +42,40 @@ export default function ParentDashboard() {
   };
   const [showSessionExpired, setShowSessionExpired] = useState(false);
 
-  const { data: meRaw, error: meError } = useQuery({
+  const { data: meRaw, error: meError, isLoading: meLoading } = useQuery({
     queryKey: parentKeys.me, queryFn: parentApi.me, staleTime: 5 * 60 * 1000,
     retry: false,
   });
   const parentProfile = (meRaw as any)?.parent ?? null;
 
-  const { data: childrenData, error: childrenError } = useQuery({
+  const { data: childrenData, error: childrenError, isLoading: childrenLoading } = useQuery({
     queryKey: parentKeys.children, queryFn: parentApi.children, staleTime: 5 * 60 * 1000,
     retry: false,
   });
 
   const children = childrenData?.children ?? [];
-  const [activeChildId, setActiveChildId] = useState<string | null>(null);
+  const [activeChildId, setActiveChildId] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('zhi_parent_active_child_id');
+    }
+    return null;
+  });
 
   useEffect(() => {
-    if (!activeChildId && children.length > 0) setActiveChildId(children[0].id);
+    if (children.length > 0) {
+      if (!activeChildId) {
+        setActiveChildId(children[0].id);
+        localStorage.setItem('zhi_parent_active_child_id', children[0].id);
+      } else if (!children.some((c: any) => c.id === activeChildId)) {
+        setActiveChildId(children[0].id);
+        localStorage.setItem('zhi_parent_active_child_id', children[0].id);
+      }
+    }
   }, [children, activeChildId]);
 
   const activeChild = children.find((c: any) => c.id === activeChildId) ?? null;
 
-  const { data: progressData, error: progressError } = useQuery({
+  const { data: progressData, error: progressError, isLoading: progressLoading } = useQuery({
     queryKey: parentKeys.childProgress(activeChildId ?? ''),
     queryFn: () => parentApi.childProgress(activeChildId!),
     enabled: !!activeChildId, staleTime: 60_000,
@@ -78,7 +91,7 @@ export default function ParentDashboard() {
     retry: false,
   });
 
-  const { data: chapterData, error: chapterError } = useQuery({
+  const { data: chapterData, error: chapterError, isLoading: chapterLoading } = useQuery({
     queryKey: parentKeys.childChapterProgress(activeChildId ?? ''),
     queryFn: () => parentApi.childChapterProgress(activeChildId!),
     enabled: !!activeChildId, staleTime: 60_000,
@@ -88,6 +101,11 @@ export default function ParentDashboard() {
   const childProgress = progressData as any;
   const quizzes = quizzesData?.quizzes ?? [];
   const chapterProgress = Array.isArray(chapterData) ? chapterData : [];
+
+  const isDashboardLoading =
+    meLoading ||
+    childrenLoading ||
+    (activeChildId ? (progressLoading || chapterLoading) : false);
 
   // Track authentication / forbidden errors
   useEffect(() => {
@@ -103,7 +121,7 @@ export default function ParentDashboard() {
       isAuthError(progressError) ||
       isAuthError(quizzesError) ||
       isAuthError(chapterError)) &&
-      (!user || user.role === 'parent')
+      (user && user.role === 'parent')
     ) {
       setShowSessionExpired(true);
     }
@@ -165,7 +183,15 @@ export default function ParentDashboard() {
     return { bg: 'linear-gradient(135deg, #f0fdf4, #dcfce7)', border: 'rgba(34, 197, 94, 0.15)', text: '#15803d', fill: 'linear-gradient(90deg, #10b981, #059669)', accent: '#bbf7d0' };
   };
 
-  const recentQuizzes = quizzes.slice(0, 4);
+  const recentQuizzes = quizzes.slice(0, 3);
+
+  if (isDashboardLoading && !showSessionExpired) {
+    return (
+      <div className={styles.loading}>
+        <div className={styles.loader} />
+      </div>
+    );
+  }
 
   return (
     <div className={`${adminFont.variable} ${styles.shell}`}>
@@ -187,7 +213,11 @@ export default function ParentDashboard() {
                 <Users size={16} />
                 <select
                   value={activeChildId || ''}
-                  onChange={(e) => setActiveChildId(e.target.value)}
+                  onChange={(e) => {
+                    const cid = e.target.value;
+                    setActiveChildId(cid);
+                    localStorage.setItem('zhi_parent_active_child_id', cid);
+                  }}
                   className={styles.selectInput}
                 >
                   {children.map((c: any) => (
@@ -364,34 +394,45 @@ export default function ParentDashboard() {
                 {recentQuizzes.length === 0 ? (
                   <p style={{ fontSize: '0.8rem', fontWeight: 700, color: '#94a3b8', textAlign: 'center', padding: '1rem 0' }}>No quizzes attempts yet</p>
                 ) : (
-                  recentQuizzes.map((q: any, i: number) => {
-                    const passed = q.percentage >= 60;
-                    return (
-                      <div key={q.id || i} className={styles.quizAttemptRow}>
-                        <div className={styles.quizAttemptIcon} style={{ background: passed ? '#dcfce7' : '#fee2e2' }}>
-                          {passed ? '🌟' : '✏️'}
+                  <>
+                    {recentQuizzes.map((q: any, i: number) => {
+                      const passed = q.percentage >= 60;
+                      return (
+                        <div key={q.id || i} className={styles.quizAttemptRow}>
+                          <div className={styles.quizAttemptIcon} style={{ background: passed ? '#dcfce7' : '#fee2e2' }}>
+                            {passed ? '🌟' : '✏️'}
+                          </div>
+                          <div className={styles.quizAttemptInfo}>
+                            <p className={styles.quizAttemptTitle} style={{ fontWeight: 950, color: '#0f172a' }}>
+                              {q.quiz_title}
+                            </p>
+                            <p style={{ fontSize: '0.74rem', color: '#0284c7', fontWeight: 800, margin: '0.1rem 0' }}>
+                              Subject: {q.subject_name} ({q.lesson_title})
+                            </p>
+                            <p className={styles.quizAttemptSub}>
+                              {new Date(q.completed_at || q.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                              {' · '}
+                              {passed ? <span style={{ color: '#16a34a', fontWeight: 900 }}>Passed</span> : <span style={{ color: '#b45309', fontWeight: 900 }}>Needs Review</span>}
+                            </p>
+                          </div>
+                          <div style={{ textAlign: 'right' }}>
+                            <span className={styles.quizAttemptScore} style={{ color: passed ? '#16a34a' : '#b45309' }}>
+                              {q.score}/{q.max_score}
+                            </span>
+                          </div>
                         </div>
-                        <div className={styles.quizAttemptInfo}>
-                          <p className={styles.quizAttemptTitle} style={{ fontWeight: 950, color: '#0f172a' }}>
-                            {q.quiz_title}
-                          </p>
-                          <p style={{ fontSize: '0.74rem', color: '#0284c7', fontWeight: 800, margin: '0.1rem 0' }}>
-                            Subject: {q.subject_name} ({q.lesson_title})
-                          </p>
-                          <p className={styles.quizAttemptSub}>
-                            {new Date(q.completed_at || q.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
-                            {' · '}
-                            {passed ? <span style={{ color: '#16a34a', fontWeight: 900 }}>Passed</span> : <span style={{ color: '#b45309', fontWeight: 900 }}>Needs Review</span>}
-                          </p>
-                        </div>
-                        <div style={{ textAlign: 'right' }}>
-                          <span className={styles.quizAttemptScore} style={{ color: passed ? '#16a34a' : '#b45309' }}>
-                            {q.score}/{q.max_score}
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })
+                      );
+                    })}
+                    
+                    {quizzes.length > 3 && (
+                      <button
+                        onClick={() => router.push(`/${locale}/parent/quizzes`)}
+                        className={styles.seeAllButton}
+                      >
+                        See All Quiz History ({quizzes.length}) →
+                      </button>
+                    )}
+                  </>
                 )}
               </div>
             </section>

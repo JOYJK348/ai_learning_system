@@ -106,6 +106,13 @@ export const parentApi = {
   me: () =>
     fetchJson<ParentProfile>('/api/parent/me'),
 
+  updateProfile: (payload: { name: string; phone: string }) =>
+    fetchJson<{ success: boolean; parent: any }>('/api/parent/me', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }),
+
   children: () =>
     fetchJson<{ children: ChildSummary[] }>('/api/parent/children'),
 
