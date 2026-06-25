@@ -29,7 +29,7 @@ export default function RegisterPage() {
 
   const [form, setForm] = useState({
     name: '', email: '', phone: '',
-    child_name: '', child_grade_id: '',
+    child_name: '', child_grade_id: '', child_gender: '', child_dob: '',
     school_name: '', address: '', city: '', board_name: '',
   });
 
@@ -59,7 +59,40 @@ export default function RegisterPage() {
     e.preventDefault();
     setError('');
     if (regType === 'parent') {
-      if (!form.child_name.trim() || !form.child_grade_id) { setError("Please enter your child's name and grade."); return; }
+      if (!form.child_name.trim() || !form.child_grade_id || !form.child_gender || !form.child_dob) {
+        setError("Please fill in your child's name, grade, gender, and date of birth.");
+        return;
+      }
+      const dob = new Date(form.child_dob);
+      const today = new Date();
+      if (isNaN(dob.getTime())) {
+        setError("Please enter a valid date of birth.");
+        return;
+      }
+      let age = today.getFullYear() - dob.getFullYear();
+      const m = today.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+        age--;
+      }
+      const selectedGrade = grades.find((g: any) => g.id === form.child_grade_id);
+      const gradeName = selectedGrade ? selectedGrade.name : '';
+
+      if (gradeName === 'LKG') {
+        if (age < 3 || age >= 5) {
+          setError("Child must be between 3 and 4 years old for LKG registration.");
+          return;
+        }
+      } else if (gradeName === 'UKG') {
+        if (age < 4 || age >= 6) {
+          setError("Child must be between 4 and 5 years old for UKG registration.");
+          return;
+        }
+      } else if (gradeName === 'Grade 1') {
+        if (age < 5 || age >= 8) {
+          setError("Child must be between 5 and 7 years old for Grade 1 registration.");
+          return;
+        }
+      }
     } else {
       if (!form.school_name.trim()) { setError("Please enter your school's name."); return; }
     }
@@ -67,7 +100,16 @@ export default function RegisterPage() {
     try {
       const endpoint = regType === 'parent' ? `${BASE}/api/auth/register-parent` : `${BASE}/api/auth/register-school`;
       const body = regType === 'parent'
-        ? { parent_name: form.name.trim(), parent_email: form.email.trim().toLowerCase(), parent_phone: form.phone.trim() || null, child_name: form.child_name.trim(), child_grade_id: form.child_grade_id || null, school_id: null }
+        ? {
+            parent_name: form.name.trim(),
+            parent_email: form.email.trim().toLowerCase(),
+            parent_phone: form.phone.trim() || null,
+            child_name: form.child_name.trim(),
+            child_grade_id: form.child_grade_id || null,
+            child_gender: form.child_gender || null,
+            child_dob: form.child_dob || null,
+            school_id: null
+          }
         : { school_name: form.school_name.trim(), admin_name: form.name.trim(), admin_email: form.email.trim().toLowerCase(), admin_phone: form.phone.trim() || null, address: form.address.trim() || null, city: form.city.trim() || null, board_name: form.board_name.trim() || null };
       const res = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       const data = await res.json();
@@ -467,6 +509,35 @@ export default function RegisterPage() {
                                 <option key={g.id} value={g.id}>{g.name}</option>
                               ))}
                             </select>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                            <div>
+                              <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">Gender *</label>
+                              <select
+                                required
+                                value={form.child_gender}
+                                onChange={e => setForm(f => ({ ...f, child_gender: e.target.value }))}
+                                className={`w-full py-3.5 px-4 border rounded-xl text-sm font-semibold text-slate-955 transition-all outline-none appearance-none ${activeInputClass}`}
+                              >
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                              </select>
+                            </div>
+
+                            <div>
+                              <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">Date of Birth *</label>
+                              <input
+                                required
+                                type="date"
+                                value={form.child_dob}
+                                onChange={e => setForm(f => ({ ...f, child_dob: e.target.value }))}
+                                className={`w-full py-3.5 px-4 border rounded-xl text-sm font-semibold text-slate-955 transition-all outline-none ${activeInputClass}`}
+                                suppressHydrationWarning
+                              />
+                            </div>
                           </div>
                         </div>
                       </>

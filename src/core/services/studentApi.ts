@@ -116,7 +116,7 @@ export const studentKeys = {
 
 export const studentApi = {
   getMe: (): Promise<StudentProfile> =>
-    fetchJson<StudentProfile>('/api/student/me'),
+    fetchJson<any>('/api/student/me').then(d => d.student ?? d),
 
   getLessons: (): Promise<Subject[]> =>
     fetchJson<Subject[]>('/api/student/lessons'),

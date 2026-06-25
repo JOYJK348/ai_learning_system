@@ -50,7 +50,7 @@ export default function AdminApprovalsPage() {
   const [urlTypeParam, setUrlTypeParam] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [feedback, setFeedback] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
-  const [credentials, setCredentials] = useState<any>(null);
+  const [successModal, setSuccessModal] = useState<{ isSchool: boolean; name: string; email: string } | null>(null);
   const [detailId, setDetailId] = useState<string | null>(null);
   const [confirmModal, setConfirmModal] = useState<{ type: 'approve' | 'reject'; id: string; name: string; extraInfo: string; isSchool?: boolean } | null>(null);
   const [rejectionReason, setRejectionReason] = useState('');
@@ -86,8 +86,21 @@ export default function AdminApprovalsPage() {
     onSuccess: (data: any) => {
       setConfirmModal(null);
       if (data.data?.status === 'approved') {
-        setCredentials(data.data);
-        setFeedback({ msg: 'Onboarding approved! Credentials generated below.', type: 'success' });
+        const isSchool = !!data.data.school_code;
+        const email = isSchool
+          ? data.data.admin_credentials?.email
+          : data.data.parent_credentials?.email;
+        
+        setSuccessModal({
+          isSchool,
+          name: isSchool ? 'School Admin' : data.data.child_credentials?.name || '',
+          email: email || '',
+        });
+        
+        const msg = isSchool
+          ? 'Onboarding approved successfully!'
+          : 'Approved successfully! Email dispatched.';
+        setFeedback({ msg, type: 'success' });
         queryClient.invalidateQueries({ queryKey: ['admin', 'pending-registrations'] });
       } else if (data.error) setFeedback({ msg: data.error, type: 'error' });
     },
@@ -242,54 +255,56 @@ export default function AdminApprovalsPage() {
         </div>
       )}
 
-      {/* Generated Credentials Block */}
-      {credentials && (
-        <div className={styles.credCard}>
-          <p className={styles.credTitle}>✅ Account Created Successfully</p>
-          <p className={styles.credNote}>
-            {credentials.school_code
-              ? 'Provide these credentials to the school principal / administrator to access the platform.'
-              : 'Share these credentials with the parent to begin using the learning portal.'}
-          </p>
-          <div className={styles.credGrid}>
-            {credentials.school_code ? (
-              <div className={styles.credBox} style={{ gridColumn: 'span 2' }}>
-                <p className={styles.credBoxTitle}>School Portal Access Details</p>
-                <div className={styles.credRow}><Building2 size={14} /> School Code: <strong>{credentials.school_code}</strong></div>
-                <div className={styles.credRow}><Mail size={14} /> Admin Email: <strong>{credentials.admin_credentials?.email}</strong></div>
-                <div className={styles.credRow}><Fingerprint size={14} /> Admin Password: <strong>{credentials.admin_credentials?.password}</strong></div>
-              </div>
-            ) : (
-              <>
-                <div className={styles.credBox}>
-                  <p className={styles.credBoxTitle}>Parent Login</p>
-                  <div className={styles.credRow}><Mail size={14} /> Email: <strong>{credentials.parent_credentials?.email}</strong></div>
-                  <div className={styles.credRow}><Fingerprint size={14} /> Password: <strong>{credentials.parent_credentials?.password}</strong></div>
-                </div>
-                <div className={styles.credBox}>
-                  <p className={styles.credBoxTitle}>Child Login ({credentials.child_credentials?.name})</p>
-                  <div className={styles.credRow}><Mail size={14} /> Email: <strong>{credentials.child_credentials?.email}</strong></div>
-                  <div className={styles.credRow}><Fingerprint size={14} /> Password: <strong>{credentials.child_credentials?.password}</strong></div>
-                </div>
-              </>
-            )}
-          </div>
-          <div style={{ marginTop: '1rem' }}>
-            <button
-              className={styles.credCopyBtn}
-              onClick={() => {
-                const text = credentials.school_code
-                  ? `School Code: ${credentials.school_code}\nAdmin Email: ${credentials.admin_credentials?.email}\nPassword: ${credentials.admin_credentials?.password}`
-                  : `Parent Email: ${credentials.parent_credentials?.email}\nPassword: ${credentials.parent_credentials?.password}\nChild Email: ${credentials.child_credentials?.email}\nPassword: ${credentials.child_credentials?.password}`;
-                navigator.clipboard.writeText(text);
-                setFeedback({ msg: 'Credentials details copied to clipboard!', type: 'success' });
-              }}
-            >
-              📋 Copy Credentials
-            </button>
-            <button className={styles.credDismiss} onClick={() => { setCredentials(null); setFeedback(null); }}>
-              Dismiss
-            </button>
+      {/* Generated Success Modal Popup */}
+      {successModal && (
+        <div className={styles.modalOverlay} onClick={() => setSuccessModal(null)}>
+          <div className={styles.modalCard} onClick={e => e.stopPropagation()} style={{ textAlign: 'center', padding: '2.5rem 2rem' }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '64px',
+              height: '64px',
+              borderRadius: '50%',
+              background: 'rgba(22, 163, 74, 0.1)',
+              color: '#16a34a',
+              marginBottom: '1.5rem'
+            }}>
+              <CheckCircle2 size={36} />
+            </div>
+            
+            <h2 className={styles.modalTitle} style={{ marginBottom: '0.75rem', fontSize: '1.5rem' }}>
+              Onboarding Approved!
+            </h2>
+            
+            <p className={styles.modalDesc} style={{ fontSize: '0.92rem', color: '#475569', marginBottom: '2rem', lineHeight: '1.6' }}>
+              {successModal.isSchool 
+                ? `The school registration has been approved. The access credentials and activation instructions have been successfully sent to ${successModal.email}.`
+                : `The parent registration has been approved. Welcome emails containing login credentials for both parent and child have been successfully sent to ${successModal.email}.`}
+            </p>
+            
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button
+                className={styles.btnConfirmApprove}
+                style={{
+                  flex: 1,
+                  padding: '0.8rem',
+                  borderRadius: '1.25rem',
+                  fontSize: '0.85rem',
+                  fontWeight: 900,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  background: 'linear-gradient(135deg, #12312f, #16a085 48%, #38bdf8)',
+                  boxShadow: '0 10px 20px rgba(22, 160, 133, 0.15)',
+                  border: 'none',
+                  color: 'white',
+                  cursor: 'pointer'
+                }}
+                onClick={() => setSuccessModal(null)}
+              >
+                Okay, Got it
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -570,8 +585,8 @@ export default function AdminApprovalsPage() {
 
       {/* Confirmation Modal */}
       {confirmModal && (
-        <div className={styles.drawerOverlay} onClick={() => setConfirmModal(null)}>
-          <div className={styles.modalCard} onClick={e => e.stopPropagation()} style={{ margin: 'auto' }}>
+        <div className={styles.modalOverlay} onClick={() => setConfirmModal(null)}>
+          <div className={styles.modalCard} onClick={e => e.stopPropagation()}>
             <div className={styles.modalHeader}>
               <div>
                 <p className={styles.kpiLabel} style={{ color: confirmModal.type === 'approve' ? '#16a34a' : '#be123c' }}>

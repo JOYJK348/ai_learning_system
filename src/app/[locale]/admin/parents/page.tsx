@@ -181,7 +181,7 @@ export default function ParentsAdminPage() {
   const [selectedPendingReg, setSelectedPendingReg] = useState<any | null>(null);
   const [confirmModal, setConfirmModal] = useState<{ type: 'approve' | 'reject'; id: string; name: string; childName: string } | null>(null);
   const [rejectionReason, setRejectionReason] = useState('');
-  const [credentials, setCredentials] = useState<any>(null);
+  const [successModal, setSuccessModal] = useState<{ isSchool: boolean; name: string; email: string } | null>(null);
 
   /* hydrate for client-side rendering */
   const [hydrated, setHydrated] = useState(false);
@@ -285,7 +285,13 @@ export default function ParentsAdminPage() {
         showFeedback(data.error || 'Operation failed');
       } else {
         if (confirmModal.type === 'approve') {
-          setCredentials(data.data);
+          const isSchool = false;
+          const email = data.data.parent_credentials?.email;
+          setSuccessModal({
+            isSchool,
+            name: data.data.child_credentials?.name || '',
+            email: email || '',
+          });
           showFeedback('Registration approved successfully!');
         } else {
           showFeedback('Registration rejected successfully!');
@@ -718,42 +724,46 @@ export default function ParentsAdminPage() {
         </section>
       )}
 
-      {/* Credentials display box */}
-      {credentials && (
-        <div className="bg-emerald-500/10 border border-emerald-500/15 rounded-3xl p-6 my-6 shadow-sm font-sans max-w-4xl mx-auto">
-          <p className="text-sm font-black text-emerald-800 uppercase tracking-wide">✅ Credentials Generated Successfully</p>
-          <p className="text-[11px] text-slate-500 mt-1 mb-4 font-semibold">Share these login details with the parent:</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-white/60 border border-slate-200/50 rounded-2xl p-4">
-              <p className="text-xs font-black text-slate-800 uppercase tracking-wider mb-2">Parent Login</p>
-              <div className="flex flex-col gap-1 text-[11.5px] text-slate-600 font-semibold">
-                <span>Email: <strong className="text-slate-850 select-all">{credentials.parent_credentials?.email}</strong></span>
-                <span>Password: <strong className="text-slate-850 select-all">{credentials.parent_credentials?.password}</strong></span>
-              </div>
+      {/* Generated Success Modal Popup */}
+      {successModal && (
+        <div className={styles.modalOverlay} onClick={() => setSuccessModal(null)}>
+          <div className={styles.modalCard} onClick={e => e.stopPropagation()} style={{ textAlign: 'center', padding: '2.5rem 2rem' }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '64px',
+              height: '64px',
+              borderRadius: '50%',
+              background: 'rgba(22, 163, 74, 0.1)',
+              color: '#16a34a',
+              marginBottom: '1.5rem'
+            }}>
+              <CheckCircle2 size={36} />
             </div>
-            <div className="bg-white/60 border border-slate-200/50 rounded-2xl p-4">
-              <p className="text-xs font-black text-slate-800 uppercase tracking-wider mb-2">Child Login ({credentials.child_credentials?.name})</p>
-              <div className="flex flex-col gap-1 text-[11.5px] text-slate-600 font-semibold">
-                <span>Email: <strong className="text-slate-850 select-all">{credentials.child_credentials?.email}</strong></span>
-                <span>Password: <strong className="text-slate-850 select-all">{credentials.child_credentials?.password}</strong></span>
-              </div>
+            
+            <h2 className={styles.modalTitle} style={{ marginBottom: '0.75rem', fontSize: '1.5rem' }}>
+              Onboarding Approved!
+            </h2>
+            
+            <p className={styles.modalDesc} style={{ fontSize: '0.92rem', color: '#475569', marginBottom: '2rem', lineHeight: '1.6' }}>
+              The parent registration has been approved. Welcome emails containing login credentials for both parent and child have been successfully sent to {successModal.email}.
+            </p>
+            
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button
+                className="flex-1 py-3 rounded-full text-xs font-black uppercase tracking-wider text-white transition-all font-sans"
+                style={{
+                  background: 'linear-gradient(135deg, #12312f, #16a085 48%, #38bdf8)',
+                  boxShadow: '0 10px 20px rgba(22, 160, 133, 0.15)',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+                onClick={() => setSuccessModal(null)}
+              >
+                Okay, Got it
+              </button>
             </div>
-          </div>
-          <div className="flex gap-3 mt-4">
-            <button 
-              className="px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider text-white transition-all hover:scale-[1.02]"
-              style={{ background: 'linear-gradient(135deg, #12312f, #16a085 48%, #38bdf8)', boxShadow: '0 18px 34px rgba(22, 160, 133, 0.22)' }}
-              onClick={() => { 
-                const text = `Parent Email: ${credentials.parent_credentials?.email}\nPassword: ${credentials.parent_credentials?.password}\nChild Email: ${credentials.child_credentials?.email}\nPassword: ${credentials.child_credentials?.password}`;
-                navigator.clipboard.writeText(text); 
-                showFeedback('Copied details to clipboard!'); 
-              }}
-            >
-              📋 Copy Details
-            </button>
-            <button className="px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider bg-slate-200 hover:bg-slate-300 text-slate-700 transition-all" onClick={() => setCredentials(null)}>
-              Dismiss
-            </button>
           </div>
         </div>
       )}
