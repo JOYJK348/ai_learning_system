@@ -64,6 +64,24 @@ export type SubscribeResult = {
   currency: string;
 };
 
+export type CreateOrderResult = {
+  success: boolean;
+  payment_record_id: string;
+  razorpay_order_id: string;
+  amount: number;           // in paise
+  currency: string;
+  plan: { id: number; code: string; name: string };
+  key_id: string;
+};
+
+export type VerifyPaymentResult = {
+  success: boolean;
+  already_processed?: boolean;
+  plan_id?: number;
+  subscription_id?: string;
+  expires_at?: string;
+};
+
 export type ChapterProgress = {
   id: string;
   name: string;
@@ -99,6 +117,27 @@ export const parentApi = {
 
   payments: () =>
     fetchJson<unknown[]>('/api/parent/payments'),
+
+  // ── Razorpay Payment Flow ────────────────────────────────────────────────
+  // Step 1: Create a Razorpay order on backend and get order details
+  createPaymentOrder: (planId: number, intervalType?: string) =>
+    fetchJson<CreateOrderResult>('/api/payments/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ plan_id: planId, interval_type: intervalType || 'monthly' }),
+    }),
+
+  // Step 2: Verify payment signature after Razorpay checkout success
+  verifyPayment: (payload: {
+    razorpay_order_id: string;
+    razorpay_payment_id: string;
+    razorpay_signature: string;
+  }) =>
+    fetchJson<VerifyPaymentResult>('/api/payments/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }),
 
   childChapterProgress: (childId: string) =>
     fetchJson<ChapterProgress[]>('/api/parent/children/' + childId + '/chapter-progress'),

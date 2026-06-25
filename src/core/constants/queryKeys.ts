@@ -18,8 +18,7 @@ export const adminKeys = {
   chapters:   ['admin', 'chapters'] as const,
   lessons:    ['admin', 'lessons'] as const,
   quizzes:   ['admin', 'quizzes'] as const,
-  videos:    ['admin', 'videos'] as const,
-  activities: ['admin', 'activities'] as const,
+  plans:     ['admin', 'plans'] as const,
 };
 
 export const parentKeys = {

@@ -4,7 +4,6 @@ import { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import {
-  Activity,
   CircleDollarSign,
   GraduationCap,
   LayoutDashboard,
@@ -23,7 +22,6 @@ import styles from './SchoolAdminBottomNav.module.css';
 const allNavItems = [
   { label: 'Dashboard', icon: LayoutDashboard, href: 'school-admin' },
   { label: 'Students', icon: GraduationCap, href: 'school-admin/students' },
-  { label: 'Activities', icon: Activity, href: 'school-admin/activities' },
   { label: 'Curriculum', icon: Library, href: 'school-admin/curriculum' },
   { label: 'Parents', icon: Users, href: 'school-admin/parents' },
   { label: 'Payments', icon: CircleDollarSign, href: 'school-admin/payments' },

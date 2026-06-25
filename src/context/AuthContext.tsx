@@ -136,6 +136,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           qc.prefetchQuery({ queryKey: adminKeys.paymentsTab('approvals'), queryFn: adminApi.paymentsApprovals, staleTime: 60000 });
           qc.prefetchQuery({ queryKey: adminKeys.students, queryFn: adminApi.students, staleTime: 60000 });
           qc.prefetchQuery({ queryKey: adminKeys.schoolDirectory, queryFn: adminApi.schoolDirectory, staleTime: 60000 });
+          qc.prefetchQuery({ queryKey: adminKeys.plans, queryFn: adminApi.paymentsPlans, staleTime: 60000 });
         }).catch(() => {});
       } else if (data.user.role === 'student') {
         Promise.all([

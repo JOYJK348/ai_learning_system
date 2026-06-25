@@ -4,7 +4,6 @@ import { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import {
-  Activity,
   BookOpen,
   Building2,
   CircleDollarSign,
@@ -14,7 +13,6 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
-  PlaySquare,
   Settings,
   Users,
   X,
@@ -29,8 +27,6 @@ const allNavItems = [
   { label: 'Parents', icon: Users, href: 'admin/parents' },
   { label: 'Payments', icon: CircleDollarSign, href: 'admin/payments' },
   { label: 'Curriculum', icon: BookOpen, href: 'admin/curriculum' },
-  { label: 'Videos', icon: PlaySquare, href: 'admin/videos' },
-  { label: 'Activities', icon: Activity, href: 'admin/activities' },
   { label: 'Quizzes', icon: ClipboardList, href: 'admin/quizzes' },
   { label: 'Reports', icon: FileBarChart, href: 'admin/reports' },
   { label: 'Settings', icon: Settings, href: 'admin/settings' },

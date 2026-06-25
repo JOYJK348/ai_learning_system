@@ -10,7 +10,7 @@ import {
   Star, GraduationCap, Pencil, Trash2, Eye, X,
   XCircle, TrendingUp, IndianRupee, Send, Plus, CreditCard,
   ChevronRight, ShieldCheck, AlertTriangle, Clock, CheckCircle2,
-  School, Mail, Calendar, ChevronDown, Users2,
+  School, Mail, Calendar, ChevronDown, Users2, ArrowLeft,
 } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { adminKeys } from '@/core/constants/queryKeys';
@@ -459,17 +459,21 @@ export default function ParentsAdminPage() {
     <main className={`${adminFont.variable} ${styles.shell}`}>
 
       {/* ── HEADER ── */}
-      <header className={styles.header}>
+      <div className={styles.pageHeader}>
         <div>
+          <a href={`/${locale}/admin`} className={styles.backLink}>
+            <ArrowLeft size={16} style={{ display: 'inline-block', verticalAlign: 'middle' }} /> Back to dashboard
+          </a>
+          <p className={styles.eyebrow} style={{ marginTop: '0.75rem' }}>Parent directory</p>
           <h1 className={styles.title}>Parent Management</h1>
           <p className={styles.subtitle}>Manage subscriptions, approvals, and payment history</p>
         </div>
         <div className={styles.headerActions}>
-          <button type="button" className={styles.secondaryButton} onClick={exportCSV}>
+          <button type="button" className={styles.primaryButton} onClick={exportCSV}>
             <Download size={15} /> Export CSV
           </button>
         </div>
-      </header>
+      </div>
 
       {pendingParentsCount > 0 && (
         <div className="bg-amber-500/10 border border-amber-500/15 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -737,7 +741,8 @@ export default function ParentsAdminPage() {
           </div>
           <div className="flex gap-3 mt-4">
             <button 
-              className="px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-600 hover:bg-emerald-700 text-white transition-all"
+              className="px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider text-white transition-all hover:scale-[1.02]"
+              style={{ background: 'linear-gradient(135deg, #12312f, #16a085 48%, #38bdf8)', boxShadow: '0 18px 34px rgba(22, 160, 133, 0.22)' }}
               onClick={() => { 
                 const text = `Parent Email: ${credentials.parent_credentials?.email}\nPassword: ${credentials.parent_credentials?.password}\nChild Email: ${credentials.child_credentials?.email}\nPassword: ${credentials.child_credentials?.password}`;
                 navigator.clipboard.writeText(text); 
@@ -798,7 +803,11 @@ export default function ParentsAdminPage() {
 
                   {selectedPendingReg.status === 'pending' && (
                     <div className="flex gap-3 mt-8">
-                      <button className="flex-1 bg-emerald-650 hover:bg-emerald-700 text-white font-black uppercase tracking-wider py-3.5 rounded-full text-xs transition-all flex items-center justify-center gap-2" onClick={() => { handleApprovePending({ raw_registration_id: selectedPendingReg.id, parent_name: selectedPendingReg.parent_name, child_name: selectedPendingReg.child_name }); setSelectedPendingReg(null); }}>
+                      <button 
+                        className="flex-1 text-white font-black uppercase tracking-wider py-3.5 rounded-full text-xs transition-all flex items-center justify-center gap-2 hover:scale-[1.01]" 
+                        style={{ background: 'linear-gradient(135deg, #12312f, #16a085 48%, #38bdf8)', boxShadow: '0 18px 34px rgba(22, 160, 133, 0.22)' }}
+                        onClick={() => { handleApprovePending({ raw_registration_id: selectedPendingReg.id, parent_name: selectedPendingReg.parent_name, child_name: selectedPendingReg.child_name }); setSelectedPendingReg(null); }}
+                      >
                         <CheckCircle2 size={15} /> Approve
                       </button>
                       <button className="flex-1 bg-red-650 hover:bg-red-750 text-white font-black uppercase tracking-wider py-3.5 rounded-full text-xs transition-all flex items-center justify-center gap-2" onClick={() => { handleRejectPending({ raw_registration_id: selectedPendingReg.id, parent_name: selectedPendingReg.parent_name, child_name: selectedPendingReg.child_name }); setSelectedPendingReg(null); }}>
@@ -906,7 +915,8 @@ export default function ParentsAdminPage() {
                 Cancel
               </button>
               <button
-                className={`flex-1 py-3 rounded-full text-xs font-black uppercase tracking-wider text-white transition-all font-sans ${confirmModal.type === 'approve' ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-red-600 hover:bg-red-750'}`}
+                className={`flex-1 py-3 rounded-full text-xs font-black uppercase tracking-wider text-white transition-all font-sans ${confirmModal.type === 'approve' ? '' : 'bg-red-600 hover:bg-red-750'}`}
+                style={confirmModal.type === 'approve' ? { background: 'linear-gradient(135deg, #12312f, #16a085 48%, #38bdf8)', boxShadow: '0 18px 34px rgba(22, 160, 133, 0.22)' } : undefined}
                 onClick={confirmPendingAction}
                 disabled={isSaving}
               >

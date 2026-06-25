@@ -87,6 +87,18 @@ export const adminApi = {
   paymentsPlans: () =>
     fetchJson<unknown>('/api/admin/plans'),
 
+  updatePlan: (id: string, body: any) =>
+    fetchJson<unknown>(`/api/admin/plans/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }),
+
+  deletePlan: (id: string) =>
+    fetchJson<unknown>(`/api/admin/plans/${id}`, {
+      method: 'DELETE',
+    }),
+
   reports: (range: string): Promise<ReportsAggregate> =>
     Promise.all([
       fetchJson(`/api/admin/reports/revenue?period=${range}`),
@@ -98,6 +110,24 @@ export const adminApi = {
     ]).then(([revenue, userStats, schoolStats, studentStats, engagement, subjectStats]) => ({
       revenue, userStats, schoolStats, studentStats, engagement, subjectStats,
     })),
+
+  reportsRevenue: (range: string) =>
+    fetchJson<any>(`/api/admin/reports/revenue?period=${range}`),
+
+  reportsUsers: () =>
+    fetchJson<any>('/api/admin/reports/users'),
+
+  reportsSchools: () =>
+    fetchJson<any>('/api/admin/reports/schools'),
+
+  reportsStudents: () =>
+    fetchJson<any>('/api/admin/reports/students'),
+
+  reportsEngagement: () =>
+    fetchJson<any>('/api/admin/reports/engagement'),
+
+  reportsSubjects: () =>
+    fetchJson<any>('/api/admin/reports/subjects'),
 
   boards: () =>
     fetchJson<unknown[]>('/api/admin/boards'),
@@ -116,10 +146,4 @@ export const adminApi = {
 
   quizzes: () =>
     fetchJson<unknown>('/api/admin/quizzes'),
-
-  videos: () =>
-    fetchJson<unknown>('/api/admin/lessons'),
-
-  activities: () =>
-    fetchJson<unknown>('/api/admin/activities'),
 };

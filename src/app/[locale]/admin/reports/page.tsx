@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   ArrowDown,
   ArrowUp,
+  ArrowLeft,
   BarChart3,
   Calendar,
   ChevronRight,
@@ -153,6 +154,7 @@ export default function ReportsAdminPage() {
 
   const [dateRange, setDateRange] = useState<DateRange>('30d');
   const [activeTab, setActiveTab] = useState('overview');
+  const [selectedGrade, setSelectedGrade] = useState('');
   const [feedback, setFeedback] = useState<string | null>(null);
 
   useEffect(() => {
@@ -161,19 +163,82 @@ export default function ReportsAdminPage() {
     }
   }, [loading, locale, router, user]);
 
-  const { data: reportsData, isLoading } = useQuery({
-    queryKey: adminKeys.reports(dateRange),
-    queryFn: () => adminApi.reports(dateRange),
+  const { data: revenue, isLoading: isRevLoading } = useQuery({
+    queryKey: ['reports', 'revenue', dateRange],
+    queryFn: () => adminApi.reportsRevenue(dateRange),
     staleTime: 60_000,
-    enabled: !!user,
+    enabled: !!user && (activeTab === 'overview' || activeTab === 'revenue'),
   });
 
-  const revenue = (reportsData?.revenue as RevenueData | null) ?? null;
-  const userStats = (reportsData?.userStats as UserData | null) ?? null;
-  const schoolStats = (reportsData?.schoolStats as SchoolData | null) ?? null;
-  const studentStats = (reportsData?.studentStats as StudentData | null) ?? null;
-  const engagement = (reportsData?.engagement as EngagementData | null) ?? null;
-  const subjectStats = (reportsData?.subjectStats as SubjectReportData | null) ?? null;
+  const { data: userStats, isLoading: isUsersLoading } = useQuery({
+    queryKey: ['reports', 'users'],
+    queryFn: () => adminApi.reportsUsers(),
+    staleTime: 300_000,
+    enabled: !!user && (activeTab === 'overview' || activeTab === 'users'),
+  });
+
+  const { data: schoolStats, isLoading: isSchoolsLoading } = useQuery({
+    queryKey: ['reports', 'schools'],
+    queryFn: () => adminApi.reportsSchools(),
+    staleTime: 300_000,
+    enabled: !!user && (activeTab === 'overview' || activeTab === 'schools'),
+  });
+
+  const { data: studentStats, isLoading: isStudentsLoading } = useQuery({
+    queryKey: ['reports', 'students'],
+    queryFn: () => adminApi.reportsStudents(),
+    staleTime: 300_000,
+    enabled: !!user && (activeTab === 'overview' || activeTab === 'students'),
+  });
+
+  const { data: engagement, isLoading: isEngageLoading } = useQuery({
+    queryKey: ['reports', 'engagement'],
+    queryFn: () => adminApi.reportsEngagement(),
+    staleTime: 300_000,
+    enabled: !!user && activeTab === 'overview',
+  });
+
+  const { data: subjectStats, isLoading: isSubjectsLoading } = useQuery({
+    queryKey: ['reports', 'subjects'],
+    queryFn: () => adminApi.reportsSubjects(),
+    staleTime: 300_000,
+    enabled: !!user && (activeTab === 'overview' || activeTab === 'subjects'),
+  });
+
+  const isLoading = useMemo(() => {
+    if (activeTab === 'overview') {
+      return isRevLoading || isUsersLoading || isSchoolsLoading || isStudentsLoading || isEngageLoading || isSubjectsLoading;
+    }
+    if (activeTab === 'revenue') return isRevLoading;
+    if (activeTab === 'users') return isUsersLoading;
+    if (activeTab === 'schools') return isSchoolsLoading;
+    if (activeTab === 'students') return isStudentsLoading;
+    if (activeTab === 'subjects') return isSubjectsLoading;
+    return false;
+  }, [activeTab, isRevLoading, isUsersLoading, isSchoolsLoading, isStudentsLoading, isEngageLoading, isSubjectsLoading]);
+
+  const filteredStudents = useMemo(() => {
+    if (!studentStats?.top_students) return [];
+    if (!selectedGrade) return studentStats.top_students;
+    return studentStats.top_students.filter(s => s.grade?.toLowerCase() === selectedGrade.toLowerCase());
+  }, [studentStats, selectedGrade]);
+
+  const filteredSubjects = useMemo(() => {
+    if (!subjectStats?.subjects) return [];
+    if (!selectedGrade) return subjectStats.subjects;
+    return subjectStats.subjects.filter(s => s.grade?.toLowerCase() === selectedGrade.toLowerCase());
+  }, [subjectStats, selectedGrade]);
+
+  const filteredSubjectSummary = useMemo(() => {
+    if (!filteredSubjects || filteredSubjects.length === 0) {
+      return { avg_completion: 0, on_track: 0, needs_attention: 0 };
+    }
+    const total = filteredSubjects.length;
+    const avg = Math.round(filteredSubjects.reduce((sum, s) => sum + s.completion_rate, 0) / total);
+    const onTrack = filteredSubjects.filter(s => s.status === 'on_track').length;
+    const needsAttention = total - onTrack;
+    return { avg_completion: avg, on_track: onTrack, needs_attention: needsAttention };
+  }, [filteredSubjects]);
 
   const showFeedback = (message: string) => {
     setFeedback(message);
@@ -245,6 +310,9 @@ export default function ReportsAdminPage() {
       {/* Header */}
       <div className={styles.pageHeader}>
         <div>
+          <Link href={`/${locale}/admin`} className={styles.backLink}>
+            <ArrowLeft size={16} /> Back to dashboard
+          </Link>
           <p className={styles.eyebrow}>Analytics</p>
           <h1 className={styles.title}>Reports & Insights</h1>
           <p className={styles.subtitle}>
@@ -252,17 +320,14 @@ export default function ReportsAdminPage() {
           </p>
         </div>
         <div className={styles.headerActions}>
-          <Link href={`/${locale}/admin`} className={styles.secondaryButton}>
-            <ChevronRight size={16} /> Back to dashboard
-          </Link>
           <div className={styles.exportGroup}>
-            <button className={styles.secondaryButton} onClick={() => exportReport('csv')}>
+            <button className={styles.primaryButton} onClick={() => exportReport('csv')}>
               <Download size={16} /> CSV
             </button>
-            <button className={styles.secondaryButton} onClick={() => exportReport('excel')}>
+            <button className={styles.primaryButton} onClick={() => exportReport('excel')}>
               <FileText size={16} /> Excel
             </button>
-            <button className={styles.secondaryButton} onClick={() => exportReport('pdf')}>
+            <button className={styles.primaryButton} onClick={() => exportReport('pdf')}>
               <Printer size={16} /> PDF
             </button>
           </div>
@@ -281,6 +346,20 @@ export default function ReportsAdminPage() {
               {range.label}
             </button>
           ))}
+        </div>
+        <div className={styles.filterGroup} style={{ minHeight: 'auto', padding: '0.2rem 0.75rem' }}>
+          <Filter size={16} />
+          <select
+            value={selectedGrade}
+            onChange={(e) => setSelectedGrade(e.target.value)}
+            className={styles.filterSelect}
+            style={{ fontSize: '0.82rem', minHeight: '2.4rem' }}
+          >
+            <option value="">All Grades</option>
+            <option value="LKG">LKG</option>
+            <option value="UKG">UKG</option>
+            <option value="Grade 1">Grade 1</option>
+          </select>
         </div>
         <div className={styles.tabBar}>
           {tabs.map((tab) => (
@@ -464,7 +543,7 @@ export default function ReportsAdminPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {studentStats.top_students.slice(0, 5).map((student, i) => (
+                        {filteredStudents.slice(0, 5).map((student, i) => (
                           <tr key={student.id}>
                             <td>
                               <span className={`${styles.rankBadge} ${i < 3 ? styles.topRank : ''}`}>
@@ -493,12 +572,12 @@ export default function ReportsAdminPage() {
                   <h3><BookOpen size={18} /> Subject Performance</h3>
                 </div>
                 <div className={styles.chartBody}>
-                  {subjectStats && (
+                  {filteredSubjects.length > 0 && (
                     <div className={styles.subjectBars}>
-                      {subjectStats.subjects.slice(0, 6).map((subject) => (
+                      {filteredSubjects.slice(0, 6).map((subject) => (
                         <div key={subject.id} className={styles.subjectBar}>
                           <div className={styles.subjectHeader}>
-                            <span>{subject.name}</span>
+                            <span>{subject.name} <small style={{ opacity: 0.6, fontSize: '0.75rem' }}>({subject.grade})</small></span>
                             <span>{subject.completion_rate}%</span>
                           </div>
                           <div className={styles.subjectTrack}>
@@ -657,7 +736,7 @@ export default function ReportsAdminPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {studentStats.top_students.map((student, i) => (
+                      {filteredStudents.map((student, i) => (
                         <tr key={student.id}>
                           <td>
                             <span className={`${styles.rankBadge} ${i < 3 ? styles.topRank : ''}`}>
@@ -690,15 +769,15 @@ export default function ReportsAdminPage() {
                   <div className={styles.summaryCards}>
                     <div className={styles.summaryCard}>
                       <span>Avg Completion</span>
-                      <strong>{subjectStats.avg_completion}%</strong>
+                      <strong>{filteredSubjectSummary.avg_completion}%</strong>
                     </div>
                     <div className={styles.summaryCard}>
                       <span>On Track</span>
-                      <strong className={styles.up}>{subjectStats.on_track}</strong>
+                      <strong className={styles.up}>{filteredSubjectSummary.on_track}</strong>
                     </div>
                     <div className={styles.summaryCard}>
                       <span>Needs Attention</span>
-                      <strong className={styles.down}>{subjectStats.needs_attention}</strong>
+                      <strong className={styles.down}>{filteredSubjectSummary.needs_attention}</strong>
                     </div>
                   </div>
                   <div className={styles.fullTable}>
@@ -715,7 +794,7 @@ export default function ReportsAdminPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {subjectStats.subjects.map((subject) => (
+                        {filteredSubjects.map((subject) => (
                           <tr key={subject.id}>
                             <td>{subject.name}</td>
                             <td>{subject.grade}</td>

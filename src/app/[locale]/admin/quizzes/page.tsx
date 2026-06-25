@@ -7,6 +7,7 @@ import { FormEvent, useEffect, useMemo, useState } from 'react';
 import {
   ArrowDown,
   ArrowUp,
+  ArrowLeft,
   BookOpen,
   ChevronRight,
   Clock,
@@ -52,6 +53,7 @@ type Quiz = {
   lesson_title?: string;
   grade_name?: string;
   subject_name?: string;
+  chapter_id?: string;
   status_id: number;
   difficulty: 'easy' | 'medium' | 'hard';
   time_limit_seconds?: number;
@@ -130,6 +132,7 @@ export default function QuizAdminPage() {
   const [selectedLessonId, setSelectedLessonId] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [difficultyFilter, setDifficultyFilter] = useState('');
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   // Form
   const [formOpen, setFormOpen] = useState(false);
@@ -183,7 +186,7 @@ export default function QuizAdminPage() {
 
   const { data: chapters = [] } = useQuery<Chapter[]>({
     queryKey: [...adminKeys.curriculum, 'chapters', selectedSubjectId],
-    queryFn: () => fetch(`${API_BASE}/api/admin/subjects?subject_id=${selectedSubjectId}`, { credentials: 'include' }).then(r => r.json()).then(d => d.data ?? []),
+    queryFn: () => fetch(`${API_BASE}/api/admin/chapters?subject_id=${selectedSubjectId}`, { credentials: 'include' }).then(r => r.json()).then(d => d.data ?? []),
     enabled: !!selectedSubjectId,
   });
 
@@ -199,24 +202,51 @@ export default function QuizAdminPage() {
     }
   }, [loading, locale, router, user]);
 
+  const hasActiveFilter = useMemo(() => {
+    return hasInteracted || !!(selectedBoardId || selectedGradeId || selectedSubjectId || selectedChapterId || selectedLessonId || searchQuery || difficultyFilter);
+  }, [hasInteracted, selectedBoardId, selectedGradeId, selectedSubjectId, selectedChapterId, selectedLessonId, searchQuery, difficultyFilter]);
+
   const filteredQuizzes = useMemo(() => {
     let filtered = [...quizzes];
-    
+
+    // Filter by Board (via its grades)
+    if (selectedBoardId && !selectedGradeId && grades.length > 0) {
+      const boardGradeNames = grades.map(g => g.name);
+      filtered = filtered.filter(q => q.grade_name && boardGradeNames.includes(q.grade_name));
+    }
+
+    // Filter by Grade
+    if (selectedGradeId && !selectedSubjectId) {
+      const grade = grades.find(g => g.id === selectedGradeId);
+      if (grade) {
+        filtered = filtered.filter(q => q.grade_name === grade.name);
+      }
+    }
+
+    // Filter by Subject
+    if (selectedSubjectId && !selectedChapterId) {
+      const subject = subjects.find(s => s.id === selectedSubjectId);
+      if (subject) {
+        filtered = filtered.filter(q => q.subject_name === subject.name);
+      }
+    }
+
+    // Filter by Chapter
+    if (selectedChapterId && !selectedLessonId) {
+      filtered = filtered.filter(q => q.chapter_id === selectedChapterId);
+    }
+
+    // Filter by Lesson
     if (selectedLessonId) {
       filtered = filtered.filter(q => q.lesson_id === selectedLessonId);
-    } else if (selectedChapterId && lessons.length > 0) {
-      const lessonIds = lessons.map(l => l.id);
-      filtered = filtered.filter(q => lessonIds.includes(q.lesson_id));
-    } else if (selectedSubjectId && chapters.length > 0 && lessons.length > 0) {
-      const chapterIds = chapters.map(c => c.id);
-      const lessonIds = lessons.filter(l => chapterIds.includes(l.chapter_id)).map(l => l.id);
-      filtered = filtered.filter(q => lessonIds.includes(q.lesson_id));
     }
     
+    // Difficulty Filter
     if (difficultyFilter) {
       filtered = filtered.filter(q => q.difficulty === difficultyFilter);
     }
     
+    // Search Query Filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(q => 
@@ -226,7 +256,7 @@ export default function QuizAdminPage() {
     }
     
     return filtered;
-  }, [quizzes, selectedLessonId, selectedChapterId, selectedSubjectId, difficultyFilter, searchQuery, lessons, chapters]);
+  }, [quizzes, selectedBoardId, selectedGradeId, selectedSubjectId, selectedChapterId, selectedLessonId, difficultyFilter, searchQuery, grades, subjects, lessons]);
 
 
 
@@ -468,6 +498,9 @@ export default function QuizAdminPage() {
     <main className={`${adminFont.variable} ${styles.shell}`}>
       <div className={styles.pageHeader}>
         <div>
+          <Link href={`/${locale}/admin`} className={styles.backLink}>
+            <ArrowLeft size={16} /> Back to dashboard
+          </Link>
           <p className={styles.eyebrow}>Quiz manager</p>
           <h1 className={styles.title}>Question bank</h1>
           <p className={styles.subtitle}>
@@ -475,12 +508,6 @@ export default function QuizAdminPage() {
           </p>
         </div>
         <div className={styles.headerActions}>
-          <Link href={`/${locale}/admin`} className={styles.secondaryButton}>
-            <ChevronRight size={16} /> Back to dashboard
-          </Link>
-          <Link href={`/${locale}/admin/quizzes/settings`} className={styles.secondaryButton}>
-            <Settings size={16} /> Quiz settings
-          </Link>
           <button
             type="button"
             className={styles.primaryButton}
@@ -488,25 +515,10 @@ export default function QuizAdminPage() {
           >
             <Plus size={18} /> Add question
           </button>
-          <label className={styles.secondaryButton} style={{ cursor: 'pointer', marginLeft: 8 }}>
+          <label className={styles.primaryButton} style={{ cursor: 'pointer', marginLeft: 8 }}>
             <input type="file" accept=".csv" style={{ display: 'none' }} onChange={(e) => handleBulkFile(e.target.files?.[0] ?? null)} />
             <Plus size={16} /> Bulk upload
           </label>
-          <button type="button" className={`${styles.secondaryButton} ${styles.smallButton}`} onClick={() => {
-            const headers = 'question_text,option_a,option_b,option_c,option_d,correct_answer,lesson_id,points,explanation\n';
-            const sample = 'What is 2+2?,1,2,3,4,D,REPLACE_WITH_LESSON_ID,10,Simple math example\n';
-            const blob = new Blob([headers+sample], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'quiz_bulk_template.csv';
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            URL.revokeObjectURL(url);
-          }} style={{ marginLeft: 8 }}>
-            Download CSV
-          </button>
         </div>
       </div>
 
@@ -526,6 +538,7 @@ export default function QuizAdminPage() {
             <select
               value={selectedBoardId}
               onChange={(e) => {
+                setHasInteracted(true);
                 setSelectedBoardId(e.target.value);
                 setSelectedGradeId('');
                 setSelectedSubjectId('');
@@ -544,6 +557,7 @@ export default function QuizAdminPage() {
             <select
               value={selectedGradeId}
               onChange={(e) => {
+                setHasInteracted(true);
                 setSelectedGradeId(e.target.value);
                 setSelectedSubjectId('');
                 setSelectedChapterId('');
@@ -562,6 +576,7 @@ export default function QuizAdminPage() {
             <select
               value={selectedSubjectId}
               onChange={(e) => {
+                setHasInteracted(true);
                 setSelectedSubjectId(e.target.value);
                 setSelectedChapterId('');
                 setSelectedLessonId('');
@@ -579,6 +594,7 @@ export default function QuizAdminPage() {
             <select
               value={selectedChapterId}
               onChange={(e) => {
+                setHasInteracted(true);
                 setSelectedChapterId(e.target.value);
                 setSelectedLessonId('');
               }}
@@ -599,7 +615,10 @@ export default function QuizAdminPage() {
               type="text"
               placeholder="Search questions..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setHasInteracted(true);
+                setSearchQuery(e.target.value);
+              }}
               className={styles.searchInput}
             />
           </div>
@@ -607,7 +626,10 @@ export default function QuizAdminPage() {
             <Filter size={16} />
             <select
               value={difficultyFilter}
-              onChange={(e) => setDifficultyFilter(e.target.value)}
+              onChange={(e) => {
+                setHasInteracted(true);
+                setDifficultyFilter(e.target.value);
+              }}
               className={styles.filterSelect}
             >
               <option value="">All difficulties</option>
@@ -620,7 +642,10 @@ export default function QuizAdminPage() {
             <label className={styles.fieldLabel}>Lesson</label>
             <select
               value={selectedLessonId}
-              onChange={(e) => setSelectedLessonId(e.target.value)}
+              onChange={(e) => {
+                setHasInteracted(true);
+                setSelectedLessonId(e.target.value);
+              }}
               disabled={!selectedChapterId}
             >
               <option value="">All lessons</option>
@@ -679,92 +704,108 @@ export default function QuizAdminPage() {
             </div>
           </div>
 
-          <div className={styles.tableWrapper}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th>Question</th>
-                  <th>Lesson</th>
-                  <th>Difficulty</th>
-                  <th>Correct</th>
-                  <th>Status</th>
-                  <th className={styles.actionsCell}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredQuizzes.length > 0 ? (
-                  filteredQuizzes.map((item) => (
-                    <tr key={item.id}>
-                      <td>
-                        <div className={styles.itemLabel}>
-                          <span>{item.question_text}</span>
-                          <span className={styles.mutedText}>
-                            {item.points} pts • {item.time_limit_seconds ? `${item.time_limit_seconds}s` : 'No timer'}
+          {!hasActiveFilter ? (
+            <div className={styles.filterPromptContainer}>
+              <Filter size={40} className={styles.promptIcon} />
+              <h3>Select curriculum filters to load questions</h3>
+              <p>Choose a Board, Grade, or enter a search query above to display the list of quiz questions from the question bank.</p>
+              <button
+                type="button"
+                className={styles.primaryButton}
+                style={{ marginTop: '1.5rem' }}
+                onClick={() => setHasInteracted(true)}
+              >
+                Show All Quizzes
+              </button>
+            </div>
+          ) : (
+            <div className={styles.tableWrapper}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Question</th>
+                    <th>Lesson</th>
+                    <th>Difficulty</th>
+                    <th>Correct</th>
+                    <th>Status</th>
+                    <th className={styles.actionsCell}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredQuizzes.length > 0 ? (
+                    filteredQuizzes.map((item) => (
+                      <tr key={item.id}>
+                        <td>
+                          <div className={styles.itemLabel}>
+                            <span>{item.question_text}</span>
+                            <span className={styles.mutedText}>
+                              {item.points} pts • {item.time_limit_seconds ? `${item.time_limit_seconds}s` : 'No timer'}
+                            </span>
+                          </div>
+                        </td>
+                        <td>
+                          <span className={styles.codeText}>
+                            {item.lesson_title || item.lesson_id}
                           </span>
-                        </div>
-                      </td>
-                      <td>
-                        <span className={styles.codeText}>
-                          {item.lesson_title || item.lesson_id}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={`${styles.difficultyPill} ${getDifficultyColor(item.difficulty)}`}>
-                          {item.difficulty}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={styles.correctAnswer}>
-                          <CheckCircle2 size={14} /> {item.correct_answer}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={`${styles.statusPill} ${item.status_id !== 1 ? styles.statusInactive : ''}`}>
-                          {item.status_id === 1 ? 'Active' : 'Inactive'}
-                        </span>
-                      </td>
-                      <td className={styles.actionsCell}>
-                        <div className={styles.actionRow}>
-                          <button 
-                            type="button" 
-                            className={styles.iconButton} 
-                            onClick={() => setPreviewItem(item)}
-                            title="Preview"
-                          >
-                            <Eye size={16} />
-                          </button>
-                          <button 
-                            type="button" 
-                            className={styles.iconButton} 
-                            onClick={() => openForm(item)}
-                            title="Edit"
-                          >
-                            <Pencil size={16} />
-                          </button>
-                          <button 
-                            type="button" 
-                            className={styles.iconButtonDanger} 
-                            onClick={() => deleteQuiz(item)}
-                            title="Delete"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
+                        </td>
+                        <td>
+                          <span className={`${styles.difficultyPill} ${getDifficultyColor(item.difficulty)}`}>
+                            {item.difficulty}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={styles.correctAnswer}>
+                            <CheckCircle2 size={14} /> {item.correct_answer}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={`${styles.statusPill} ${item.status_id !== 1 ? styles.statusInactive : ''}`}>
+                            {item.status_id === 1 ? 'Active' : 'Inactive'}
+                          </span>
+                        </td>
+                        <td className={styles.actionsCell}>
+                          <div className={styles.actionRow}>
+                            <button 
+                              type="button" 
+                              className={styles.iconButton} 
+                              onClick={() => setPreviewItem(item)}
+                              title="Preview"
+                            >
+                              <Eye size={16} />
+                            </button>
+                            <button 
+                              type="button" 
+                              className={styles.iconButton} 
+                              onClick={() => openForm(item)}
+                              title="Edit"
+                            >
+                              <Pencil size={16} />
+                            </button>
+                            <button 
+                              type="button" 
+                              className={styles.iconButtonDanger} 
+                              onClick={() => deleteQuiz(item)}
+                              title="Delete"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={6} className={styles.emptyState}>
+                        {quizzes.length === 0 
+                          ? 'No questions yet. Create your first quiz question!' 
+                          : 'No questions match your filters.'}
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={6} className={styles.emptyState}>
-                      {quizzes.length === 0 
-                        ? 'No questions yet. Create your first quiz question!' 
-                        : 'No questions match your filters.'}
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
         </section>
 
         {/* Side Panel */}

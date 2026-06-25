@@ -8,12 +8,26 @@ import {
   ArrowUp,
   BookOpen,
   ChevronRight,
-  Layers,
   Plus,
   Pencil,
-  ShieldCheck,
   Trash2,
+  Folder,
+  FolderOpen,
+  FileVideo,
+  ArrowLeft,
+  Home,
+  AlertTriangle,
+  Play,
+  Layers,
+  Crown,
+  Award,
+  Activity,
+  Search,
+  Tag,
+  Info,
+  Clock,
   Video,
+  GraduationCap
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -29,9 +43,7 @@ const adminFont = Manrope({
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, '') ?? '';
 
-
 type Level = 'boards' | 'grades' | 'subjects' | 'chapters' | 'lessons';
-
 type CurriculumItem = Record<string, any>;
 
 const levelConfig: Record<Level, { label: string; parentLabel?: string; api: string; placeholder: string }> = {
@@ -39,7 +51,7 @@ const levelConfig: Record<Level, { label: string; parentLabel?: string; api: str
   grades: { label: 'Grade', parentLabel: 'Board', api: 'grades', placeholder: 'Grade 1, Grade 5, Grade 9' },
   subjects: { label: 'Subject', parentLabel: 'Grade', api: 'subjects', placeholder: 'Math, Science, English' },
   chapters: { label: 'Chapter', parentLabel: 'Subject', api: 'chapters', placeholder: 'Numbers, Plant Biology, Grammar' },
-  lessons: { label: 'Lesson', parentLabel: 'Chapter', api: 'lessons', placeholder: 'YouTube lesson, practice module or demo' },
+  lessons: { label: 'Lesson', parentLabel: 'Chapter', api: 'lessons', placeholder: 'YouTube URL or video title' },
 };
 
 const statusOptions = [
@@ -47,15 +59,14 @@ const statusOptions = [
   { label: 'Inactive', value: 2 },
 ];
 
-const resourceOrder: Level[] = ['boards', 'grades', 'subjects', 'chapters', 'lessons'];
-
-function getPreviewImage(videoId: string) {
+function getPreviewImage(videoId: string | null | undefined) {
   if (!videoId) return null;
   return `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
 }
 
-function normalizeYoutubeId(url: string) {
-  const match = url.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);
+function normalizeYoutubeId(url: string | null | undefined) {
+  if (!url) return '';
+  const match = url.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([A-Za-z0-9_-]{11})/);
   return match?.[1] ?? url;
 }
 
@@ -66,11 +77,13 @@ export default function CurriculumAdminPage() {
   const { user, loading } = useAuth();
 
   const [activeLevel, setActiveLevel] = useState<Level>('boards');
-
   const [selectedBoardId, setSelectedBoardId] = useState('');
   const [selectedGradeId, setSelectedGradeId] = useState('');
   const [selectedSubjectId, setSelectedSubjectId] = useState('');
   const [selectedChapterId, setSelectedChapterId] = useState('');
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [hydrated, setHydrated] = useState(false);
 
   const [formOpen, setFormOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<CurriculumItem | null>(null);
@@ -88,6 +101,10 @@ export default function CurriculumAdminPage() {
 
   const [feedback, setFeedback] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -134,33 +151,34 @@ export default function CurriculumAdminPage() {
 
   const currentItems = useMemo(() => {
     switch (activeLevel) {
-      case 'boards':
-        return boards;
-      case 'grades':
-        return grades;
-      case 'subjects':
-        return subjects;
-      case 'chapters':
-        return chapters;
-      case 'lessons':
-        return lessons;
-      default:
-        return [];
+      case 'boards': return boards;
+      case 'grades': return grades;
+      case 'subjects': return subjects;
+      case 'chapters': return chapters;
+      case 'lessons': return lessons;
+      default: return [];
     }
   }, [activeLevel, boards, grades, subjects, chapters, lessons]);
 
+  const filteredItems = useMemo(() => {
+    const q = searchQuery.toLowerCase().trim();
+    if (!q) return currentItems;
+    return currentItems.filter((item) => {
+      const nameMatch = (item.name || '').toLowerCase().includes(q);
+      const titleMatch = (item.title || '').toLowerCase().includes(q);
+      const codeMatch = (item.code || '').toLowerCase().includes(q);
+      const descMatch = (item.description || '').toLowerCase().includes(q);
+      return nameMatch || titleMatch || codeMatch || descMatch;
+    });
+  }, [currentItems, searchQuery]);
+
   const activeParentId = useMemo(() => {
     switch (activeLevel) {
-      case 'grades':
-        return selectedBoardId;
-      case 'subjects':
-        return selectedGradeId;
-      case 'chapters':
-        return selectedSubjectId;
-      case 'lessons':
-        return selectedChapterId;
-      default:
-        return '';
+      case 'grades': return selectedBoardId;
+      case 'subjects': return selectedGradeId;
+      case 'chapters': return selectedSubjectId;
+      case 'lessons': return selectedChapterId;
+      default: return '';
     }
   }, [activeLevel, selectedBoardId, selectedGradeId, selectedSubjectId, selectedChapterId]);
 
@@ -168,19 +186,116 @@ export default function CurriculumAdminPage() {
   const canAddCurrent = activeLevel === 'boards' || Boolean(activeParentId);
   const primaryLabel = levelConfig[activeLevel].label;
 
-  const selectedPath = [
-    boards.find((board) => board.id === selectedBoardId),
-    grades.find((grade) => grade.id === selectedGradeId),
-    subjects.find((subject) => subject.id === selectedSubjectId),
-    chapters.find((chapter) => chapter.id === selectedChapterId),
-  ]
-    .filter(Boolean)
-    .map((item) => item?.name || item?.title)
-    .join(' › ');
-
-  const handleSelectLevel = (level: Level) => {
-    setActiveLevel(level);
+  // Folder navigation helpers
+  const exploreBoard = (id: string) => {
+    setSelectedBoardId(id);
+    setActiveLevel('grades');
+    setSearchQuery('');
   };
+
+  const exploreGrade = (id: string) => {
+    setSelectedGradeId(id);
+    setActiveLevel('subjects');
+    setSearchQuery('');
+  };
+
+  const exploreSubject = (id: string) => {
+    setSelectedSubjectId(id);
+    setActiveLevel('chapters');
+    setSearchQuery('');
+  };
+
+  const exploreChapter = (id: string) => {
+    setSelectedChapterId(id);
+    setActiveLevel('lessons');
+    setSearchQuery('');
+  };
+
+  const handleRowExplore = (item: CurriculumItem) => {
+    switch (activeLevel) {
+      case 'boards': exploreBoard(item.id); break;
+      case 'grades': exploreGrade(item.id); break;
+      case 'subjects': exploreSubject(item.id); break;
+      case 'chapters': exploreChapter(item.id); break;
+    }
+  };
+
+  // Interactive Breadcrumbs Trail
+  const breadcrumbsList = useMemo(() => {
+    const list = [{
+      id: 'boards',
+      label: 'Root (Boards)',
+      active: activeLevel === 'boards',
+      onClick: () => {
+        setActiveLevel('boards');
+        setSelectedBoardId('');
+        setSelectedGradeId('');
+        setSelectedSubjectId('');
+        setSelectedChapterId('');
+        setSearchQuery('');
+      }
+    }];
+
+    if (selectedBoardId) {
+      const board = boards.find((b) => b.id === selectedBoardId);
+      list.push({
+        id: 'grades',
+        label: board?.name || 'Board',
+        active: activeLevel === 'grades',
+        onClick: () => {
+          setActiveLevel('grades');
+          setSelectedGradeId('');
+          setSelectedSubjectId('');
+          setSelectedChapterId('');
+          setSearchQuery('');
+        }
+      });
+    }
+
+    if (selectedGradeId) {
+      const grade = grades.find((g) => g.id === selectedGradeId);
+      list.push({
+        id: 'subjects',
+        label: grade?.name || 'Grade',
+        active: activeLevel === 'subjects',
+        onClick: () => {
+          setActiveLevel('subjects');
+          setSelectedSubjectId('');
+          setSelectedChapterId('');
+          setSearchQuery('');
+        }
+      });
+    }
+
+    if (selectedSubjectId) {
+      const subject = subjects.find((s) => s.id === selectedSubjectId);
+      list.push({
+        id: 'chapters',
+        label: subject?.name || 'Subject',
+        active: activeLevel === 'chapters',
+        onClick: () => {
+          setActiveLevel('chapters');
+          setSelectedChapterId('');
+          setSearchQuery('');
+        }
+      });
+    }
+
+    if (selectedChapterId) {
+      const chapter = chapters.find((c) => c.id === selectedChapterId);
+      list.push({
+        id: 'lessons',
+        label: chapter?.name || 'Chapter',
+        active: activeLevel === 'lessons',
+        onClick: () => {
+          setActiveLevel('lessons');
+          setSearchQuery('');
+        }
+      });
+    }
+
+    return list;
+  }, [activeLevel, selectedBoardId, selectedGradeId, selectedSubjectId, selectedChapterId, boards, grades, subjects, chapters]);
 
   const openForm = (item?: CurriculumItem) => {
     setEditingItem(item ?? null);
@@ -305,7 +420,7 @@ export default function CurriculumAdminPage() {
   };
 
   const swapOrder = async (index: number, direction: 'up' | 'down') => {
-    const list = [...currentItems];
+    const list = [...filteredItems];
     const targetIndex = direction === 'up' ? index - 1 : index + 1;
     if (targetIndex < 0 || targetIndex >= list.length) return;
     const source = list[index];
@@ -330,232 +445,192 @@ export default function CurriculumAdminPage() {
     }
   };
 
-  if (loading || !user) return null;
+  if (!hydrated || loading || !user) return null;
 
   return (
     <main className={`${adminFont.variable} ${styles.shell}`}>
-      <div className={styles.breadcrumbs}>
-        {resourceOrder.map((level) => {
-          const config = levelConfig[level];
-          const isActive = level === activeLevel;
-          const isComplete =
-            (level === 'boards' && Boolean(selectedBoardId)) ||
-            (level === 'grades' && Boolean(selectedGradeId)) ||
-            (level === 'subjects' && Boolean(selectedSubjectId)) ||
-            (level === 'chapters' && Boolean(selectedChapterId)) ||
-            level === 'lessons';
-          return (
-            <button
-              key={level}
-              type="button"
-              className={`${styles.breadcrumbChip} ${isActive ? styles.breadcrumbActive : ''}`}
-              onClick={() => handleSelectLevel(level)}
-            >
-              <span>{config.label}</span>
-              {isComplete && <ChevronRight size={14} />}
-            </button>
-          );
-        })}
-      </div>
+      <div className={styles.bgGlow} />
 
-      <section className={styles.pathBanner}>
-        <div>
-          <p className={styles.pathLabel}>Current path</p>
-          <h2 className={styles.pathTitle}>{selectedPath || `Select a ${parentLabel ?? 'Board'} to begin`}</h2>
-        </div>
-        <p className={styles.pathHint}>
-          Manage the selected curriculum level with clean controls for create, update, delete, and reorder.
-        </p>
-      </section>
-
-      <section className={styles.selectorSection}>
-        <div className={styles.sectionHeading}>
+      <div className={styles.content}>
+        {/* Page Header */}
+        <div className={styles.pageHeader}>
           <div>
-            <p className={styles.panelEyebrow}>Refine your selection</p>
-            <h2 className={styles.sectionTitle}>Choose the active curriculum branch</h2>
+            <a href={`/${locale}/admin`} className={styles.backLink}>
+              <ArrowLeft size={16} style={{ display: 'inline-block', verticalAlign: 'middle' }} /> Back to dashboard
+            </a>
+            <p className={styles.eyebrow} style={{ marginTop: '0.75rem' }}>Management</p>
+            <h1 className={styles.title}>Curriculum Explorer</h1>
+            <p className={styles.subtitle}>
+              Configure your courses, grades, subjects, chapters, and lessons in a gorgeous visual tree layout.
+            </p>
           </div>
-          <p className={styles.sectionNote}>Select a board, then drill into grade, subject and chapter to unlock the next level of edits and lesson management.</p>
+          <div className={styles.headerActions}>
+            <button
+              type="button"
+              className={styles.primaryButton}
+              onClick={() => openForm()}
+              disabled={!canAddCurrent}
+            >
+              <Plus size={16} /> Create {primaryLabel}
+            </button>
+          </div>
         </div>
 
-        <div className={styles.selectorPanel}>
-          <div className={styles.selectorGroup}>
-            <label className={styles.fieldLabel}>Board</label>
-            <select
-              value={selectedBoardId}
-              onChange={(event) => {
-                setSelectedBoardId(event.target.value);
-                setSelectedGradeId('');
-                setSelectedSubjectId('');
-                setSelectedChapterId('');
-              }}
-            >
-              <option value="">Choose board</option>
-              {boards.map((board) => (
-                <option key={board.id} value={board.id}>
-                  {board.name} {board.code ? `• ${board.code}` : ''}
-                </option>
-              ))}
-            </select>
+        {/* Directory Path Breadcrumbs Bar */}
+        <section className={styles.explorerPathSection}>
+          <div className={styles.pathLabelRow}>
+            <Home size={12} className={styles.homeIcon} />
+            <span className={styles.pathLabel}>PATH DIRECTORY</span>
           </div>
-          <div className={styles.selectorGroup}>
-            <label className={styles.fieldLabel}>Grade</label>
-            <select
-              value={selectedGradeId}
-              onChange={(event) => {
-                setSelectedGradeId(event.target.value);
-                setSelectedSubjectId('');
-                setSelectedChapterId('');
-              }}
-              disabled={!selectedBoardId}
-            >
-              <option value="">Choose grade</option>
-              {grades.map((grade) => (
-                <option key={grade.id} value={grade.id}>
-                  {grade.name} {grade.code ? `• ${grade.code}` : ''}
-                </option>
-              ))}
-            </select>
+          <div className={styles.trailContainer}>
+            {breadcrumbsList.map((crumb, idx) => (
+              <div key={crumb.id} className={styles.trailItem}>
+                {idx > 0 && <span className={styles.trailSeparator}>›</span>}
+                <button
+                  type="button"
+                  className={`${styles.trailButton} ${crumb.active ? styles.trailButtonActive : ''}`}
+                  onClick={crumb.onClick}
+                >
+                  {crumb.id === 'boards' ? <Home size={13} style={{ marginRight: '6px' }} /> : <Folder size={13} style={{ marginRight: '6px' }} />}
+                  {crumb.label}
+                </button>
+              </div>
+            ))}
           </div>
-          <div className={styles.selectorGroup}>
-            <label className={styles.fieldLabel}>Subject</label>
-            <select
-              value={selectedSubjectId}
-              onChange={(event) => {
-                setSelectedSubjectId(event.target.value);
-                setSelectedChapterId('');
-              }}
-              disabled={!selectedGradeId}
-            >
-              <option value="">Choose subject</option>
-              {subjects.map((subject) => (
-                <option key={subject.id} value={subject.id}>
-                  {subject.name} {subject.code ? `• ${subject.code}` : ''}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className={styles.selectorGroup}>
-            <label className={styles.fieldLabel}>Chapter</label>
-            <select
-              value={selectedChapterId}
-              onChange={(event) => setSelectedChapterId(event.target.value)}
-              disabled={!selectedSubjectId}
-            >
-              <option value="">Choose chapter</option>
-              {chapters.map((chapter) => (
-                <option key={chapter.id} value={chapter.id}>
-                  {chapter.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <section className={styles.summaryGrid}>
-        <article className={styles.summaryCard}>
-          <div className={styles.summaryCardHead}>
-            <BookOpen size={18} />
-          </div>
-          <p className={styles.summaryLabel}>Boards ready</p>
-          <h2>{boards.length}</h2>
-          <p className={styles.summaryMeta}>Core curriculum foundations</p>
-        </article>
-        <article className={styles.summaryCard}>
-          <div className={styles.summaryCardHead}>
-            <Layers size={18} />
-          </div>
-          <p className={styles.summaryLabel}>Active path</p>
-          <h2>{resourceOrder.indexOf(activeLevel) + 1}/5</h2>
-          <p className={styles.summaryMeta}>{primaryLabel} workspace</p>
-        </article>
-        <article className={styles.summaryCard}>
-          <div className={styles.summaryCardHead}>
-            <ShieldCheck size={18} />
-          </div>
-          <p className={styles.summaryLabel}>Current node</p>
-          <h2>{currentItems.length}</h2>
-          <p className={styles.summaryMeta}>{levelConfig[activeLevel].label}s in view</p>
-        </article>
-      </section>
-
-      <div className={styles.panelGrid}>
-        <section className={styles.tablePanel}>
-          <div className={styles.panelHeader}>
+        {/* Unified Table Workspace - Matches Schools Page Layout */}
+        <section className={styles.workspaceContainer}>
+          <div className={styles.panelTitleBar}>
             <div>
-              <p className={styles.panelEyebrow}>{primaryLabel} table</p>
-              <h2 className={styles.panelTitle}>{levelConfig[activeLevel].label} list</h2>
+              <h2>{primaryLabel} Directory</h2>
+              <p>Select folders or video lessons under the active branch to explore.</p>
             </div>
-            <div className={styles.tableActions}>
-              <button
-                type="button"
-                className={styles.createButton}
-                onClick={() => openForm()}
-                disabled={!canAddCurrent}
-              >
-                <Plus size={18} />
-                <span>Create {primaryLabel}</span>
-              </button>
-              {!canAddCurrent && parentLabel && (
-                <p className={styles.actionHint}>Select a {parentLabel.toLowerCase()} first</p>
-              )}
+            
+            <div className={styles.titleBarActions}>
+              <div className={styles.searchGroup}>
+                <Search size={14} className={styles.searchIcon} />
+                <input
+                  type="text"
+                  placeholder={`Search ${primaryLabel.toLowerCase()}s...`}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className={styles.searchInput}
+                />
+              </div>
             </div>
           </div>
+
+          {!canAddCurrent && parentLabel && (
+            <div className={styles.warningAlert}>
+              <AlertTriangle size={16} />
+              <span>Please select a {parentLabel.toLowerCase()} from the breadcrumbs directory above to view or add details.</span>
+            </div>
+          )}
 
           <div className={styles.tableWrapper}>
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>{primaryLabel}</th>
+                  <th style={{ width: '45%' }}>{primaryLabel} Details</th>
+                  <th>Code / Video ID</th>
                   <th>Status</th>
-                  <th>Code / Meta</th>
-                  <th className={styles.actionsCell}>Actions</th>
+                  <th className={styles.actionsCell} style={{ textAlign: 'right' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {currentItems.length > 0 ? (
-                  currentItems.map((item, index) => (
-                    <tr key={item.id}>
-                      <td>
-                        <div className={styles.itemLabel}>
-                          <span>{item.name || item.title}</span>
-                          <span className={styles.mutedText}>{item.description || item.age_range || item.youtube_video_id || ''}</span>
-                        </div>
-                      </td>
-                      <td>
-                        <span className={`${styles.statusPill} ${item.status_id !== 1 ? styles.statusInactive : ''}`}>
-                          {item.status_id === 1 ? 'Active' : 'Inactive'}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={styles.codeText}>{item.code || item.youtube_video_id || '—'}</span>
-                      </td>
-                      <td className={styles.actionsCell}>
-                        <div className={styles.actionRow}>
-                          {['grades', 'chapters', 'lessons'].includes(activeLevel) && (
-                            <>
-                              <button type="button" className={styles.iconButton} onClick={() => swapOrder(index, 'up')}>
-                                <ArrowUp size={16} />
+                {filteredItems.length > 0 ? (
+                  filteredItems.map((item, index) => {
+                    const isLesson = activeLevel === 'lessons';
+                    return (
+                      <tr 
+                        key={item.id} 
+                        className={`${styles.tableRow} ${activeLevel !== 'lessons' ? styles.tableRowFolder : ''}`}
+                        onDoubleClick={() => activeLevel !== 'lessons' && handleRowExplore(item)}
+                      >
+                        <td>
+                          <div className={styles.itemCell}>
+                            <div className={`${styles.itemIconBadge} ${isLesson ? styles.iconLesson : styles.iconFolder}`}>
+                              {isLesson ? <FileVideo size={16} /> : <Folder size={16} />}
+                            </div>
+                            <div className={styles.itemInfo}>
+                              <span className={styles.itemName}>{item.name || item.title}</span>
+                              <span className={styles.itemDescription}>
+                                {item.description || item.age_range || 'No description available'}
+                              </span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <span className={styles.monoText}>
+                            {item.code || (item.youtube_video_id ? `YT: ${item.youtube_video_id}` : '—')}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={`${styles.statusPill} ${item.status_id === 1 ? styles.statusActive : styles.statusInactive}`}>
+                            {item.status_id === 1 ? 'Active' : 'Inactive'}
+                          </span>
+                        </td>
+                        <td className={styles.actionsCell}>
+                          <div className={styles.actionRow} onClick={(e) => e.stopPropagation()}>
+                            {activeLevel !== 'lessons' && (
+                              <button
+                                type="button"
+                                className={`${styles.iconButton} ${styles.exploreBtn}`}
+                                onClick={() => handleRowExplore(item)}
+                                title={`Open ${primaryLabel}`}
+                              >
+                                <FolderOpen size={14} /> <span style={{ marginLeft: '4px', fontSize: '0.75rem', fontWeight: 800 }}>Explore</span>
                               </button>
-                              <button type="button" className={styles.iconButton} onClick={() => swapOrder(index, 'down')}>
-                                <ArrowDown size={16} />
-                              </button>
-                            </>
-                          )}
-                          <button type="button" className={styles.iconButton} onClick={() => openForm(item)}>
-                            <Pencil size={16} />
-                          </button>
-                          <button type="button" className={styles.iconButtonDanger} onClick={() => deleteResource(item)}>
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                            )}
+                            {['grades', 'chapters', 'lessons'].includes(activeLevel) && (
+                              <>
+                                <button
+                                  type="button"
+                                  className={styles.iconButton}
+                                  onClick={() => swapOrder(index, 'up')}
+                                  disabled={index === 0}
+                                  title="Move Up"
+                                >
+                                  <ArrowUp size={14} />
+                                </button>
+                                <button
+                                  type="button"
+                                  className={styles.iconButton}
+                                  onClick={() => swapOrder(index, 'down')}
+                                  disabled={index === filteredItems.length - 1}
+                                  title="Move Down"
+                                >
+                                  <ArrowDown size={14} />
+                                </button>
+                              </>
+                            )}
+                            <button
+                              type="button"
+                              className={styles.iconButton}
+                              onClick={() => openForm(item)}
+                              title="Edit"
+                            >
+                              <Pencil size={14} />
+                            </button>
+                            <button
+                              type="button"
+                              className={styles.iconButtonDanger}
+                              onClick={() => deleteResource(item)}
+                              title="Delete"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td colSpan={4} className={styles.emptyState}>
-                      {activeParentId ? `No ${primaryLabel.toLowerCase()} found yet.` : `Select ${parentLabel?.toLowerCase()} to load this level.`}
+                      <FolderOpen size={32} style={{ marginBottom: '0.5rem', color: '#cbd5e1' }} />
+                      <p>{activeParentId ? `No ${primaryLabel.toLowerCase()}s found in this directory.` : `Please select a folder path to load details.`}</p>
                     </td>
                   </tr>
                 )}
@@ -563,156 +638,294 @@ export default function CurriculumAdminPage() {
             </table>
           </div>
         </section>
-
-        <aside className={styles.sidePanel}>
-          <article className={styles.infoCard}>
-            <div className={styles.infoHead}>
-              <div>
-                <p className={styles.panelEyebrow}>Hierarchy guide</p>
-                <h3 className={styles.infoTitle}>Curriculum tree</h3>
-              </div>
-              <Layers size={22} />
-            </div>
-            <p className={styles.infoText}>
-              Manage your syllabus in one screen. Choose a board first, then narrow down grade, subject and chapter to unlock lesson controls.
-            </p>
-          </article>
-
-          {activeLevel === 'lessons' && selectedChapterId && (
-            <article className={styles.infoCard}>
-              <div className={styles.infoHead}>
-                <div>
-                  <p className={styles.panelEyebrow}>Lesson preview</p>
-                  <h3 className={styles.infoTitle}>Media & URL</h3>
-                </div>
-                <Video size={22} />
-              </div>
-              {formValues.youtube_video_id ? (
-                <div className={styles.lessonPreview}>
-                  <img src={getPreviewImage(String(formValues.youtube_video_id)) ?? ''} alt="Lesson thumbnail" />
-                  <p className={styles.previewCaption}>Paste a YouTube URL when adding a lesson and preview content instantly.</p>
-                </div>
-              ) : (
-                <p className={styles.infoText}>Pick a chapter and add a lesson to preview the video thumbnail.</p>
-              )}
-            </article>
-          )}
-
-          <article className={styles.infoCardAccent}>
-            <div className={styles.infoHead}>
-              <div>
-                <p className={styles.panelEyebrow}>Pro workflow</p>
-                <h3 className={styles.infoTitle}>Fast actions</h3>
-              </div>
-              <ShieldCheck size={22} />
-            </div>
-            <ul className={styles.keyList}>
-              <li><span>•</span>Select board first to enable grade creation.</li>
-              <li><span>•</span>Add chapters after subject selection.</li>
-              <li><span>•</span>Lessons support YouTube URL and reorder controls.</li>
-            </ul>
-          </article>
-        </aside>
       </div>
-
+      {/* Modal Dialog Form */}
       {formOpen && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalCard}>
+        <div className={styles.modalOverlay} onClick={closeForm}>
+          <div className={styles.modalCard} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHeader}>
               <div>
-                <p className={styles.panelEyebrow}>Edit {primaryLabel}</p>
-                <h2 className={styles.modalTitle}>{editingItem ? 'Update' : 'Create'} {primaryLabel}</h2>
+                <p className={styles.panelEyebrow}>Resource settings</p>
+                <h2 className={styles.modalTitle}>{editingItem ? 'Edit' : 'Create New'} {primaryLabel}</h2>
               </div>
-              <button type="button" className={styles.closeButton} onClick={closeForm} aria-label="Close form">
+              <button type="button" className={styles.closeButton} onClick={closeForm} aria-label="Close dialog">
                 ✕
               </button>
             </div>
+            
             <form onSubmit={saveResource} className={styles.formGrid}>
-              <div className={styles.formField}>
-                <label className={styles.formLabel}>{activeLevel === 'lessons' ? 'Lesson title' : 'Name'}</label>
-                <input
-                  value={formValues.name}
-                  onChange={(event) => setFormValues({ ...formValues, name: event.target.value, title: event.target.value })}
-                  placeholder={levelConfig[activeLevel].placeholder}
-                  required
-                />
+              <div className={styles.formSection}>
+                <h3 className={styles.formSectionTitle}>
+                  {activeLevel === 'boards' && <Crown size={16} />}
+                  {activeLevel === 'grades' && <GraduationCap size={16} />}
+                  {activeLevel === 'subjects' && <BookOpen size={16} />}
+                  {activeLevel === 'chapters' && <Layers size={16} />}
+                  {activeLevel === 'lessons' && <FileVideo size={16} />}
+                  {primaryLabel} Details
+                </h3>
+
+                {/* BOARD FORM */}
+                {activeLevel === 'boards' && (
+                  <>
+                    <div className={styles.formRow}>
+                      <div className={styles.formField}>
+                        <label>Board Name *</label>
+                        <input
+                          value={formValues.name}
+                          onChange={(event) => setFormValues({ ...formValues, name: event.target.value, title: event.target.value })}
+                          placeholder="e.g. Central Board of Secondary Education"
+                          required
+                        />
+                      </div>
+                      <div className={styles.formField}>
+                        <label>Short Code *</label>
+                        <input
+                          value={formValues.code}
+                          onChange={(event) => setFormValues({ ...formValues, code: event.target.value })}
+                          placeholder="e.g. CBSE"
+                          required
+                        />
+                      </div>
+                      <div className={styles.formField}>
+                        <label>Status</label>
+                        <select
+                          value={formValues.status_id}
+                          onChange={(event) => setFormValues({ ...formValues, status_id: Number(event.target.value) })}
+                        >
+                          {statusOptions.map((option) => (
+                            <option key={option.value} value={option.value}>{option.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                    <div className={styles.formFieldWide} style={{ marginTop: '0.75rem' }}>
+                      <label>Description</label>
+                      <textarea
+                        rows={3}
+                        value={formValues.description}
+                        onChange={(event) => setFormValues({ ...formValues, description: event.target.value })}
+                        placeholder="Brief details about the board curriculum..."
+                      />
+                    </div>
+                  </>
+                )}
+
+                {/* GRADE FORM */}
+                {activeLevel === 'grades' && (
+                  <>
+                    <div className={styles.formRow}>
+                      <div className={styles.formField}>
+                        <label>Grade Name *</label>
+                        <input
+                          value={formValues.name}
+                          onChange={(event) => setFormValues({ ...formValues, name: event.target.value, title: event.target.value })}
+                          placeholder="e.g. Grade 5 or LKG"
+                          required
+                        />
+                      </div>
+                      <div className={styles.formField}>
+                        <label>Short Code</label>
+                        <input
+                          value={formValues.code}
+                          onChange={(event) => setFormValues({ ...formValues, code: event.target.value })}
+                          placeholder="e.g. G5"
+                        />
+                      </div>
+                      <div className={styles.formField}>
+                        <label>Target Age Range</label>
+                        <input
+                          value={formValues.age_range}
+                          onChange={(event) => setFormValues({ ...formValues, age_range: event.target.value })}
+                          placeholder="e.g. 5-6 years"
+                        />
+                      </div>
+                    </div>
+                    <div className={styles.formRow} style={{ marginTop: '0.75rem' }}>
+                      <div className={styles.formFieldWide}>
+                        <label>Description</label>
+                        <textarea
+                          rows={3}
+                          value={formValues.description}
+                          onChange={(event) => setFormValues({ ...formValues, description: event.target.value })}
+                          placeholder="Brief description about the learning goals of this grade..."
+                        />
+                      </div>
+                      <div className={styles.formField}>
+                        <label>Status</label>
+                        <select
+                          value={formValues.status_id}
+                          onChange={(event) => setFormValues({ ...formValues, status_id: Number(event.target.value) })}
+                        >
+                          {statusOptions.map((option) => (
+                            <option key={option.value} value={option.value}>{option.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* SUBJECT FORM */}
+                {activeLevel === 'subjects' && (
+                  <>
+                    <div className={styles.formRow}>
+                      <div className={styles.formField}>
+                        <label>Subject Name *</label>
+                        <input
+                          value={formValues.name}
+                          onChange={(event) => setFormValues({ ...formValues, name: event.target.value, title: event.target.value })}
+                          placeholder="e.g. Mathematics"
+                          required
+                        />
+                      </div>
+                      <div className={styles.formField}>
+                        <label>Subject Code</label>
+                        <input
+                          value={formValues.code}
+                          onChange={(event) => setFormValues({ ...formValues, code: event.target.value })}
+                          placeholder="e.g. MATH"
+                        />
+                      </div>
+                      <div className={styles.formField}>
+                        <label>Status</label>
+                        <select
+                          value={formValues.status_id}
+                          onChange={(event) => setFormValues({ ...formValues, status_id: Number(event.target.value) })}
+                        >
+                          {statusOptions.map((option) => (
+                            <option key={option.value} value={option.value}>{option.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                    <div className={styles.formFieldWide} style={{ marginTop: '0.75rem' }}>
+                      <label>Description</label>
+                      <textarea
+                        rows={3}
+                        value={formValues.description}
+                        onChange={(event) => setFormValues({ ...formValues, description: event.target.value })}
+                        placeholder="Key domains covered in this subject..."
+                      />
+                    </div>
+                  </>
+                )}
+
+                {/* CHAPTER FORM */}
+                {activeLevel === 'chapters' && (
+                  <>
+                    <div className={styles.formRow}>
+                      <div className={styles.formField}>
+                        <label>Chapter Title *</label>
+                        <input
+                          value={formValues.name}
+                          onChange={(event) => setFormValues({ ...formValues, name: event.target.value, title: event.target.value })}
+                          placeholder="e.g. Introduction to Fractions"
+                          required
+                        />
+                      </div>
+                      <div className={styles.formField}>
+                        <label>Chapter Code / Unit</label>
+                        <input
+                          value={formValues.code}
+                          onChange={(event) => setFormValues({ ...formValues, code: event.target.value })}
+                          placeholder="e.g. CH-01"
+                        />
+                      </div>
+                      <div className={styles.formField}>
+                        <label>Status</label>
+                        <select
+                          value={formValues.status_id}
+                          onChange={(event) => setFormValues({ ...formValues, status_id: Number(event.target.value) })}
+                        >
+                          {statusOptions.map((option) => (
+                            <option key={option.value} value={option.value}>{option.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                    <div className={styles.formFieldWide} style={{ marginTop: '0.75rem' }}>
+                      <label>Description / Objectives</label>
+                      <textarea
+                        rows={3}
+                        value={formValues.description}
+                        onChange={(event) => setFormValues({ ...formValues, description: event.target.value })}
+                        placeholder="What students will learn in this chapter..."
+                      />
+                    </div>
+                  </>
+                )}
+
+                {/* LESSON FORM */}
+                {activeLevel === 'lessons' && (
+                  <>
+                    <div className={styles.formRow}>
+                      <div className={styles.formField}>
+                        <label>Lesson Title *</label>
+                        <input
+                          value={formValues.name}
+                          onChange={(event) => setFormValues({ ...formValues, name: event.target.value, title: event.target.value })}
+                          placeholder="e.g. Dividing Fractions Tutorial"
+                          required
+                        />
+                      </div>
+                      <div className={styles.formField}>
+                        <label>YouTube Video URL or ID *</label>
+                        <input
+                          value={formValues.youtube_video_id}
+                          onChange={(event) => setFormValues({ ...formValues, youtube_video_id: event.target.value })}
+                          placeholder="e.g. https://youtu.be/..."
+                          required
+                        />
+                      </div>
+                      <div className={styles.formField}>
+                        <label>Duration (seconds)</label>
+                        <input
+                          value={formValues.duration_seconds}
+                          onChange={(event) => setFormValues({ ...formValues, duration_seconds: event.target.value })}
+                          placeholder="e.g. 360"
+                          type="number"
+                        />
+                      </div>
+                    </div>
+                    <div className={styles.formRow} style={{ marginTop: '0.75rem' }}>
+                      <div className={styles.formFieldWide}>
+                        <label>Lesson Description</label>
+                        <textarea
+                          rows={3}
+                          value={formValues.description}
+                          onChange={(event) => setFormValues({ ...formValues, description: event.target.value })}
+                          placeholder="Brief notes about the lesson topic..."
+                        />
+                      </div>
+                      <div className={styles.formField}>
+                        <label>Status</label>
+                        <select
+                          value={formValues.status_id}
+                          onChange={(event) => setFormValues({ ...formValues, status_id: Number(event.target.value) })}
+                        >
+                          {statusOptions.map((option) => (
+                            <option key={option.value} value={option.value}>{option.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
-              {['boards', 'grades', 'subjects'].includes(activeLevel) && (
-                <div className={styles.formField}>
-                  <label className={styles.formLabel}>Code</label>
-                  <input
-                    value={formValues.code}
-                    onChange={(event) => setFormValues({ ...formValues, code: event.target.value })}
-                    placeholder="CBSE, IBSE, STEM, HSC"
-                  />
-                </div>
-              )}
-              {activeLevel === 'grades' && (
-                <div className={styles.formField}>
-                  <label className={styles.formLabel}>Age range</label>
-                  <input
-                    value={formValues.age_range}
-                    onChange={(event) => setFormValues({ ...formValues, age_range: event.target.value })}
-                    placeholder="8-10 years"
-                  />
-                </div>
-              )}
-              {['boards', 'grades', 'subjects', 'chapters', 'lessons'].includes(activeLevel) && (
-                <div className={styles.formFieldWide}>
-                  <label className={styles.formLabel}>Description</label>
-                  <textarea
-                    rows={4}
-                    value={formValues.description}
-                    onChange={(event) => setFormValues({ ...formValues, description: event.target.value })}
-                    placeholder="Add a crisp curriculum description."
-                  />
-                </div>
-              )}
-              {activeLevel === 'lessons' && (
-                <>
-                  <div className={styles.formField}>
-                    <label className={styles.formLabel}>YouTube URL</label>
-                    <input
-                      value={formValues.youtube_video_id}
-                      onChange={(event) => setFormValues({ ...formValues, youtube_video_id: event.target.value })}
-                      placeholder="https://youtu.be/VIDEO_ID"
-                    />
-                  </div>
-                  <div className={styles.formField}>
-                    <label className={styles.formLabel}>Duration (sec)</label>
-                    <input
-                      value={formValues.duration_seconds}
-                      onChange={(event) => setFormValues({ ...formValues, duration_seconds: event.target.value })}
-                      placeholder="250"
-                      type="number"
-                    />
-                  </div>
-                </>
-              )}
-              <div className={styles.formField}>
-                <label className={styles.formLabel}>Status</label>
-                <select
-                  value={formValues.status_id}
-                  onChange={(event) => setFormValues({ ...formValues, status_id: Number(event.target.value) })}
-                >
-                  {statusOptions.map((option) => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
-                  ))}
-                </select>
-              </div>
+
+              {/* ACTIONS */}
               <div className={styles.formActions}>
                 <button type="button" className={styles.secondaryButton} onClick={closeForm}>
                   Cancel
                 </button>
                 <button type="submit" className={styles.primaryButton} disabled={isSaving}>
-                  {editingItem ? 'Save changes' : `Create ${primaryLabel}`}
+                  {editingItem ? 'Save Settings' : `Create ${primaryLabel}`}
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
-
       {feedback && <div className={styles.toast}>{feedback}</div>}
     </main>
   );

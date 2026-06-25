@@ -746,16 +746,16 @@ export default function SchoolsAdminPage() {
       {/* Header */}
       <div className={styles.pageHeader}>
         <div>
-          <p className={styles.eyebrow}>School directory</p>
+          <Link href={`/${locale}/admin`} className={styles.backLink}>
+            <ArrowLeft size={16} style={{ display: 'inline-block', verticalAlign: 'middle' }} /> Back to dashboard
+          </Link>
+          <p className={styles.eyebrow} style={{ marginTop: '0.75rem' }}>School directory</p>
           <h1 className={styles.title}>School management</h1>
           <p className={styles.subtitle}>
             Manage all schools, their plans, admins, and revenue. Track performance and handle renewals.
           </p>
         </div>
         <div className={styles.headerActions}>
-          <Link href={`/${locale}/admin`} className={styles.secondaryButton}>
-            <ChevronRight size={16} /> Back to dashboard
-          </Link>
           <button className={styles.secondaryButton} onClick={exportCSV}>
             <Download size={16} /> Export CSV
           </button>

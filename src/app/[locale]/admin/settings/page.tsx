@@ -3,8 +3,10 @@
 import { useParams, useRouter } from 'next/navigation';
 import { Manrope } from 'next/font/google';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import {
   AlertTriangle,
+  ArrowLeft,
   Award,
   CheckCircle2,
   Clock,
@@ -14,7 +16,7 @@ import {
   Trash2,
   X,
 } from 'lucide-react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminKeys } from '@/core/constants/queryKeys';
 import { adminApi } from '@/core/services/adminApi';
 import { useAuth } from '@/context/AuthContext';
@@ -26,8 +28,6 @@ const adminFont = Manrope({
   display: 'swap',
 });
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, '') ?? '';
-
 export default function SettingsPlansPage() {
   const router = useRouter();
   const params = useParams();
@@ -35,52 +35,80 @@ export default function SettingsPlansPage() {
   const { user, loading } = useAuth();
   const queryClient = useQueryClient();
 
+  const [mounted, setMounted] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<any | null>(null);
   const [editPlan, setEditPlan] = useState<any | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!loading && !user) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && !loading && !user) {
       router.push(`/${locale}/login`);
     }
-  }, [loading, locale, router, user]);
+  }, [mounted, loading, locale, router, user]);
 
-  const { data: planData, isLoading } = useQuery({
-    queryKey: [...adminKeys.all, 'plans'],
+  const { data: planData, isLoading, error } = useQuery({
+    queryKey: adminKeys.plans,
     queryFn: adminApi.paymentsPlans,
     enabled: !!user,
   });
+
+  if (error) {
+    console.error("useQuery plans error:", error);
+  }
 
   const showFeedback = (msg: string) => {
     setFeedback(msg);
     window.setTimeout(() => setFeedback(null), 3500);
   };
 
-  const handleSavePlan = async () => {
+  const updateMutation = useMutation({
+    mutationFn: ({ id, plan }: { id: string; plan: any }) => adminApi.updatePlan(id, plan),
+    onSuccess: () => {
+      showFeedback('Plan saved');
+      setEditPlan(null);
+      setSelectedPlan(null);
+      queryClient.invalidateQueries({ queryKey: adminKeys.plans });
+    },
+    onError: () => {
+      showFeedback('Save failed');
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => adminApi.deletePlan(id),
+    onSuccess: () => {
+      showFeedback('Plan deleted');
+      setSelectedPlan(null);
+      queryClient.invalidateQueries({ queryKey: adminKeys.plans });
+    },
+    onError: () => {
+      showFeedback('Delete failed');
+    },
+  });
+
+  const handleSavePlan = () => {
     if (!editPlan) return;
-    try {
-      const res = await fetch(`${API_BASE}/api/admin/plans/${editPlan.id}`, {
-        method: 'PUT', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(editPlan), credentials: 'include',
-      });
-      if (res.ok) { showFeedback('Plan saved'); setEditPlan(null); queryClient.invalidateQueries(); }
-    } catch { showFeedback('Save failed'); }
+    updateMutation.mutate({ id: editPlan.id, plan: editPlan });
   };
 
-  const handleDeletePlan = async (id: string) => {
+  const handleDeletePlan = (id: string) => {
     if (!window.confirm('Delete this plan?')) return;
-    try {
-      const res = await fetch(`${API_BASE}/api/admin/plans/${id}`, { method: 'DELETE', credentials: 'include' });
-      if (res.ok) { showFeedback('Plan deleted'); setSelectedPlan(null); queryClient.invalidateQueries(); }
-    } catch { showFeedback('Delete failed'); }
+    deleteMutation.mutate(id);
   };
 
-  if (loading || !user) return null;
+  if (!mounted || loading || !user) return null;
 
   return (
     <main className={`${adminFont.variable} ${styles.shell}`}>
       <div className={styles.pageHeader}>
         <div>
+          <Link href={`/${locale}/admin`} className={styles.backLink}>
+            <ArrowLeft size={16} /> Back to dashboard
+          </Link>
           <p className={styles.eyebrow}>Settings</p>
           <h1 className={styles.title}>Plans Management</h1>
           <p className={styles.subtitle}>Configure parent and school subscription plans</p>
@@ -92,6 +120,12 @@ export default function SettingsPlansPage() {
           <h2>Plans Overview</h2>
           <span>{(planData as any)?.parent_plans?.length + (planData as any)?.school_plans?.length || 0} total</span>
         </div>
+
+        {error && (
+          <div style={{ color: '#dc2626', background: '#fef2f2', border: '1px solid #fecaca', padding: '1rem', borderRadius: '0.8rem', marginBottom: '1.5rem', fontSize: '0.88rem', fontWeight: 600 }}>
+            Error loading plans: {(error as Error).message}
+          </div>
+        )}
 
         {isLoading ? (
           <div className={styles.loadingState}>

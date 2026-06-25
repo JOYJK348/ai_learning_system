@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Manrope } from 'next/font/google';
+import Link from 'next/navigation';
+import { useParams } from 'next/navigation';
 import {
   GraduationCap,
   Star,
@@ -11,18 +12,17 @@ import {
   Activity,
   TrendingUp,
   Eye,
-  CheckSquare,
-  Square,
   AlertTriangle,
   X,
-  Mail,
-  Calendar,
-  Hash,
-  Clock3,
-  BookOpen,
   Filter,
   ChevronDown,
+  ChevronUp,
+  ChevronRight,
   User,
+  Shield,
+  Building2,
+  ArrowLeft,
+  Download
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { adminKeys } from '@/core/constants/queryKeys';
@@ -70,19 +70,12 @@ type Kid = {
   school_name?: string;
 };
 
-const CONTAINER = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.025 } },
-};
-
-const ROW_ITEM = {
-  hidden: { opacity: 0, y: 12 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.25 } },
-};
-
 export default function StudentsPage() {
   const { user } = useAuth();
+  const params = useParams();
+  const locale = (params?.locale as string) || 'en';
 
+  // Fetch Students
   const { data: studentsRes, isLoading, isError, error } = useQuery({
     queryKey: adminKeys.students,
     queryFn: async () => {
@@ -95,23 +88,37 @@ export default function StudentsPage() {
     enabled: !!user,
   });
 
+  // Fetch All Schools dynamically to populate the dropdown
+  const { data: schoolsRes } = useQuery({
+    queryKey: ['admin', 'schools', 'list'],
+    queryFn: async () => {
+      const data = await adminApi.schools();
+      if (!data) return [];
+      const raw = (data as any)?.data ?? data ?? [];
+      return Array.isArray(raw) ? raw : [];
+    },
+    staleTime: 60_000,
+    enabled: !!user,
+  });
+
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => { setHydrated(true); }, []);
 
   const students: Kid[] = studentsRes ?? [];
+  const schoolsList = useMemo(() => Array.isArray(schoolsRes) ? schoolsRes : [], [schoolsRes]);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'name' | 'progress' | 'stars' | 'last_active'>('name');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [detailStudent, setDetailStudent] = useState<Kid | null>(null);
+  
+  // Power Filters State
   const [gradeFilter, setGradeFilter] = useState('');
-
-  const schoolOptions = useMemo(() => {
-    const set = new Set<string>();
-    students.forEach(s => { if (s.school_name) set.add(s.school_name); });
-    return Array.from(set).sort();
-  }, [students]);
+  const [schoolFilter, setSchoolFilter] = useState('');
+  const [progressFilter, setProgressFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [regTypeFilter, setRegTypeFilter] = useState('');
 
   const gradeOptions = useMemo(() => {
     const set = new Set<string>();
@@ -122,6 +129,28 @@ export default function StudentsPage() {
   const filtered = useMemo(() => {
     let list = [...students];
     if (gradeFilter) list = list.filter(s => s.grade_name === gradeFilter);
+    if (schoolFilter) list = list.filter(s => s.school_name === schoolFilter);
+    
+    if (regTypeFilter) {
+      if (regTypeFilter === 'school') list = list.filter(s => !!s.school_name);
+      else if (regTypeFilter === 'individual') list = list.filter(s => !s.school_name);
+    }
+
+    if (progressFilter) {
+      if (progressFilter === 'low') list = list.filter(s => s.overall_progress < 40);
+      else if (progressFilter === 'mid') list = list.filter(s => s.overall_progress >= 40 && s.overall_progress < 70);
+      else if (progressFilter === 'high') list = list.filter(s => s.overall_progress >= 70);
+    }
+    
+    if (statusFilter) {
+      list = list.filter(s => {
+        const isOnline = s.last_active
+          ? Date.now() - new Date(s.last_active).getTime() < 30 * 60 * 1000
+          : false;
+        return statusFilter === 'online' ? isOnline : !isOnline;
+      });
+    }
+
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       list = list.filter((s) => (s.name ?? '').toLowerCase().includes(q));
@@ -139,7 +168,7 @@ export default function StudentsPage() {
       return sortDir === 'asc' ? cmp : -cmp;
     });
     return list;
-  }, [students, searchQuery, sortBy, sortDir, gradeFilter]);
+  }, [students, searchQuery, sortBy, sortDir, gradeFilter, schoolFilter, progressFilter, statusFilter, regTypeFilter]);
 
   const stats = useMemo(() => {
     const pool = students;
@@ -152,30 +181,13 @@ export default function StudentsPage() {
     const avgStars = pool.length
       ? Math.round(pool.reduce((s, k) => s + (k.total_stars || 0), 0) / pool.length)
       : 0;
-    return { total: pool.length, activeToday, avgProgress, avgStars };
+
+    // Count school vs individual
+    const schoolCount = pool.filter(s => !!s.school_name).length;
+    const individualCount = pool.length - schoolCount;
+
+    return { total: pool.length, activeToday, avgProgress, avgStars, schoolCount, individualCount };
   }, [students]);
-
-  const handleSort = (field: typeof sortBy) => {
-    if (sortBy === field) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
-    else { setSortBy(field); setSortDir('asc'); }
-  };
-
-  const sortArrow = (field: typeof sortBy) => {
-    if (sortBy !== field) return '';
-    return sortDir === 'asc' ? ' \u2191' : ' \u2193';
-  };
-
-  const getProgressColor = (val: number) => {
-    if (val >= 70) return '#22c55e';
-    if (val >= 40) return '#f59e0b';
-    return '#ef4444';
-  };
-
-  const getProgressGradient = (val: number) => {
-    if (val >= 70) return 'linear-gradient(90deg, #22c55e, #16a34a)';
-    if (val >= 40) return 'linear-gradient(90deg, #f59e0b, #d97706)';
-    return 'linear-gradient(90deg, #ef4444, #dc2626)';
-  };
 
   const toggleSelect = (id: string) => {
     setSelectedIds((prev) => {
@@ -194,186 +206,367 @@ export default function StudentsPage() {
     }
   };
 
+  const getProgressColor = (val: number) => {
+    if (val >= 70) return '#22c55e';
+    if (val >= 40) return '#f59e0b';
+    return '#ef4444';
+  };
+
+  const getProgressGradient = (val: number) => {
+    if (val >= 70) return 'linear-gradient(90deg, #22c55e, #16a34a)';
+    if (val >= 40) return 'linear-gradient(90deg, #f59e0b, #d97706)';
+    return 'linear-gradient(90deg, #ef4444, #dc2626)';
+  };
+
+  const resetFilters = () => {
+    setGradeFilter('');
+    setSchoolFilter('');
+    setProgressFilter('');
+    setStatusFilter('');
+    setRegTypeFilter('');
+    setSearchQuery('');
+  };
+
   const selectedCount = selectedIds.size;
+  const filtersActive = gradeFilter || schoolFilter || progressFilter || statusFilter || regTypeFilter || searchQuery;
+
+  const exportCSV = () => {
+    const headers = ['Name', 'Email', 'Grade', 'School Name', 'Progress (%)', 'Stars', 'Badges', 'Streak (days)', 'Status', 'Joined Date'];
+    const rows = filtered.map(s => {
+      const isOnline = s.last_active
+        ? Date.now() - new Date(s.last_active).getTime() < 30 * 60 * 1000
+        : false;
+      return [
+        `"${(s.name || '').replace(/"/g, '""')}"`,
+        `"${(s.email || '').replace(/"/g, '""')}"`,
+        `"${(s.grade_name || '').replace(/"/g, '""')}"`,
+        `"${(s.school_name || 'Individual').replace(/"/g, '""')}"`,
+        s.overall_progress,
+        s.total_stars,
+        s.badges_count,
+        s.current_streak_days,
+        isOnline ? 'Online' : 'Offline',
+        s.created_at ? new Date(s.created_at).toISOString().split('T')[0] : 'N/A'
+      ];
+    });
+    const csvContent = "\uFEFF" + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `students_export_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  if (!hydrated || !user) return null;
 
   return (
     <main className={`${adminFont.variable} ${styles.shell}`}>
-      <div className={styles.bgGlow} />
-      <div className={styles.content}>
-        <header className={styles.header}>
-          <div>
-            <h1 className={styles.title}>Student Directory</h1>
-            <p className={styles.subtitle}>Monitor all students across your platform</p>
-          </div>
-        </header>
-
-        <div className={styles.statsRow}>
-          <motion.div className={styles.statCard} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05, duration: 0.35 }}>
-            <div className={`${styles.statIcon} ${styles.statIcon1}`}><Users size={18} /></div>
-            <div>
-              <p className={styles.statValue}>{stats.total}</p>
-              <p className={styles.statLabel}>Total Students</p>
-            </div>
-          </motion.div>
-          <motion.div className={styles.statCard} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.35 }}>
-            <div className={`${styles.statIcon} ${styles.statIcon2}`}><Activity size={18} /></div>
-            <div>
-              <p className={styles.statValue}>{stats.activeToday}</p>
-              <p className={styles.statLabel}>Active Today</p>
-            </div>
-          </motion.div>
-          <motion.div className={styles.statCard} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.35 }}>
-            <div className={`${styles.statIcon} ${styles.statIcon3}`}><TrendingUp size={18} /></div>
-            <div>
-              <p className={styles.statValue}>{stats.avgProgress}%</p>
-              <p className={styles.statLabel}>Avg Progress</p>
-            </div>
-          </motion.div>
-          <motion.div className={styles.statCard} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.35 }}>
-            <div className={`${styles.statIcon} ${styles.statIcon4}`}><Star size={18} /></div>
-            <div>
-              <p className={styles.statValue}>{stats.avgStars}</p>
-              <p className={styles.statLabel}>Avg Stars</p>
-            </div>
-          </motion.div>
+      {/* Header */}
+      <div className={styles.pageHeader}>
+        <div>
+          <a href={`/${locale}/admin`} className={styles.backLink}>
+            <ArrowLeft size={16} style={{ display: 'inline-block', verticalAlign: 'middle' }} /> Back to dashboard
+          </a>
+          <p className={styles.eyebrow} style={{ marginTop: '0.75rem' }}>Student directory</p>
+          <h1 className={styles.title}>Student management</h1>
+          <p className={styles.subtitle}>
+            Monitor all students across your platform. Track progress, stars, and activity metrics.
+          </p>
         </div>
-
-        <div className={styles.toolbar}>
-          <div className={styles.filterRow}>
-            <div className={styles.searchBox}>
-              <Search size={16} className={styles.searchIcon} />
-              <input className={styles.searchInput} type="search" placeholder="Search by name..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-              {searchQuery && (
-                <button type="button" className={styles.clearBtn} onClick={() => setSearchQuery('')}>
-                  <span aria-hidden>&times;</span>
-                </button>
-              )}
-            </div>
-
-            <div className={styles.filterGroup}>
-              <div className={styles.selectWrap}>
-                <select className={styles.selectBox} value={gradeFilter} onChange={(e) => setGradeFilter(e.target.value)}>
-                  <option value="">All Grades</option>
-                  {gradeOptions.map(s => <option key={s} value={s}>{s}</option>)}
-                </select>
-                <ChevronDown size={12} className={styles.selectChevron} />
-              </div>
-            </div>
-          </div>
+        <div className={styles.headerActions}>
+          <button className={styles.primaryButton} onClick={exportCSV}>
+            <Download size={16} /> Export CSV
+          </button>
         </div>
-
-        {selectedCount > 0 && (
-          <motion.div className={styles.bulkBar} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
-            <span className={styles.bulkCount}>{selectedCount} selected</span>
-            <button type="button" className={styles.bulkDeselectBtn} onClick={() => setSelectedIds(new Set())}>
-              Deselect All
-            </button>
-          </motion.div>
-        )}
-
-        {isError ? (
-          <div className={styles.emptyState}>
-            <div className={styles.emptyIcon}><AlertTriangle size={40} /></div>
-            <h3 className={styles.emptyTitle}>Failed to load students</h3>
-            <p className={styles.emptyText}>{(error as any)?.message || 'Check console for details'}</p>
-          </div>
-        ) : isLoading && hydrated ? (
-          <div className={styles.emptyState}>
-            <div className={styles.loader} />
-            <p className={styles.emptyText}>Loading students...</p>
-          </div>
-        ) : filtered.length === 0 ? (
-          <div className={styles.emptyState}>
-            <div className={styles.emptyIcon}><GraduationCap size={40} /></div>
-            <h3 className={styles.emptyTitle}>No students found</h3>
-            <p className={styles.emptyText}>
-              {searchQuery ? 'Try adjusting your search' : 'No students registered yet'}
-            </p>
-          </div>
-        ) : (
-          <section className={styles.tableWrap}>
-            <div className={styles.tableHeader}>
-              <div className={styles.cellCheck}>
-                <button type="button" className={styles.checkBtn} onClick={toggleSelectAll} aria-label="Select all">
-                  {selectedIds.size === filtered.length ? <CheckSquare size={15} /> : <Square size={15} />}
-                </button>
-              </div>
-              <button type="button" className={styles.sortBtn} onClick={() => handleSort('name')}>Student{sortArrow('name')}</button>
-              <button type="button" className={styles.sortBtn} onClick={() => handleSort('progress')}>Progress{sortArrow('progress')}</button>
-              <button type="button" className={styles.sortBtn} onClick={() => handleSort('stars')}>Stars{sortArrow('stars')}</button>
-              <button type="button" className={styles.sortBtn} onClick={() => handleSort('last_active')}>Status{sortArrow('last_active')}</button>
-              <span className={styles.actionColHeader} />
-            </div>
-
-            <motion.div variants={CONTAINER} initial="hidden" animate="show">
-              {filtered.map((s) => {
-                const isOnline = s.last_active
-                  ? Date.now() - new Date(s.last_active).getTime() < 30 * 60 * 1000
-                  : false;
-                const pc = getProgressColor(s.overall_progress);
-                const pg = getProgressGradient(s.overall_progress);
-                const isSelected = selectedIds.has(s.id);
-
-                return (
-                  <motion.div
-                    key={s.id}
-                    variants={ROW_ITEM}
-                    className={`${styles.row} ${isSelected ? styles.rowSelected : ''}`}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <div className={styles.cellCheck}>
-                      <button type="button" className={styles.checkBtn} onClick={(e) => { e.stopPropagation(); toggleSelect(s.id); }} aria-label={isSelected ? 'Deselect' : 'Select'}>
-                        {isSelected ? <CheckSquare size={15} color="#12312f" /> : <Square size={15} />}
-                      </button>
-                    </div>
-
-                    <div className={styles.cellStudent}>
-                      <div className={styles.avatar} style={{ background: getAvatarGradient(s.name ?? '') }}>
-                        {(s.name ?? '?').charAt(0)}
-                      </div>
-                      <div className={styles.nameGroup}>
-                        <p className={styles.name}>{s.name}</p>
-                        <p className={styles.meta}>
-                          <span className={styles.gradePill}>{s.grade_name || 'No Grade'}</span>
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className={styles.cellProgress}>
-                      <div className={styles.progressTrack}>
-                        <div className={styles.progressFill} style={{ width: `${s.overall_progress}%`, background: pg }} />
-                      </div>
-                      <span className={styles.progressPct} style={{ color: pc }}>{s.overall_progress}%</span>
-                    </div>
-
-                    <div className={styles.cellStars}>
-                      <Star size={13} fill="#f59e0b" color="#f59e0b" />
-                      <span className={styles.starsVal}>{s.total_stars}</span>
-                    </div>
-
-                    <div className={styles.cellStatus}>
-                      <span className={`${styles.statusDot} ${isOnline ? styles.online : ''}`}>
-                        <span className={styles.pulse} />
-                        {isOnline ? 'Online' : 'Offline'}
-                      </span>
-                    </div>
-
-                    <div className={styles.cellActions}>
-                      <button type="button" className={styles.actionBtn} aria-label="View details" onClick={(e) => { e.stopPropagation(); setDetailStudent(s); }}>
-                        <Eye size={15} />
-                      </button>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-          </section>
-        )}
-
-        <div className={styles.bottomPad} />
       </div>
 
+      {/* KPI Cards */}
+      {stats && (
+        <section className={`${styles.kpiGrid} ${styles.kpiGridStudents}`}>
+          <article className={styles.kpiCard}>
+            <div className={styles.kpiIcon}><Users size={20} /></div>
+            <div className={styles.kpiContent}>
+              <p className={styles.kpiLabel}>Total Students</p>
+              <h2>{stats.total}</h2>
+              <span className={styles.kpiMeta}>
+                {stats.schoolCount} school • {stats.individualCount} individual
+              </span>
+            </div>
+          </article>
+          <article className={styles.kpiCard}>
+            <div className={`${styles.kpiIcon} ${styles.kpiGreen}`}><Activity size={20} /></div>
+            <div className={styles.kpiContent}>
+              <p className={styles.kpiLabel}>Active Today</p>
+              <h2>{stats.activeToday}</h2>
+              <span className={styles.kpiMeta}>Active in last 24h</span>
+            </div>
+          </article>
+          <article className={styles.kpiCard}>
+            <div className={`${styles.kpiIcon} ${styles.kpiPurple}`}><TrendingUp size={20} /></div>
+            <div className={styles.kpiContent}>
+              <p className={styles.kpiLabel}>Avg Progress</p>
+              <h2>{stats.avgProgress}%</h2>
+              <span className={styles.kpiMeta}>Platform average</span>
+            </div>
+          </article>
+          <article className={styles.kpiCard}>
+            <div className={`${styles.kpiIcon} ${styles.kpiGold}`}><Star size={20} /></div>
+            <div className={styles.kpiContent}>
+              <p className={styles.kpiLabel}>Avg Stars</p>
+              <h2>{stats.avgStars}</h2>
+              <span className={styles.kpiMeta}>Earned per student</span>
+            </div>
+          </article>
+        </section>
+      )}
+
+      {/* Power Filters */}
+      <section className={styles.filterSection}>
+        <div className={styles.filterRow}>
+          {/* Search */}
+          <div className={styles.searchGroup}>
+            <Search size={16} />
+            <input
+              type="text"
+              placeholder="Search by name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={styles.searchInput}
+            />
+          </div>
+
+          {/* School/Individual Segment */}
+          <div className={styles.filterGroup}>
+            <User size={16} />
+            <select 
+              value={regTypeFilter} 
+              onChange={(e) => {
+                const val = e.target.value;
+                setRegTypeFilter(val);
+                if (val === 'individual') {
+                  setSchoolFilter('');
+                }
+              }}
+            >
+              <option value="">All Account Types</option>
+              <option value="school">🏫 School Linked</option>
+              <option value="individual">👤 Individual B2C</option>
+            </select>
+          </div>
+
+          {/* School Name Dropdown (only shown if not filtered to Individual) */}
+          {regTypeFilter !== 'individual' && (
+            <div className={styles.filterGroup}>
+              <Building2 size={16} />
+              <select 
+                value={schoolFilter} 
+                onChange={(e) => setSchoolFilter(e.target.value)}
+              >
+                <option value="">All Schools</option>
+                {schoolsList.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
+              </select>
+            </div>
+          )}
+
+          {/* Grade Dropdown */}
+          <div className={styles.filterGroup}>
+            <Filter size={16} />
+            <select value={gradeFilter} onChange={(e) => setGradeFilter(e.target.value)}>
+              <option value="">All Grades</option>
+              {gradeOptions.map(s => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
+
+          {/* Performance/Progress Dropdown */}
+          <div className={styles.filterGroup}>
+            <TrendingUp size={16} />
+            <select value={progressFilter} onChange={(e) => setProgressFilter(e.target.value)}>
+              <option value="">All Progress Levels</option>
+              <option value="high">Excellent (≥ 70%)</option>
+              <option value="mid">Average (40% - 69%)</option>
+              <option value="low">Needs Attention (&lt; 40%)</option>
+            </select>
+          </div>
+
+          {/* Online/Offline Status Dropdown */}
+          <div className={styles.filterGroup}>
+            <Shield size={16} />
+            <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+              <option value="">All Status</option>
+              <option value="online">Online Now</option>
+              <option value="offline">Offline</option>
+            </select>
+          </div>
+
+          {/* Sort Menu */}
+          <div className={styles.sortGroup}>
+            <span>Sort:</span>
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value as any)}>
+              <option value="name">Name</option>
+              <option value="progress">Progress</option>
+              <option value="stars">Stars</option>
+              <option value="last_active">Active Status</option>
+            </select>
+            <button onClick={() => setSortDir(d => d === 'asc' ? 'desc' : 'asc')}>
+              {sortDir === 'asc' ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Action bar for active selection or filters */}
+        {(selectedCount > 0 || filtersActive) && (
+          <div className={styles.bulkBar}>
+            {selectedCount > 0 && <span>{selectedCount} selected</span>}
+            {selectedCount > 0 && (
+              <button onClick={() => setSelectedIds(new Set())}><X size={14} /> Clear Selection</button>
+            )}
+            {filtersActive && (
+              <button onClick={resetFilters} className={styles.secondaryButton} style={{ marginLeft: selectedCount > 0 ? '0' : 'auto', color: '#be123c', borderColor: 'rgba(244, 63, 94, 0.15)', background: 'rgba(244, 63, 94, 0.05)' }}>
+                <RefreshCwIcon /> Reset Filters
+              </button>
+            )}
+          </div>
+        )}
+      </section>
+
+      {/* Table */}
+      {isError ? (
+        <div className={styles.emptyState}>
+          <div className={styles.emptyIcon}><AlertTriangle size={40} /></div>
+          <h3 className={styles.emptyTitle}>Failed to load students</h3>
+          <p className={styles.emptyText}>{(error as any)?.message || 'Check console for details'}</p>
+        </div>
+      ) : isLoading ? (
+        <div className={styles.emptyState}>
+          <div className={styles.loader} />
+          <p className={styles.emptyText}>Loading students...</p>
+        </div>
+      ) : (
+        <section className={styles.tableSection}>
+          <div className={styles.tableHeader}>
+            <div className={styles.tableTitle}>
+              <h2>All Students</h2>
+              <span>{filtered.length} students</span>
+            </div>
+          </div>
+
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th className={styles.checkboxCol}>
+                    <input 
+                      type="checkbox" 
+                      checked={selectedIds.size === filtered.length && filtered.length > 0}
+                      onChange={toggleSelectAll}
+                    />
+                  </th>
+                  <th>Student</th>
+                  <th>Progress</th>
+                  <th>Stars</th>
+                  <th>Status</th>
+                  <th className={styles.actionsCol}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.length > 0 ? (
+                  filtered.map((s) => {
+                    const isOnline = s.last_active
+                      ? Date.now() - new Date(s.last_active).getTime() < 30 * 60 * 1000
+                      : false;
+                    const pc = getProgressColor(s.overall_progress);
+                    const pg = getProgressGradient(s.overall_progress);
+                    const isSelected = selectedIds.has(s.id);
+
+                    return (
+                      <tr 
+                        key={s.id}
+                        className={`${styles.tableRow} ${isSelected ? styles.expanded : ''}`}
+                      >
+                        <td className={styles.checkboxCol}>
+                          <input 
+                            type="checkbox" 
+                            checked={isSelected}
+                            onChange={() => toggleSelect(s.id)}
+                          />
+                        </td>
+                        <td>
+                          <div className={styles.cellStudent}>
+                            <div className={styles.avatar} style={{ background: getAvatarGradient(s.name ?? '') }}>
+                              {(s.name ?? '?').charAt(0)}
+                            </div>
+                            <div className={styles.nameGroup}>
+                              <span className={styles.schoolName}>{s.name}</span>
+                              <span className={styles.schoolMeta}>
+                                <span className={styles.gradePill}>{s.grade_name || 'No Grade'}</span>
+                                {s.school_name ? (
+                                  <span className={styles.gradePill} style={{ background: 'rgba(18, 49, 47, 0.06)', color: '#12312f', marginLeft: '0.25rem' }}>
+                                    🏫 {s.school_name}
+                                  </span>
+                                ) : (
+                                  <span className={styles.gradePill} style={{ background: 'rgba(100, 116, 139, 0.08)', color: '#475569', marginLeft: '0.25rem' }}>
+                                    👤 Individual
+                                  </span>
+                                )}
+                              </span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div className={styles.cellProgress}>
+                            <div className={styles.progressTrack} style={{ width: '6rem' }}>
+                              <div className={styles.progressFill} style={{ width: `${s.overall_progress}%`, background: pg }} />
+                            </div>
+                            <span className={styles.progressPct} style={{ color: pc }}>{s.overall_progress}%</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div className={styles.cellStars}>
+                            <Star size={13} fill="#f59e0b" color="#f59e0b" />
+                            <span className={styles.starsVal}>{s.total_stars}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div className={styles.cellStatus}>
+                            <span className={`${styles.statusDot} ${isOnline ? styles.online : ''}`}>
+                              <span className={styles.pulse} />
+                              {isOnline ? 'Online' : 'Offline'}
+                            </span>
+                          </div>
+                        </td>
+                        <td className={styles.actionsCol}>
+                          <div className={styles.actionMenu}>
+                            <button type="button" className={styles.iconButton} aria-label="View details" onClick={() => setDetailStudent(s)}>
+                              <Eye size={15} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td colSpan={6}>
+                      <div className={styles.emptyState}>
+                        <div className={styles.emptyIcon}><GraduationCap size={40} /></div>
+                        <h3 className={styles.emptyTitle}>No students found</h3>
+                        <p className={styles.emptyText}>
+                          Try adjusting or resetting your filter configurations.
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+
+      {/* Drawer */}
       {detailStudent && (
         <div className={styles.drawerOverlay} onClick={() => setDetailStudent(null)}>
           <div className={styles.drawer} onClick={e => e.stopPropagation()}>
@@ -395,6 +588,10 @@ export default function StudentsPage() {
                 <div className={styles.drawerGrid}>
                   <div><label>Email</label><p>{detailStudent.email || 'No email'}</p></div>
                   <div><label>Grade</label><p>{detailStudent.grade_name || 'No Grade'}</p></div>
+                  <div>
+                    <label>Account Type</label>
+                    <p>{detailStudent.school_name ? `🏫 School (${detailStudent.school_name})` : '👤 Individual B2C'}</p>
+                  </div>
                   <div><label>Parent</label><p>{detailStudent.parent_name || 'Not linked'}</p></div>
                   <div><label>Joined</label><p>{new Date(detailStudent.created_at).toLocaleDateString('en-IN')}</p></div>
                   <div><label>Last Active</label><p>{detailStudent.last_active ? new Date(detailStudent.last_active).toLocaleDateString('en-IN') : 'Never'}</p></div>
@@ -430,5 +627,17 @@ export default function StudentsPage() {
         </div>
       )}
     </main>
+  );
+}
+
+// Inline Icon to avoid import breaks
+function RefreshCwIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '4px' }}>
+      <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+      <path d="M16 3h5v5" />
+      <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+      <path d="M8 21H3v-5" />
+    </svg>
   );
 }

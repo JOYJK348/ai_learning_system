@@ -215,27 +215,100 @@ export default function ProfilePage() {
     }
   };
 
-  // Handle Plan Subscription
-  const handleSubscribe = async (planId: number) => {
+  // Handle Plan Subscription — Real Razorpay Flow
+  const handleSubscribe = async (planId: number, planName?: string, amount?: number) => {
     setSelectedPlanId(planId);
     setSubscribing(true);
+    setAlert(null);
+
     try {
-      const result = await parentApi.subscribe(planId);
-      if (result.amount > 0) {
-        // Redirect to checkout order
-        router.push(`/${locale}/parent/plans/checkout?order_id=${result.payment?.order_id}`);
-      } else {
-        // Free plan, refresh subscription data
+      // Free plan — direct subscription, no payment needed
+      if (!amount || amount === 0) {
+        const result = await parentApi.subscribe(planId);
         await queryClient.invalidateQueries({ queryKey: parentKeys.subscription });
         setActiveSubTab('my-plan');
-        setAlert({ type: 'success', message: 'Plan changed successfully!' });
+        setAlert({ type: 'success', message: 'Free plan activated successfully!' });
+        return;
       }
+
+      // STEP 1: Create Razorpay order from backend
+      const orderData = await parentApi.createPaymentOrder(planId, 'monthly');
+
+      // STEP 2: Open Razorpay checkout widget
+      await new Promise<void>((resolve, reject) => {
+        // Load Razorpay script dynamically if not already loaded
+        const loadRazorpay = () => {
+          return new Promise<void>((res) => {
+            if ((window as any).Razorpay) { res(); return; }
+            const script = document.createElement('script');
+            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            script.onload = () => res();
+            document.body.appendChild(script);
+          });
+        };
+
+        loadRazorpay().then(() => {
+          const options = {
+            key: orderData.key_id,
+            amount: orderData.amount,
+            currency: orderData.currency,
+            name: 'Zhi Learning',
+            description: `${orderData.plan.name} Plan - Monthly`,
+            order_id: orderData.razorpay_order_id,
+            prefill: {
+              name: parentProfile?.name || '',
+              email: parentProfile?.email || '',
+            },
+            theme: { color: '#12312f' },
+            modal: {
+              ondismiss: () => {
+                // User closed checkout without paying — re-enable button
+                reject(new Error('Payment cancelled by user'));
+              },
+            },
+            handler: async (response: {
+              razorpay_order_id: string;
+              razorpay_payment_id: string;
+              razorpay_signature: string;
+            }) => {
+              try {
+                // STEP 3: Verify signature on backend
+                await parentApi.verifyPayment({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                });
+                resolve();
+              } catch (verifyErr: any) {
+                reject(verifyErr);
+              }
+            },
+          };
+
+          const rzp = new (window as any).Razorpay(options);
+          rzp.on('payment.failed', (resp: any) => {
+            reject(new Error(resp?.error?.description || 'Payment failed'));
+          });
+          rzp.open();
+        });
+      });
+
+      // STEP 4: Payment + verification success — refresh subscription
+      await queryClient.invalidateQueries({ queryKey: parentKeys.subscription });
+      setActiveSubTab('my-plan');
+      setAlert({ type: 'success', message: `🎉 Payment successful! Welcome to ${orderData.plan.name}!` });
+
     } catch (err: any) {
-      setAlert({ type: 'error', message: err.message || 'Subscription upgrade failed.' });
+      const msg = err.message || 'Payment failed. Please try again.';
+      if (msg !== 'Payment cancelled by user') {
+        setAlert({ type: 'error', message: msg });
+      }
     } finally {
       setSubscribing(false);
+      setSelectedPlanId(null);
     }
   };
+
 
   const isLoading = authLoading || meLoading || childrenLoading || subLoading;
   const currentPlanId = subscription?.plan_id;
@@ -653,7 +726,7 @@ export default function ProfilePage() {
                         type="button"
                         className={`${styles.ctaBtn} ${isCurrent ? styles.ctaBtnCurrent : ''}`}
                         style={!isCurrent ? { background: PLAN_COLORS[plan.code] } : {}}
-                        onClick={() => handleSubscribe(plan.id)}
+                        onClick={() => handleSubscribe(plan.id, plan.name, plan.amount_monthly)}
                         disabled={isCurrent || (subscribing && selectedPlanId === plan.id)}
                       >
                         {subscribing && selectedPlanId === plan.id ? (

@@ -19,13 +19,12 @@ const groupA: PrefetchItem[] = [
   { key: adminKeys.paymentsStats, fn: adminApi.paymentsStats },
   { key: adminKeys.paymentsTab('approvals'), fn: adminApi.paymentsApprovals },
   { key: adminKeys.boards, fn: adminApi.boards },
+  { key: adminKeys.plans, fn: adminApi.paymentsPlans },
 ];
 
 const groupB: PrefetchItem[] = [
   { key: adminKeys.reports('30d'), fn: () => adminApi.reports('30d') },
   { key: adminKeys.quizzes, fn: adminApi.quizzes },
-  { key: adminKeys.videos, fn: adminApi.videos },
-  { key: adminKeys.activities, fn: adminApi.activities },
 ];
 
 function relayItem<T>(key: readonly string[], fn: () => Promise<T>) {

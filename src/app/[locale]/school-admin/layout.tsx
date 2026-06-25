@@ -6,7 +6,6 @@ import { useRouter } from '@/i18n/routing';
 import { useParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { usePrefetchSchoolData } from '@/hooks/useSchoolParents';
-import { usePrefetchSchoolActivities } from '@/hooks/useSchoolActivities';
 import { usePrefetchSchoolCurriculum } from '@/hooks/useSchoolCurriculum';
 import { usePrefetchSchoolPayments } from '@/hooks/useSchoolPayments';
 import { usePrefetchSchoolMe } from '@/hooks/useSchoolBranding';
@@ -20,7 +19,6 @@ export default function SchoolAdminLayout({ children }: { children: ReactNode })
   const locale = (params?.locale as string) || 'en';
 
   usePrefetchSchoolData();
-  usePrefetchSchoolActivities();
   usePrefetchSchoolCurriculum();
   usePrefetchSchoolPayments();
   usePrefetchSchoolMe();

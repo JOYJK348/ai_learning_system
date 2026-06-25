@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -216,9 +216,9 @@ export default function SuperAdminPortal() {
 
   if (loading) {
     return (
-      <main className={`${adminFont.variable} ${styles.shell}`}>
+      <div className={`${adminFont.variable} ${styles.shell}`}>
         <div className={styles.loading}><div className={styles.loader} /></div>
-      </main>
+      </div>
     );
   }
 

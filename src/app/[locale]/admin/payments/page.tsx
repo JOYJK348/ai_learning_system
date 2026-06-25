@@ -31,6 +31,7 @@ import {
   Zap,
   ArrowDown,
   ArrowUp,
+  ArrowLeft,
   Calendar,
   FileText,
   Phone,
@@ -123,6 +124,7 @@ type Transaction = {
   transaction_id: string;
   created_at: string;
   invoice_url?: string;
+  parent_id?: string;
 };
 
 type PaymentStats = {
@@ -185,6 +187,66 @@ export default function PaymentsAdminPage() {
       router.push(`/${locale}/login`);
     }
   }, [loading, locale, router, user]);
+
+  // Proactive background prefetching on mount for instant tab swaps
+  useEffect(() => {
+    if (!user || !hydrated) return;
+    
+    const prefetchTabs = async () => {
+      const regParams = ['', 'individual', 'school'];
+      
+      // Prefetch payments stats
+      queryClient.prefetchQuery({
+        queryKey: adminKeys.paymentsStats,
+        queryFn: adminApi.paymentsStats,
+        staleTime: 60_000,
+      });
+      
+      // Prefetch individual free users
+      queryClient.prefetchQuery({
+        queryKey: ['admin', 'payments', 'free', 'individual'],
+        queryFn: () => adminApi.paymentsParentsPlans('plan=free&registration_type=individual'),
+        staleTime: 60_000,
+      });
+
+      // Prefetch all other tab and filter permutations in parallel
+      for (const reg of regParams) {
+        const regParam = reg ? `&registration_type=${reg}` : '';
+        
+        queryClient.prefetchQuery({
+          queryKey: [...adminKeys.paymentsTab('active'), reg || 'all'],
+          queryFn: () => adminApi.paymentsParentsPlans(`status=active${regParam}`),
+          staleTime: 60_000,
+        });
+
+        queryClient.prefetchQuery({
+          queryKey: [...adminKeys.paymentsTab('expired'), reg || 'all'],
+          queryFn: () => adminApi.paymentsParentsPlans(`status=expired${regParam}`),
+          staleTime: 60_000,
+        });
+      }
+
+      queryClient.prefetchQuery({
+        queryKey: [...adminKeys.paymentsTab('free'), 'all'],
+        queryFn: () => adminApi.paymentsParentsPlans('plan=free'),
+        staleTime: 60_000,
+      });
+      
+      queryClient.prefetchQuery({
+        queryKey: [...adminKeys.paymentsTab('transactions'), 'all'],
+        queryFn: () => adminApi.payments(),
+        staleTime: 60_000,
+      });
+
+      queryClient.prefetchQuery({
+        queryKey: [...adminKeys.paymentsTab('schools'), 'all'],
+        queryFn: adminApi.paymentsSchoolPayments,
+        staleTime: 60_000,
+      });
+    };
+
+    prefetchTabs();
+  }, [user, hydrated, queryClient]);
 
   const tabFetchFn = (tab: TabType) => {
     const regParam = regTypeFilter ? `&registration_type=${regTypeFilter}` : '';
@@ -423,12 +485,12 @@ export default function PaymentsAdminPage() {
     }
   }, [activeTab, activeParents, expiredParents, freeParents, transactions, schoolPayments, searchQuery]);
 
-  const tabs: { id: TabType; label: string; icon: React.ElementType; count?: number }[] = [
-    { id: 'active', label: 'Active Paid', icon: Crown, count: stats?.active_paid_users },
-    { id: 'expired', label: 'Expired', icon: Timer, count: stats?.expired_users },
-    { id: 'free', label: 'Individual Users', icon: User, count: individualFreeCount },
-    { id: 'schools', label: 'Schools', icon: Users, count: stats?.total_schools ?? 0 },
-    { id: 'transactions', label: 'Transactions', icon: Receipt, count: stats?.total_transactions },
+  const tabs: { id: TabType; label: string; icon: React.ElementType; iconClass: string; count?: number }[] = [
+    { id: 'active', label: 'Active Paid', icon: Crown, iconClass: styles.kpiGold, count: stats?.active_paid_users },
+    { id: 'expired', label: 'Expired', icon: Timer, iconClass: styles.kpiRed, count: stats?.expired_users },
+    { id: 'free', label: 'Individual Users', icon: User, iconClass: styles.kpiPurple, count: individualFreeCount },
+    { id: 'schools', label: 'Schools', icon: Users, iconClass: styles.kpiTeal, count: stats?.total_schools ?? 0 },
+    { id: 'transactions', label: 'Transactions', icon: Receipt, iconClass: styles.kpiGreen, count: stats?.total_transactions },
   ];
 
   return (
@@ -438,17 +500,17 @@ export default function PaymentsAdminPage() {
       {/* Header */}
       <div className={styles.pageHeader}>
         <div>
-          <p className={styles.eyebrow}>Revenue center</p>
+          <a href={`/${locale}/admin`} className={styles.backLink}>
+            <ArrowLeft size={16} style={{ display: 'inline-block', verticalAlign: 'middle' }} /> Back to dashboard
+          </a>
+          <p className={styles.eyebrow} style={{ marginTop: '0.75rem' }}>Revenue center</p>
           <h1 className={styles.title}>Payments</h1>
           <p className={styles.subtitle}>
             Manage parent approvals, track payments, handle renewals, and monitor revenue in real-time.
           </p>
         </div>
         <div className={styles.headerActions}>
-          <Link href={`/${locale}/admin`} className={styles.secondaryButton}>
-            <ChevronRight size={16} /> Back to dashboard
-          </Link>
-          <button className={styles.secondaryButton} onClick={exportCSV}>
+          <button className={styles.primaryButton} onClick={exportCSV}>
             <Download size={16} /> Export CSV
           </button>
         </div>
@@ -463,13 +525,22 @@ export default function PaymentsAdminPage() {
             key={tab.id}
             className={`${styles.kpiCard} ${styles.tabKpiCard} ${activeTab === tab.id ? styles.kpiCardActive : ''}`}
             onClick={() => { setActiveTab(tab.id); if (!['active', 'expired', 'free'].includes(tab.id)) setRegTypeFilter(''); }}
+            onMouseEnter={() => {
+              queryClient.prefetchQuery({
+                queryKey: [...adminKeys.paymentsTab(tab.id), regTypeFilter || 'all'],
+                queryFn: tabFetchFn(tab.id),
+                staleTime: 60_000,
+              });
+            }}
             style={{ cursor: 'pointer' }}
           >
-            <div className={styles.kpiTop}>
-              <div className={styles.kpiIcon}><tab.icon size={16} /></div>
+            <div className={`${styles.kpiIcon} ${tab.iconClass}`}>
+              <tab.icon size={20} />
             </div>
-            <p className={styles.kpiValue}>{tab.count ?? 0}</p>
-            <p className={styles.kpiLabel}>{tab.label}</p>
+            <div className={styles.kpiContent}>
+              <p className={styles.kpiLabel}>{tab.label}</p>
+              <h2 className={styles.kpiValue}>{tab.count ?? 0}</h2>
+            </div>
           </article>
         ))}
       </section>
@@ -519,7 +590,7 @@ export default function PaymentsAdminPage() {
 
       {/* Table Content */}
       <section className={styles.tableSection}>
-        {(!hydrated || isLoading) ? (
+        {(!hydrated || (filteredData.length === 0 && isLoading)) ? (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem', padding: '4rem 1rem', color: '#94a3b8' }}>
             <div style={{ width: 32, height: 32 }} />
             <p style={{ margin: 0, fontSize: '0.88rem', fontWeight: 800 }}>Loading data...</p>
@@ -607,20 +678,21 @@ export default function PaymentsAdminPage() {
                             <td>
                               <div className={styles.actionMenu}>
                                 <button 
-                                  className={styles.actionButton}
+                                  className={`${styles.actionButton} ${styles.upgradeButton}`}
                                   onClick={(e) => { e.stopPropagation(); setUpgradeModal(item); }}
                                 >
                                   <ArrowUpRight size={14} /> Upgrade
                                 </button>
                                 <button 
-                                  className={styles.iconButton}
+                                  className={`${styles.actionButton} ${styles.renewButton}`}
                                   onClick={(e) => { e.stopPropagation(); setRemindModal(item); }}
                                 >
                                   <Send size={14} /> Remind
                                 </button>
                                 <button 
-                                  className={styles.iconButton}
-                                  onClick={(e) => { e.stopPropagation(); router.push(`/${locale}/admin/payments/${item.id}`); }}
+                                  className={`${styles.actionButton} ${styles.offerButton}`}
+                                  onClick={(e) => { e.stopPropagation(); router.push(`/${locale}/admin/payments/${item.parent_id}`); }}
+                                  onMouseEnter={() => prefetchParent(item.parent_id)}
                                 >
                                   <FileText size={14} /> Invoice
                                 </button>
@@ -809,7 +881,7 @@ export default function PaymentsAdminPage() {
                                   <ArrowUpRight size={14} /> Upgrade
                                 </button>
                                 <button 
-                                  className={styles.iconButton}
+                                  className={`${styles.actionButton} ${styles.renewButton}`}
                                   onClick={() => setRemindModal(item)}
                                 >
                                   <Mail size={14} /> Nudge
@@ -888,20 +960,21 @@ export default function PaymentsAdminPage() {
                             <td>
                               <div className={styles.actionMenu}>
                                 <button 
-                                  className={styles.iconButton}
+                                  className={`${styles.actionButton} ${styles.renewButton}`}
                                   onClick={() => setViewPayment(item)}
                                 >
                                   <Eye size={14} /> View
                                 </button>
                                 <button 
-                                  className={styles.iconButton}
-                                  onClick={() => window.open(item.invoice_url, '_blank')}
+                                  className={`${styles.actionButton} ${styles.offerButton}`}
+                                  onClick={() => item.parent_id && router.push(`/${locale}/admin/payments/${item.parent_id}`)}
+                                  onMouseEnter={() => item.parent_id && prefetchParent(item.parent_id)}
                                 >
                                   <FileText size={14} /> Invoice
                                 </button>
                                 {item.status === 'success' && (
                                   <button 
-                                    className={styles.iconButtonDanger}
+                                    className={`${styles.actionButton} ${styles.rejectButton}`}
                                     onClick={() => handleRefund(item.id)}
                                   >
                                     <RotateCcw size={14} /> Refund
@@ -979,7 +1052,7 @@ export default function PaymentsAdminPage() {
         )}
       </section>
 
-      {/* {/* View Payment / Detail Modal */}
+      {/* View Payment / Detail Modal */}
       {viewPayment && (
         <div className={styles.modalOverlay} onClick={() => setViewPayment(null)}>
           <div className={styles.modalCard} onClick={(e) => e.stopPropagation()}>
@@ -1032,6 +1105,105 @@ export default function PaymentsAdminPage() {
             </div>
             <div className={styles.modalActions}>
               <button className={styles.secondaryButton} onClick={() => setViewPayment(null)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Upgrade Modal */}
+      {upgradeModal && (
+        <div className={styles.modalOverlay} onClick={() => setUpgradeModal(null)}>
+          <div className={styles.modalCard} onClick={(e) => e.stopPropagation()}>
+            <button className={styles.modalCloseFloat} onClick={() => setUpgradeModal(null)}>
+              <X size={16} />
+            </button>
+            <div className={styles.modalDragHandle} />
+            <div className={styles.modalCardBody}>
+              <div className={styles.parentPreview} style={{ marginBottom: '1.5rem' }}>
+                <div className={styles.parentAvatarLarge}>
+                  <Crown size={32} />
+                </div>
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <h3 style={{ margin: 0, color: '#0f172a' }}>Upgrade Subscription</h3>
+                  <p suppressHydrationWarning style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: '#64748b' }}>
+                    Parent: {upgradeModal.parent_name} ({upgradeModal.parent_email})
+                  </p>
+                </div>
+              </div>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                {[
+                  { id: '2', name: 'Focus Plan', price: '₹149/mo', desc: 'Master one subject at a time' },
+                  { id: '3', name: 'Premium Plan', price: '₹399/mo', desc: 'Full access to all subjects & quizzes' },
+                  { id: '4', name: 'Ultimate Plan', price: '₹699/mo', desc: 'Full access + AI customized learning features' },
+                ].map((plan) => (
+                  <div
+                    key={plan.id}
+                    className={styles.planCardOption}
+                    style={{
+                      border: '1px solid #e2e8f0',
+                      borderRadius: '12px',
+                      padding: '1rem',
+                      cursor: 'pointer',
+                      background: 'rgba(255, 255, 255, 0.5)',
+                      transition: 'all 0.2s',
+                    }}
+                    onClick={() => handleUpgrade(upgradeModal.parent_id, plan.id)}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
+                      <span style={{ fontWeight: 800, color: '#0f172a' }}>{plan.name}</span>
+                      <span style={{ fontWeight: 900, color: '#16a085' }}>{plan.price}</span>
+                    </div>
+                    <p style={{ margin: 0, fontSize: '0.78rem', color: '#64748b' }}>{plan.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className={styles.modalActions}>
+              <button className={styles.secondaryButton} onClick={() => setUpgradeModal(null)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Remind Modal */}
+      {remindModal && (
+        <div className={styles.modalOverlay} onClick={() => setRemindModal(null)}>
+          <div className={styles.modalCard} onClick={(e) => e.stopPropagation()}>
+            <button className={styles.modalCloseFloat} onClick={() => setRemindModal(null)}>
+              <X size={16} />
+            </button>
+            <div className={styles.modalDragHandle} />
+            <div className={styles.modalCardBody}>
+              <div className={styles.parentPreview} style={{ marginBottom: '1.5rem' }}>
+                <div className={styles.parentAvatarLarge} style={{ background: '#fef3c7', color: '#d97706' }}>
+                  <Bell size={32} />
+                </div>
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <h3 style={{ margin: 0, color: '#0f172a' }}>Send Payment Reminder</h3>
+                  <p suppressHydrationWarning style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: '#64748b' }}>
+                    Parent: {remindModal.parent_name} ({remindModal.parent_email})
+                  </p>
+                </div>
+              </div>
+              
+              <div style={{ background: 'rgba(15, 23, 42, 0.02)', borderRadius: '12px', padding: '1rem', marginBottom: '1.5rem' }}>
+                <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.82rem', color: '#475569' }}>
+                  <strong>Current Plan:</strong> {remindModal.plan_name || 'Free'}
+                </p>
+                <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.82rem', color: '#475569' }}>
+                  <strong>Days Left:</strong> {remindModal.days_until_expiry} days
+                </p>
+                <p style={{ margin: 0, fontSize: '0.78rem', color: '#64748b', lineHeight: 1.4 }}>
+                  This will send an automated payment nudge and billing alert email to the parent to renew their subscription.
+                </p>
+              </div>
+            </div>
+            <div className={styles.modalActions}>
+              <button className={styles.secondaryButton} onClick={() => setRemindModal(null)}>Cancel</button>
+              <button className={styles.primaryButton} onClick={() => handleRemind(remindModal.parent_id)}>
+                <Send size={14} /> Send Nudge
+              </button>
             </div>
           </div>
         </div>
@@ -1148,6 +1320,8 @@ export default function PaymentsAdminPage() {
           </div>
         </div>
       )}
+
+      <div className={styles.bottomPad} />
 
       {/* Toast */}
       {feedback && <div className={styles.toast}>{feedback}</div>}
