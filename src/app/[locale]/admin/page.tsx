@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { Manrope } from 'next/font/google';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { adminKeys } from '@/core/constants/queryKeys';
@@ -114,6 +114,11 @@ export default function SuperAdminPortal() {
   const params = useParams();
   const locale = (params?.locale as string) || 'en';
 
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const { data: rawDashboard, isLoading: dashboardLoading, error: dashboardError } = useQuery({
     queryKey: adminKeys.dashboard,
     queryFn: adminApi.dashboard,
@@ -209,12 +214,12 @@ export default function SuperAdminPortal() {
   };
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (mounted && !loading && !user) {
       router.push(`/${locale}/login`);
     }
-  }, [loading, locale, router, user]);
+  }, [mounted, loading, locale, router, user]);
 
-  if (loading) {
+  if (!mounted || loading) {
     return (
       <div className={`${adminFont.variable} ${styles.shell}`}>
         <div className={styles.loading}><div className={styles.loader} /></div>
@@ -286,35 +291,53 @@ export default function SuperAdminPortal() {
             {/* Dashboard Grid */}
             <div className={styles.dashboardGrid}>
               <div className={styles.leftStack}>
-                {/* Engagement Section */}
+                {/* Admin Quick Actions Command Center */}
                 <section className={styles.insightBox}>
                   <div className={styles.insightHeader}>
                     <Zap size={17} color="#12312f" />
-                    <h3>Engagement</h3>
-                    <span className={styles.insightCount}>Live</span>
+                    <h3>Quick Actions Hub</h3>
+                    <span className={styles.insightCount}>Command Center</span>
                   </div>
-                  <div className={styles.metricGrid}>
-                    {engagementMetrics.map((m) => (
-                      <div key={m.label} className={styles.metricCard}>
-                        <p className={styles.metricValue} style={{ color: m.color }}>{dashboardLoading ? '...' : m.value}</p>
-                        <p className={styles.metricLabel}>{m.label}</p>
+                  <div className={styles.quickActionsGrid}>
+                    <Link href={`/${locale}/admin/schools`} className={styles.actionCard}>
+                      <div className={`${styles.actionIcon} ${styles.iconTeal}`}>
+                        <Building2 size={20} />
                       </div>
-                    ))}
-                  </div>
-                  <div className={styles.progressList}>
-                    {progressBars.map((p) => {
-                      const pc = getProgressColor(p.value);
-                      const pg = getProgressGradient(p.value);
-                      return (
-                        <div key={p.label} className={styles.progressRow}>
-                          <span className={styles.progressLabel}>{p.label}</span>
-                          <div className={styles.progressTrack}>
-                            <div className={styles.progressFill} style={{ width: `${p.value}%`, background: pg }} />
-                          </div>
-                          <span className={styles.progressPerc} style={{ color: pc }}>{p.value}%</span>
-                        </div>
-                      );
-                    })}
+                      <div className={styles.actionContent}>
+                        <h4>Manage Schools</h4>
+                        <p>Register new schools, view active plans, and adjust student limits.</p>
+                      </div>
+                    </Link>
+
+                    <Link href={`/${locale}/admin/pending-registrations`} className={styles.actionCard}>
+                      <div className={`${styles.actionIcon} ${styles.iconPurple}`}>
+                        <ShieldCheck size={20} />
+                      </div>
+                      <div className={styles.actionContent}>
+                        <h4>Pending Approvals</h4>
+                        <p>Review parent signup requests and approve student account creations.</p>
+                      </div>
+                    </Link>
+
+                    <Link href={`/${locale}/admin/payments`} className={styles.actionCard}>
+                      <div className={`${styles.actionIcon} ${styles.iconGold}`}>
+                        <CircleDollarSign size={20} />
+                      </div>
+                      <div className={styles.actionContent}>
+                        <h4>Payment Dashboard</h4>
+                        <p>Track subscriber revenues, invoices, and payment confirmations.</p>
+                      </div>
+                    </Link>
+
+                    <Link href={`/${locale}/admin/curriculum`} className={styles.actionCard}>
+                      <div className={`${styles.actionIcon} ${styles.iconBlue}`}>
+                        <BookOpen size={20} />
+                      </div>
+                      <div className={styles.actionContent}>
+                        <h4>Curriculum Settings</h4>
+                        <p>Map grades, add lessons, check chapters, and manage quizzes.</p>
+                      </div>
+                    </Link>
                   </div>
                 </section>
 

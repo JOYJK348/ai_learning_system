@@ -20,28 +20,31 @@ export default function AdminTopNav() {
   return (
     <header className={styles.topbar}>
       <div className={styles.brandIdentity}>
-        <Image src="/assets/img/logo-removebg-preview.png" alt="ZHI" width={44} height={44} className={styles.logo} />
-        <div>
+        <Image 
+          src="/assets/img/logo-removebg-preview.png" 
+          alt="ZHI" 
+          width={40} 
+          height={40} 
+          className={styles.logo} 
+        />
+        <div className={styles.brandText}>
           <p className={styles.brandTitle}>ZHI Learn</p>
           <p className={styles.brandMeta}>Super Admin</p>
         </div>
       </div>
+      
       <div className={styles.search}>
-        <Search size={18} />
-        <input placeholder="Search students, schools, payments" type="search" />
+        <Search size={16} />
+        <input placeholder="Search students, schools, payments..." type="search" />
       </div>
+      
       <div className={styles.profile}>
         <button type="button" className={styles.iconButton} aria-label="Notifications">
-          <Bell size={20} />
+          <Bell size={18} />
         </button>
         <button type="button" className={styles.logoutButton} onClick={handleLogout} aria-label="Sign out">
-          <LogOut size={18} />
+          <LogOut size={16} />
         </button>
-        <div className={styles.profileText}>
-          <p className={styles.profileName} suppressHydrationWarning>{user?.name || 'Admin User'}</p>
-          <p className={styles.brandMeta}>Online</p>
-        </div>
-        <div className={styles.avatar} suppressHydrationWarning>{(user?.name || user?.email || 'AU').slice(0, 2).toUpperCase()}</div>
       </div>
     </header>
   );
