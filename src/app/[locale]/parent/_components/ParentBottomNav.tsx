@@ -2,12 +2,13 @@
 
 import Link from 'next/link';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { BookOpen, LayoutDashboard, MessageSquare, Users } from 'lucide-react';
+import { BookOpen, LayoutDashboard, MessageSquare, Users, Award } from 'lucide-react';
 import styles from './ParentBottomNav.module.css';
 
 const allNavItems = [
   { label: 'Hub', icon: LayoutDashboard, href: 'parent' },
-  { label: 'Quizzes', icon: BookOpen, href: 'parent/quizzes' },
+  { label: 'Learning', icon: BookOpen, href: 'parent/learning' },
+  { label: 'Quizzes', icon: Award, href: 'parent/quizzes' },
   { label: 'Mentor', icon: MessageSquare, href: 'parent/mentor' },
   { label: 'Profile', icon: Users, href: 'parent/profile' },
 ];

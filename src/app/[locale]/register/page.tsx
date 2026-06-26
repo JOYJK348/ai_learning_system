@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { Link } from '@/i18n/routing';
 import { useQuery } from '@tanstack/react-query';
@@ -19,6 +19,67 @@ const adminFont = Manrope({
 
 const BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 
+const countryList = [
+  { code: 'in', dial: '+91', name: 'India', length: 10 },
+  { code: 'us', dial: '+1', name: 'United States', length: 10 },
+  { code: 'gb', dial: '+44', name: 'United Kingdom', length: 10 },
+  { code: 'sg', dial: '+65', name: 'Singapore', length: 8 },
+  { code: 'my', dial: '+60', name: 'Malaysia', length: 9 }, // Malaysia mobile is typically 9 digits
+  { code: 'ae', dial: '+971', name: 'United Arab Emirates', length: 9 },
+  { code: 'sa', dial: '+966', name: 'Saudi Arabia', length: 9 },
+  { code: 'ca', dial: '+1', name: 'Canada', length: 10 },
+  { code: 'au', dial: '+61', name: 'Australia', length: 9 },
+  { code: 'nz', dial: '+64', name: 'New Zealand', length: 9 },
+  { code: 'lk', dial: '+94', name: 'Sri Lanka', length: 9 },
+  { code: 'bd', dial: '+880', name: 'Bangladesh', length: 10 },
+  { code: 'pk', dial: '+92', name: 'Pakistan', length: 10 },
+  { code: 'za', dial: '+27', name: 'South Africa', length: 9 },
+  { code: 'de', dial: '+49', name: 'Germany', length: 11 },
+  { code: 'fr', dial: '+33', name: 'France', length: 9 },
+  { code: 'jp', dial: '+81', name: 'Japan', length: 10 },
+  { code: 'om', dial: '+968', name: 'Oman', length: 8 },
+  { code: 'qa', dial: '+974', name: 'Qatar', length: 8 },
+  { code: 'kw', dial: '+965', name: 'Kuwait', length: 8 },
+  { code: 'bh', dial: '+973', name: 'Bahrain', length: 8 },
+  { code: 'id', dial: '+62', name: 'Indonesia' },
+  { code: 'ph', dial: '+63', name: 'Philippines', length: 10 },
+  { code: 'th', dial: '+66', name: 'Thailand', length: 9 },
+  { code: 'vn', dial: '+84', name: 'Vietnam', length: 9 },
+  { code: 'hk', dial: '+852', name: 'Hong Kong', length: 8 },
+  { code: 'tw', dial: '+886', name: 'Taiwan', length: 9 },
+  { code: 'kr', dial: '+82', name: 'South Korea', length: 10 },
+  { code: 'nl', dial: '+31', name: 'Netherlands', length: 9 },
+  { code: 'ch', dial: '+41', name: 'Switzerland', length: 9 },
+  { code: 'se', dial: '+46', name: 'Sweden', length: 9 },
+  { code: 'no', dial: '+47', name: 'Norway', length: 8 },
+  { code: 'dk', dial: '+45', name: 'Denmark', length: 8 },
+  { code: 'fi', dial: '+358', name: 'Finland', length: 9 },
+  { code: 'ie', dial: '+353', name: 'Ireland', length: 9 },
+  { code: 'it', dial: '+39', name: 'Italy', length: 10 },
+  { code: 'es', dial: '+34', name: 'Spain', length: 9 },
+  { code: 'pt', dial: '+351', name: 'Portugal', length: 9 },
+  { code: 'ru', dial: '+7', name: 'Russia', length: 10 },
+  { code: 'br', dial: '+55', name: 'Brazil', length: 11 },
+  { code: 'mx', dial: '+52', name: 'Mexico', length: 10 },
+  { code: 'ar', dial: '+54', name: 'Argentina', length: 10 },
+  { code: 'co', dial: '+57', name: 'Colombia', length: 10 },
+  { code: 'pe', dial: '+51', name: 'Peru', length: 9 },
+  { code: 'cl', dial: '+56', name: 'Chile', length: 9 },
+  { code: 'eg', dial: '+20', name: 'Egypt', length: 10 },
+  { code: 'ng', dial: '+234', name: 'Nigeria', length: 10 },
+  { code: 'ke', dial: '+254', name: 'Kenya', length: 9 },
+  { code: 'gh', dial: '+233', name: 'Ghana', length: 9 },
+  { code: 'tr', dial: '+90', name: 'Turkey', length: 10 },
+];
+
+const getPhonePlaceholder = (country: any) => {
+  if (country.code === 'in') return 'e.g. 9876543210';
+  if (country.code === 'us' || country.code === 'ca') return 'e.g. 2015550123';
+  if (country.code === 'sg') return 'e.g. 81234567';
+  if (country.length) return `e.g. ${country.length}-digit number`;
+  return 'Enter mobile number';
+};
+
 export default function RegisterPage() {
   const params = useParams();
   const locale = (params?.locale as string) || 'en';
@@ -31,7 +92,18 @@ export default function RegisterPage() {
     name: '', email: '', phone: '',
     child_name: '', child_grade_id: '', child_gender: '', child_dob: '',
     school_name: '', address: '', city: '', board_name: '',
+    school_designation: '', school_students: '', school_website: '',
   });
+  const [selectedCountry, setSelectedCountry] = useState({ code: 'in', dial: '+91', name: 'India' });
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [countrySearch, setCountrySearch] = useState('');
+
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    const handleOutsideClick = () => setDropdownOpen(false);
+    window.addEventListener('click', handleOutsideClick);
+    return () => window.removeEventListener('click', handleOutsideClick);
+  }, [dropdownOpen]);
 
   const { data: gradesData } = useQuery({
     queryKey: ['public', 'grades'],
@@ -44,7 +116,31 @@ export default function RegisterPage() {
     setError('');
     if (step === 'type') { setStep('details'); return; }
     if (step === 'details') {
-      if (!form.name.trim() || !form.email.trim()) { setError('Please fill in your name and email.'); return; }
+      if (!form.name.trim() || !form.email.trim() || !form.phone.trim()) {
+        setError('Please fill in your name, email, and phone number.');
+        return;
+      }
+      
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(form.email.trim())) {
+        setError('Please enter a valid email address.');
+        return;
+      }
+
+      const expectedLength = (selectedCountry as any).length;
+      if (expectedLength) {
+        if (form.phone.trim().length !== expectedLength) {
+          setError(`Phone number for ${selectedCountry.name} must be exactly ${expectedLength} digits.`);
+          return;
+        }
+      } else {
+        if (form.phone.trim().length < 7 || form.phone.trim().length > 15) {
+          setError('Phone number must be between 7 and 15 digits.');
+          return;
+        }
+      }
+
+      if (regType === 'school' && !form.school_designation) { setError('Please select your official designation.'); return; }
       setStep('setup');
     }
   };
@@ -95,22 +191,34 @@ export default function RegisterPage() {
       }
     } else {
       if (!form.school_name.trim()) { setError("Please enter your school's name."); return; }
+      if (!form.school_students) { setError("Please select your school's estimated student capacity."); return; }
     }
     setStep('submitting');
     try {
       const endpoint = regType === 'parent' ? `${BASE}/api/auth/register-parent` : `${BASE}/api/auth/register-school`;
+      const phonePrefix = selectedCountry.dial;
+      const formattedPhone = `${phonePrefix}${form.phone.trim()}`;
+
       const body = regType === 'parent'
         ? {
             parent_name: form.name.trim(),
             parent_email: form.email.trim().toLowerCase(),
-            parent_phone: form.phone.trim() || null,
+            parent_phone: formattedPhone,
             child_name: form.child_name.trim(),
             child_grade_id: form.child_grade_id || null,
             child_gender: form.child_gender || null,
             child_dob: form.child_dob || null,
             school_id: null
           }
-        : { school_name: form.school_name.trim(), admin_name: form.name.trim(), admin_email: form.email.trim().toLowerCase(), admin_phone: form.phone.trim() || null, address: form.address.trim() || null, city: form.city.trim() || null, board_name: form.board_name.trim() || null };
+        : {
+            school_name: `${form.school_name.trim()} (${form.school_students})`,
+            admin_name: `${form.name.trim()} (${form.school_designation})`,
+            admin_email: form.email.trim().toLowerCase(),
+            admin_phone: formattedPhone,
+            address: form.school_website ? `${form.address.trim()} (Website: ${form.school_website.trim()})` : form.address.trim() || null,
+            city: form.city.trim() || null,
+            board_name: form.board_name.trim() || null
+          };
       const res = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Registration failed');
@@ -455,19 +563,107 @@ export default function RegisterPage() {
                       </div>
 
                       <div>
-                        <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">Phone / Mobile</label>
+                        <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">Phone / Mobile *</label>
                         <div className="relative flex items-center">
-                          <Phone size={16} className="absolute left-4 text-slate-400 pointer-events-none" />
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setDropdownOpen(!dropdownOpen);
+                            }}
+                            className="absolute left-3 flex items-center gap-2 border-r border-slate-200 pr-2.5 h-6 z-10 hover:opacity-85 transition-opacity"
+                          >
+                            <img
+                              src={`https://flagcdn.com/w20/${selectedCountry.code}.png`}
+                              alt={selectedCountry.name}
+                              className="w-5 h-3.5 object-cover rounded-[1px] shadow-[0_1px_2px_rgba(0,0,0,0.1)]"
+                            />
+                            <span className="text-xs font-bold text-slate-700">{selectedCountry.dial}</span>
+                          </button>
+                          
                           <input
-                            type="tel"
+                            required
+                            type="text"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            maxLength={(selectedCountry as any).length || 15}
                             value={form.phone}
-                            onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
-                            placeholder="Mobile connection number"
-                            className={`w-full py-3.5 pl-11 pr-4 border rounded-xl text-sm font-semibold text-slate-955 placeholder-slate-450 transition-all outline-none ${activeInputClass}`}
+                            onChange={e => {
+                              const val = e.target.value.replace(/[^0-9]/g, '');
+                              setForm(f => ({ ...f, phone: val }));
+                            }}
+                            placeholder={getPhonePlaceholder(selectedCountry)}
+                            className={`w-full py-3.5 pr-4 border rounded-xl text-sm font-semibold text-slate-955 placeholder-slate-400 transition-all outline-none ${activeInputClass}`}
+                            style={{ paddingLeft: '5.8rem' }}
                             suppressHydrationWarning
                           />
+
+                          {dropdownOpen && (
+                            <div
+                              onClick={e => e.stopPropagation()}
+                              className="absolute left-0 top-[110%] w-72 max-h-64 bg-white border border-slate-200/80 rounded-2xl shadow-xl z-50 overflow-hidden flex flex-col font-sans"
+                            >
+                              <div className="p-2 border-b border-slate-100 bg-slate-50/[0.3]">
+                                <input
+                                  type="text"
+                                  placeholder="Search country..."
+                                  value={countrySearch}
+                                  onChange={e => setCountrySearch(e.target.value)}
+                                  className="w-full py-1.5 px-3 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 focus:outline-none focus:border-emerald-500"
+                                />
+                              </div>
+                              <div className="overflow-y-auto flex-1 py-1">
+                                {countryList
+                                  .filter(c => c.name.toLowerCase().includes(countrySearch.toLowerCase()) || c.dial.includes(countrySearch))
+                                  .map(c => (
+                                    <button
+                                      key={c.code}
+                                      type="button"
+                                      onClick={() => {
+                                        setSelectedCountry(c);
+                                        setForm(f => ({ ...f, phone: '' }));
+                                        setDropdownOpen(false);
+                                        setCountrySearch('');
+                                      }}
+                                      className="w-full flex items-center justify-between py-2 px-3.5 hover:bg-slate-50 transition-colors text-left text-xs font-semibold text-slate-700"
+                                    >
+                                      <div className="flex items-center gap-2.5">
+                                        <img
+                                          src={`https://flagcdn.com/w20/${c.code}.png`}
+                                          alt={c.name}
+                                          className="w-5 h-3.5 object-cover rounded-[1px] shadow-[0_1px_2px_rgba(0,0,0,0.1)]"
+                                        />
+                                        <span>{c.name}</span>
+                                      </div>
+                                      <span className="text-slate-400 text-[10px] font-black">{c.dial}</span>
+                                    </button>
+                                  ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
+
+                      {regType === 'school' && (
+                        <div>
+                          <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">Your Designation / Role *</label>
+                          <select
+                            required
+                            value={form.school_designation}
+                            onChange={e => setForm(f => ({ ...f, school_designation: e.target.value }))}
+                            className={`w-full py-3.5 px-4 border rounded-xl text-sm font-semibold text-slate-955 transition-all outline-none appearance-none ${activeInputClass}`}
+                          >
+                            <option value="">Select Designation</option>
+                            <option value="Principal">Principal / Headmaster</option>
+                            <option value="Vice Principal">Vice Principal</option>
+                            <option value="Trustee">Trustee / Chairman</option>
+                            <option value="Coordinator">Academic Coordinator</option>
+                            <option value="IT Administrator">IT / System Administrator</option>
+                            <option value="Teacher">Teacher / Instructor</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -607,6 +803,36 @@ export default function RegisterPage() {
                               className={`w-full py-3.5 px-4 border rounded-xl text-sm font-semibold text-slate-955 transition-all outline-none ${activeInputClass}`}
                               suppressHydrationWarning
                             />
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                            <div>
+                              <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">Estimated Students *</label>
+                              <select
+                                required
+                                value={form.school_students}
+                                onChange={e => setForm(f => ({ ...f, school_students: e.target.value }))}
+                                className={`w-full py-3.5 px-4 border rounded-xl text-sm font-semibold text-slate-955 transition-all outline-none appearance-none ${activeInputClass}`}
+                              >
+                                <option value="">Select Student Count</option>
+                                <option value="Under 100">Under 100 students</option>
+                                <option value="100 - 500">100 - 500 students</option>
+                                <option value="500 - 1000">500 - 1000 students</option>
+                                <option value="1000+">1000+ students</option>
+                              </select>
+                            </div>
+
+                            <div>
+                              <label className="block text-[10px] font-black text-slate-455 uppercase tracking-wider mb-1.5">School Website URL</label>
+                              <input
+                                type="url"
+                                value={form.school_website}
+                                onChange={e => setForm(f => ({ ...f, school_website: e.target.value }))}
+                                placeholder="https://www.school.edu"
+                                className={`w-full py-3.5 px-4 border rounded-xl text-sm font-semibold text-slate-955 placeholder-slate-450 transition-all outline-none ${activeInputClass}`}
+                                suppressHydrationWarning
+                              />
+                            </div>
                           </div>
                         </div>
                       </>

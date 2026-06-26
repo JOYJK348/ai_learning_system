@@ -136,6 +136,7 @@ export default function QuizzesPage() {
     queryKey: parentKeys.children,
     queryFn: parentApi.children,
     enabled: !!user && user.role === 'parent',
+    staleTime: 5 * 60 * 1000,
     retry: false,
   });
 
@@ -167,6 +168,7 @@ export default function QuizzesPage() {
     queryKey: parentKeys.childQuizzes(activeChildId ?? ''),
     queryFn: () => parentApi.childQuizzes(activeChildId!),
     enabled: !!activeChildId,
+    staleTime: 30_000,
     retry: false,
   });
 
@@ -244,16 +246,11 @@ export default function QuizzesPage() {
       <div className={styles.content}>
         
         {/* Header */}
-        <header className={styles.header}>
-          <div className={styles.headerLeft}>
-            <button 
-              type="button" 
-              className={styles.backBtn} 
-              onClick={() => router.push(`/${locale}/parent`)}
-              aria-label="Back to dashboard"
-            >
-              <ArrowLeft size={18} />
-            </button>
+        <header className={styles.header} style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div className={styles.headerLeft} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.4rem', minWidth: 0 }}>
+            <a href={`/${locale}/parent`} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: '#64748b', fontSize: '0.8rem', fontWeight: 800, textDecoration: 'none' }}>
+              <ArrowLeft size={14} /> Back to dashboard
+            </a>
             <div>
               <h1 className={styles.title}>Quiz Performance History</h1>
               <div className={styles.headerMeta}>

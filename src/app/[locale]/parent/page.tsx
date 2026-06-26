@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Manrope } from 'next/font/google';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter, useSearchParams, useParams } from 'next/navigation';
@@ -24,6 +24,18 @@ export default function ParentDashboard() {
   const params = useParams();
   const locale = (params?.locale as string) || 'en';
   const activeTab = searchParams.get('tab');
+
+  // Prevent background scrolling when a drawer (Quizzes/Profile) is open
+  useEffect(() => {
+    if (activeTab) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [activeTab]);
   const queryClient = useQueryClient();
   const { user } = useAuth();
 
@@ -107,6 +119,52 @@ export default function ParentDashboard() {
     childrenLoading ||
     (activeChildId ? (progressLoading || chapterLoading) : false);
 
+  const currentDate = useMemo(
+    () => new Intl.DateTimeFormat('en-IN', { weekday: 'long', day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()),
+    [],
+  );
+
+  const greeting = useMemo(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  }, []);
+
+  const kpiValues = useMemo(() => {
+    const completed = childProgress?.lesson_progress?.completed_lessons || 0;
+    const streak = childProgress?.student?.current_streak_days || 0;
+    const badges = childProgress?.student?.badges_earned || 0;
+    const quizAttempts = quizzes.length;
+
+    return [
+      {
+        label: 'Lessons Completed',
+        value: completed,
+        change: 'Keep it up!',
+        icon: BookOpen,
+      },
+      {
+        label: 'Learning Streak',
+        value: `${streak} Days`,
+        change: streak > 0 ? 'Active streak!' : 'Start learning!',
+        icon: Zap,
+      },
+      {
+        label: 'Badges Earned',
+        value: badges,
+        change: 'Superstar status',
+        icon: Award,
+      },
+      {
+        label: 'Quiz Attempts',
+        value: quizAttempts,
+        change: 'Total trials',
+        icon: GraduationCap,
+      },
+    ];
+  }, [childProgress, quizzes]);
+
   // Track authentication / forbidden errors
   useEffect(() => {
     const isAuthError = (err: any) => {
@@ -148,6 +206,8 @@ export default function ParentDashboard() {
     }
   }, [activeChildId, queryClient]);
 
+
+
   // Toggle state for subject details in the syllabus area
   const [expandedSubjectId, setExpandedSubjectId] = useState<string | null>(null);
   const [expandedChapterIds, setExpandedChapterIds] = useState<Record<string, boolean>>({});
@@ -174,16 +234,79 @@ export default function ParentDashboard() {
 
   const statusObj = getStatusSmiley(overallPercentage);
 
-  // Subject theme generator
+  // Subject theme generator (unified brand teal theme)
   const getSubjectTheme = (name: string) => {
-    const n = name.toLowerCase();
-    if (n.includes('tamil')) return { bg: 'linear-gradient(135deg, #fef2f2, #fee2e2)', border: 'rgba(239, 68, 68, 0.15)', text: '#dc2626', fill: 'linear-gradient(90deg, #ef4444, #dc2626)', accent: '#fca5a5' };
-    if (n.includes('math')) return { bg: 'linear-gradient(135deg, #fffbeb, #fef3c7)', border: 'rgba(245, 158, 11, 0.15)', text: '#b45309', fill: 'linear-gradient(90deg, #f59e0b, #d97706)', accent: '#fcd34d' };
-    if (n.includes('english')) return { bg: 'linear-gradient(135deg, #eff6ff, #dbeafe)', border: 'rgba(59, 130, 246, 0.15)', text: '#1d4ed8', fill: 'linear-gradient(90deg, #3b82f6, #2563eb)', accent: '#bfdbfe' };
-    return { bg: 'linear-gradient(135deg, #f0fdf4, #dcfce7)', border: 'rgba(34, 197, 94, 0.15)', text: '#15803d', fill: 'linear-gradient(90deg, #10b981, #059669)', accent: '#bbf7d0' };
+    return { 
+      bg: 'linear-gradient(135deg, #f0fdfa, #ccfbf1)', 
+      border: 'rgba(20, 184, 166, 0.15)', 
+      text: '#12312f', 
+      fill: 'linear-gradient(90deg, #14b8a6, #0f766e)', 
+      accent: '#99f6e4' 
+    };
   };
 
   const recentQuizzes = quizzes.slice(0, 3);
+
+  const timelineActivities = useMemo(() => {
+    const list: Array<{
+      id: string;
+      type: 'quiz' | 'lesson' | 'badge' | 'streak';
+      title: string;
+      desc: string;
+      time: string;
+      theme: 'green' | 'orange' | 'blue';
+      date: Date;
+    }> = [];
+
+    // 1. Quizzes
+    quizzes.forEach((q: any) => {
+      list.push({
+        id: `quiz-${q.id || Math.random()}`,
+        type: 'quiz',
+        title: `Quiz: ${q.quiz_title}`,
+        desc: `Scored ${q.score}/${q.max_score} (${q.percentage}%) in ${q.subject_name}.`,
+        time: new Date(q.completed_at || q.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }),
+        theme: q.percentage >= 60 ? 'green' : 'orange',
+        date: new Date(q.completed_at || q.created_at),
+      });
+    });
+
+    // 2. Completed Chapters
+    chapterProgress.forEach((subject: any) => {
+      if (subject.chapters) {
+        subject.chapters.forEach((chapter: any) => {
+          if (chapter.is_complete) {
+            list.push({
+              id: `chap-${chapter.id || Math.random()}`,
+              type: 'lesson',
+              title: `Chapter Finished!`,
+              desc: `Completed "${chapter.name}" in ${subject.name}.`,
+              time: 'Recently',
+              theme: 'green',
+              date: new Date(Date.now() - 3600000), 
+            });
+          }
+        });
+      }
+    });
+
+    // 3. Streaks
+    const streak = childProgress?.student?.current_streak_days || 0;
+    if (streak > 0) {
+      list.push({
+        id: 'streak-status',
+        type: 'streak',
+        title: `Learning Streak!`,
+        desc: `${streak} days active streak. Outstanding work!`,
+        time: 'Active',
+        theme: 'orange',
+        date: new Date(),
+      });
+    }
+
+    // Sort by date (descending)
+    return list.sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, 5);
+  }, [quizzes, chapterProgress, childProgress]);
 
   if (isDashboardLoading && !showSessionExpired) {
     return (
@@ -197,15 +320,31 @@ export default function ParentDashboard() {
     <div className={`${adminFont.variable} ${styles.shell}`}>
       <div className={styles.content}>
         {/* Header */}
-        <div className={styles.pageHeader}>
-          <div>
-            <p className={styles.eyebrow}>Parent Portal</p>
+        <header className={styles.header}>
+          <div className={styles.headerLeft}>
             <h1 className={styles.title}>
               Hello, <span style={{ color: '#16a085' }}>{parentProfile?.name || 'Parent'}</span>!
             </h1>
-            <p className={styles.subtitle}>
-              Here is an easy look at how your child is studying and learning.
-            </p>
+            <div className={styles.headerMeta}>
+              <span className={styles.headerDate}>{currentDate}</span>
+              <span className={styles.headerDot} />
+              <span className={styles.headerLive}>
+                <span className={styles.liveDot} />
+                {isDashboardLoading ? 'Syncing' : 'System Live'}
+              </span>
+              {activeChild && (
+                <>
+                  <span className={styles.headerDot} />
+                  <span className={styles.headerRole}>
+                    🎓 {activeChild.name} ({activeChild.grade || 'LKG'})
+                  </span>
+                  <span className={styles.headerDot} />
+                  <span className={styles.progressHeaderBadge}>
+                    {overallPercentage}% Completed
+                  </span>
+                </>
+              )}
+            </div>
           </div>
           {children.length > 1 ? (
             <div className={styles.headerActions}>
@@ -228,216 +367,128 @@ export default function ParentDashboard() {
                 </select>
               </div>
             </div>
-          ) : children.length === 1 ? (
-            <div className={styles.headerActions}>
-              <span className={styles.activeChildBadge}>
-                <Users size={14} /> Student: {children[0].name}
-              </span>
-            </div>
           ) : null}
-        </div>
+        </header>
+
+        {/* Status box row */}
+        {activeChild && (
+          <div className={styles.statusBoxRow}>
+            <span style={{ fontSize: '1.25rem' }}>{statusObj.emoji}</span>
+            <div>
+              <p className={styles.statusBoxTitle}>{activeChild.name} is {statusObj.text.toLowerCase()}</p>
+              <p className={styles.statusBoxSub}>{statusObj.subtext}</p>
+            </div>
+          </div>
+        )}
+
+        {/* KPI Grid */}
+        <section className={styles.kpiGrid}>
+          {kpiValues.map((k, i) => (
+            <div key={k.label} className={styles.kpiCard}>
+              <div className={styles.kpiTop}>
+                <div className={styles.kpiIcon}>
+                  <k.icon size={17} />
+                </div>
+                <span className={styles.kpiChange}>{k.change}</span>
+              </div>
+              <p className={styles.kpiLabel}>{k.label}</p>
+              <h2 className={styles.kpiValue}>{k.value}</h2>
+            </div>
+          ))}
+        </section>
 
         {/* Dashboard Main Grid */}
         <div className={styles.dashboardGrid}>
           <div className={styles.leftStack}>
-            {/* Subject Textbooks / Syllabus Board */}
             <section className={styles.insightBox}>
               <div className={styles.insightHeader}>
                 <BookOpen size={18} color="#12312f" />
-                <h3>Syllabus & Textbook Chapters</h3>
-                <span className={styles.insightCount}>{chapterProgress.length} Subjects</span>
+                <h3>Learning Pathways</h3>
               </div>
-              <p style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 650, marginTop: '-0.8rem', marginBottom: '1.2rem' }}>
-                Click on any subject card to see which chapters are completed!
+              <p style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 650, marginTop: '-0.5rem', marginBottom: '1.2rem' }}>
+                View step-by-step progress roadmaps of the curriculum.
               </p>
-
-              {chapterProgress.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>
-                  <BookOpen size={32} style={{ margin: '0 auto 0.5rem', opacity: 0.4 }} />
-                  <p>Loading syllabus progress...</p>
-                </div>
-              ) : (
-                <div className={styles.subjectCardGrid}>
-                  {chapterProgress.map((subject: any) => {
-                    const subCompleted = subject.chapters?.filter((c: any) => c.is_complete).length || 0;
-                    const subTotal = subject.chapters?.length || 0;
-                    const pct = subTotal > 0 ? Math.round((subCompleted / subTotal) * 100) : 0;
-                    const theme = getSubjectTheme(subject.name);
-                    const isExpanded = expandedSubjectId === subject.id;
-                    const smileyInfo = getStatusSmiley(pct);
-
+              
+              {chapterProgress.length > 0 ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', margin: '0.5rem 0 1.5rem', width: '100%' }}>
+                  {chapterProgress.map((sub: any) => {
+                    const theme = getSubjectTheme(sub.name);
+                    const totalCh = sub.chapters?.length || 0;
+                    const compCh = sub.chapters?.filter((c: any) => c.is_complete).length || 0;
+                    const subPct = totalCh > 0 ? Math.round((compCh / totalCh) * 100) : 0;
+                    
                     return (
-                      <div
-                        key={subject.id}
-                        className={styles.subjectTile}
-                        style={{ background: theme.bg, borderColor: theme.border }}
-                      >
-                        {/* Header Box */}
-                        <div
-                          className={styles.subjectTileHeader}
-                          onClick={() => setExpandedSubjectId(isExpanded ? null : subject.id)}
-                          role="button"
-                          tabIndex={0}
-                        >
-                          <div className={styles.subjectTileInfo}>
-                            <h4 style={{ color: theme.text, margin: 0, fontSize: '1rem', fontWeight: 950 }}>
-                              {subject.name}
-                            </h4>
-                            <p style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 800, margin: '0.15rem 0 0' }}>
-                              {subCompleted} of {subTotal} chapters completed ({pct}%)
-                            </p>
-                          </div>
-                          <div className={styles.subjectTileStatus}>
-                            <span style={{ fontSize: '1.1rem', marginRight: '0.35rem' }}>{smileyInfo.emoji}</span>
-                            {isExpanded ? <ChevronUp size={16} color="#64748b" /> : <ChevronDown size={16} color="#64748b" />}
-                          </div>
+                      <div key={sub.id} style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', background: '#f8fafc', padding: '0.85rem 1.15rem', borderRadius: '1rem', border: '1px solid rgba(15, 23, 42, 0.04)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#1e293b' }}>{sub.name}</span>
+                          <span style={{ fontSize: '0.78rem', fontWeight: 900, color: theme.text }}>{subPct}%</span>
                         </div>
-
-                        {/* Progress line */}
-                        <div className={styles.subjectProgressLineTrack} style={{ background: theme.accent + '66' }}>
-                          <div className={styles.subjectProgressLineFill} style={{ width: `${pct}%`, background: theme.fill }} />
+                        <div style={{ height: '6px', borderRadius: '999px', background: 'rgba(15, 23, 42, 0.05)', overflow: 'hidden' }}>
+                          <div style={{ height: '100%', borderRadius: 'inherit', width: `${subPct}%`, background: theme.fill }} />
                         </div>
-
-                        {/* Expandable Chapters List */}
-                        {isExpanded && subject.chapters && (
-                          <div className={styles.subjectChaptersList}>
-                            {subject.chapters.map((chapter: any, cIdx: number) => {
-                              const isChapterExpanded = expandedChapterIds[chapter.id];
-                              return (
-                                <div key={chapter.id || cIdx} style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                                  <div
-                                    className={styles.chapterItemRow}
-                                    onClick={() => toggleChapter(chapter.id)}
-                                    role="button"
-                                    tabIndex={0}
-                                    style={{ cursor: 'pointer' }}
-                                  >
-                                    <div className={styles.chapterItemLeft}>
-                                      {chapter.is_complete ? (
-                                        <CheckCircle2 size={16} className={styles.completeCheckIcon} />
-                                      ) : chapter.completion_percentage > 0 ? (
-                                        <Unlock size={15} style={{ color: '#3b82f6', flexShrink: 0 }} />
-                                      ) : (
-                                        <Lock size={15} style={{ color: '#94a3b8', flexShrink: 0 }} />
-                                      )}
-                                      <div>
-                                        <p className={styles.chapterItemName}>{chapter.name}</p>
-                                        <span className={styles.chapterItemLessonsMeta}>
-                                          {chapter.completed_lessons} of {chapter.total_lessons} lessons done
-                                        </span>
-                                      </div>
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                      <span className={styles.chapterItemPct} style={{ color: chapter.is_complete ? '#16a34a' : '#64748b' }}>
-                                        {chapter.completion_percentage}%
-                                      </span>
-                                      {isChapterExpanded ? <ChevronUp size={14} color="#64748b" /> : <ChevronDown size={14} color="#64748b" />}
-                                    </div>
-                                  </div>
-
-                                  {/* Expanded Lessons list */}
-                                  {isChapterExpanded && chapter.lessons && (
-                                    <div className={styles.lessonsList}>
-                                      {chapter.lessons.length === 0 ? (
-                                        <p style={{ fontSize: '0.72rem', color: '#94a3b8', paddingLeft: '2rem', margin: '0.2rem 0' }}>No lessons found</p>
-                                      ) : (
-                                        chapter.lessons.map((lesson: any, lIdx: number) => (
-                                          <div key={lesson.id || lIdx} className={styles.lessonItemRow}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 0 }}>
-                                              <span style={{ fontSize: '0.8rem' }}>
-                                                {lesson.status === 'completed' ? '🟢' : lesson.status === 'in_progress' ? '🔵' : '⚪'}
-                                              </span>
-                                              <span className={styles.lessonItemTitle}>{lesson.title}</span>
-                                            </div>
-                                            <span style={{ fontSize: '0.68rem', color: lesson.status === 'completed' ? '#16a34a' : '#64748b', fontWeight: 800 }}>
-                                              {lesson.status === 'completed'
-                                                ? (typeof lesson.quiz_score === 'number'
-                                                    ? `Score: ${lesson.quiz_score}/${lesson.quiz_max_score || 5}`
-                                                    : 'Read'
-                                                  )
-                                                : lesson.status === 'in_progress'
-                                                ? 'Learning'
-                                                : 'Not Started'
-                                              }
-                                            </span>
-                                          </div>
-                                        ))
-                                      )}
-                                    </div>
-                                  )}
-                                </div>
-                              );
-                            })}
-                          </div>
-                        )}
                       </div>
                     );
                   })}
                 </div>
+              ) : (
+                <p style={{ fontSize: '0.8rem', fontWeight: 650, color: '#64748b', margin: '1rem 0' }}>No subjects loaded</p>
               )}
+
+              <button className={styles.brandActionBtn} style={{ marginTop: 'auto', width: 'fit-content' }} onClick={() => router.push('/' + locale + '/parent/learning')}>
+                Open Learning Map →
+              </button>
             </section>
           </div>
 
-          <div className={styles.rightStack}>
-            {/* Simple Quiz Attempts */}
-            <section className={styles.insightBox}>
-              <div className={styles.insightHeader}>
-                <Award size={18} color="#ea580c" />
-                <h3>Recent Quizzes</h3>
-                <span className={styles.insightCount}>{quizzes.length} Attempts</span>
-              </div>
-              <p style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 650, marginTop: '-0.8rem', marginBottom: '1rem' }}>
-                Quizzes show how well your child remembers lessons.
-              </p>
-
-              <div className={styles.quizListSimple}>
-                {recentQuizzes.length === 0 ? (
-                  <p style={{ fontSize: '0.8rem', fontWeight: 700, color: '#94a3b8', textAlign: 'center', padding: '1rem 0' }}>No quizzes attempts yet</p>
-                ) : (
-                  <>
-                    {recentQuizzes.map((q: any, i: number) => {
-                      const passed = q.percentage >= 60;
-                      return (
-                        <div key={q.id || i} className={styles.quizAttemptRow}>
-                          <div className={styles.quizAttemptIcon} style={{ background: passed ? '#dcfce7' : '#fee2e2' }}>
-                            {passed ? '🌟' : '✏️'}
-                          </div>
-                          <div className={styles.quizAttemptInfo}>
-                            <p className={styles.quizAttemptTitle} style={{ fontWeight: 950, color: '#0f172a' }}>
-                              {q.quiz_title}
-                            </p>
-                            <p style={{ fontSize: '0.74rem', color: '#0284c7', fontWeight: 800, margin: '0.1rem 0' }}>
-                              Subject: {q.subject_name} ({q.lesson_title})
-                            </p>
-                            <p className={styles.quizAttemptSub}>
-                              {new Date(q.completed_at || q.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
-                              {' · '}
-                              {passed ? <span style={{ color: '#16a34a', fontWeight: 900 }}>Passed</span> : <span style={{ color: '#b45309', fontWeight: 900 }}>Needs Review</span>}
-                            </p>
-                          </div>
-                          <div style={{ textAlign: 'right' }}>
-                            <span className={styles.quizAttemptScore} style={{ color: passed ? '#16a34a' : '#b45309' }}>
-                              {q.score}/{q.max_score}
-                            </span>
+              <div className={styles.rightStack}>
+                {/* Recent Activities Milestone Timeline */}
+                <section className={styles.insightBox}>
+                  <div className={styles.insightHeader}>
+                    <Zap size={18} color="#ea580c" />
+                    <h3>Recent Milestones</h3>
+                  </div>
+                  {timelineActivities.length === 0 ? (
+                    <p style={{ fontSize: '0.8rem', fontWeight: 700, color: '#94a3b8', textAlign: 'center', padding: '1rem 0' }}>No milestone records yet</p>
+                  ) : (
+                    <div className={styles.timelineContainer}>
+                      {timelineActivities.map((act) => (
+                        <div key={act.id} className={`${styles.timelineItem} ${act.theme === 'green' ? styles.timelineItemGreen : act.theme === 'orange' ? styles.timelineItemOrange : styles.timelineItemBlue}`}>
+                          <div className={styles.timelineDot} />
+                          <div className={styles.timelineContent}>
+                            <div className={styles.timelineHeaderRow}>
+                              <h4 className={styles.timelineTitle}>{act.title}</h4>
+                              <span className={styles.timelineTime}>{act.time}</span>
+                            </div>
+                            <p className={styles.timelineBodyText}>{act.desc}</p>
                           </div>
                         </div>
-                      );
-                    })}
-                    
-                    {quizzes.length > 3 && (
-                      <button
-                        onClick={() => router.push(`/${locale}/parent/quizzes`)}
-                        className={styles.seeAllButton}
-                      >
-                        See All Quiz History ({quizzes.length}) →
-                      </button>
-                    )}
-                  </>
-                )}
+                      ))}
+                    </div>
+                  )}
+
+                  <div style={{ 
+                    marginTop: 'auto', 
+                    background: 'linear-gradient(135deg, #f0fdf4, #ecfdf5)', 
+                    border: '1px solid rgba(22, 163, 74, 0.12)', 
+                    padding: '0.85rem 1.15rem', 
+                    borderRadius: '1rem', 
+                    display: 'flex', 
+                    alignItems: 'flex-start', 
+                    gap: '0.65rem',
+                    boxShadow: '0 2px 8px rgba(22, 163, 74, 0.02)',
+                    width: '100%'
+                  }}>
+                    <span style={{ fontSize: '1.1rem' }}>💡</span>
+                    <div>
+                      <p style={{ margin: 0, fontSize: '0.78rem', fontWeight: 850, color: '#166534' }}>Parent Tip</p>
+                      <p style={{ margin: '0.15rem 0 0', fontSize: '0.7rem', fontWeight: 650, color: '#14532d', lineHeight: 1.35 }}>
+                        Encourage {activeChild?.name || 'your child'} to practice daily to maintain their learning streak and unlock new milestones!
+                      </p>
+                    </div>
+                  </div>
+                </section>
               </div>
-            </section>
-          </div>
-        </div>
+            </div>
       </div>
 
       {/* Quizzes Drawer */}

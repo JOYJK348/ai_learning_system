@@ -8,7 +8,12 @@ async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
   };
   const res = await fetch(`${BASE}${path}`, { credentials: 'include', ...init, headers });
   const payload = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(payload.error || `Failed to load ${path}`);
+  if (!res.ok) {
+    if ((res.status === 401 || res.status === 403) && typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('zhi-session-expired'));
+    }
+    throw new Error(payload.error || `Failed to load ${path}`);
+  }
   return payload.data ?? payload;
 }
 

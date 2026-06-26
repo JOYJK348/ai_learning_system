@@ -528,6 +528,12 @@
   color: #12312f;
 }
 
+.badgeLinkRequest {
+  background: rgba(20, 184, 166, 0.12);
+  color: #0f766e;
+}
+
+
 .statusBadge {
   display: inline-flex;
   align-items: center;

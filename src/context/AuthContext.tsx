@@ -216,6 +216,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     api('/api/auth/logout', { method: 'POST' }).catch(() => {});
   };
 
+  const [sessionExpired, setSessionExpired] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const handleExpired = () => {
+      setSessionExpired(true);
+    };
+    window.addEventListener('zhi-session-expired', handleExpired);
+    return () => window.removeEventListener('zhi-session-expired', handleExpired);
+  }, []);
+
+  const handleRedirectToLogin = async () => {
+    setSessionExpired(false);
+    await logout();
+    const loc = (typeof window !== 'undefined' ? window.location.pathname.split('/')[1] : 'en') || 'en';
+    window.location.href = `/${loc}/login?expired=1`;
+  };
+
   useEffect(() => {
     refreshUser();
   }, []);
@@ -225,7 +243,94 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [user, loading, error]
   );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+      {sessionExpired && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          backgroundColor: 'rgba(15, 23, 42, 0.4)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          zIndex: 9999999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '1rem',
+          fontFamily: 'system-ui, -apple-system, sans-serif'
+        }}>
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(16px)',
+            borderRadius: '1.8rem',
+            padding: '2.5rem 2rem',
+            width: 'min(28rem, 95vw)',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.12), inset 0 0 0 1px rgba(255, 255, 255, 0.5)',
+            border: '1px solid rgba(15, 23, 42, 0.08)',
+            textAlign: 'center'
+          }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '64px',
+              height: '64px',
+              borderRadius: '50%',
+              background: 'rgba(239, 68, 68, 0.1)',
+              color: '#ef4444',
+              marginBottom: '1.5rem'
+            }}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </div>
+            
+            <h2 style={{
+              fontSize: '1.5rem',
+              fontWeight: 850,
+              color: '#0f172a',
+              margin: '0 0 0.75rem 0',
+              letterSpacing: '-0.02em'
+            }}>
+              Session Expired
+            </h2>
+            
+            <p style={{
+              fontSize: '0.92rem',
+              color: '#475569',
+              lineHeight: '1.6',
+              margin: '0 0 2rem 0'
+            }}>
+              Your security session has expired or is invalid. Please log in again to access the portal.
+            </p>
+            
+            <button
+              style={{
+                width: '100%',
+                padding: '0.8rem',
+                borderRadius: '1.25rem',
+                fontSize: '0.85rem',
+                fontWeight: 900,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                background: 'linear-gradient(135deg, #12312f, #16a085 48%, #38bdf8)',
+                boxShadow: '0 10px 20px rgba(22, 160, 133, 0.15)',
+                border: 'none',
+                color: 'white',
+                cursor: 'pointer',
+                transition: 'transform 0.15s ease'
+              }}
+              onClick={handleRedirectToLogin}
+            >
+              Re-authenticate
+            </button>
+          </div>
+        </div>
+      )}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {

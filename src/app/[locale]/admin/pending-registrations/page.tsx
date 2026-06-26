@@ -72,8 +72,10 @@ export default function AdminApprovalsPage() {
   });
 
   const approveMutation = useMutation({
-    mutationFn: ({ id, isSchool }: { id: string; isSchool?: boolean }) => {
-      const url = isSchool
+    mutationFn: ({ id, isSchool, isLinkRequest }: { id: string; isSchool?: boolean; isLinkRequest?: boolean }) => {
+      const url = isLinkRequest
+        ? `${BASE}/api/admin/pending-registrations/link-request/${id}`
+        : isSchool
         ? `${BASE}/api/admin/pending-school-registrations/${id}`
         : `${BASE}/api/admin/pending-registrations/${id}`;
       return fetch(url, {
@@ -89,7 +91,7 @@ export default function AdminApprovalsPage() {
         const isSchool = !!data.data.school_code;
         const email = isSchool
           ? data.data.admin_credentials?.email
-          : data.data.parent_credentials?.email;
+          : data.data.parent_credentials?.email || data.data.child_credentials?.email;
         
         setSuccessModal({
           isSchool,
@@ -108,8 +110,10 @@ export default function AdminApprovalsPage() {
   });
 
   const rejectMutation = useMutation({
-    mutationFn: ({ id, reason, isSchool }: { id: string; reason: string; isSchool?: boolean }) => {
-      const url = isSchool
+    mutationFn: ({ id, reason, isSchool, isLinkRequest }: { id: string; reason: string; isSchool?: boolean; isLinkRequest?: boolean }) => {
+      const url = isLinkRequest
+        ? `${BASE}/api/admin/pending-registrations/link-request/${id}`
+        : isSchool
         ? `${BASE}/api/admin/pending-school-registrations/${id}`
         : `${BASE}/api/admin/pending-registrations/${id}`;
       return fetch(url, {
@@ -134,8 +138,9 @@ export default function AdminApprovalsPage() {
     id: reg.id,
     name: reg.parent_name,
     extraInfo: reg.is_school ? reg.school_name : reg.child_name || '',
-    isSchool: reg.is_school
-  });
+    isSchool: reg.is_school,
+    isLinkRequest: reg.is_link_request
+  } as any);
 
   const handleReject = (reg: any) => {
     setConfirmModal({
@@ -143,17 +148,18 @@ export default function AdminApprovalsPage() {
       id: reg.id,
       name: reg.parent_name,
       extraInfo: reg.is_school ? reg.school_name : reg.child_name || '',
-      isSchool: reg.is_school
-    });
+      isSchool: reg.is_school,
+      isLinkRequest: reg.is_link_request
+    } as any);
     setRejectionReason('');
   };
 
   const confirmAction = () => {
     if (!confirmModal) return;
     if (confirmModal.type === 'approve') {
-      approveMutation.mutate({ id: confirmModal.id, isSchool: confirmModal.isSchool });
+      approveMutation.mutate({ id: confirmModal.id, isSchool: confirmModal.isSchool, isLinkRequest: (confirmModal as any).isLinkRequest });
     } else {
-      rejectMutation.mutate({ id: confirmModal.id, reason: rejectionReason, isSchool: confirmModal.isSchool });
+      rejectMutation.mutate({ id: confirmModal.id, reason: rejectionReason, isSchool: confirmModal.isSchool, isLinkRequest: (confirmModal as any).isLinkRequest });
     }
   };
 
@@ -162,6 +168,7 @@ export default function AdminApprovalsPage() {
   }, [loading, user, router, locale]);
 
   const registrations = useMemo(() => (Array.isArray(regData) ? regData : []), [regData]);
+
 
   const filtered = useMemo(() => {
     return registrations.filter((r: any) => {
@@ -391,8 +398,8 @@ export default function AdminApprovalsPage() {
                           <div className={styles.userInfo}>
                             <span className={styles.userName}>{reg.parent_name}</span>
                             <span className={styles.userMeta}>
-                              <span className={`${styles.gradePill} ${reg.is_school ? styles.badgeSchool : styles.badgeParent}`}>
-                                {reg.is_school ? '🏫 School Admin' : '👤 Parent'}
+                              <span className={`${styles.gradePill} ${reg.is_school ? styles.badgeSchool : reg.is_link_request ? styles.badgeLinkRequest : styles.badgeParent}`}>
+                                {reg.is_school ? '🏫 School Admin' : reg.is_link_request ? '🔗 Link Request' : '👤 Parent'}
                               </span>
                               <span style={{ marginLeft: '0.25rem' }}>{reg.parent_email}</span>
                             </span>
@@ -414,6 +421,7 @@ export default function AdminApprovalsPage() {
                               <span className={styles.userName} style={{ fontSize: '0.9rem' }}>Child: {reg.child_name}</span>
                               <span className={styles.userMeta}>
                                 {reg.grade && <span>{reg.grade}</span>}
+                                {reg.is_link_request && <span style={{ color: '#0f766e', fontWeight: 900, background: '#ccfbf1', padding: '0.05rem 0.25rem', borderRadius: '4px', marginLeft: '0.25rem', fontSize: '0.62rem' }}>Link Only</span>}
                               </span>
                             </>
                           )}
@@ -421,6 +429,7 @@ export default function AdminApprovalsPage() {
                       </td>
                       <td>
                         <span className={styles.userMeta}>
+
                           {new Date(reg.created_at).toLocaleDateString('en-IN', {
                             day: 'numeric',
                             month: 'short',
