@@ -18,6 +18,55 @@ const adminFont = Manrope({
   display: 'swap',
 });
 
+function CountdownTimer({ expiresAt }: { expiresAt: string }) {
+  const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0, expired: false });
+
+  useEffect(() => {
+    const update = () => {
+      const remaining = new Date(expiresAt).getTime() - Date.now();
+      if (remaining <= 0) {
+        setTime({ days: 0, hours: 0, minutes: 0, seconds: 0, expired: true });
+        return;
+      }
+      const totalSec = Math.floor(remaining / 1000);
+      const days = Math.floor(totalSec / (3600 * 24));
+      const hours = Math.floor((totalSec % (3600 * 24)) / 3600);
+      const minutes = Math.floor((totalSec % 3600) / 60);
+      const seconds = totalSec % 60;
+      setTime({ days, hours, minutes, seconds, expired: false });
+    };
+    update();
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
+  }, [expiresAt]);
+
+  if (time.expired) return <span style={{ fontSize: '0.72rem', fontWeight: 850, color: '#fca5a5' }}>Expired</span>;
+
+  return (
+    <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(255, 255, 255, 0.15)', padding: '0.25rem 0.45rem', borderRadius: '0.4rem', minWidth: '1.8rem' }}>
+        <span style={{ fontSize: '0.75rem', fontWeight: 950, color: '#fff' }}>{String(time.days).padStart(2, '0')}</span>
+        <span style={{ fontSize: '0.5rem', fontWeight: 700, color: 'rgba(255, 255, 255, 0.7)', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Days</span>
+      </div>
+      <span style={{ fontSize: '0.75rem', fontWeight: 950, color: 'rgba(255, 255, 255, 0.3)' }}>:</span>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(255, 255, 255, 0.15)', padding: '0.25rem 0.45rem', borderRadius: '0.4rem', minWidth: '1.8rem' }}>
+        <span style={{ fontSize: '0.75rem', fontWeight: 950, color: '#fff' }}>{String(time.hours).padStart(2, '0')}</span>
+        <span style={{ fontSize: '0.5rem', fontWeight: 700, color: 'rgba(255, 255, 255, 0.7)', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Hrs</span>
+      </div>
+      <span style={{ fontSize: '0.75rem', fontWeight: 950, color: 'rgba(255, 255, 255, 0.3)' }}>:</span>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(255, 255, 255, 0.15)', padding: '0.25rem 0.45rem', borderRadius: '0.4rem', minWidth: '1.8rem' }}>
+        <span style={{ fontSize: '0.75rem', fontWeight: 950, color: '#fff' }}>{String(time.minutes).padStart(2, '0')}</span>
+        <span style={{ fontSize: '0.5rem', fontWeight: 700, color: 'rgba(255, 255, 255, 0.7)', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Min</span>
+      </div>
+      <span style={{ fontSize: '0.75rem', fontWeight: 950, color: 'rgba(255, 255, 255, 0.3)' }}>:</span>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(255, 255, 255, 0.15)', padding: '0.25rem 0.45rem', borderRadius: '0.4rem', minWidth: '1.8rem' }}>
+        <span style={{ fontSize: '0.75rem', fontWeight: 950, color: '#fff' }}>{String(time.seconds).padStart(2, '0')}</span>
+        <span style={{ fontSize: '0.5rem', fontWeight: 700, color: 'rgba(255, 255, 255, 0.7)', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Sec</span>
+      </div>
+    </div>
+  );
+}
+
 export default function ParentDashboard() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -641,6 +690,30 @@ export default function ParentDashboard() {
                     </div>
                   </div>
                 </div>
+
+                {/* Subscription Timer banner here inside profile drawer if they are individual parents */}
+                {parentProfile?.plan_expires_at && !parentProfile?.school && (!activeChild || !activeChild.school) && (
+                  <div style={{
+                    background: 'linear-gradient(135deg, #12312f, #1e4d4a)',
+                    color: '#fff',
+                    padding: '0.85rem 1.15rem',
+                    borderRadius: '0.85rem',
+                    marginTop: '1rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.5rem',
+                    boxShadow: '0 4px 15px rgba(18, 49, 47, 0.08)'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <span style={{ fontSize: '1rem' }}>⏳</span>
+                      <span style={{ fontSize: '0.72rem', fontWeight: 900 }}>Premium Access Active</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+                      <span style={{ fontSize: '0.65rem', fontWeight: 700, color: 'rgba(255, 255, 255, 0.7)' }}>Time Remaining:</span>
+                      <CountdownTimer expiresAt={parentProfile.plan_expires_at} />
+                    </div>
+                  </div>
+                )}
               </section>
 
               {/* Active Child Details Section */}

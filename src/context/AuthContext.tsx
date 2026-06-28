@@ -125,7 +125,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(data.user);
       document.cookie = `zhi_user_role=${data.user.role}; path=/; max-age=${60 * 60 * 24 * 30}`;
       // Warm admin or student cache immediately after login
-      if (data.user.role === 'super_admin' || data.user.role === 'school_admin') {
+      if (data.user.role === 'super_admin') {
         Promise.all([
           import('@/core/services/adminApi'),
           import('@/core/constants/queryKeys'),
@@ -138,6 +138,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           qc.prefetchQuery({ queryKey: adminKeys.schoolDirectory, queryFn: adminApi.schoolDirectory, staleTime: 60000 });
           qc.prefetchQuery({ queryKey: adminKeys.plans, queryFn: adminApi.paymentsPlans, staleTime: 60000 });
         }).catch(() => {});
+      } else if (data.user.role === 'school_admin') {
+        // School admin cache warming can be added here if needed, avoiding super admin routes
       } else if (data.user.role === 'student') {
         Promise.all([
           import('@/core/services/studentApi'),

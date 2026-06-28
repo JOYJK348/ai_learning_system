@@ -93,6 +93,55 @@ function FeatureIcon({ code }: { code: string }) {
   return <>{FEATURE_ICONS[code] || <HelpCircle size={13} />}</>;
 }
 
+function CountdownTimer({ expiresAt }: { expiresAt: string }) {
+  const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0, expired: false });
+
+  useEffect(() => {
+    const update = () => {
+      const remaining = new Date(expiresAt).getTime() - Date.now();
+      if (remaining <= 0) {
+        setTime({ days: 0, hours: 0, minutes: 0, seconds: 0, expired: true });
+        return;
+      }
+      const totalSec = Math.floor(remaining / 1000);
+      const days = Math.floor(totalSec / (3600 * 24));
+      const hours = Math.floor((totalSec % (3600 * 24)) / 3600);
+      const minutes = Math.floor((totalSec % 3600) / 60);
+      const seconds = totalSec % 60;
+      setTime({ days, hours, minutes, seconds, expired: false });
+    };
+    update();
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
+  }, [expiresAt]);
+
+  if (time.expired) return <span style={{ fontSize: '0.72rem', fontWeight: 850, color: '#dc2626' }}>Expired</span>;
+
+  return (
+    <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(20, 184, 166, 0.08)', border: '1px solid rgba(20, 184, 166, 0.15)', padding: '0.25rem 0.45rem', borderRadius: '0.4rem', minWidth: '1.8rem' }}>
+        <span style={{ fontSize: '0.75rem', fontWeight: 950, color: '#0f766e' }}>{String(time.days).padStart(2, '0')}</span>
+        <span style={{ fontSize: '0.5rem', fontWeight: 700, color: 'rgba(15, 23, 42, 0.55)', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Days</span>
+      </div>
+      <span style={{ fontSize: '0.75rem', fontWeight: 950, color: 'rgba(20, 184, 166, 0.4)' }}>:</span>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(20, 184, 166, 0.08)', border: '1px solid rgba(20, 184, 166, 0.15)', padding: '0.25rem 0.45rem', borderRadius: '0.4rem', minWidth: '1.8rem' }}>
+        <span style={{ fontSize: '0.75rem', fontWeight: 950, color: '#0f766e' }}>{String(time.hours).padStart(2, '0')}</span>
+        <span style={{ fontSize: '0.5rem', fontWeight: 700, color: 'rgba(15, 23, 42, 0.55)', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Hrs</span>
+      </div>
+      <span style={{ fontSize: '0.75rem', fontWeight: 950, color: 'rgba(20, 184, 166, 0.4)' }}>:</span>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(20, 184, 166, 0.08)', border: '1px solid rgba(20, 184, 166, 0.15)', padding: '0.25rem 0.45rem', borderRadius: '0.4rem', minWidth: '1.8rem' }}>
+        <span style={{ fontSize: '0.75rem', fontWeight: 950, color: '#0f766e' }}>{String(time.minutes).padStart(2, '0')}</span>
+        <span style={{ fontSize: '0.5rem', fontWeight: 700, color: 'rgba(15, 23, 42, 0.55)', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Min</span>
+      </div>
+      <span style={{ fontSize: '0.75rem', fontWeight: 950, color: 'rgba(20, 184, 166, 0.4)' }}>:</span>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(20, 184, 166, 0.08)', border: '1px solid rgba(20, 184, 166, 0.15)', padding: '0.25rem 0.45rem', borderRadius: '0.4rem', minWidth: '1.8rem' }}>
+        <span style={{ fontSize: '0.75rem', fontWeight: 950, color: '#0f766e' }}>{String(time.seconds).padStart(2, '0')}</span>
+        <span style={{ fontSize: '0.5rem', fontWeight: 700, color: 'rgba(15, 23, 42, 0.55)', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Sec</span>
+      </div>
+    </div>
+  );
+}
+
 export default function ProfilePage() {
   const router = useRouter();
   const params = useParams();
@@ -103,8 +152,6 @@ export default function ProfilePage() {
   const initialTab =
     searchParams.get('tab') === 'plans'
       ? 'plans'
-      : searchParams.get('tab') === 'my-plan'
-      ? 'my-plan'
       : 'details';
 
   const { user, refreshUser, loading: authLoading } = useAuth();
@@ -116,7 +163,7 @@ export default function ProfilePage() {
     return null;
   });
 
-  const [activeSubTab, setActiveSubTab] = useState<'details' | 'my-plan' | 'plans'>(initialTab);
+  const [activeSubTab, setActiveSubTab] = useState<'details' | 'plans'>(initialTab);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [isSaving, setIsSaving] = useState(false);
@@ -143,7 +190,7 @@ export default function ProfilePage() {
     },
     staleTime: 10 * 60 * 1000,
   });
-  const gradesList = (gradesListRaw || []) as Array<{ id: string; name: string; age_range?: string }>;
+  const gradesList = (gradesListRaw || []) as Array<{ id: string; name: string; code: string; age_range?: string }>;
 
   // Parse age range string like "3-4 years" → { min: 3, max: 4 }
   function parseAgeRange(ageRange?: string): { min: number; max: number } | null {
@@ -214,8 +261,11 @@ export default function ProfilePage() {
     if (parentProfile) {
       setName(parentProfile.name || '');
       setPhone(parentProfile.phone || '');
+      if (parentProfile.school && activeSubTab === 'plans') {
+        setActiveSubTab('details');
+      }
     }
-  }, [parentProfile]);
+  }, [parentProfile, activeSubTab]);
 
   const { data: childrenData, isLoading: childrenLoading } = useQuery({
     queryKey: parentKeys.children,
@@ -324,7 +374,7 @@ export default function ProfilePage() {
       if (!amount || amount === 0) {
         await parentApi.subscribe(planId);
         await queryClient.invalidateQueries({ queryKey: parentKeys.subscription });
-        setActiveSubTab('my-plan');
+        setActiveSubTab('plans');
         setAlert({ type: 'success', message: 'Free plan activated successfully!' });
         return;
       }
@@ -374,7 +424,7 @@ export default function ProfilePage() {
         });
       });
       await queryClient.invalidateQueries({ queryKey: parentKeys.subscription });
-      setActiveSubTab('my-plan');
+      setActiveSubTab('plans');
       setAlert({ type: 'success', message: `🎉 Payment successful! Welcome to ${orderData.plan.name}!` });
     } catch (err: any) {
       const msg = err.message || 'Payment failed. Please try again.';
@@ -406,75 +456,125 @@ export default function ProfilePage() {
     <main className={`${adminFont.variable} ${styles.shell}`}>
       <div className={styles.content}>
 
-        {/* ── HERO BANNER ── */}
-        <div className={styles.heroBanner}>
-          <button
-            type="button"
-            className={styles.heroBackBtn}
-            onClick={() => router.push(`/${locale}/parent`)}
-            aria-label="Back to dashboard"
-          >
-            <ArrowLeft size={16} />
-          </button>
-
-          <div className={styles.heroAvatar}>
-            {initials}
-            <span className={styles.heroAvatarBadge} aria-hidden="true" />
+        {/* ── Page Header ── */}
+        <div className={styles.pageHeader}>
+          <div className={styles.headerText}>
+            <p className={styles.eyebrow}>Guardian Portal</p>
+            <h1 className={styles.title}>Parent Profile</h1>
+            <p className={styles.subtitle}>
+              Manage your personal guardian account details, monitor linked students, and configure premium plans.
+            </p>
           </div>
+          <div className={styles.headerActions}>
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={() => router.push(`/${locale}/parent`)}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                borderRadius: '999px',
+                padding: '0.5rem 1.1rem',
+                fontSize: '0.75rem',
+                fontWeight: 950,
+                border: '1px solid rgba(15,23,42,0.08)',
+                background: '#fff',
+                color: '#334155',
+                cursor: 'pointer'
+              }}
+            >
+              <ArrowLeft size={14} />
+              <span>Back to Dashboard</span>
+            </button>
+          </div>
+        </div>
 
-          <div className={styles.heroInfo}>
-            <h1 className={styles.heroName}>{name || 'Parent'}</h1>
-            <p className={styles.heroRole}>Parent Guardian Account</p>
-            <div className={styles.heroPillRow}>
-              <span className={styles.heroPill}>
-                <Mail size={10} />
-                {parentProfile?.email || '—'}
-              </span>
-              <span className={`${styles.heroPill} ${styles.heroPillAccent}`}>
-                <ShieldCheck size={10} />
-                {subscription?.plan?.name || 'Free Plan'}
-              </span>
+        {/* Subscription Timer Banner for Individual Parents */}
+        {parentProfile?.plan_expires_at && !parentProfile?.school && !children.some((c: any) => c.school) && (
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(20, 184, 166, 0.08) 0%, rgba(20, 184, 166, 0.03) 100%)',
+            border: '1px solid rgba(20, 184, 166, 0.18)',
+            color: '#12312f',
+            padding: '1rem 1.5rem',
+            borderRadius: '1.25rem',
+            marginBottom: '1.25rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '1rem',
+            boxShadow: '0 10px 30px rgba(20, 184, 166, 0.04)',
+            backdropFilter: 'blur(8px)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+              <span style={{ fontSize: '1.3rem' }}>⏳</span>
+              <div>
+                <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: 900, color: '#12312f', letterSpacing: '0.01em' }}>Subscription Plan Active</p>
+                <p style={{ margin: '0.15rem 0 0', fontSize: '0.72rem', fontWeight: 700, color: '#475569' }}>
+                  Your premium individual parent access is active.
+                </p>
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+              <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#0f766e' }}>Time Remaining:</span>
+              <CountdownTimer expiresAt={parentProfile.plan_expires_at} />
             </div>
           </div>
-        </div>
+        )}
 
-        {/* ── KPI STRIP ── */}
-        <div className={styles.kpiStrip}>
-          <div className={styles.kpiCard}>
-            <div className={styles.kpiIcon}><Crown size={14} /></div>
-            <p className={styles.kpiLabel}>Membership</p>
-            <h2 className={styles.kpiValue} style={{ color: '#12312f', textTransform: 'capitalize' }}>
-              {subscription?.plan?.name || 'Free'}
-            </h2>
-          </div>
-          <div className={styles.kpiCard}>
-            <div className={styles.kpiIcon}><Users size={14} /></div>
-            <p className={styles.kpiLabel}>Students</p>
-            <h2 className={styles.kpiValue}>
-              {children.length}
-            </h2>
-          </div>
-          <div className={styles.kpiCard}>
-            <div className={styles.kpiIcon}><ShieldCheck size={14} /></div>
-            <p className={styles.kpiLabel}>Status</p>
-            <h2 className={styles.kpiValue} style={{ color: '#16a34a' }}>Active</h2>
-          </div>
-        </div>
+        {/* ── KPI GRID ── */}
+        <section className={styles.kpiGrid} style={{ marginBottom: '1.25rem' }}>
+          <article className={styles.kpiCard}>
+            <div className={`${styles.kpiIcon} ${styles.kpiIcon1}`}>
+              <Crown size={20} />
+            </div>
+            <div className={styles.kpiContent}>
+              <p className={styles.kpiLabel}>Membership</p>
+              <h2 className={styles.kpiValue} style={{ textTransform: 'capitalize' }}>
+                {subscription?.plan?.name || 'Free'}
+              </h2>
+            </div>
+          </article>
+
+          <article className={styles.kpiCard}>
+            <div className={`${styles.kpiIcon} ${styles.kpiIcon2}`}>
+              <Users size={20} />
+            </div>
+            <div className={styles.kpiContent}>
+              <p className={styles.kpiLabel}>Linked Students</p>
+              <h2 className={styles.kpiValue}>{children.length}</h2>
+            </div>
+          </article>
+
+          <article className={styles.kpiCard}>
+            <div className={`${styles.kpiIcon} ${styles.kpiIcon3}`}>
+              <ShieldCheck size={20} />
+            </div>
+            <div className={styles.kpiContent}>
+              <p className={styles.kpiLabel}>Account Status</p>
+              <h2 className={styles.kpiValue} style={{ color: '#16a34a' }}>Active</h2>
+            </div>
+          </article>
+        </section>
 
         {/* ── TAB BAR ── */}
         <div className={styles.tabWrap}>
           <div className={styles.tabBar}>
             {([
               { key: 'details', label: 'Profile & Kids', icon: <User size={13} /> },
-              { key: 'my-plan', label: 'Active Plan', icon: <Crown size={13} /> },
-              { key: 'plans',   label: 'Upgrades',    icon: <Sparkles size={13} /> },
-            ] as const).map((tab) => (
+              ...(!parentProfile?.school ? [{ key: 'plans' as const, label: 'Upgrades', icon: <Sparkles size={13} /> }] : []),
+            ]).map((tab) => (
               <button
                 key={tab.key}
                 type="button"
                 id={`profile-tab-${tab.key}`}
                 className={`${styles.tabBtn} ${activeSubTab === tab.key ? styles.tabBtnActive : ''}`}
-                onClick={() => { setActiveSubTab(tab.key); setAlert(null); }}
+                onClick={() => {
+                  if (parentProfile?.school && tab.key === 'plans') return;
+                  setActiveSubTab(tab.key);
+                  setAlert(null);
+                }}
               >
                 {tab.icon}
                 {tab.label}
@@ -679,153 +779,7 @@ export default function ProfilePage() {
           </div>
         )}
 
-        {/* ══════════════ TAB: MY PLAN ══════════════ */}
-        {activeSubTab === 'my-plan' && (
-          <div className={styles.sectionPad}>
-            {!subscription ? (
-              <div className={styles.card}>
-                <div className={styles.noSubCard}>
-                  <Award size={42} color="#94a3b8" />
-                  <p className={styles.emptyText}>No Active Subscription</p>
-                  <p className={styles.emptySubText}>
-                    Upgrade to unlock all subjects, tests, AI features and more.
-                  </p>
-                  <button
-                    type="button"
-                    className={styles.primaryBtn}
-                    style={{ marginTop: '0.5rem', width: 'auto' }}
-                    onClick={() => setActiveSubTab('plans')}
-                  >
-                    <Sparkles size={15} /> Browse Plans
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {/* Plan Hero Card */}
-                <div
-                  className={styles.planHeroCard}
-                  style={{ borderColor: PLAN_COLORS[planCode] || '#12312f' }}
-                >
-                  <div
-                    className={styles.planHeroIcon}
-                    style={{
-                      background: `${PLAN_COLORS[planCode]}15`,
-                      color: PLAN_COLORS[planCode],
-                    }}
-                  >
-                    {PLAN_ICONS[planCode]}
-                  </div>
-                  <div>
-                    <h2 className={styles.planHeroName}>{subscription?.plan?.name || 'Free Plan'}</h2>
-                    <p className={styles.planHeroPrice}>
-                      {subscription?.plan?.amount_monthly === 0
-                        ? 'Free forever'
-                        : `₹${subscription?.plan?.amount_monthly || 0}/month`}
-                    </p>
-                  </div>
-                  <span
-                    className={`${styles.statusBadge} ${
-                      subscription.status === 'trial' ? styles.statusTrial : styles.statusActive
-                    }`}
-                  >
-                    {subscription.status === 'trial' ? (
-                      <><Clock size={11} /> Trial</>
-                    ) : (
-                      <><CheckCircle2 size={11} /> Active</>
-                    )}
-                  </span>
-                </div>
 
-                {/* Dates */}
-                <div className={styles.planDatesGrid}>
-                  <div className={styles.planDateItem}>
-                    <Calendar size={16} />
-                    <div>
-                      <p className={styles.planDateLabel}>Activation Date</p>
-                      <p className={styles.planDateValue}>
-                        {subscription?.start_date || parentProfile?.plan_started_at
-                          ? new Date(
-                              subscription.start_date || parentProfile?.plan_started_at
-                            ).toLocaleDateString('en-IN')
-                          : 'Lifetime Active'}
-                      </p>
-                    </div>
-                  </div>
-                  {subscription?.trial_end && (
-                    <div className={styles.planDateItem}>
-                      <Clock size={16} />
-                      <div>
-                        <p className={styles.planDateLabel}>Trial End Date</p>
-                        <p className={styles.planDateValue}>
-                          {new Date(subscription.trial_end).toLocaleDateString('en-IN')}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                  <div className={styles.planDateItem}>
-                    <AlertTriangle size={16} />
-                    <div>
-                      <p className={styles.planDateLabel}>Expiry Date</p>
-                      <p className={styles.planDateValue}>
-                        {subscription?.end_date || parentProfile?.plan_expires_at
-                          ? new Date(
-                              subscription.end_date || parentProfile?.plan_expires_at
-                            ).toLocaleDateString('en-IN')
-                          : 'Never (Lifetime)'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Included Features */}
-                <div className={styles.card}>
-                  <div className={styles.cardHead}>
-                    <span className={`${styles.cardHeadIcon} ${styles.cardHeadIconBlue}`}>
-                      <CheckCircle2 size={16} />
-                    </span>
-                    <h3 className={styles.cardTitle}>Included Features</h3>
-                    <button
-                      type="button"
-                      className={styles.cardAction}
-                      onClick={() => setActiveSubTab('plans')}
-                    >
-                      Upgrade Plan →
-                    </button>
-                  </div>
-
-                  <div className={styles.featuresGrid}>
-                    {(subscription?.plan?.features || []).map((f: any) => (
-                      <div key={f.id} className={styles.featureRow}>
-                        <CheckCircle2
-                          size={14}
-                          color={f.limit === false ? '#cbd5e1' : '#16a34a'}
-                          style={{ flexShrink: 0 }}
-                        />
-                        <span
-                          className={`${styles.featureRowName} ${
-                            f.limit === false ? styles.featureRowDisabled : ''
-                          }`}
-                        >
-                          {f.name}
-                        </span>
-                        <span className={styles.featureRowVal}>
-                          {f.limit === 'unlimited'
-                            ? '∞'
-                            : f.limit === true
-                            ? '✓'
-                            : f.limit === false
-                            ? '—'
-                            : String(f.limit)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
 
         {/* ══════════════ TAB: UPGRADES ══════════════ */}
         {activeSubTab === 'plans' && (
@@ -852,95 +806,106 @@ export default function ProfilePage() {
               </div>
             ) : (
               <div className={styles.plansGrid}>
-                {(plans || []).map((plan) => {
-                  const isCurrent = plan.id === currentPlanId;
-                  const featuresByCategory = plan.features.reduce<
-                    Record<string, typeof plan.features>
-                  >((acc, f) => {
-                    if (!acc[f.category]) acc[f.category] = [];
-                    acc[f.category].push(f);
-                    return acc;
-                  }, {});
+                {(() => {
+                  const currentPlanAmount = subscription?.plan?.amount_monthly ?? 0;
+                  return (plans || []).map((plan) => {
+                    const isCurrent = plan.id === currentPlanId;
+                    const isUpgrade = plan.amount_monthly > currentPlanAmount;
+                    const isDowngrade = plan.amount_monthly < currentPlanAmount;
+                    
+                    const featuresByCategory = plan.features.reduce<
+                      Record<string, typeof plan.features>
+                    >((acc, f) => {
+                      if (!acc[f.category]) acc[f.category] = [];
+                      acc[f.category].push(f);
+                      return acc;
+                    }, {});
 
-                  return (
-                    <div
-                      key={plan.id}
-                      className={`${styles.planCard} ${isCurrent ? styles.planCardCurrent : ''}`}
-                    >
-                      {plan.badge_label && (
-                        <span className={styles.planBadge}>{plan.badge_label}</span>
-                      )}
-
+                    return (
                       <div
-                        className={styles.planIcon}
-                        style={{
-                          background: `${PLAN_COLORS[plan.code]}15`,
-                          color: PLAN_COLORS[plan.code],
-                        }}
+                        key={plan.id}
+                        className={`${styles.planCard} ${isCurrent ? styles.planCardCurrent : ''} plan-card-${plan.code}`}
                       >
-                        {PLAN_ICONS[plan.code]}
-                      </div>
-
-                      <h2 className={styles.planName}>{plan.name}</h2>
-                      <div className={styles.planPriceRow}>
-                        <span className={styles.priceNum}>₹{plan.amount_monthly}</span>
-                        <span className={styles.pricePer}>/mo</span>
-                      </div>
-                      <p className={styles.planDesc}>{plan.description}</p>
-
-                      <div className={styles.featureGroups}>
-                        {Object.entries(featuresByCategory).map(([category, features]) => (
-                          <div key={category}>
-                            <p className={styles.featureCategory}>
-                              {CATEGORY_ICONS[category]}
-                              {CATEGORY_LABELS[category] || category}
-                            </p>
-                            <div className={styles.featureList}>
-                              {features.map((f) => (
-                                <div key={f.id} className={styles.featureItem}>
-                                  <FeatureIcon code={f.code} />
-                                  <span
-                                    className={`${styles.featureName} ${
-                                      f.limit === false ? styles.featureDisabled : ''
-                                    }`}
-                                  >
-                                    {f.name}
-                                  </span>
-                                  <span
-                                    className={`${styles.featureLimit} ${
-                                      f.limit === false ? styles.featureDisabled : ''
-                                    }`}
-                                  >
-                                    {formatLimit(f.limit)}
-                                  </span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-                      <button
-                        id={`subscribe-plan-${plan.id}`}
-                        type="button"
-                        className={`${styles.ctaBtn} ${isCurrent ? styles.ctaBtnCurrent : ''}`}
-                        style={!isCurrent ? { background: PLAN_COLORS[plan.code] } : {}}
-                        onClick={() => handleSubscribe(plan.id, plan.name, plan.amount_monthly)}
-                        disabled={isCurrent || (subscribing && selectedPlanId === plan.id)}
-                      >
-                        {subscribing && selectedPlanId === plan.id ? (
-                          <><Loader2 size={15} className={styles.spinner} /> Processing…</>
-                        ) : isCurrent ? (
-                          <><CheckCircle2 size={14} /> Current Plan</>
-                        ) : plan.amount_monthly === 0 ? (
-                          'Choose Free'
-                        ) : (
-                          <>Upgrade Now <ChevronRight size={14} /></>
+                        {plan.badge_label && (
+                          <span className={styles.planBadge}>{plan.badge_label}</span>
                         )}
-                      </button>
-                    </div>
-                  );
-                })}
+
+                        <div
+                          className={styles.planIcon}
+                          style={{
+                            background: `${PLAN_COLORS[plan.code]}15`,
+                            color: PLAN_COLORS[plan.code],
+                          }}
+                        >
+                          {PLAN_ICONS[plan.code]}
+                        </div>
+
+                        <h2 className={styles.planName}>{plan.name}</h2>
+                        <div className={styles.planPriceRow}>
+                          <span className={styles.priceNum}>₹{plan.amount_monthly}</span>
+                          <span className={styles.pricePer}>/mo</span>
+                        </div>
+                        <p className={styles.planDesc}>{plan.description}</p>
+
+                        <div className={styles.featureGroups}>
+                          {Object.entries(featuresByCategory).map(([category, features]) => (
+                            <div key={category}>
+                              <p className={styles.featureCategory}>
+                                {CATEGORY_ICONS[category]}
+                                {CATEGORY_LABELS[category] || category}
+                              </p>
+                              <div className={styles.featureList}>
+                                {features.map((f) => (
+                                  <div key={f.id} className={styles.featureItem}>
+                                    <FeatureIcon code={f.code} />
+                                    <span
+                                      className={`${styles.featureName} ${
+                                        f.limit === false ? styles.featureDisabled : ''
+                                      }`}
+                                    >
+                                      {f.name}
+                                    </span>
+                                    <span
+                                      className={`${styles.featureLimit} ${
+                                        f.limit === false ? styles.featureDisabled : ''
+                                      }`}
+                                    >
+                                      {formatLimit(f.limit)}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        <button
+                          id={`subscribe-plan-${plan.id}`}
+                          type="button"
+                          className={`${styles.ctaBtn} ${
+                            isCurrent
+                              ? styles.ctaBtnCurrent
+                              : isUpgrade
+                              ? styles.ctaBtnUpgrade
+                              : styles.ctaBtnDowngrade
+                          }`}
+                          onClick={() => handleSubscribe(plan.id, plan.name, plan.amount_monthly)}
+                          disabled={isCurrent || (subscribing && selectedPlanId === plan.id)}
+                        >
+                          {subscribing && selectedPlanId === plan.id ? (
+                            <><Loader2 size={15} className={styles.spinner} /> Processing…</>
+                          ) : isCurrent ? (
+                            <><CheckCircle2 size={14} /> Current Plan</>
+                          ) : isUpgrade ? (
+                            <>Upgrade Now <ChevronRight size={14} /></>
+                          ) : (
+                            <>Downgrade / Switch <ChevronRight size={14} /></>
+                          )}
+                        </button>
+                      </div>
+                    );
+                  });
+                })()}
               </div>
             )}
           </div>
@@ -960,11 +925,24 @@ export default function ProfilePage() {
           }}
         >
           <div className={styles.modal}>
+            {/* Modal Header */}
             <div className={styles.modalHead}>
-              <span className={`${styles.cardHeadIcon} ${styles.cardHeadIconGreen}`}>
-                <FilePlus size={16} />
-              </span>
-              <h3 className={styles.modalTitle}>Register New Student</h3>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                <span style={{
+                  width: '2.2rem', height: '2.2rem', borderRadius: '0.65rem',
+                  background: 'linear-gradient(135deg, rgba(20,184,166,0.12), rgba(20,184,166,0.06))',
+                  border: '1px solid rgba(20,184,166,0.2)',
+                  display: 'grid', placeItems: 'center', color: '#0f766e'
+                }}>
+                  <FilePlus size={16} />
+                </span>
+                <div>
+                  <h3 className={styles.modalTitle}>Register New Student</h3>
+                  <p style={{ margin: 0, fontSize: '0.68rem', color: '#64748b', fontWeight: 600 }}>
+                    Fill in the details below to enrol your child
+                  </p>
+                </div>
+              </div>
               <button
                 type="button"
                 id="close-link-modal"
@@ -991,44 +969,94 @@ export default function ProfilePage() {
             )}
 
             <form onSubmit={handleAddChildRequest} className={styles.modalForm}>
+
+              {/* Student Name */}
               <div className={styles.inputWrap}>
-                <label className={styles.label}>Child's Full Name</label>
+                <label className={styles.label}>Student Full Name</label>
                 <div className={styles.inputRow}>
                   <User size={14} className={styles.inputIcon} />
                   <input
                     type="text"
                     value={childName}
                     onChange={(e) => setChildName(e.target.value)}
-                    placeholder="Enter child's full name"
+                    placeholder="e.g. Jay Kumar"
                     className={styles.input}
                     required
                   />
                 </div>
               </div>
 
+              {/* Grade Picker — visual card grid */}
               <div className={styles.inputWrap}>
-                <label className={styles.label}>Grade Level</label>
-                <select
-                  value={childGradeId}
-                  onChange={(e) => setChildGradeId(e.target.value)}
-                  className={styles.select}
-                  required
-                >
-                  <option value="">Select Grade</option>
-                  {gradesList.map((g) => (
-                    <option key={g.id} value={g.id}>
-                      {g.name}{g.age_range ? ` (${g.age_range})` : ''}
-                    </option>
-                  ))}
-                </select>
-                {selectedGrade?.age_range && (
-                  <p style={{ margin: '0.3rem 0 0', fontSize: '0.68rem', fontWeight: 800, color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                    <span style={{ fontSize: '0.75rem' }}>ℹ️</span>
-                    {selectedGrade.name} is for children aged <strong style={{ color: '#12312f', marginLeft: '0.2rem' }}>{selectedGrade.age_range}</strong>
+                <label className={styles.label}>Select Grade</label>
+                {gradesList.length === 0 ? (
+                  <div style={{ padding: '1rem', textAlign: 'center', color: '#94a3b8', fontSize: '0.78rem', fontWeight: 700, background: 'rgba(15,23,42,0.03)', borderRadius: '0.75rem', border: '1px dashed rgba(15,23,42,0.1)' }}>
+                    <Loader2 size={16} style={{ animation: 'spin 1s linear infinite', marginBottom: '0.35rem' }} />
+                    <p style={{ margin: 0 }}>Loading grades…</p>
+                  </div>
+                ) : (
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(5.5rem, 1fr))',
+                    gap: '0.55rem',
+                  }}>
+                    {gradesList.map((g) => {
+                      const isSelected = childGradeId === g.id;
+                      return (
+                        <button
+                          key={g.id}
+                          type="button"
+                          onClick={() => setChildGradeId(g.id)}
+                          style={{
+                            border: isSelected
+                              ? '2px solid #0f766e'
+                              : '1.5px solid rgba(15,23,42,0.08)',
+                            borderRadius: '0.85rem',
+                            padding: '0.65rem 0.4rem',
+                            background: isSelected
+                              ? 'linear-gradient(135deg, rgba(20,184,166,0.1), rgba(20,184,166,0.05))'
+                              : '#fff',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '0.15rem',
+                            transition: 'all 0.2s ease',
+                            boxShadow: isSelected
+                              ? '0 0 0 3px rgba(20,184,166,0.15)'
+                              : '0 1px 4px rgba(0,0,0,0.04)',
+                            transform: isSelected ? 'scale(1.03)' : 'scale(1)',
+                          }}
+                        >
+                          <span style={{ fontSize: '1.3rem' }}>
+                            {g.code === 'lkg' ? '🌱' : g.code === 'ukg' ? '🌿' :
+                             g.code === 'grade-1' ? '1️⃣' : g.code === 'grade-2' ? '2️⃣' :
+                             g.code === 'grade-3' ? '3️⃣' : g.code === 'grade-4' ? '4️⃣' :
+                             g.code === 'grade-5' ? '5️⃣' : g.code === 'grade-6' ? '6️⃣' :
+                             g.code === 'grade-7' ? '7️⃣' : g.code === 'grade-8' ? '8️⃣' :
+                             g.code === 'grade-9' ? '9️⃣' : g.code === 'grade-10' ? '🔟' : '📚'}
+                          </span>
+                          <span style={{ fontSize: '0.68rem', fontWeight: 900, color: isSelected ? '#0f766e' : '#334155', letterSpacing: '-0.01em' }}>
+                            {g.name}
+                          </span>
+                          {g.age_range && (
+                            <span style={{ fontSize: '0.55rem', fontWeight: 700, color: isSelected ? '#0f766e' : '#94a3b8' }}>
+                              {g.age_range}
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+                {!childGradeId && (
+                  <p style={{ margin: '0.35rem 0 0', fontSize: '0.65rem', color: '#94a3b8', fontWeight: 700 }}>
+                    Tap a grade card to select it
                   </p>
                 )}
               </div>
 
+              {/* Gender */}
               <div className={styles.inputWrap}>
                 <label className={styles.label}>Gender</label>
                 <div className={styles.genderRow}>
@@ -1053,6 +1081,7 @@ export default function ProfilePage() {
                 </div>
               </div>
 
+              {/* Date of Birth */}
               <div className={styles.inputWrap}>
                 <label className={styles.label}>
                   Date of Birth
@@ -1072,7 +1101,6 @@ export default function ProfilePage() {
                     style={ageValidationError ? { borderColor: '#f87171' } : (currentChildAge !== null && !ageValidationError ? { borderColor: '#4ade80' } : {})}
                   />
                 </div>
-                {/* Real-time age feedback */}
                 {childDob && currentChildAge !== null && (
                   ageValidationError ? (
                     <p style={{ margin: '0.3rem 0 0', fontSize: '0.68rem', fontWeight: 800, color: '#b91c1c', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
@@ -1094,7 +1122,7 @@ export default function ProfilePage() {
                 type="submit"
                 id="submit-link-request"
                 className={styles.primaryBtn}
-                disabled={isSubmittingLink}
+                disabled={isSubmittingLink || !childGradeId}
                 style={{ width: '100%', alignSelf: 'stretch' }}
               >
                 {isSubmittingLink ? (

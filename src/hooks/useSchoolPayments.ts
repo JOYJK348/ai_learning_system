@@ -152,3 +152,94 @@ export function useSchoolUpgrade() {
     },
   });
 }
+
+// ── Hybrid Payments Hooks ───────────────────────────────────────────────────
+
+export type CreateOrderResult = {
+  payment_record_id: string;
+  razorpay_order_id: string;
+  amount: number;
+  currency: string;
+  plan_name: string;
+  key_id: string;
+};
+
+async function fetchCreateOrder(planType: string) {
+  const res = await fetch(`${API_BASE}/api/school-admin/payments/create-order`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ plan_type: planType }),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error || 'Failed to create payment order');
+  return json.data as CreateOrderResult;
+}
+
+export function useCreateSchoolOrder() {
+  return useMutation({
+    mutationFn: (planType: string) => fetchCreateOrder(planType),
+  });
+}
+
+export type VerifyPaymentPayload = {
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+};
+
+async function fetchVerifyPayment(payload: VerifyPaymentPayload) {
+  const res = await fetch(`${API_BASE}/api/school-admin/payments/verify`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error || 'Payment verification failed');
+  return json;
+}
+
+export function useVerifySchoolPayment() {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const schoolId = user?.schoolId;
+
+  return useMutation({
+    mutationFn: (payload: VerifyPaymentPayload) => fetchVerifyPayment(payload),
+    onSuccess: () => {
+      if (schoolId) {
+        queryClient.invalidateQueries({ queryKey: schoolAdminKeys.payments(schoolId) });
+      }
+    },
+  });
+}
+
+async function fetchSubmitOfflinePayment(planType: string, referenceCode: string) {
+  const res = await fetch(`${API_BASE}/api/school-admin/payments/offline`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ plan_type: planType, reference_code: referenceCode }),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error || 'Failed to submit reference');
+  return json;
+}
+
+export function useSubmitOfflinePayment() {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const schoolId = user?.schoolId;
+
+  return useMutation({
+    mutationFn: ({ planType, referenceCode }: { planType: string; referenceCode: string }) => 
+      fetchSubmitOfflinePayment(planType, referenceCode),
+    onSuccess: () => {
+      if (schoolId) {
+        queryClient.invalidateQueries({ queryKey: schoolAdminKeys.payments(schoolId) });
+      }
+    },
+  });
+}
+

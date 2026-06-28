@@ -43,4 +43,9 @@ export const schoolAdminKeys = {
     ['school-admin', 'curriculum', schoolId, gradeId] as const,
   payments: (schoolId?: string | null) => ['school-admin', 'payments', schoolId] as const,
   plans: (schoolId?: string | null) => ['school-admin', 'plans', schoolId] as const,
+  curriculumProgress: (schoolId?: string | null) => ['school-admin', 'curriculum-progress', schoolId] as const,
+  curriculumGradeProgress: (schoolId?: string | null, gradeId?: string | null) =>
+    ['school-admin', 'curriculum-grade-progress', schoolId, gradeId] as const,
+  curriculumGradeQuizzes: (schoolId?: string | null, gradeId?: string | null, subjectId?: string | null) =>
+    ['school-admin', 'curriculum-grade-quizzes', schoolId, gradeId, subjectId] as const,
 };

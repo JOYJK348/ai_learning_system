@@ -118,3 +118,124 @@ export function useSchoolCurriculum(gradeId?: string | null) {
     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 10000),
   });
 }
+
+/* ─── Progress hooks ─────────────────────────────────── */
+
+export type GradeProgressSummary = {
+  grade_id: string;
+  grade_name: string;
+  total_students: number;
+  active_today: number;
+  avg_progress: number;
+  total_lessons_completed: number;
+  total_quizzes_attempted: number;
+  total_quizzes_passed: number;
+};
+
+export type StudentProgressRow = {
+  id: string;
+  name: string;
+  section: string | null;
+  overall_progress: number;
+  lessons_completed: number;
+  quizzes_attempted: number;
+  quizzes_passed: number;
+  stars_earned: number;
+  last_active: string | null;
+  is_active_today: boolean;
+};
+
+async function fetchCurriculumProgress() {
+  const res = await fetch(`${API_BASE}/api/school-admin/curriculum/progress`, { credentials: 'include' });
+  if (!res.ok) throw new Error('Failed to fetch progress');
+  const json = await res.json();
+  return json.data as { grades: GradeProgressSummary[] };
+}
+
+async function fetchGradeProgress(gradeId: string) {
+  const res = await fetch(`${API_BASE}/api/school-admin/curriculum/progress?grade_id=${gradeId}`, { credentials: 'include' });
+  if (!res.ok) throw new Error('Failed to fetch grade progress');
+  const json = await res.json();
+  return json.data as StudentProgressRow[];
+}
+
+export function useCurriculumProgress() {
+  const { user } = useAuth();
+  const schoolId = user?.schoolId;
+  return useQuery({
+    queryKey: schoolAdminKeys.curriculumProgress(schoolId),
+    queryFn: fetchCurriculumProgress,
+    enabled: !!schoolId,
+    staleTime: 60_000,
+  });
+}
+
+export function useGradeProgress(gradeId?: string | null) {
+  const { user } = useAuth();
+  const schoolId = user?.schoolId;
+  return useQuery({
+    queryKey: schoolAdminKeys.curriculumGradeProgress(schoolId, gradeId),
+    queryFn: () => fetchGradeProgress(gradeId!),
+    enabled: !!schoolId && !!gradeId,
+    staleTime: 60_000,
+  });
+}
+
+/* ─── Quiz performance tracking hooks ────────────────── */
+
+export type SchoolQuizAttempt = {
+  student_id: string;
+  student_name: string;
+  section: string | null;
+  score: number;
+  max_score: number;
+  percentage: number;
+  passed: boolean;
+  time_taken_seconds: number | null;
+  completed_at: string | null;
+};
+
+export type SchoolQuizGroup = {
+  quiz_id: string;
+  quiz_title: string;
+  lesson_title: string;
+  total_attempts: number;
+  pass_count: number;
+  fail_count: number;
+  avg_score: number;
+  attempts: SchoolQuizAttempt[];
+};
+
+export type SchoolChapterQuizGroup = {
+  chapter_id: string;
+  chapter_name: string;
+  quizzes: SchoolQuizGroup[];
+};
+
+export type SchoolSubjectQuizGroup = {
+  subject_id: string;
+  subject_name: string;
+  chapters: SchoolChapterQuizGroup[];
+};
+
+async function fetchGradeQuizzes(gradeId: string, subjectId?: string | null) {
+  let url = `${API_BASE}/api/school-admin/curriculum/quizzes?grade_id=${gradeId}`;
+  if (subjectId) url += `&subject_id=${subjectId}`;
+  const res = await fetch(url, { credentials: 'include' });
+  if (!res.ok) throw new Error('Failed to fetch grade quizzes');
+  const json = await res.json();
+  return json.data as SchoolSubjectQuizGroup[];
+}
+
+export function useGradeQuizzes(gradeId?: string | null, subjectId?: string | null) {
+  const { user } = useAuth();
+  const schoolId = user?.schoolId;
+  return useQuery({
+    queryKey: schoolAdminKeys.curriculumGradeQuizzes(schoolId, gradeId, subjectId),
+    queryFn: () => fetchGradeQuizzes(gradeId!, subjectId),
+    enabled: !!schoolId && !!gradeId,
+    staleTime: 30_000,
+  });
+}
+
+

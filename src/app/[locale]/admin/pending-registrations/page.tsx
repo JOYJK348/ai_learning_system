@@ -61,6 +61,7 @@ export default function AdminApprovalsPage() {
       const t = sp.get('type');
       if (t === 'school') { setTypeFilter('school'); setUrlTypeParam('school'); }
       else if (t === 'parent') { setTypeFilter('parent'); setUrlTypeParam('parent'); }
+      else { setTypeFilter('all'); setUrlTypeParam(null); }
     }
   }, []);
 
@@ -205,7 +206,13 @@ export default function AdminApprovalsPage() {
     return registrations.find((r: any) => r.id === detailId) || null;
   }, [detailId, registrations]);
 
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
   if (loading || !user) return null;
+  if (!hasMounted) return null;
 
   return (
     <main className={`${adminFont.variable} ${styles.shell}`}>

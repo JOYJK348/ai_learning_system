@@ -1,7 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from '@/i18n/routing';
 import { useParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -17,6 +17,7 @@ export default function SchoolAdminLayout({ children }: { children: ReactNode })
   const router = useRouter();
   const params = useParams();
   const locale = (params?.locale as string) || 'en';
+  const [mounted, setMounted] = useState(false);
 
   usePrefetchSchoolData();
   usePrefetchSchoolCurriculum();
@@ -24,12 +25,16 @@ export default function SchoolAdminLayout({ children }: { children: ReactNode })
   usePrefetchSchoolMe();
 
   useEffect(() => {
-    if (!loading && (!user || user.role !== 'school_admin')) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && !loading && (!user || user.role !== 'school_admin')) {
       router.replace('/login');
     }
-  }, [loading, router, user]);
+  }, [mounted, loading, router, user]);
 
-  if (loading || !user) {
+  if (!mounted || loading || !user) {
     return (
       <div style={{ display: 'grid', placeItems: 'center', minHeight: '100vh', background: '#f8faff', gap: '0.75rem' }}>
         <div style={{ width: '1.8rem', height: '1.8rem', border: '3px solid #e2e8f0', borderTopColor: '#3b82f6', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />

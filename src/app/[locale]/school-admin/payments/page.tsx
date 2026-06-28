@@ -26,7 +26,11 @@ import {
   Info,
   Timer,
   AlertOctagon,
+  FileText,
+  Printer,
+  Download,
 } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 import { useSchoolPayments, usePlansConfig } from '@/hooks/useSchoolPayments';
 import type { PaymentsData, PlanItem } from '@/hooks/useSchoolPayments';
 import UpgradeModal from '../_components/UpgradeModal';
@@ -120,14 +124,18 @@ function CountdownTimer({ expiresAt, serverTime }: { expiresAt: string; serverTi
 }
 
 export default function PaymentsPage() {
+  const { user } = useAuth();
   const { data, isLoading } = useSchoolPayments();
   const plans = usePlansConfig();
   const d = data as PaymentsData | undefined;
   const sub = d?.subscription;
   const usage = d?.usage;
   const revenue = d?.revenue;
+  const transactions = d?.transactions || [];
   const serverTime = d?.server_time;
   const expired = sub?.plan_status === 'expired';
+
+  const [selectedInvoice, setSelectedInvoice] = useState<any | null>(null);
 
   const currentPlanPrice = sub && sub.plan_price > 0
     ? `₹${Number(sub.plan_price).toLocaleString('en-IN')}`
@@ -363,6 +371,7 @@ export default function PaymentsPage() {
             {/* Timeline + Features */}
             <TimelineCard sub={sub} expired={isExpired} serverTime={serverTime} />
             <FeaturesCard plans={plans} activeFeatures={activeFeatures} enabledCount={enabledCount} />
+            <InvoicesCard transactions={transactions} onViewInvoice={(t) => setSelectedInvoice(t)} />
 
           </motion.div>
         )}
@@ -379,6 +388,14 @@ export default function PaymentsPage() {
           currentSub={sub}
         />
       )}
+
+      {/* Invoice Detail Modal */}
+      <InvoiceDetailModal
+        open={!!selectedInvoice}
+        onClose={() => setSelectedInvoice(null)}
+        transaction={selectedInvoice}
+        schoolName={user?.name || 'Partner School'}
+      />
     </div>
   );
 }
@@ -460,3 +477,246 @@ function FeaturesCard({ plans, activeFeatures, enabledCount }: { plans: PlanItem
     </motion.div>
   );
 }
+
+function InvoicesCard({ transactions, onViewInvoice }: { transactions: any[]; onViewInvoice: (t: any) => void }) {
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredTransactions = useMemo(() => {
+    return transactions.filter(t => {
+      const displayId = `INV-${new Date(t.created_at).toISOString().slice(0, 10).replace(/-/g, '')}-${t.id.slice(0, 4).toUpperCase()}`;
+      const matchesSearch = 
+        displayId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (t.plan_name_snapshot || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (t.gateway_payment_id || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (t.notes || '').toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const matchesStatus = 
+        statusFilter === 'all' || 
+        (t.payment_status_name || '').toLowerCase() === statusFilter.toLowerCase();
+      
+      return matchesSearch && matchesStatus;
+    });
+  }, [transactions, searchQuery, statusFilter]);
+
+  return (
+    <motion.div className={styles.card} variants={ITEM}>
+      <div className={styles.cardHdr} style={{ marginBottom: '1rem' }}>
+        <FileText size={16} color="#12312f" />
+        <h3 style={{ flex: 1 }}>Billing & Invoice History</h3>
+        <span className={styles.cardBadge}>{filteredTransactions.length} filtered / {transactions.length} total</span>
+      </div>
+
+      {/* Filters Bar */}
+      <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+        <input
+          type="text"
+          placeholder="Search by Invoice ID, Plan, or Ref ID..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={{
+            flex: 1,
+            minWidth: '15rem',
+            padding: '0.5rem 0.75rem',
+            borderRadius: '0.5rem',
+            border: '1px solid rgba(15, 23, 42, 0.08)',
+            fontSize: '0.72rem',
+            fontWeight: 800,
+            background: 'rgba(255, 255, 255, 0.9)',
+            outline: 'none',
+            color: '#0f172a'
+          }}
+        />
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          style={{
+            padding: '0.5rem 0.75rem',
+            borderRadius: '0.5rem',
+            border: '1px solid rgba(15, 23, 42, 0.08)',
+            fontSize: '0.72rem',
+            fontWeight: 850,
+            background: 'rgba(255, 255, 255, 0.9)',
+            color: '#334155',
+            cursor: 'pointer',
+            outline: 'none'
+          }}
+        >
+          <option value="all">All Statuses</option>
+          <option value="success">Success</option>
+          <option value="pending">Pending</option>
+          <option value="failed">Failed</option>
+        </select>
+      </div>
+
+      {filteredTransactions.length === 0 ? (
+        <p className={styles.emptySmall}>No matching billing records found</p>
+      ) : (
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th className={styles.th}>Date</th>
+                <th className={styles.th}>Invoice ID</th>
+                <th className={styles.th}>Plan</th>
+                <th className={styles.th}>Amount</th>
+                <th className={styles.th}>Method</th>
+                <th className={styles.th}>Status</th>
+                <th className={styles.th}>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredTransactions.map((t) => {
+                const formattedDate = t.paid_at 
+                  ? new Date(t.paid_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+                  : new Date(t.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+                const displayId = `INV-${new Date(t.created_at).toISOString().slice(0, 10).replace(/-/g, '')}-${t.id.slice(0, 4).toUpperCase()}`;
+                return (
+                  <tr key={t.id} className={styles.tr}>
+                    <td className={styles.td}>{formattedDate}</td>
+                    <td className={styles.td}>{displayId}</td>
+                    <td className={styles.td}>{t.plan_name_snapshot || 'Standard Upgrade'}</td>
+                    <td className={styles.td}>₹{Number(t.amount).toLocaleString('en-IN')}.00</td>
+                    <td className={styles.td}>{t.payment_method || 'Online'}</td>
+                    <td className={styles.td}>
+                      <span className={styles.badge} style={{ background: t.payment_status_color || '#dcfce7', color: '#166534' }}>
+                        {t.payment_status_name || 'Success'}
+                      </span>
+                    </td>
+                    <td className={styles.td}>
+                      <button className={styles.invoiceBtn} onClick={() => onViewInvoice(t)}>
+                        <FileText size={12} />
+                        View Invoice
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </motion.div>
+  );
+}
+
+interface InvoiceDetailModalProps {
+  open: boolean;
+  onClose: () => void;
+  transaction: any;
+  schoolName: string;
+}
+
+function InvoiceDetailModal({ open, onClose, transaction, schoolName }: InvoiceDetailModalProps) {
+  if (!open || !transaction) return null;
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const formattedDate = transaction.paid_at 
+    ? new Date(transaction.paid_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })
+    : new Date(transaction.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
+
+  const invoiceNumber = `INV-${new Date(transaction.created_at).toISOString().slice(0, 10).replace(/-/g, '')}-${transaction.id.slice(0, 4).toUpperCase()}`;
+
+  const basePrice = Math.round(Number(transaction.amount) / 1.18);
+  const gst = Number(transaction.amount) - basePrice;
+
+  return (
+    <div className={styles.modalOverlay}>
+      <div className={styles.modalBackdrop} onClick={onClose} />
+      <div className={styles.modalPanel}>
+        <div className={styles.modalHeader}>
+          <h3 className={styles.modalTitle}>Tax Invoice / Receipt</h3>
+          <button className={styles.closeBtn} onClick={onClose}>
+            <XCircle size={18} />
+          </button>
+        </div>
+        <div className={styles.invoiceContainer}>
+          <div className={styles.invoicePaper}>
+            <div className={styles.invoiceTop}>
+              <div>
+                <h4 className={styles.logoTitle}>Agaran AI Learning Portal</h4>
+                <div className={styles.logoSub}>Modern Digital Schooling System</div>
+              </div>
+              <div className={styles.invoiceMeta}>
+                <div className={styles.invoiceNum}>{invoiceNumber}</div>
+                <div className={styles.invoiceDate}>Date: {formattedDate}</div>
+              </div>
+            </div>
+            
+            <div className={styles.invoiceAddresses}>
+              <div className={styles.addressCol}>
+                <div className={styles.addressTitle}>Billed From</div>
+                <div className={styles.orgName}>Agaran AI Technologies</div>
+                <div className={styles.addressDetail}>12, Gandhi Salai, T. Nagar</div>
+                <div className={styles.addressDetail}>Chennai, Tamil Nadu - 600017</div>
+                <div className={styles.addressDetail}>GSTIN: 33AAAAA0000A1Z5</div>
+              </div>
+              <div className={styles.addressCol}>
+                <div className={styles.addressTitle}>Billed To</div>
+                <div className={styles.orgName}>{schoolName}</div>
+                <div className={styles.addressDetail}>School Administrator Portal</div>
+                <div className={styles.addressDetail}>Registered Partner School</div>
+              </div>
+            </div>
+
+            <table className={styles.invoiceItems}>
+              <thead>
+                <tr>
+                  <th className={styles.itemTh} style={{ textAlign: 'left' }}>Description</th>
+                  <th className={styles.itemTh} style={{ textAlign: 'right' }}>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className={styles.itemTd}>
+                    <div>{transaction.plan_name_snapshot || 'Standard Upgrade'}</div>
+                    <div style={{ fontSize: '0.62rem', color: '#64748b', marginTop: '0.1rem' }}>
+                      Premium school platform subscription access.
+                    </div>
+                  </td>
+                  <td className={styles.itemTd} style={{ textAlign: 'right' }}>
+                    ₹{basePrice.toLocaleString('en-IN')}.00
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div className={styles.summarySection}>
+              <div className={styles.summaryGrid}>
+                <span className={styles.summaryLbl}>Subtotal:</span>
+                <span className={styles.summaryVal}>₹{basePrice.toLocaleString('en-IN')}.00</span>
+                
+                <span className={styles.summaryLbl}>CGST (9%):</span>
+                <span className={styles.summaryVal}>₹{Math.round(gst / 2).toLocaleString('en-IN')}.00</span>
+                
+                <span className={styles.summaryLbl}>SGST (9%):</span>
+                <span className={styles.summaryVal}>₹{Math.round(gst / 2).toLocaleString('en-IN')}.00</span>
+                
+                <span className={styles.summaryTotalLbl}>Grand Total:</span>
+                <span className={styles.summaryTotalVal}>₹{Number(transaction.amount).toLocaleString('en-IN')}.00</span>
+              </div>
+            </div>
+
+            <div className={styles.invoiceFooter}>
+              <p style={{ margin: 0 }}>Thank you for partnering with Agaran AI Learning Portal.</p>
+              <p style={{ margin: '0.2rem 0 0', fontSize: '0.58rem' }}>This is a system generated e-invoice. No signature required.</p>
+            </div>
+          </div>
+        </div>
+        <div className={styles.invoiceModalFooter}>
+          <button className={styles.printBtn} onClick={handlePrint}>
+            <Printer size={14} />
+            Print / Save PDF
+          </button>
+          <button className={styles.primaryBtn} onClick={onClose}>
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+

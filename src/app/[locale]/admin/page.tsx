@@ -356,8 +356,8 @@ export default function SuperAdminPortal() {
                         No recent entries
                       </p>
                     )}
-                    {signups.map((signup) => (
-                      <div key={`${signup.name}-${signup.created_at}`} className={styles.signupRow}>
+                    {signups.map((signup, idx) => (
+                      <div key={`${signup.name}-${signup.created_at || 'no-date'}-${idx}`} className={styles.signupRow}>
                         <div className={styles.signupAvatar} style={{ background: getAvatarGradient(signup.name) }}>
                           {signup.name.charAt(0)}
                         </div>

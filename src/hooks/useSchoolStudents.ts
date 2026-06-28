@@ -73,11 +73,12 @@ export function useSchoolStudents() {
 
 export type CreateStudentInput = {
   full_name: string;
-  email: string;
-  mobile: string;
   grade_id?: string;
   section?: string;
   roll_number?: string;
+  parent_name?: string;
+  parent_email: string;
+  parent_phone: string;
 };
 
 export type CreateStudentResult = {
@@ -86,6 +87,9 @@ export type CreateStudentResult = {
   email: string;
   username: string;
   password: string;
+  parent_email: string;
+  parent_status: 'created' | 'linked';
+  parent_password?: string;
 };
 
 export function useCreateStudent() {
@@ -108,6 +112,7 @@ export function useCreateStudent() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: schoolAdminKeys.students(schoolId) });
       queryClient.invalidateQueries({ queryKey: schoolAdminKeys.dashboard(schoolId) });
+      queryClient.invalidateQueries({ queryKey: ['school-admin', 'parents', schoolId] });
     },
   });
 }
@@ -162,6 +167,7 @@ export function useDeleteStudent() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: schoolAdminKeys.students(schoolId) });
       queryClient.invalidateQueries({ queryKey: schoolAdminKeys.dashboard(schoolId) });
+      queryClient.invalidateQueries({ queryKey: ['school-admin', 'parents', schoolId] });
     },
   });
 }
@@ -188,6 +194,7 @@ export function useBulkDeleteStudents() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: schoolAdminKeys.students(schoolId) });
       queryClient.invalidateQueries({ queryKey: schoolAdminKeys.dashboard(schoolId) });
+      queryClient.invalidateQueries({ queryKey: ['school-admin', 'parents', schoolId] });
     },
   });
 }
