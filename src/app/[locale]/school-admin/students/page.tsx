@@ -25,6 +25,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { useSchoolStudents, useBulkDeleteStudents } from '@/hooks/useSchoolStudents';
+import { useAuth } from '@/context/AuthContext';
 import StudentDetailModal from '../_components/StudentDetailModal';
 import AddStudentModal from '../_components/AddStudentModal';
 import BulkUploadModal from '../_components/BulkUploadModal';
@@ -83,6 +84,7 @@ const ROW_ITEM = {
 };
 
 export default function StudentsPage() {
+  const { user } = useAuth();
   const { data: studentsRes, isLoading } = useSchoolStudents();
   const [searchQuery, setSearchQuery] = useState('');
   const [gradeFilter, setGradeFilter] = useState('');
@@ -102,11 +104,12 @@ export default function StudentsPage() {
   const [logSearch, setLogSearch] = useState('');
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const raw = localStorage.getItem('zhi_bulk_upload_history');
+    if (typeof window !== 'undefined' && user?.schoolId) {
+      const key = `zhi_bulk_upload_history_${user.schoolId}`;
+      const raw = localStorage.getItem(key);
       setHistoryLogs(raw ? JSON.parse(raw) : []);
     }
-  }, [activeView, showBulkModal]);
+  }, [activeView, showBulkModal, user]);
 
   interface LogTableRow {
     rowNum: number;
@@ -195,12 +198,14 @@ export default function StudentsPage() {
 
   const deleteLogRun = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!user?.schoolId) return;
     if (!confirm("Are you sure you want to delete this log from history?")) return;
-    const rawHistory = localStorage.getItem('zhi_bulk_upload_history');
+    const key = `zhi_bulk_upload_history_${user.schoolId}`;
+    const rawHistory = localStorage.getItem(key);
     if (rawHistory) {
       const historyList = JSON.parse(rawHistory);
       const filtered = historyList.filter((item: any) => item.id !== id);
-      localStorage.setItem('zhi_bulk_upload_history', JSON.stringify(filtered));
+      localStorage.setItem(key, JSON.stringify(filtered));
       setHistoryLogs(filtered);
       if (selectedLogRun?.id === id) {
         setSelectedLogRun(null);

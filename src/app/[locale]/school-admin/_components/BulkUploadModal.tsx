@@ -73,11 +73,11 @@ export default function BulkUploadModal({ open, onClose, onUploadComplete }: Pro
   }, [open]);
 
   useEffect(() => {
-    if (open && typeof window !== 'undefined') {
-      const raw = localStorage.getItem('zhi_bulk_upload_history');
+    if (open && typeof window !== 'undefined' && user?.schoolId) {
+      const raw = localStorage.getItem(`zhi_bulk_upload_history_${user.schoolId}`);
       setHistoryLogs(raw ? JSON.parse(raw) : []);
     }
-  }, [open]);
+  }, [open, user]);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
@@ -208,12 +208,14 @@ export default function BulkUploadModal({ open, onClose, onUploadComplete }: Pro
 
   const deleteHistoryRun = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!user?.schoolId) return;
     if (!confirm("Are you sure you want to delete this log from history?")) return;
-    const rawHistory = localStorage.getItem('zhi_bulk_upload_history');
+    const key = `zhi_bulk_upload_history_${user.schoolId}`;
+    const rawHistory = localStorage.getItem(key);
     if (rawHistory) {
       const historyList = JSON.parse(rawHistory);
       const filtered = historyList.filter((item: any) => item.id !== id);
-      localStorage.setItem('zhi_bulk_upload_history', JSON.stringify(filtered));
+      localStorage.setItem(key, JSON.stringify(filtered));
       setHistoryLogs(filtered);
       if (selectedHistoryRun?.id === id) {
         setSelectedHistoryRun(null);
@@ -364,10 +366,11 @@ export default function BulkUploadModal({ open, onClose, onUploadComplete }: Pro
             credentials: payload.data.credentials || [],
             students: studentsList
           };
-          const rawHistory = localStorage.getItem('zhi_bulk_upload_history');
+          const key = `zhi_bulk_upload_history_${user.schoolId}`;
+          const rawHistory = localStorage.getItem(key);
           const historyList = rawHistory ? JSON.parse(rawHistory) : [];
           historyList.unshift(newHistoryItem);
-          localStorage.setItem('zhi_bulk_upload_history', JSON.stringify(historyList));
+          localStorage.setItem(key, JSON.stringify(historyList));
           setHistoryLogs(historyList);
 
           if (onUploadComplete) {

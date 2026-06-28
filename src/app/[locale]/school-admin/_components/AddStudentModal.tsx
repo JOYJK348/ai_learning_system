@@ -285,85 +285,9 @@ export default function AddStudentModal({ open, onClose }: Props) {
                   <CheckCircle2 size={40} color="#22c55e" />
                 </div>
                 <p className={styles.successText}>Student and Parent profiles linked successfully!</p>
-                <p className={styles.successSub} style={{ marginBottom: '1rem' }}>
-                  An onboarding email has been sent to <strong>{resultData?.parent_email}</strong>.
+                <p className={styles.successSub} style={{ marginBottom: '2rem' }}>
+                  All access credentials and onboarding instructions have been securely sent to <strong>{resultData?.parent_email}</strong>.
                 </p>
-
-                <div style={{ fontSize: '0.74rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#16a085', marginBottom: '0.4rem' }}>
-                  Student Learning Space
-                </div>
-                <div className={styles.credBox} style={{ marginBottom: '1.25rem' }}>
-                  <div className={styles.credRow}>
-                    <Mail size={16} />
-                    <div className={styles.credContent}>
-                      <p className={styles.credLabel}>Student ID (Username)</p>
-                      <p className={styles.credValue}>{resultData?.username}</p>
-                    </div>
-                    <button
-                      type="button"
-                      className={styles.copyBtn}
-                      onClick={() => handleCopy('student_user', resultData?.username || '')}
-                      aria-label="Copy student username"
-                    >
-                      {copied === 'student_user' ? <CheckCircle2 size={16} color="#22c55e" /> : <Copy size={16} />}
-                    </button>
-                  </div>
-                  <div className={styles.credRow}>
-                    <Eye size={16} />
-                    <div className={styles.credContent}>
-                      <p className={styles.credLabel}>Student Password</p>
-                      <p className={styles.credValue}>{resultData?.password}</p>
-                    </div>
-                    <button
-                      type="button"
-                      className={styles.copyBtn}
-                      onClick={() => handleCopy('student_pass', resultData?.password || '')}
-                      aria-label="Copy student password"
-                    >
-                      {copied === 'student_pass' ? <CheckCircle2 size={16} color="#22c55e" /> : <Copy size={16} />}
-                    </button>
-                  </div>
-                </div>
-
-                <div style={{ fontSize: '0.74rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#16a085', marginBottom: '0.4rem' }}>
-                  Parent Control Panel
-                </div>
-                <div className={styles.credBox} style={{ marginBottom: '1.5rem' }}>
-                  <div className={styles.credRow}>
-                    <Mail size={16} />
-                    <div className={styles.credContent}>
-                      <p className={styles.credLabel}>Parent Username</p>
-                      <p className={styles.credValue}>{resultData?.parent_email}</p>
-                    </div>
-                    <button
-                      type="button"
-                      className={styles.copyBtn}
-                      onClick={() => handleCopy('parent_user', resultData?.parent_email || '')}
-                      aria-label="Copy parent username"
-                    >
-                      {copied === 'parent_user' ? <CheckCircle2 size={16} color="#22c55e" /> : <Copy size={16} />}
-                    </button>
-                  </div>
-                  <div className={styles.credRow}>
-                    <Eye size={16} />
-                    <div className={styles.credContent}>
-                      <p className={styles.credLabel}>Parent Password</p>
-                      <p className={styles.credValue}>
-                        {resultData?.parent_status === 'linked' ? '(Linked to existing account)' : resultData?.parent_password}
-                      </p>
-                    </div>
-                    {resultData?.parent_status !== 'linked' && (
-                      <button
-                        type="button"
-                        className={styles.copyBtn}
-                        onClick={() => handleCopy('parent_pass', resultData?.parent_password || '')}
-                        aria-label="Copy parent password"
-                      >
-                        {copied === 'parent_pass' ? <CheckCircle2 size={16} color="#22c55e" /> : <Copy size={16} />}
-                      </button>
-                    )}
-                  </div>
-                </div>
 
                 <button type="button" className={styles.submitBtn} onClick={onClose}>
                   Done
