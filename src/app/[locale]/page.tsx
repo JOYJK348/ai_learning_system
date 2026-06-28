@@ -188,6 +188,7 @@ export default function HomePage() {
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.95 }}
+                          suppressHydrationWarning
                           className="w-20 h-20 rounded-full bg-white/5 backdrop-blur-3xl flex items-center justify-center border border-white/20 text-white shadow-2xl group"
                         >
                           <div className="w-14 h-14 rounded-full bg-white/10 flex items-center justify-center border border-white/30 transition-colors group-hover:bg-white/20">
