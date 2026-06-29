@@ -1407,15 +1407,8 @@ export default function QuizArena() {
                                return `Win ${target - todayDone} more question${target - todayDone !== 1 ? 's' : ''} today to earn a Magical Star! 🌟🌸`;
                              })()}
                           </p>
-                          
-                          <div className="flex justify-center md:justify-start w-full font-sans">
-                            <button 
-                              onClick={startDailyThree}
-                              className="bg-indigo-600 text-white px-10 py-5 rounded-[2rem] font-black text-lg shadow-2xl hover:bg-indigo-700 active:scale-95 transition-all flex items-center gap-3 group/btn"
-                            >
-                               ENTER ARENA <Play className="group-hover/btn:translate-x-1 transition-transform" />
-                            </button>
-                          </div>
+
+
                        </div>
 
                        <div className="relative w-64 h-64 sm:w-80 sm:h-80 select-none">
