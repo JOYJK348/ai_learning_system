@@ -1565,25 +1565,22 @@ export default function QuizArena() {
 
                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     {[
-                      { id: 'sound', title: 'Sound Match', emoji: '🔊', color: 'bg-blue-500' },
-                      { id: 'truefalse', title: 'True or False', emoji: '🤪', color: 'bg-emerald-500' },
-                      { id: 'sequence', title: 'Sequence', emoji: '🧩', color: 'bg-purple-500' },
-                      { id: 'memory', title: 'Memory', emoji: '🧠', color: 'bg-rose-500' },
+                      { id: 'sound',     title: 'Bubble Pop 🫧',       emoji: '🫧', color: 'bg-purple-500',  desc: 'Pop the correct bubble!' },
+                      { id: 'truefalse', title: 'True or False ✅',    emoji: '✅', color: 'bg-violet-500',  desc: 'Is the statement right?' },
+                      { id: 'sequence',  title: 'Odd One Out 🔍',    emoji: '🔍', color: 'bg-amber-500',   desc: 'Find the one that differs!' },
+                      { id: 'memory',    title: 'Memory Match 🧠',    emoji: '🧠', color: 'bg-rose-500',    desc: 'Find all matching pairs!' },
                     ].map((game) => (
                       <button key={game.id}
-                        
-                        
                         onClick={() => setActiveGame(game.id)}
-                        className="bg-white/95 rounded-[3rem] p-8 text-left border-2 border-white/60 shadow-2xl flex items-center gap-8 transition-all group hover:bg-white w-full"
+                        className="bg-white/95 rounded-[3rem] p-8 text-left border-2 border-white/60 shadow-2xl flex items-center gap-6 transition-all group hover:bg-white hover:-translate-y-1 hover:shadow-3xl w-full active:scale-95"
                       >
                          <div className={`w-20 h-20 rounded-[1.8rem] ${game.color} flex items-center justify-center text-4xl shadow-xl transform group-hover:scale-110 group-hover:rotate-6 transition-all`}>
                            {game.emoji}
                          </div>
-                         <div>
-                           <h3 className="text-2xl font-black text-indigo-950 tracking-tight leading-none mb-2 font-sans">{game.title}</h3>
-                           <span className="text-xs font-black text-indigo-900/40 uppercase tracking-[0.2em] font-sans">Start Training</span>
+                         <div className="flex-1 min-w-0">
+                           <h3 className="text-xl font-black text-indigo-950 tracking-tight leading-none mb-1 font-sans">{game.title}</h3>
+                           <span className="text-xs font-black text-indigo-900/40 uppercase tracking-[0.2em] font-sans">{game.desc}</span>
                          </div>
-                         <ChevronRight className="ml-auto text-indigo-900/20 group-hover:text-indigo-900 group-hover:translate-x-2 transition-all" size={32} />
                       </button>
                     ))}
                  </div>
