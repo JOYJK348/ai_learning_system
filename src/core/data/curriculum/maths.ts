@@ -3,19 +3,19 @@ import { type TutorialStep } from './english';
 export function getChapterVisuals(name: string) {
   const lower = name.toLowerCase();
   if (lower.includes('pre-math') || lower.includes('concepts'))
-    return { emoji: '🧠', mascot: '🤔', color: 'from-purple-400 to-pink-500', sound: 'Pre-Math Concepts!' };
+    return { emoji: '🧠', mascot: '🤔', color: 'from-purple-400 to-pink-500', sound: 'Pre-Math Concepts!', image: '/assets/subjects/maths_pre_math_concepts-removebg-preview.png' };
   if (lower.includes('shape') || lower.includes('spatial'))
-    return { emoji: '⭕', mascot: '⬛', color: 'from-blue-400 to-cyan-500', sound: 'Shapes & Space!' };
+    return { emoji: '⭕', mascot: '⬛', color: 'from-blue-400 to-cyan-500', sound: 'Shapes & Space!', image: '/assets/subjects/maths_shapes_spatial_awareness-removebg-preview.png' };
   if (lower.includes('numbers 1-5') || lower.includes('1-5'))
-    return { emoji: '🔢', mascot: '✋', color: 'from-orange-400 to-amber-500', sound: 'Numbers 1 to 5!' };
+    return { emoji: '🔢', mascot: '✋', color: 'from-orange-400 to-amber-500', sound: 'Numbers 1 to 5!', image: '/assets/subjects/maths_numbers_1_5-removebg-preview.png' };
   if (lower.includes('numbers 6-10') || lower.includes('6-10') || lower.includes('counting'))
-    return { emoji: '🔟', mascot: '🧮', color: 'from-emerald-400 to-teal-500', sound: 'Numbers 6 to 10!' };
+    return { emoji: '🔟', mascot: '🧮', color: 'from-emerald-400 to-teal-500', sound: 'Numbers 6 to 10!', image: '/assets/subjects/maths_numbers_6_10-removebg-preview.png' };
   if (lower.includes('position') || lower.includes('word'))
-    return { emoji: '📍', mascot: '📌', color: 'from-pink-400 to-rose-500', sound: 'Position Words!' };
+    return { emoji: '📍', mascot: '📌', color: 'from-pink-400 to-rose-500', sound: 'Position Words!', image: '/assets/subjects/maths_position_words-removebg-preview.png' };
   if (lower.includes('sort') || lower.includes('comparison'))
-    return { emoji: '🔀', mascot: '📊', color: 'from-indigo-400 to-violet-500', sound: 'Sorting & Comparison!' };
+    return { emoji: '🔀', mascot: '📊', color: 'from-indigo-400 to-violet-500', sound: 'Sorting & Comparison!', image: '/assets/subjects/maths_sorting_comparison-removebg-preview.png' };
   if (lower.includes('pattern'))
-    return { emoji: '🔁', mascot: '🎨', color: 'from-yellow-400 to-orange-500', sound: 'Patterns!' };
+    return { emoji: '🔁', mascot: '🎨', color: 'from-yellow-400 to-orange-500', sound: 'Patterns!', image: '/assets/subjects/maths_patterns-removebg-preview.png' };
   return { emoji: '🔢', mascot: '🧮', color: 'from-orange-400 to-amber-500', sound: `${name}!` };
 }
 

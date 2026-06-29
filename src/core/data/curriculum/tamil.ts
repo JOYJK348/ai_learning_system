@@ -3,16 +3,20 @@ import { type TutorialStep } from './english';
 export function getChapterVisuals(name: string) {
   const lower = name.toLowerCase();
   if (lower.includes('முன் எழுத்து') || lower.includes('எழுத்து பயிற்சிகள்'))
-    return { emoji: '✍️', mascot: '🖍️', color: 'from-amber-400 to-orange-500', sound: 'முன் எழுத்து பயிற்சிகள்!' };
-  if (lower.includes('உயிர் எழுத்துக்கள்'))
-    return { emoji: '🍎', mascot: 'அ', color: 'from-red-400 to-rose-500', sound: 'உயிர் எழுத்துக்கள்!' };
-  if (lower.includes('மெய் எழுத்துக்கள்'))
-    return { emoji: '⭐️', mascot: 'க்', color: 'from-blue-400 to-indigo-500', sound: 'மெய் எழுத்துக்கள்!' };
+    return { emoji: '✍️', mascot: '🖍️', color: 'from-amber-400 to-orange-500', sound: 'முன் எழுத்து பயிற்சிகள்!', image: '/assets/subjects/tamil_writing_strokes-removebg-preview.png' };
+  if (lower.includes('உயிர் எழுத்துக்கள் அ-ஊ') || lower.includes('அ-ஊ'))
+    return { emoji: '🍎', mascot: 'அ', color: 'from-red-400 to-rose-500', sound: 'உயிர் எழுத்துக்கள் அ முதல் ஊ வரை!', image: '/assets/subjects/tamil_vowels_1-removebg-preview.png' };
+  if (lower.includes('உயிர் எழுத்துக்கள் எ-ஃ') || lower.includes('எ-ஃ') || lower.includes('உயிர் எழுத்துக்கள்'))
+    return { emoji: '🍇', mascot: 'எ', color: 'from-red-400 to-rose-500', sound: 'உயிர் எழுத்துக்கள் எ முதல் ஃ வரை!', image: '/assets/subjects/tamil_vowels_2-removebg-preview.png' };
+  if (lower.includes('மெய் எழுத்துக்கள் - வரிசை 1') || lower.includes('வரிசை 1'))
+    return { emoji: '⭐️', mascot: 'க்', color: 'from-blue-400 to-indigo-500', sound: 'மெய் எழுத்துக்கள் வரிசை ஒன்று!', image: '/assets/subjects/tamil_consonants_1-removebg-preview.png' };
+  if (lower.includes('மெய் எழுத்துக்கள் - வரிசை 2') || lower.includes('வரிசை 2') || lower.includes('மெய் எழுத்துக்கள்'))
+    return { emoji: '🌟', mascot: 'ங்', color: 'from-blue-400 to-indigo-500', sound: 'மெய் எழுத்துக்கள் வரிசை இரண்டு!', image: '/assets/subjects/tamil_consonants_2-removebg-preview.png' };
   if (lower.includes('எளிய சொற்கள்'))
-    return { emoji: '🗣️', mascot: 'சொல்', color: 'from-emerald-400 to-teal-500', sound: 'எளிய சொற்கள்!' };
+    return { emoji: '🗣️', mascot: 'சொல்', color: 'from-emerald-400 to-teal-500', sound: 'எளிய சொற்கள்!', image: '/assets/subjects/tamil_simple_words-removebg-preview.png' };
   if (lower.includes('பாடல்கள்') || lower.includes('கதைகள்'))
-    return { emoji: '🎵', mascot: '🎶', color: 'from-pink-400 to-rose-500', sound: 'பாடல்கள் மற்றும் கதைகள்!' };
-  return { emoji: '📚', mascot: '📖', color: 'from-indigo-400 to-purple-500', sound: `${name}!` };
+    return { emoji: '🎵', mascot: '🎶', color: 'from-pink-400 to-rose-500', sound: 'பாடல்கள் மற்றும் கதைகள்!', image: '/assets/subjects/tamil_songs_stories-removebg-preview.png' };
+  return { emoji: '📚', mascot: '📖', color: 'from-indigo-400 to-purple-500', sound: `${name}!`, image: '/assets/subjects/tamil_writing_strokes-removebg-preview.png' };
 }
 
 export function getLessonVisuals(title: string) {

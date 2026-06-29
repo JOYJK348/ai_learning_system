@@ -2,19 +2,27 @@ import { type TutorialStep } from './english';
 
 export function getChapterVisuals(name: string) {
   const lower = name.toLowerCase();
-  if (lower.includes('myself'))
-    return { emoji: '👧', mascot: '🧍', color: 'from-sky-400 to-blue-500', sound: 'All About Me!' };
+  if (lower.includes('myself') || lower.includes('my world'))
+    return { emoji: '👧', mascot: '🧍', color: 'from-sky-400 to-blue-500', sound: 'All About Me!', image: '/assets/subjects/evs-removebg-preview.png' };
   if (lower.includes('family') || lower.includes('home'))
-    return { emoji: '👨‍👩‍👧', mascot: '🏠', color: 'from-pink-400 to-rose-500', sound: 'Family & Home!' };
+    return { emoji: '👨‍👩‍👧', mascot: '🏠', color: 'from-pink-400 to-rose-500', sound: 'Family & Home!', image: '/assets/subjects/evs-removebg-preview.png' };
+  if (lower.includes('color'))
+    return { emoji: '🎨', mascot: '🌈', color: 'from-purple-400 to-fuchsia-500', sound: 'Colors Around Us!', image: '/assets/subjects/maths_shapes_spatial_awareness-removebg-preview.png' };
   if (lower.includes('animal'))
-    return { emoji: '🐶', mascot: '🐾', color: 'from-amber-400 to-orange-500', sound: 'Animals Around Us!' };
+    return { emoji: '🐶', mascot: '🐾', color: 'from-amber-400 to-orange-500', sound: 'Animals Around Us!', image: '/assets/subjects/gk-removebg-preview.png' };
   if (lower.includes('plant') || lower.includes('nature'))
-    return { emoji: '🌱', mascot: '🌳', color: 'from-green-400 to-emerald-500', sound: 'Plants & Nature!' };
+    return { emoji: '🌱', mascot: '🌳', color: 'from-green-400 to-emerald-500', sound: 'Plants & Nature!', image: '/assets/subjects/evs-removebg-preview.png' };
+  if (lower.includes('around the world'))
+    return { emoji: '🌍', mascot: '✈️', color: 'from-blue-400 to-indigo-500', sound: 'Around The World!', image: '/assets/subjects/evs-removebg-preview.png' };
   if (lower.includes('transport'))
-    return { emoji: '🚗', mascot: '🚌', color: 'from-violet-400 to-purple-500', sound: 'Transport!' };
+    return { emoji: '🚗', mascot: '🚌', color: 'from-violet-400 to-purple-500', sound: 'Transport!', image: '/assets/subjects/evs-removebg-preview.png' };
   if (lower.includes('habit') || lower.includes('food'))
-    return { emoji: '🧼', mascot: '🍎', color: 'from-teal-400 to-cyan-500', sound: 'Good Habits!' };
-  return { emoji: '🌍', mascot: '🌳', color: 'from-emerald-400 to-teal-500', sound: `Let's Explore!` };
+    return { emoji: '🧼', mascot: '🍎', color: 'from-teal-400 to-cyan-500', sound: 'Good Habits!', image: '/assets/subjects/evs-removebg-preview.png' };
+  if (lower.includes('safety') || lower.includes('rule'))
+    return { emoji: '🚦', mascot: '🚸', color: 'from-rose-400 to-red-500', sound: 'Safety and Rules!', image: '/assets/subjects/english_checkpoint-removebg-preview.png' };
+  if (lower.includes('fun') || lower.includes('knowledge'))
+    return { emoji: '✨', mascot: '⭐', color: 'from-yellow-400 to-amber-500', sound: 'Fun Knowledge!', image: '/assets/subjects/english_checkpoint-removebg-preview.png' };
+  return { emoji: '🌍', mascot: '🌳', color: 'from-emerald-400 to-teal-500', sound: `Let's Explore!`, image: '/assets/subjects/evs-removebg-preview.png' };
 }
 
 export function getLessonVisuals(title: string) {

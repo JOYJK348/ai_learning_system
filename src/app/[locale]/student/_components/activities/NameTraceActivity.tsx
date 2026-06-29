@@ -16,39 +16,39 @@ const TRACE_TOLERANCE = 24;
 const MIN_TRACE_RATIO = 0.5;
 
 const LETTER_SEGMENTS: Record<string, [number, number, number, number][]> = {
-  'A': [[0.2,0.9,0.5,0.1],[0.8,0.9,0.5,0.1],[0.35,0.6,0.65,0.6]],
-  'B': [[0.25,0.1,0.25,0.9],[0.25,0.1,0.65,0.1],[0.65,0.1,0.72,0.28],[0.72,0.28,0.65,0.48],[0.65,0.48,0.25,0.5],[0.25,0.5,0.65,0.52],[0.65,0.52,0.72,0.72],[0.72,0.72,0.65,0.9],[0.65,0.9,0.25,0.9]],
-  'C': [[0.75,0.15,0.45,0.07],[0.45,0.07,0.2,0.28],[0.2,0.28,0.2,0.72],[0.2,0.72,0.45,0.93],[0.45,0.93,0.75,0.85]],
-  'D': [[0.25,0.1,0.25,0.9],[0.25,0.1,0.55,0.1],[0.55,0.1,0.75,0.28],[0.75,0.28,0.8,0.5],[0.8,0.5,0.75,0.72],[0.75,0.72,0.55,0.9],[0.55,0.9,0.25,0.9]],
-  'E': [[0.75,0.1,0.2,0.1],[0.2,0.1,0.2,0.9],[0.2,0.9,0.75,0.9],[0.2,0.5,0.65,0.5]],
-  'F': [[0.75,0.1,0.2,0.1],[0.2,0.1,0.2,0.9],[0.2,0.5,0.65,0.5]],
-  'G': [[0.75,0.15,0.45,0.07],[0.45,0.07,0.2,0.28],[0.2,0.28,0.2,0.72],[0.2,0.72,0.45,0.93],[0.45,0.93,0.75,0.85],[0.75,0.85,0.75,0.5],[0.75,0.5,0.55,0.5]],
-  'H': [[0.2,0.1,0.2,0.9],[0.8,0.1,0.8,0.9],[0.2,0.5,0.8,0.5]],
-  'I': [[0.5,0.1,0.5,0.9]],
-  'J': [[0.65,0.1,0.65,0.72],[0.65,0.72,0.5,0.9],[0.5,0.9,0.3,0.85]],
-  'K': [[0.25,0.1,0.25,0.9],[0.25,0.45,0.75,0.12],[0.25,0.55,0.78,0.88]],
-  'L': [[0.2,0.1,0.2,0.9],[0.2,0.9,0.8,0.9]],
-  'M': [[0.15,0.9,0.15,0.1],[0.15,0.1,0.5,0.5],[0.5,0.5,0.85,0.1],[0.85,0.1,0.85,0.9]],
-  'N': [[0.2,0.9,0.2,0.1],[0.2,0.1,0.8,0.9],[0.8,0.9,0.8,0.1]],
-  'O': [[0.25,0.1,0.75,0.1],[0.75,0.1,0.85,0.3],[0.85,0.3,0.85,0.7],[0.85,0.7,0.75,0.9],[0.75,0.9,0.25,0.9],[0.25,0.9,0.15,0.7],[0.15,0.7,0.15,0.3],[0.15,0.3,0.25,0.1]],
-  'P': [[0.3,0.1,0.3,0.9],[0.3,0.1,0.68,0.1],[0.68,0.1,0.78,0.25],[0.78,0.25,0.68,0.45],[0.68,0.45,0.3,0.5]],
-  'Q': [[0.25,0.1,0.75,0.1],[0.75,0.1,0.85,0.3],[0.85,0.3,0.85,0.7],[0.85,0.7,0.75,0.9],[0.75,0.9,0.25,0.9],[0.25,0.9,0.15,0.7],[0.15,0.7,0.15,0.3],[0.15,0.3,0.25,0.1],[0.6,0.65,0.85,0.95]],
-  'R': [[0.25,0.1,0.25,0.9],[0.25,0.1,0.68,0.1],[0.68,0.1,0.78,0.25],[0.78,0.25,0.68,0.45],[0.68,0.45,0.25,0.5],[0.45,0.5,0.78,0.9]],
-  'S': [[0.78,0.12,0.5,0.07],[0.5,0.07,0.22,0.2],[0.22,0.2,0.28,0.4],[0.28,0.4,0.72,0.5],[0.72,0.5,0.78,0.7],[0.78,0.7,0.62,0.93],[0.62,0.93,0.25,0.85]],
-  'T': [[0.15,0.1,0.85,0.1],[0.5,0.1,0.5,0.9]],
-  'U': [[0.2,0.1,0.2,0.6],[0.2,0.6,0.3,0.82],[0.3,0.82,0.7,0.82],[0.7,0.82,0.8,0.6],[0.8,0.6,0.8,0.1]],
-  'V': [[0.12,0.1,0.5,0.85],[0.5,0.85,0.88,0.1]],
-  'W': [[0.08,0.1,0.22,0.85],[0.22,0.85,0.5,0.28],[0.5,0.28,0.78,0.85],[0.78,0.85,0.92,0.1]],
-  'X': [[0.12,0.1,0.88,0.9],[0.88,0.1,0.12,0.9]],
-  'Y': [[0.12,0.1,0.5,0.5],[0.88,0.1,0.5,0.5],[0.5,0.5,0.5,0.9]],
-  'Z': [[0.1,0.1,0.9,0.1],[0.9,0.1,0.1,0.9],[0.1,0.9,0.9,0.9]],
+  'A': [[0.2, 0.9, 0.5, 0.1], [0.8, 0.9, 0.5, 0.1], [0.35, 0.6, 0.65, 0.6]],
+  'B': [[0.25, 0.1, 0.25, 0.9], [0.25, 0.1, 0.65, 0.1], [0.65, 0.1, 0.7, 0.3], [0.7, 0.3, 0.65, 0.48], [0.65, 0.48, 0.25, 0.5], [0.25, 0.5, 0.65, 0.52], [0.65, 0.52, 0.7, 0.7], [0.7, 0.7, 0.65, 0.9], [0.65, 0.9, 0.25, 0.9]],
+  'C': [[0.7, 0.15, 0.4, 0.1], [0.4, 0.1, 0.25, 0.3], [0.25, 0.3, 0.25, 0.7], [0.25, 0.7, 0.4, 0.9], [0.4, 0.9, 0.7, 0.85]],
+  'D': [[0.25, 0.1, 0.25, 0.9], [0.25, 0.1, 0.6, 0.1], [0.6, 0.1, 0.75, 0.3], [0.75, 0.3, 0.75, 0.7], [0.75, 0.7, 0.6, 0.9], [0.6, 0.9, 0.25, 0.9]],
+  'E': [[0.7, 0.1, 0.2, 0.1], [0.2, 0.1, 0.2, 0.9], [0.2, 0.9, 0.7, 0.9], [0.2, 0.5, 0.6, 0.5]],
+  'F': [[0.7, 0.1, 0.2, 0.1], [0.2, 0.1, 0.2, 0.9], [0.2, 0.5, 0.6, 0.5]],
+  'G': [[0.7, 0.15, 0.4, 0.1], [0.4, 0.1, 0.25, 0.3], [0.25, 0.3, 0.25, 0.7], [0.25, 0.7, 0.4, 0.9], [0.4, 0.9, 0.7, 0.85], [0.7, 0.85, 0.7, 0.5], [0.7, 0.5, 0.55, 0.5]],
+  'H': [[0.2, 0.1, 0.2, 0.9], [0.8, 0.1, 0.8, 0.9], [0.2, 0.5, 0.8, 0.5]],
+  'I': [[0.5, 0.1, 0.5, 0.9]],
+  'J': [[0.65, 0.1, 0.65, 0.75], [0.65, 0.75, 0.55, 0.88], [0.55, 0.88, 0.35, 0.85]],
+  'K': [[0.25, 0.1, 0.25, 0.9], [0.25, 0.5, 0.75, 0.15], [0.25, 0.5, 0.75, 0.85]],
+  'L': [[0.2, 0.1, 0.2, 0.9], [0.2, 0.9, 0.8, 0.9]],
+  'M': [[0.15, 0.9, 0.15, 0.1], [0.15, 0.1, 0.5, 0.5], [0.5, 0.5, 0.85, 0.1], [0.85, 0.1, 0.85, 0.9]],
+  'N': [[0.2, 0.1, 0.2, 0.9], [0.2, 0.1, 0.8, 0.9], [0.8, 0.9, 0.8, 0.1]],
+  'O': [[0.25, 0.1, 0.8, 0.1], [0.8, 0.1, 0.88, 0.3], [0.88, 0.3, 0.88, 0.7], [0.88, 0.7, 0.8, 0.9], [0.8, 0.9, 0.25, 0.9], [0.25, 0.9, 0.17, 0.7], [0.17, 0.7, 0.17, 0.3], [0.17, 0.3, 0.25, 0.1]],
+  'P': [[0.3, 0.1, 0.3, 0.9], [0.3, 0.1, 0.7, 0.1], [0.7, 0.1, 0.8, 0.25], [0.8, 0.25, 0.7, 0.45], [0.7, 0.45, 0.3, 0.5]],
+  'Q': [[0.25, 0.1, 0.8, 0.1], [0.8, 0.1, 0.88, 0.3], [0.88, 0.3, 0.88, 0.7], [0.88, 0.7, 0.8, 0.9], [0.8, 0.9, 0.25, 0.9], [0.25, 0.9, 0.17, 0.7], [0.17, 0.7, 0.17, 0.3], [0.17, 0.3, 0.25, 0.1], [0.55, 0.6, 0.85, 0.95]],
+  'R': [[0.25, 0.1, 0.25, 0.9], [0.25, 0.1, 0.7, 0.1], [0.7, 0.1, 0.8, 0.25], [0.8, 0.25, 0.7, 0.45], [0.7, 0.45, 0.25, 0.5], [0.45, 0.5, 0.8, 0.9]],
+  'S': [[0.78, 0.15, 0.52, 0.1], [0.52, 0.1, 0.28, 0.2], [0.28, 0.2, 0.32, 0.4], [0.32, 0.4, 0.72, 0.5], [0.72, 0.5, 0.78, 0.7], [0.78, 0.7, 0.62, 0.9], [0.62, 0.9, 0.32, 0.85]],
+  'T': [[0.15, 0.1, 0.85, 0.1], [0.5, 0.1, 0.5, 0.9]],
+  'U': [[0.2, 0.1, 0.2, 0.65], [0.2, 0.65, 0.35, 0.85], [0.35, 0.85, 0.65, 0.85], [0.65, 0.85, 0.8, 0.65], [0.8, 0.65, 0.8, 0.1]],
+  'V': [[0.15, 0.1, 0.5, 0.85], [0.5, 0.85, 0.85, 0.1]],
+  'W': [[0.1, 0.1, 0.25, 0.85], [0.25, 0.85, 0.5, 0.3], [0.5, 0.3, 0.75, 0.85], [0.75, 0.85, 0.9, 0.1]],
+  'X': [[0.15, 0.1, 0.85, 0.9], [0.85, 0.1, 0.15, 0.9]],
+  'Y': [[0.15, 0.1, 0.5, 0.5], [0.85, 0.1, 0.5, 0.5], [0.5, 0.5, 0.5, 0.9]],
+  'Z': [[0.1, 0.1, 0.9, 0.1], [0.9, 0.1, 0.1, 0.9], [0.1, 0.9, 0.9, 0.9]],
 };
 
 const LETTER_EMOJIS: Record<string, string> = {
-  'A': '🍎','B': '🏀','C': '🐱','D': '🐕','E': '🐘','F': '🐟','G': '🍇','H': '🎩',
-  'I': '🍦','J': '🏺','K': '🪁','L': '🦁','M': '🥭','N': '🪹','O': '🦉','P': '🐧',
-  'Q': '👑','R': '🐰','S': '☀️','T': '🐯','U': '☂️','V': '🚐','W': '⌚','X': '🎹',
-  'Y': '🦬','Z': '🦓',
+  'A': '🍎', 'B': '🏀', 'C': '🐱', 'D': '🐕', 'E': '🐘', 'F': '🐟', 'G': '🍇', 'H': '🎩',
+  'I': '🍦', 'J': '🏺', 'K': '🪁', 'L': '🦁', 'M': '🥭', 'N': '🪹', 'O': '🦉', 'P': '🐧',
+  'Q': '👑', 'R': '🐰', 'S': '☀️', 'T': '🐯', 'U': '☂️', 'V': '🚐', 'W': '⌚', 'X': '🎹',
+  'Y': '🦬', 'Z': '🦓',
 };
 
 function generateDottedPath(segments: [number, number, number, number][], w: number, h: number) {
@@ -76,7 +76,7 @@ function generateDottedPath(segments: [number, number, number, number][], w: num
 }
 
 export default function NameTraceActivity({ config, onComplete, studentName }: Props) {
-  const name = ((config.name || studentName || 'Explorer').toUpperCase()).slice(0, 10);
+  const name = ((config.name || studentName || 'Explorer').toUpperCase()).replace(/\s+/g, '').slice(0, 10);
   const letters = name.split('');
 
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -121,13 +121,12 @@ export default function NameTraceActivity({ config, onComplete, studentName }: P
                 <motion.div
                   key={idx}
                   layout
-                  className={`relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-sm sm:text-base font-black transition-all duration-300 ${
-                    isDone
+                  className={`relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-sm sm:text-base font-black transition-all duration-300 ${isDone
                       ? 'bg-emerald-400 text-white shadow-md scale-100'
                       : isCurrent
-                      ? 'bg-amber-400 text-white shadow-lg scale-110 ring-2 ring-amber-300'
-                      : 'bg-amber-100/60 text-amber-400'
-                  }`}
+                        ? 'bg-amber-400 text-white shadow-lg scale-110 ring-2 ring-amber-300'
+                        : 'bg-amber-100/60 text-amber-400'
+                    }`}
                 >
                   {isDone ? <CheckCircle size={18} className="text-white" /> : letter}
                 </motion.div>
@@ -187,22 +186,20 @@ export default function NameTraceActivity({ config, onComplete, studentName }: P
         <button
           onClick={() => { if (currentIdx > 0) setCurrentIdx(currentIdx - 1); }}
           disabled={currentIdx === 0}
-          className={`p-3 rounded-2xl transition-all ${
-            currentIdx === 0
+          className={`p-3 rounded-2xl transition-all ${currentIdx === 0
               ? 'bg-slate-100 text-slate-300 cursor-not-allowed'
               : 'bg-white text-amber-700 shadow-md hover:shadow-lg hover:bg-amber-50'
-          }`}
+            }`}
         >
           <ChevronLeft size={20} />
         </button>
         <button
           onClick={() => { if (currentIdx < letters.length - 1) setCurrentIdx(currentIdx + 1); }}
           disabled={currentIdx >= letters.length - 1}
-          className={`p-3 rounded-2xl transition-all ${
-            currentIdx >= letters.length - 1
+          className={`p-3 rounded-2xl transition-all ${currentIdx >= letters.length - 1
               ? 'bg-slate-100 text-slate-300 cursor-not-allowed'
               : 'bg-white text-amber-700 shadow-md hover:shadow-lg hover:bg-amber-50'
-          }`}
+            }`}
         >
           <ChevronRight size={20} />
         </button>
@@ -460,8 +457,6 @@ function LetterTraceCanvas({
         >
           <line x1="0" y1={dimensions.h * 0.65} x2={dimensions.w} y2={dimensions.h * 0.65}
             stroke="#E8D5B7" strokeWidth="2" strokeDasharray="8 4" />
-          <line x1="0" y1={dimensions.h * 0.8} x2={dimensions.w} y2={dimensions.h * 0.8}
-            stroke="#FFD7D7" strokeWidth="2" strokeDasharray="8 4" />
           <line x1="0" y1={dimensions.h * 0.35} x2={dimensions.w} y2={dimensions.h * 0.35}
             stroke="#E8D5B7" strokeWidth="1" strokeDasharray="4 6" opacity="0.5" />
         </svg>
@@ -471,34 +466,43 @@ function LetterTraceCanvas({
           height={dimensions.h}
           className="absolute inset-0 z-[1] pointer-events-none"
         >
+          {/* Beautiful background alphabet placeholder for proper visual guidance */}
+          <text
+            x={dimensions.w / 2}
+            y={dimensions.h * 0.52}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            className="fill-indigo-950/10 font-black select-none"
+            style={{ fontSize: Math.round(dimensions.h * 0.72), fontFamily: 'Outfit, Inter, sans-serif' }}
+          >
+            {letter}
+          </text>
+
           {hasSegments ? (
-            dottedPath.map((p, i) => (
-              <circle
-                key={i}
-                cx={p.x} cy={p.y} r={4}
-                fill={i === 0 ? '#22C55E' : '#A78BFA'}
-                opacity={i === 0 ? 1 : 0.4}
-              />
-            ))
-          ) : (
-            <text
-              x={dimensions.w / 2} y={dimensions.h / 2}
-              textAnchor="middle" dominantBaseline="central"
-              className="fill-amber-400/60" fontSize="72" fontWeight="900" opacity="0.25"
-            >
-              {letter}
-            </text>
-          )}
+            <>
+              {/* Draw clean guide dots along the path, matching the standard caps letter trace format */}
+              {dottedPath.map((p, i) => (
+                <circle
+                  key={i}
+                  cx={p.x}
+                  cy={p.y}
+                  r={4}
+                  fill={i === 0 ? '#10B981' : '#818CF8'}
+                  opacity={i === 0 ? 1 : 0.45}
+                />
+              ))}
+            </>
+          ) : null}
           {hasSegments && dottedPath.length > 0 && (
             <>
-              <text x={dottedPath[0].x} y={dottedPath[0].y - 16}
-                fontSize="8" fill="#22C55E" fontWeight="900" textAnchor="middle">
+              <text x={dottedPath[0].x} y={dottedPath[0].y - 18}
+                fontSize="9" fill="#10B981" fontWeight="900" textAnchor="middle" className="drop-shadow-sm">
                 START
               </text>
               <circle cx={dottedPath[0].x} cy={dottedPath[0].y} r={10}
-                fill="none" stroke="#22C55E" strokeWidth="2" opacity="0.5">
-                <animate attributeName="r" values="8;16;8" dur="1.5s" repeatCount="indefinite" />
-                <animate attributeName="opacity" values="0.5;0;0.5" dur="1.5s" repeatCount="indefinite" />
+                fill="none" stroke="#10B981" strokeWidth="2" opacity="0.6">
+                <animate attributeName="r" values="6;14;6" dur="1.5s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.6;0;0.6" dur="1.5s" repeatCount="indefinite" />
               </circle>
             </>
           )}
@@ -569,11 +573,10 @@ function LetterTraceCanvas({
             <button
               onClick={validateDrawing}
               disabled={!hasDrawn || points.length < 15}
-              className={`px-6 py-2.5 text-[12px] font-black rounded-xl shadow-md transition-all ${
-                hasDrawn && points.length >= 15
+              className={`px-6 py-2.5 text-[12px] font-black rounded-xl shadow-md transition-all ${hasDrawn && points.length >= 15
                   ? 'bg-emerald-500 text-white hover:bg-emerald-600'
                   : 'bg-slate-200 text-slate-400 cursor-not-allowed'
-              }`}
+                }`}
             >
               Done ✅
             </button>

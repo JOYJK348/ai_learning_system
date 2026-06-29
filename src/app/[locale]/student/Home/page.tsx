@@ -11,7 +11,7 @@ export default function HomePage() {
       <DashboardHome />
 
       {/* 🎵📺 SECTION 2: Rhyme Radio + Magic Cinema (Entertainment Hub) */}
-      <div className="w-full bg-white relative z-20">
+      <div className="w-full bg-gradient-to-br from-indigo-300 via-sky-400 to-emerald-300 relative z-20">
         <MediaWorld />
       </div>
     </div>

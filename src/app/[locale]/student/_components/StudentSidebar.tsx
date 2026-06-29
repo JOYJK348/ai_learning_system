@@ -11,7 +11,6 @@ import { Link, usePathname } from '@/i18n/routing';
 
 const NAV_ITEMS = [
   { name: 'Dashboard', icon: LayoutDashboard, path: '/student/Home' },
-  { name: 'Adventure', icon: Compass, path: '/student/Learn' },
   { name: 'Quiz Arena', icon: Gamepad2, path: '/student/Quiz' },
   { name: 'Collections', icon: BookOpen, path: '/student/Collections' },
   { name: 'Achievements', icon: Trophy, path: '/student/Achievements' },

@@ -9,7 +9,6 @@ import { studentKeys, studentApi } from '@/core/services/studentApi';
 
 const NAV_ITEMS = [
   { name: 'Home', icon: LayoutDashboard, path: '/student/Home', color: 'from-blue-400 to-indigo-500' },
-  { name: 'Learn', icon: Compass, path: '/student/Learn', color: 'from-orange-400 to-rose-500' },
   { name: 'Games', icon: Gamepad2, path: '/student/Quiz', color: 'from-emerald-400 to-teal-500' },
   { name: 'Profile', icon: User, path: '/student/profile', color: 'from-purple-400 to-fuchsia-500' },
 ];

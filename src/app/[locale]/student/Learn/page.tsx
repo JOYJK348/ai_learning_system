@@ -2,6 +2,7 @@
 import { getSubjectVisuals, getChapterVisuals, getLessonVisuals, buildTutorial, type TutorialStep } from '@/core/data/curriculum';
 
 import React, { Suspense, useState, useMemo, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     ArrowLeft, CheckCircle,
@@ -26,6 +27,350 @@ import TamilWordShowcase from '../_components/activities/TamilWordShowcase';
 
 
 import TutorialPlayer from '../_components/activities/TutorialPlayer';
+
+/* ─── STROKE SVG ICONS ─── */
+function StrokeIcon({ type, className = '' }: { type: string; className?: string }) {
+  const base = 'w-full h-full';
+  const stroke = { strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, fill: 'none', strokeWidth: 5 };
+  switch (type) {
+    case 'standing':
+      return (
+        <svg viewBox="0 0 64 64" className={`${base} ${className}`}>
+          <line x1="32" y1="8" x2="32" y2="56" stroke="white" {...stroke} />
+          <circle cx="32" cy="8" r="4" fill="white" />
+          <polygon points="28,52 36,52 32,60" fill="white" />
+        </svg>
+      );
+    case 'sleeping':
+      return (
+        <svg viewBox="0 0 64 64" className={`${base} ${className}`}>
+          <line x1="8" y1="32" x2="56" y2="32" stroke="white" {...stroke} />
+          <circle cx="8" cy="32" r="4" fill="white" />
+          <polygon points="52,28 60,32 52,36" fill="white" />
+        </svg>
+      );
+    case 'left-slanting':
+      return (
+        <svg viewBox="0 0 64 64" className={`${base} ${className}`}>
+          <line x1="48" y1="10" x2="16" y2="54" stroke="white" {...stroke} />
+          <circle cx="48" cy="10" r="4" fill="white" />
+          <polygon points="12,50 20,58 12,54" fill="white" />
+        </svg>
+      );
+    case 'right-slanting':
+      return (
+        <svg viewBox="0 0 64 64" className={`${base} ${className}`}>
+          <line x1="16" y1="10" x2="48" y2="54" stroke="white" {...stroke} />
+          <circle cx="16" cy="10" r="4" fill="white" />
+          <polygon points="44,50 52,54 44,58" fill="white" />
+        </svg>
+      );
+    case 'left-curve':
+      return (
+        <svg viewBox="0 0 64 64" className={`${base} ${className}`}>
+          <path d="M 48 10 Q 12 32 48 56" stroke="white" {...stroke} />
+          <circle cx="48" cy="10" r="4" fill="white" />
+          <polygon points="44,52 52,60 52,52" fill="white" />
+        </svg>
+      );
+    case 'right-curve':
+      return (
+        <svg viewBox="0 0 64 64" className={`${base} ${className}`}>
+          <path d="M 16 10 Q 52 32 16 56" stroke="white" {...stroke} />
+          <circle cx="16" cy="10" r="4" fill="white" />
+          <polygon points="12,52 20,52 12,60" fill="white" />
+        </svg>
+      );
+    case 'up-curve':
+      return (
+        <svg viewBox="0 0 64 64" className={`${base} ${className}`}>
+          <path d="M 8 52 Q 32 8 56 52" stroke="white" {...stroke} />
+          <circle cx="8" cy="52" r="4" fill="white" />
+          <polygon points="52,48 60,56 52,56" fill="white" />
+        </svg>
+      );
+    case 'down-curve':
+      return (
+        <svg viewBox="0 0 64 64" className={`${base} ${className}`}>
+          <path d="M 8 12 Q 32 56 56 12" stroke="white" {...stroke} />
+          <circle cx="8" cy="12" r="4" fill="white" />
+          <polygon points="52,8 60,8 56,16" fill="white" />
+        </svg>
+      );
+    case 'circle':
+      return (
+        <svg viewBox="0 0 64 64" className={`${base} ${className}`}>
+          <circle cx="32" cy="32" r="22" stroke="white" {...stroke} />
+          <circle cx="32" cy="10" r="4" fill="white" />
+        </svg>
+      );
+    case 'quiz':
+      return (
+        <svg viewBox="0 0 64 64" className={`${base} ${className}`}>
+          <line x1="32" y1="8" x2="32" y2="28" stroke="white" {...stroke} strokeWidth={4} />
+          <line x1="12" y1="18" x2="52" y2="18" stroke="white" {...stroke} strokeWidth={4} />
+          <path d="M 8 44 Q 32 20 56 44" stroke="white" {...stroke} strokeWidth={4} />
+          <circle cx="32" cy="56" r="5" fill="white" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+}
+
+/* ─── STROKE KEY RESOLVER ─── */
+function getStrokeKey(title: string): string | null {
+  const t = title.toLowerCase();
+  if (t.includes('நேர்கோடு') || t.includes('நேர் கோடு') || t.includes('standing')) return 'standing';
+  if (t.includes('படுக்கைகோடு') || t.includes('படுத்த கோடு') || t.includes('sleeping')) return 'sleeping';
+  if (t.includes('இடது சாய்வு') || t.includes('left slant') || t.includes('left-slant')) return 'left-slanting';
+  if (t.includes('வலது சாய்வு') || t.includes('right slant') || t.includes('right-slant')) return 'right-slanting';
+  if (t.includes('இடது வளைவு') || t.includes('left curve') || t.includes('left-curve')) return 'left-curve';
+  if (t.includes('வலது வளைவு') || t.includes('right curve') || t.includes('right-curve')) return 'right-curve';
+  if (t.includes('மேல் வளைவு') || t.includes('up curve') || t.includes('up-curve')) return 'up-curve';
+  if (t.includes('கீழ் வளைவு') || t.includes('down curve') || t.includes('down-curve')) return 'down-curve';
+  if (t.includes('வட்டம்') || t.includes('circle')) return 'circle';
+  if (t.includes('தேர்வு') || t.includes('quiz') || t.includes('exam') || t.includes('test')) return 'quiz';
+  return null;
+}
+
+/* ─── CONSONANT GROUP SVG ICONS ─── */
+function ConsonantIcon({ group, className = '' }: { group: string; className?: string }) {
+  const configs: Record<string, { letters: string[]; colors: string[]; bg: string }> = {
+    'ka-group': {
+      letters: ['க்', 'ங்', 'ச்', 'ஞ்'],
+      colors: ['#FF6B6B', '#FF9F43', '#FFEAA7', '#74B9FF'],
+      bg: 'from-orange-500 to-red-500',
+    },
+    'ta-group': {
+      letters: ['ட்', 'ண்', 'த்', 'ந்'],
+      colors: ['#A29BFE', '#6C5CE7', '#FD79A8', '#FDCB6E'],
+      bg: 'from-violet-500 to-purple-600',
+    },
+    'pa-group': {
+      letters: ['ப்', 'ம்'],
+      colors: ['#55EFC4', '#00B894'],
+      bg: 'from-emerald-400 to-teal-600',
+    },
+    'ya-group': {
+      letters: ['ய்', 'ர்', 'ல்', 'வ்'],
+      colors: ['#FD79A8', '#E17055', '#FDCB6E', '#74B9FF'],
+      bg: 'from-pink-500 to-rose-500',
+    },
+    'zha-group': {
+      letters: ['ழ்', 'ள்', 'ற்', 'ன்'],
+      colors: ['#55EFC4', '#74B9FF', '#A29BFE', '#FF6B6B'],
+      bg: 'from-sky-500 to-blue-600',
+    },
+  };
+  const cfg = configs[group];
+  if (!cfg) return null;
+
+  const isFour = cfg.letters.length === 4;
+  const isTwo  = cfg.letters.length === 2;
+
+  return (
+    <svg viewBox="0 0 96 96" className={className} style={{ fontFamily: 'inherit' }}>
+      {/* Decorative background circles */}
+      <circle cx="48" cy="48" r="44" fill="white" fillOpacity="0.12" />
+      <circle cx="48" cy="48" r="32" fill="white" fillOpacity="0.08" />
+      {isFour && (
+        <>
+          {/* Top-left */}
+          <circle cx="28" cy="28" r="18" fill={cfg.colors[0]} fillOpacity="0.9" />
+          <text x="28" y="35" textAnchor="middle" fontSize="15" fill="white" fontWeight="900">{cfg.letters[0]}</text>
+          {/* Top-right */}
+          <circle cx="68" cy="28" r="18" fill={cfg.colors[1]} fillOpacity="0.9" />
+          <text x="68" y="35" textAnchor="middle" fontSize="15" fill="white" fontWeight="900">{cfg.letters[1]}</text>
+          {/* Bottom-left */}
+          <circle cx="28" cy="68" r="18" fill={cfg.colors[2]} fillOpacity="0.9" />
+          <text x="28" y="75" textAnchor="middle" fontSize="15" fill="white" fontWeight="900">{cfg.letters[2]}</text>
+          {/* Bottom-right */}
+          <circle cx="68" cy="68" r="18" fill={cfg.colors[3]} fillOpacity="0.9" />
+          <text x="68" y="75" textAnchor="middle" fontSize="15" fill="white" fontWeight="900">{cfg.letters[3]}</text>
+        </>
+      )}
+      {isTwo && (
+        <>
+          {/* Left large */}
+          <circle cx="32" cy="48" r="24" fill={cfg.colors[0]} fillOpacity="0.92" />
+          <text x="32" y="57" textAnchor="middle" fontSize="20" fill="white" fontWeight="900">{cfg.letters[0]}</text>
+          {/* Right large */}
+          <circle cx="68" cy="48" r="20" fill={cfg.colors[1]} fillOpacity="0.92" />
+          <text x="68" y="56" textAnchor="middle" fontSize="17" fill="white" fontWeight="900">{cfg.letters[1]}</text>
+        </>
+      )}
+      {/* Sparkle stars */}
+      <polygon points="48,4 50,10 56,10 51,14 53,20 48,16 43,20 45,14 40,10 46,10" fill="white" fillOpacity="0.9" />
+    </svg>
+  );
+}
+
+function getConsonantKey(title: string): string | null {
+  if (title.includes('க்') && title.includes('ங்')) return 'ka-group';
+  if (title.includes('ட்') && title.includes('ண்')) return 'ta-group';
+  if (title.includes('ப்') && title.includes('ம்') && !title.includes('க்')) return 'pa-group';
+  if (title.includes('ய்') && title.includes('ர்')) return 'ya-group';
+  if (title.includes('ழ்') && title.includes('ள்')) return 'zha-group';
+  return null;
+}
+
+
+/* ─── SIMPLE WORDS SVG ICONS ─── */
+function WordsIcon({ type, className = '' }: { type: string; className?: string }) {
+  switch (type) {
+    case 'vowel-words':
+      // Colourful vowel letters அ ஆ இ arranged as bubbles
+      return (
+        <svg viewBox="0 0 96 96" className={className}>
+          <circle cx="48" cy="48" r="44" fill="white" fillOpacity="0.1" />
+          {/* Big central அ */}
+          <circle cx="48" cy="44" r="26" fill="#FF6B6B" fillOpacity="0.92" />
+          <text x="48" y="54" textAnchor="middle" fontSize="26" fill="white" fontWeight="900">அ</text>
+          {/* Small ஆ top-right */}
+          <circle cx="78" cy="22" r="14" fill="#FF9F43" fillOpacity="0.92" />
+          <text x="78" y="28" textAnchor="middle" fontSize="13" fill="white" fontWeight="900">ஆ</text>
+          {/* Small இ bottom-right */}
+          <circle cx="80" cy="70" r="13" fill="#A29BFE" fillOpacity="0.92" />
+          <text x="80" y="76" textAnchor="middle" fontSize="12" fill="white" fontWeight="900">இ</text>
+          {/* Tiny ஈ bottom-left */}
+          <circle cx="18" cy="72" r="11" fill="#55EFC4" fillOpacity="0.92" />
+          <text x="18" y="78" textAnchor="middle" fontSize="10" fill="white" fontWeight="900">ஈ</text>
+          {/* Sparkle */}
+          <polygon points="48,2 50,8 56,8 51,12 53,18 48,14 43,18 45,12 40,8 46,8" fill="white" fillOpacity="0.9" />
+        </svg>
+      );
+    case 'basic-words':
+      // House + sun + star = everyday items
+      return (
+        <svg viewBox="0 0 96 96" className={className}>
+          <circle cx="48" cy="48" r="44" fill="white" fillOpacity="0.1" />
+          {/* House */}
+          <rect x="26" y="50" width="34" height="26" rx="3" fill="#FDCB6E" fillOpacity="0.95" />
+          <polygon points="22,52 48,28 74,52" fill="#E17055" fillOpacity="0.95" />
+          <rect x="40" y="62" width="10" height="14" rx="2" fill="#6C5CE7" fillOpacity="0.9" />
+          {/* Sun top-right */}
+          <circle cx="76" cy="20" r="11" fill="#FFEAA7" fillOpacity="1" />
+          <line x1="76" y1="6" x2="76" y2="10" stroke="#FFEAA7" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="76" y1="30" x2="76" y2="34" stroke="#FFEAA7" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="62" y1="20" x2="66" y2="20" stroke="#FFEAA7" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="86" y1="20" x2="90" y2="20" stroke="#FFEAA7" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Star bottom-left */}
+          <polygon points="16,70 18,78 26,78 20,83 22,91 16,86 10,91 12,83 6,78 14,78" fill="#74B9FF" fillOpacity="0.92" />
+        </svg>
+      );
+    case 'animals':
+      // Paw print with colourful toe pads
+      return (
+        <svg viewBox="0 0 96 96" className={className}>
+          <circle cx="48" cy="48" r="44" fill="white" fillOpacity="0.1" />
+          {/* Main paw pad */}
+          <ellipse cx="48" cy="62" rx="20" ry="16" fill="#FF6B6B" fillOpacity="0.9" />
+          {/* Toe pads */}
+          <circle cx="30" cy="42" r="10" fill="#FF9F43" fillOpacity="0.92" />
+          <circle cx="48" cy="36" r="11" fill="#FD79A8" fillOpacity="0.92" />
+          <circle cx="66" cy="42" r="10" fill="#A29BFE" fillOpacity="0.92" />
+          {/* Mini inner toe */}
+          <circle cx="20" cy="58" r="7" fill="#FDCB6E" fillOpacity="0.92" />
+          <circle cx="76" cy="58" r="7" fill="#55EFC4" fillOpacity="0.92" />
+          {/* Sparkle star */}
+          <polygon points="48,2 50,8 56,8 51,12 53,18 48,14 43,18 45,12 40,8 46,8" fill="white" fillOpacity="0.85" />
+        </svg>
+      );
+    case 'things':
+      // Grid of colourful everyday object shapes
+      return (
+        <svg viewBox="0 0 96 96" className={className}>
+          <circle cx="48" cy="48" r="44" fill="white" fillOpacity="0.1" />
+          {/* Book (top-left) */}
+          <rect x="10" y="12" width="32" height="36" rx="4" fill="#74B9FF" fillOpacity="0.92" />
+          <line x1="26" y1="12" x2="26" y2="48" stroke="white" strokeWidth="2" />
+          <line x1="14" y1="22" x2="24" y2="22" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+          <line x1="14" y1="28" x2="24" y2="28" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+          {/* Ball (top-right) */}
+          <circle cx="72" cy="28" r="18" fill="#FF6B6B" fillOpacity="0.92" />
+          <path d="M 56 22 Q 72 14 88 22" stroke="white" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+          <path d="M 54 32 Q 72 42 90 32" stroke="white" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+          {/* Pencil (bottom-left) */}
+          <rect x="12" y="56" width="10" height="30" rx="2" fill="#FDCB6E" fillOpacity="0.95" />
+          <polygon points="12,86 22,86 17,96" fill="#E17055" fillOpacity="0.95" />
+          {/* Star (bottom-right) */}
+          <polygon points="70,58 73,68 83,68 75,74 78,84 70,78 62,84 65,74 57,68 67,68" fill="#A29BFE" fillOpacity="0.92" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+}
+
+function getWordsKey(title: string): string | null {
+  if (title.includes('விலங்கு') || title.toLowerCase().includes('animal')) return 'animals';
+  if (title.includes('பொருட்கள்') || title.toLowerCase().includes('things') || title.includes('சுற்றியுள்ள')) return 'things';
+  if (title.includes('உயிரெழுத்து') || title.includes('உயிர்எழுத்து')) return 'vowel-words';
+  if (title.includes('அடிப்படை') || title.includes('தினமும்') || title.includes('எளிய தமிழ்')) return 'basic-words';
+  return null;
+}
+
+/* ─── CHECKPOINT SVG ICONS ─── */
+function CheckpointIcon({ type, className = '' }: { type: string; className?: string }) {
+  switch (type) {
+    case 'balloon-pop':
+      return (
+        <svg viewBox="0 0 96 96" className={className}>
+          <circle cx="48" cy="48" r="44" fill="white" fillOpacity="0.1" />
+          {/* Balloon 1 (Left - Red/Orange) */}
+          <g transform="translate(14, 18)">
+            <path d="M 16 0 C 26 0, 32 8, 32 18 C 32 28, 24 36, 16 36 C 8 36, 0 28, 0 18 C 0 8, 6 0, 16 0 Z" fill="#FF6B6B" />
+            <polygon points="16,36 12,41 20,41" fill="#FF6B6B" />
+            <path d="M 16,41 Q 14,48 18,54" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" />
+            <text x="16" y="24" textAnchor="middle" fontSize="14" fill="white" fontWeight="900">A</text>
+          </g>
+          {/* Balloon 2 (Right - Blue/Purple) */}
+          <g transform="translate(48, 12)">
+            <path d="M 16 0 C 26 0, 32 8, 32 18 C 32 28, 24 36, 16 36 C 8 36, 0 28, 0 18 C 0 8, 6 0, 16 0 Z" fill="#74B9FF" />
+            <polygon points="16,36 12,41 20,41" fill="#74B9FF" />
+            <path d="M 16,41 Q 18,48 14,54" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" />
+            <text x="16" y="24" textAnchor="middle" fontSize="14" fill="white" fontWeight="900">B</text>
+          </g>
+          {/* Mini Yellow Balloon center-bottom */}
+          <g transform="translate(34, 38) scale(0.7)">
+            <path d="M 16 0 C 26 0, 32 8, 32 18 C 32 28, 24 36, 16 36 C 8 36, 0 28, 0 18 C 0 8, 6 0, 16 0 Z" fill="#FFEAA7" />
+            <polygon points="16,36 12,41 20,41" fill="#FFEAA7" />
+            <text x="16" y="24" textAnchor="middle" fontSize="14" fill="#E17055" fontWeight="900">C</text>
+          </g>
+        </svg>
+      );
+    case 'card-matching':
+      return (
+        <svg viewBox="0 0 96 96" className={className}>
+          <circle cx="48" cy="48" r="44" fill="white" fillOpacity="0.1" />
+          {/* Underlay card (Purple) */}
+          <g transform="translate(18, 26) rotate(-12)">
+            <rect x="0" y="0" width="36" height="50" rx="6" fill="#A29BFE" stroke="white" strokeWidth="2.5" />
+            <text x="18" y="32" textAnchor="middle" fontSize="18" fill="white" fontWeight="900">A</text>
+          </g>
+          {/* Overlay card (Pink) */}
+          <g transform="translate(44, 20) rotate(8)">
+            <rect x="0" y="0" width="36" height="50" rx="6" fill="#FD79A8" stroke="white" strokeWidth="2.5" />
+            <text x="18" y="32" textAnchor="middle" fontSize="18" fill="white" fontWeight="900">a</text>
+          </g>
+          {/* Shiny sparkles */}
+          <polygon points="18,12 20,16 24,16 21,19 22,23 18,20 14,23 15,19 12,16 16,16" fill="#FFEAA7" />
+          <polygon points="80,72 82,76 86,76 83,79 84,83 80,80 76,83 77,79 74,76 78,76" fill="#55EFC4" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+}
+
+function getCheckpointKey(title: string): string | null {
+  const t = title.toLowerCase();
+  if (t.includes('balloon') || t.includes('pop') || t.includes('பலூன்')) return 'balloon-pop';
+  if (t.includes('card') || t.includes('pick') || t.includes('matching') || t.includes('அட்டை')) return 'card-matching';
+  return null;
+}
+
 
 /* ─── STROKE LABELS ─── */
 const STROKE_LABELS_EN: Record<string, string> = {
@@ -65,7 +410,7 @@ function UltimateLearnEngineInner() {
     const chapterParam = searchParams.get('chapter');
 
     const [mounted, setMounted] = useState(false);
-    const [view, setView] = useState<'hub' | 'chapter'>(subjectParam && chapterParam ? 'chapter' : 'hub');
+    const [view, setView] = useState<'hub' | 'chapter'>(subjectParam ? 'chapter' : 'hub');
     const [activeSubjectId, setActiveSubjectId] = useState<string | null>(subjectParam);
     const [activeChapterId, setActiveChapterId] = useState<string | null>(chapterParam);
     const [activeLesson, setActiveLesson] = useState<Lesson | null>(null);
@@ -102,6 +447,17 @@ function UltimateLearnEngineInner() {
         filteredSubjects.find(s => s.id === activeSubjectId), [activeSubjectId, filteredSubjects]);
     const activeChapter = useMemo(() =>
         activeSubject?.chapters.find(c => c.id === activeChapterId), [activeSubject, activeChapterId]);
+
+    // Auto-select subject from URL param when subjects are loaded
+    useEffect(() => {
+        if (subjectParam && filteredSubjects.length > 0 && !activeSubjectId) {
+            const matched = filteredSubjects.find(s => s.id === subjectParam);
+            if (matched) {
+                setActiveSubjectId(matched.id);
+                setView('chapter');
+            }
+        }
+    }, [subjectParam, filteredSubjects, activeSubjectId]);
 
     const isTamil = params?.locale === 'ta' ||
         (activeSubject?.name ? (
@@ -140,8 +496,10 @@ function UltimateLearnEngineInner() {
 
     const closeChapter = () => {
         setActiveChapterId(null);
+        setActiveSubjectId(null);
         setView('hub');
-        router.push(`/${window.location.pathname.split('/')[1]}/student/Learn`, { scroll: true });
+        const currentLocale = params?.locale || 'en';
+        router.push(`/${currentLocale}/student/Home`, { scroll: true });
     };
 
     const goBackToChapters = () => {
@@ -577,8 +935,9 @@ function UltimateLearnEngineInner() {
                                             </div>
                                         </div>
 
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20 justify-items-center">
                                             {activeSubject.chapters.map((chapter, idx) => {
+                                                const subjectVisuals = getSubjectVisuals(activeSubject.name);
                                                 const visuals = getChapterVisuals(activeSubject.name, chapter.name);
                                                 return (
                                                     <motion.button
@@ -588,54 +947,60 @@ function UltimateLearnEngineInner() {
                                                         initial={{ opacity: 0, y: 20 }}
                                                         animate={{ opacity: 1, y: 0 }}
                                                         transition={{ delay: idx * 0.05 }}
-                                                        whileHover={chapter.is_unlocked ? { y: -6, scale: 1.02 } : {}}
+                                                        whileHover={chapter.is_unlocked ? { y: -6 } : {}}
                                                         whileTap={chapter.is_unlocked ? { scale: 0.97 } : {}}
-                                                        className={`relative text-left bg-white/95 border-2 rounded-[2.5rem] p-5 shadow-xl transition-all overflow-hidden group ${chapter.is_unlocked
-                                                                ? 'border-white/60 hover:bg-white active:scale-[0.98]'
-                                                                : 'border-gray-300/30 opacity-60 cursor-not-allowed'
-                                                            }`}
+                                                        className={`group relative w-[75vw] max-w-[280px] sm:w-full sm:max-w-[270px] aspect-square mx-auto rounded-[2.5rem] border-4 border-white shadow-2xl active:scale-95 transition-all bg-gradient-to-br ${visuals.color} flex flex-col items-center justify-between p-4 ${
+                                                            !chapter.is_unlocked ? 'opacity-50 cursor-not-allowed' : ''
+                                                        }`}
                                                     >
-                                                        <div className="flex flex-col items-center text-center">
-                                                            <motion.div
-                                                                animate={chapter.is_unlocked ? { y: [0, -8, 0] } : {}}
-                                                                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                                                                className={`relative w-28 h-28 sm:w-32 sm:h-32 rounded-[2.5rem] flex items-center justify-center text-6xl shadow-xl mb-4 transition-transform group-hover:scale-110 border-4 border-white ${chapter.is_unlocked
-                                                                        ? chapter.completion_percentage >= 100
-                                                                            ? 'bg-gradient-to-br from-emerald-400 to-green-500 text-white'
-                                                                            : `bg-gradient-to-br ${visuals.color} text-white`
-                                                                        : 'bg-gray-200'
-                                                                    }`}
-                                                            >
-                                                                {chapter.is_unlocked ? (
-                                                                    visuals.mascot
-                                                                ) : (
-                                                                    <Lock size={32} className="text-gray-400" />
-                                                                )}
-                                                            </motion.div>
-
-                                                            <h3 className={`text-lg sm:text-xl font-black tracking-tight mb-1 ${chapter.is_unlocked ? 'text-indigo-950' : 'text-gray-500'
-                                                                }`}>
-                                                                {chapter.name}
-                                                            </h3>
-
+                                                        {/* Lock / Status Indicator absolute top-right overlay to avoid layout shift */}
+                                                        <div className="absolute top-4 right-4 z-20 flex gap-2">
                                                             {!chapter.is_unlocked && (
-                                                                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-3 py-1 bg-gray-200 rounded-full mb-2">🔒 Locked</span>
+                                                                <span className="text-[9px] font-black text-gray-400 bg-white/20 border border-white/30 uppercase tracking-widest px-2 py-0.5 rounded-full">🔒</span>
                                                             )}
                                                             {chapter.is_unlocked && chapter.completion_percentage >= 100 && (
-                                                                <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest px-3 py-1 bg-emerald-100 rounded-full mb-2">⭐ Done</span>
-                                                            )}
-
-                                                            {chapter.is_unlocked && chapter.completion_percentage > 0 && chapter.completion_percentage < 100 && (
-                                                                <div className="w-full h-2.5 bg-indigo-950/10 rounded-full overflow-hidden mt-3">
-                                                                    <motion.div
-                                                                        initial={{ width: 0 }}
-                                                                        animate={{ width: `${chapter.completion_percentage}%` }}
-                                                                        transition={{ duration: 0.8, delay: 0.2 }}
-                                                                        className={`h-full rounded-full bg-gradient-to-r ${visuals.color}`}
-                                                                    />
-                                                                </div>
+                                                                <span className="text-[9px] font-black text-emerald-600 bg-white border border-emerald-50 uppercase tracking-widest px-2.5 py-0.5 rounded-full shadow-md">⭐ Done</span>
                                                             )}
                                                         </div>
+
+                                                        {/* Character image centered in card - matching DashboardHome */}
+                                                        <div className="w-full flex-1 flex items-center justify-center select-none pointer-events-none mt-2 relative">
+                                                            {chapter.is_unlocked ? (
+                                                                visuals.image ? (
+                                                                    <Image
+                                                                        src={visuals.image}
+                                                                        alt={chapter.name}
+                                                                        width={200}
+                                                                        height={200}
+                                                                        priority={true}
+                                                                        className="max-h-[170px] w-auto h-auto object-contain transform scale-105 group-hover:scale-110 transition-all duration-200 drop-shadow-[0_8px_8px_rgba(0,0,0,0.2)]"
+                                                                    />
+                                                                ) : (
+                                                                    <span className="text-6xl font-black text-white drop-shadow-md">
+                                                                        {visuals.mascot}
+                                                                    </span>
+                                                                )
+                                                            ) : (
+                                                                <Lock size={40} className="text-white/40" />
+                                                            )}
+                                                        </div>
+
+                                                        {/* In-progress progress bar directly overlayed at the bottom of mascot */}
+                                                        {chapter.is_unlocked && chapter.completion_percentage > 0 && chapter.completion_percentage < 100 && (
+                                                            <div className="w-[80%] h-2.5 bg-white/20 rounded-full overflow-hidden mt-1 border border-white/10 mx-auto">
+                                                                <motion.div
+                                                                    initial={{ width: 0 }}
+                                                                    animate={{ width: `${chapter.completion_percentage}%` }}
+                                                                    transition={{ duration: 0.8, delay: 0.2 }}
+                                                                    className="h-full rounded-full bg-white"
+                                                                />
+                                                            </div>
+                                                        )}
+
+                                                        {/* Clean text directly on card (No white container) - matching DashboardHome */}
+                                                        <h3 className="text-white font-black text-base sm:text-xl tracking-tight leading-tight drop-shadow-[0_2px_2px_rgba(0,0,0,0.4)] uppercase w-full text-center mt-2">
+                                                            {chapter.name}
+                                                        </h3>
                                                     </motion.button>
                                                 );
                                             })}
@@ -701,7 +1066,17 @@ function UltimateLearnEngineInner() {
                                                                         : 'bg-gray-200 grayscale'
                                                                     }`}
                                                             >
-                                                                {lesson.is_unlocked ? visuals.mascot : '🔒'}
+                                                                {lesson.is_unlocked ? (() => {
+                                                                const checkpointKey = getCheckpointKey(lesson.title);
+                                                                if (checkpointKey) return <CheckpointIcon type={checkpointKey} className="w-16 h-16 sm:w-20 sm:h-20" />;
+                                                                const wordsKey = getWordsKey(lesson.title);
+                                                                if (wordsKey) return <WordsIcon type={wordsKey} className="w-16 h-16 sm:w-20 sm:h-20" />;
+                                                                const consonantKey = getConsonantKey(lesson.title);
+                                                                if (consonantKey) return <ConsonantIcon group={consonantKey} className="w-16 h-16 sm:w-20 sm:h-20" />;
+                                                                const strokeKey = getStrokeKey(lesson.title);
+                                                                if (strokeKey) return <StrokeIcon type={strokeKey} className="w-14 h-14 sm:w-16 sm:h-16 drop-shadow-[0_2px_6px_rgba(0,0,0,0.25)]" />;
+                                                                return <span className="text-5xl sm:text-6xl">{visuals.mascot}</span>;
+                                                            })() : '🔒'}
                                                             </motion.div>
                                                             {lesson.progress?.status === 'completed' && (
                                                                 <div className="absolute -top-2 -right-2">

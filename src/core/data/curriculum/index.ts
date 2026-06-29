@@ -2,6 +2,7 @@ import * as english from './english';
 import * as tamil from './tamil';
 import * as maths from './maths';
 import * as evs from './evs';
+import * as hindi from './hindi';
 import { type TutorialStep } from './english';
 
 export { type TutorialStep };
@@ -13,6 +14,15 @@ function isTamilSubject(subjectName?: string): boolean {
   if (!subjectName) return false;
   const lower = subjectName.toLowerCase();
   return lower.includes('tamil') || lower.includes('தமிழ்');
+}
+
+/**
+ * Checks if the subject is Hindi based on its name or ID.
+ */
+function isHindiSubject(subjectName?: string): boolean {
+  if (!subjectName) return false;
+  const lower = subjectName.toLowerCase();
+  return lower.includes('hindi') || lower.includes('हिंदी');
 }
 
 /**
@@ -30,7 +40,7 @@ function isMathsSubject(subjectName?: string): boolean {
 function isEvsSubject(subjectName?: string): boolean {
   if (!subjectName) return false;
   const lower = subjectName.toLowerCase();
-  return lower.includes('environment') || lower.includes('evs') || lower.includes('science') || lower === 'evs';
+  return lower.includes('environment') || lower.includes('evs') || lower.includes('science') || lower === 'evs' || lower.includes('gk') || lower.includes('general') || lower.includes('knowledge');
 }
 
 /**
@@ -125,9 +135,12 @@ export function getSubjectVisuals(name: string) {
 /**
  * Returns chapter visual details dynamically.
  */
-export function getChapterVisuals(subjectName: string, name: string) {
+export function getChapterVisuals(subjectName: string, name: string): { emoji: string; mascot: string; color: string; sound: string; image?: string } {
   if (isTamilSubject(subjectName)) {
     return tamil.getChapterVisuals(name);
+  }
+  if (isHindiSubject(subjectName)) {
+    return hindi.getChapterVisuals(name);
   }
   if (isMathsSubject(subjectName)) {
     return maths.getChapterVisuals(name);
@@ -144,6 +157,9 @@ export function getChapterVisuals(subjectName: string, name: string) {
 export function getLessonVisuals(subjectName: string, title: string) {
   if (isTamilSubject(subjectName)) {
     return tamil.getLessonVisuals(title);
+  }
+  if (isHindiSubject(subjectName)) {
+    return hindi.getLessonVisuals(title);
   }
   if (isMathsSubject(subjectName)) {
     return maths.getLessonVisuals(title);

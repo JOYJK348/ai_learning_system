@@ -1,5 +1,14 @@
 'use client';
 
+const RHYME_COLORS = [
+  'from-rose-400 to-pink-500',
+  'from-sky-400 to-blue-500',
+  'from-orange-400 to-amber-500',
+  'from-emerald-400 to-teal-500',
+  'from-purple-400 to-indigo-500',
+  'from-lime-400 to-green-500',
+];
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Play, X, Disc, Music, Film, Pause, Sparkles, Tv, Monitor, ArrowRight, Plus, Star, Compass, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -67,50 +76,35 @@ export default function MediaWorld() {
   );
 
   return (
-    <div className="relative w-full overflow-hidden mb-12 pb-20 pt-10 font-sans bg-emerald-50 shadow-inner">
-      
-      {/* ── SEAMLESS ATMOSPHERE ── */}
-      <div className="absolute inset-0 z-0">
-        <style>{`
-          @keyframes driftMedia { from { transform: translateX(-20vw); } to { transform: translateX(120vw); } }
-        `}</style>
-        {[...Array(3)].map((_, i) => (
-          <div key={i}
-            className="absolute text-8xl opacity-[0.05] pointer-events-none"
-            style={{ 
-              top: `${15 + i * 25}%`, 
-              animation: `driftMedia ${40 + i * 15}s linear ${i * 10}s infinite`
-            }}
-          >
-            ☁️
-          </div>
-        ))}
-      </div>
+    <div className="relative w-full overflow-hidden mb-12 pb-20 pt-10 font-sans">
 
       <div className="relative z-10 space-y-20">
         
         {/* RHYME PATH */}
         <section className="relative w-full">
           <div className="max-w-7xl mx-auto flex flex-col items-center text-center mb-6 px-4">
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-800 uppercase leading-none">Rhyme Adventure</h2>
-            <p className="text-slate-400 font-bold text-[9px] uppercase tracking-widest mt-2 mb-6">Tap to listen</p>
-            
+            <div className="w-full border-b-8 border-white/10 pb-8 mb-8">
+              <div className="flex flex-col items-center">
+                <div className="inline-flex items-center gap-2 px-6 py-2 bg-amber-400 text-indigo-950 rounded-full font-black text-xs uppercase tracking-[0.3em] shadow-xl mb-4">
+                  🎵 RHYME ADVENTURE
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-black text-indigo-950 tracking-tighter leading-tight">Rhyme Adventure</h2>
+                <p className="text-indigo-900/60 font-bold text-sm mt-2">Tap any rhyme to listen! 🎶</p>
+              </div>
+            </div>
             {/* SEARCH BAR */}
             <div className="relative w-full max-w-md group">
                <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                  <Search size={18} className="text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
+                  <Search size={18} className="text-indigo-400 group-focus-within:text-indigo-600 transition-colors" />
                </div>
                <input 
                  type="text"
                  placeholder="Search your favorite rhyme..."
                  value={searchTerm}
                  onChange={(e) => setSearchTerm(e.target.value)}
-                 className="w-full bg-white border-4 border-slate-100 rounded-3xl py-4 pl-12 pr-6 text-sm font-bold text-slate-700 placeholder:text-slate-300 focus:outline-none focus:border-indigo-400 shadow-sm transition-all"
+                 className="w-full bg-white/80 border-4 border-white rounded-3xl py-4 pl-12 pr-6 text-sm font-bold text-indigo-900 placeholder:text-indigo-300 focus:outline-none focus:border-indigo-400 shadow-lg transition-all backdrop-blur-sm"
                  suppressHydrationWarning
                />
-               <div className="absolute top-1/2 -translate-y-1/2 right-4 hidden sm:block">
-                  <span className="text-[10px] font-black text-slate-300 uppercase letter-spacing-widest">Find Magic</span>
-               </div>
             </div>
           </div>
 
@@ -126,6 +120,7 @@ export default function MediaWorld() {
               <AnimatePresence mode='popLayout'>
                 {filteredRhymes.map((r, idx) => {
                   const isOn = playing === r.id;
+                  const colorClass = RHYME_COLORS[idx % RHYME_COLORS.length];
                   return (
                     <motion.div 
                       key={r.id} 
@@ -135,8 +130,8 @@ export default function MediaWorld() {
                       exit={{ scale: 0.8, opacity: 0 }}
                       className="flex flex-col items-center"
                     >
-                      <div className={`relative w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-white shadow-md border-4 border-white flex items-center justify-center transition-transform active:scale-95 ${isOn ? 'border-indigo-500' : ''}`}>
-                         <span className="text-4xl sm:text-6xl">{r.image}</span>
+                      <div className={`relative w-28 h-28 sm:w-36 sm:h-36 rounded-[2rem] bg-gradient-to-br ${colorClass} shadow-2xl border-4 border-white flex items-center justify-center transition-transform active:scale-95`}>
+                         <span className="text-4xl sm:text-6xl drop-shadow-md">{r.image}</span>
                          <button 
                            onClick={() => handleRhymePlay(r)} 
                            className={`absolute -bottom-2 -right-2 w-12 h-12 rounded-full shadow-lg flex items-center justify-center text-white ${isOn ? 'bg-rose-500' : 'bg-indigo-600'}`}
@@ -145,8 +140,8 @@ export default function MediaWorld() {
                             {isOn ? <Pause size={20} /> : <Play size={24} fill="currentColor" />}
                          </button>
                       </div>
-                      <div className="mt-4 px-4 py-1.5 bg-white rounded-full shadow-sm border border-slate-100">
-                         <span className="text-[10px] font-black text-slate-800 uppercase">{r.title}</span>
+                      <div className="mt-4 px-4 py-1.5 bg-white/90 rounded-full shadow-lg border-2 border-white">
+                         <span className="text-[10px] font-black text-indigo-950 uppercase">{r.title}</span>
                       </div>
                     </motion.div>
                   );
@@ -169,24 +164,31 @@ export default function MediaWorld() {
 
         {/* CINEMA PORTAL */}
         <section className="relative px-6 pb-12">
-          <div className="flex flex-col items-center text-center mb-16 px-4">
-             <h2 className="text-2xl sm:text-4xl font-black text-slate-900 uppercase leading-none">Cinema Portal</h2>
-             <p className="text-slate-400 font-bold text-[9px] uppercase tracking-[0.4em] mt-3">Watch & Learn</p>
+          <div className="flex flex-col items-center text-center mb-12 px-4">
+            <div className="w-full border-b-8 border-white/10 pb-8 mb-8">
+              <div className="flex flex-col items-center">
+                <div className="inline-flex items-center gap-2 px-6 py-2 bg-amber-400 text-indigo-950 rounded-full font-black text-xs uppercase tracking-[0.3em] shadow-xl mb-4">
+                  🎬 CINEMA PORTAL
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-black text-indigo-950 tracking-tighter leading-tight">Cinema Portal</h2>
+                <p className="text-indigo-900/60 font-bold text-sm mt-2">Watch & Learn! 🍿</p>
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {VIDEOS.map((v, i) => (
-              <div key={i} className="group relative bg-white rounded-[2.5rem] border-2 border-slate-100 p-3 shadow-sm active:scale-95 transition-transform overflow-hidden">
+              <div key={i} className="group relative bg-white/90 rounded-[2.5rem] border-4 border-white p-3 shadow-2xl active:scale-95 transition-transform overflow-hidden backdrop-blur-sm">
                 <div className="aspect-video rounded-2xl overflow-hidden relative mb-4">
                    <img src={v.thumb} className="w-full h-full object-cover" alt={v.title} />
                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/60">
-                      <button onClick={() => setVideo(v)} className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-xl">
+                      <button onClick={() => setVideo(v)} className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-xl" suppressHydrationWarning>
                          <Play size={32} className="text-indigo-600" fill="currentColor" />
                       </button>
                    </div>
                 </div>
                 <div className="px-2 pb-2">
-                   <h4 className="text-sm font-black text-slate-900 uppercase mb-1">{v.title}</h4>
+                   <h4 className="text-sm font-black text-indigo-950 uppercase mb-1">{v.title}</h4>
                    <span className="text-[9px] font-black text-indigo-500 uppercase tracking-widest">{v.tag}</span>
                 </div>
               </div>

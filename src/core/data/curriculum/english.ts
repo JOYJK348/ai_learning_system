@@ -42,23 +42,21 @@ export const WORD_VISUALS: Record<string, { emoji: string; mascot: string; color
 export function getChapterVisuals(name: string) {
   const lower = name.toLowerCase();
   if (lower.includes('checkpoint'))
-    return { emoji: '🏁', mascot: '🎯', color: 'from-violet-400 to-purple-500', sound: 'Checkpoint time!' };
-  if (lower.includes('final') || lower.includes('assessment'))
-    return { emoji: '📖', mascot: '🧚', color: 'from-violet-400 to-purple-500', sound: 'Story time!' };
-  if (lower.includes('rhymes & songs'))
-    return { emoji: '🎤', mascot: '🎶', color: 'from-pink-400 to-rose-500', sound: 'Sing along!' };
-  if (lower.includes('rhyme'))
-    return { emoji: '🎵', mascot: '🎙️', color: 'from-red-400 to-pink-500', sound: 'Rhyme time!' };
+    return { emoji: '🏁', mascot: '🎯', color: 'from-violet-400 to-purple-500', sound: 'Checkpoint time!', image: '/assets/subjects/english_checkpoint-removebg-preview.png' };
+  if (lower.includes('final') || lower.includes('assessment') || lower.includes('story time') || lower.includes('story'))
+    return { emoji: '📖', mascot: '🧚', color: 'from-violet-400 to-purple-500', sound: 'Story time!', image: '/assets/subjects/english_story_time-removebg-preview.png' };
+  if (lower.includes('rhymes & songs') || lower.includes('rhyme') || lower.includes('song'))
+    return { emoji: '🎤', mascot: '🎶', color: 'from-pink-400 to-rose-500', sound: 'Sing along!', image: '/assets/subjects/english_rhymes_songs-removebg-preview.png' };
   if (lower.includes('small') && lower.includes('letter') && (lower.includes('phonics') || (lower.includes('small') && lower.includes('a-m'))))
-    return { emoji: '🐝', mascot: '🔤', color: 'from-teal-400 to-cyan-500', sound: 'Phonics time!' };
+    return { emoji: '🐝', mascot: '🔤', color: 'from-teal-400 to-cyan-500', sound: 'Phonics time!', image: '/assets/subjects/english_small_phonics-removebg-preview.png' };
   if (lower.includes('phonics'))
-    return { emoji: '🐝', mascot: '🔤', color: 'from-teal-400 to-cyan-500', sound: 'Phonics time!' };
+    return { emoji: '🐝', mascot: '🔤', color: 'from-teal-400 to-cyan-500', sound: 'Phonics time!', image: '/assets/subjects/english_small_phonics-removebg-preview.png' };
   if (lower.includes('recognition'))
     return { emoji: '🔍', mascot: '👀', color: 'from-sky-400 to-blue-500', sound: 'Find the letter!' };
   if (lower.includes('letters a-m') || lower.includes('letters a') || lower.includes('a-m'))
-    return { emoji: '🍎', mascot: '🅰️', color: 'from-red-400 to-rose-500', sound: 'A to M!' };
+    return { emoji: '🍎', mascot: '🅰️', color: 'from-red-400 to-rose-500', sound: 'A to M!', image: '/assets/subjects/english_alphabet_a_m-removebg-preview.png' };
   if (lower.includes('letters n-z') || lower.includes('letters n') || lower.includes('n-z'))
-    return { emoji: '🦓', mascot: '🆉', color: 'from-indigo-400 to-violet-500', sound: 'N to Z!' };
+    return { emoji: '🦓', mascot: '🆉', color: 'from-indigo-400 to-violet-500', sound: 'N to Z!', image: '/assets/subjects/english_alphabet_n_z-removebg-preview.png' };
   if (lower.includes('alphabet'))
     return { emoji: '🔤', mascot: '🔡', color: 'from-blue-400 to-purple-500', sound: 'Alphabets!' };
   if (lower.includes('letter'))
@@ -68,7 +66,7 @@ export function getChapterVisuals(name: string) {
   if (lower.includes('grammar'))
     return { emoji: '📝', mascot: '✏️', color: 'from-lime-400 to-green-500', sound: 'Grammar time!' };
   if (lower.includes('pre-writing') || lower.includes('writing') || lower.includes('line'))
-    return { emoji: '🖍️', mascot: '✍️', color: 'from-amber-400 to-orange-500', sound: 'Writing time!' };
+    return { emoji: '🖍️', mascot: '✍️', color: 'from-amber-400 to-orange-500', sound: 'Writing time!', image: '/assets/subjects/tamil_writing_strokes-removebg-preview.png' };
   if (lower.includes('flower') || lower.includes('plant'))
     return { emoji: '🌸', mascot: '🌻', color: 'from-pink-400 to-yellow-400', sound: 'Flowers!' };
   if (lower.includes('cvc'))
