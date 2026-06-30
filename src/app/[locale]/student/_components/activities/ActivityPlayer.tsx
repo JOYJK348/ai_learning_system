@@ -91,6 +91,7 @@ import TamilSoundShapeQuiz from './TamilSoundShapeQuiz';
 import TamilWordReadingQuiz from './TamilWordReadingQuiz';
 import TamilSentenceReadingQuiz from './TamilSentenceReadingQuiz';
 import UkgEvsQuiz from './UkgEvsQuiz';
+import UkgGkQuiz from './UkgGkQuiz';
 
 type Props = {
   lessonId: string;
@@ -178,6 +179,7 @@ const ACTIVITY_TYPE_MAP: Record<number, string> = {
   75: 'tamil_word_reading_quiz',
   76: 'tamil_sentence_reading_quiz',
   77: 'ukg_evs_quiz',
+  78: 'ukg_gk_quiz',
 };
 
 export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onClose, studentName, subjectName }: Props) {
@@ -202,6 +204,10 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
     const isEvs = subjectName?.toLowerCase().includes('environmental') || subjectName?.toLowerCase().includes('studies') || subjectName?.toLowerCase().includes('evs');
     if (isUKG && isEvs) {
       return [{ id: `${lessonId}-ukgevs`, name: 'UKG EVS Level Up Quiz', activity_type_id: 77, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    const isGk = subjectName?.toLowerCase().includes('general') || subjectName?.toLowerCase().includes('knowledge') || subjectName?.toLowerCase().includes('gk');
+    if (isUKG && isGk) {
+      return [{ id: `${lessonId}-ukggk`, name: 'UKG GK Level Up Quiz', activity_type_id: 78, config: {}, sort_order: 1, attempt: null }] as Activity[];
     }
 
     const lowerTitle = lessonTitle.toLowerCase();
@@ -1167,7 +1173,8 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   const getEvsConceptKey = () => {
     const isUKG = studentProfile?.grade_name?.toUpperCase() === 'UKG';
     const isEvsSubject = subjectName?.toLowerCase().includes('environmental') || subjectName?.toLowerCase().includes('studies') || subjectName?.toLowerCase().includes('evs');
-    if (isUKG && isEvsSubject) return null; // Let UKG EVS play the new level up quiz
+    const isGkSubject = subjectName?.toLowerCase().includes('general') || subjectName?.toLowerCase().includes('knowledge') || subjectName?.toLowerCase().includes('gk');
+    if (isUKG && (isEvsSubject || isGkSubject)) return null; // Let UKG EVS and GK play the new level up quizzes
 
     const lower = lessonTitle.toLowerCase();
     // Hindi lessons
@@ -1629,6 +1636,8 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
         return <TamilSentenceReadingQuiz {...commonProps} />;
       case 'ukg_evs_quiz':
         return <UkgEvsQuiz lessonTitle={lessonTitle} {...commonProps} />;
+      case 'ukg_gk_quiz':
+        return <UkgGkQuiz lessonTitle={lessonTitle} {...commonProps} />;
       default:
         return (
           <div className="flex flex-col items-center gap-4 p-8">
