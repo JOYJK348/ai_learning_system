@@ -2,20 +2,29 @@ import { type TutorialStep } from './english';
 
 export function getChapterVisuals(name: string) {
   const lower = name.toLowerCase();
-  if (lower.includes('pre-math') || lower.includes('concepts'))
-    return { emoji: '🧠', mascot: '🤔', color: 'from-purple-400 to-pink-500', sound: 'Pre-Math Concepts!', image: '/assets/subjects/maths_pre_math_concepts-removebg-preview.png' };
+  if (lower.includes('readiness') || lower.includes('counting'))
+    return { emoji: '🔢', mascot: '🧮', color: 'from-orange-400 to-amber-500', sound: 'Number Readiness & Counting!', image: '/assets/subjects/maths_numbers_6_10-removebg-preview.png' };
+  if (lower.includes('addition'))
+    return { emoji: '➕', mascot: '🍎', color: 'from-rose-450 to-pink-500', sound: 'Addition Basics!', image: '/assets/subjects/maths_pre_math_concepts-removebg-preview.png' };
+  if (lower.includes('subtraction'))
+    return { emoji: '➖', mascot: '🍏', color: 'from-amber-400 to-orange-500', sound: 'Subtraction Basics!', image: '/assets/subjects/maths_pre_math_concepts-removebg-preview.png' };
+  if (lower.includes('comparing'))
+    return { emoji: '🔀', mascot: '📊', color: 'from-indigo-400 to-violet-500', sound: 'Comparing Numbers!', image: '/assets/subjects/maths_sorting_comparison-removebg-preview.png' };
+  if (lower.includes('measurement'))
+    return { emoji: '📏', mascot: '📐', color: 'from-cyan-400 to-blue-500', sound: 'Measurement!', image: '/assets/subjects/maths_pre_math_concepts-removebg-preview.png' };
   if (lower.includes('shape') || lower.includes('spatial'))
-    return { emoji: '⭕', mascot: '⬛', color: 'from-blue-400 to-cyan-500', sound: 'Shapes & Space!', image: '/assets/subjects/maths_shapes_spatial_awareness-removebg-preview.png' };
-  if (lower.includes('numbers 1-5') || lower.includes('1-5'))
-    return { emoji: '🔢', mascot: '✋', color: 'from-orange-400 to-amber-500', sound: 'Numbers 1 to 5!', image: '/assets/subjects/maths_numbers_1_5-removebg-preview.png' };
-  if (lower.includes('numbers 6-10') || lower.includes('6-10') || lower.includes('counting'))
-    return { emoji: '🔟', mascot: '🧮', color: 'from-emerald-400 to-teal-500', sound: 'Numbers 6 to 10!', image: '/assets/subjects/maths_numbers_6_10-removebg-preview.png' };
-  if (lower.includes('position') || lower.includes('word'))
-    return { emoji: '📍', mascot: '📌', color: 'from-pink-400 to-rose-500', sound: 'Position Words!', image: '/assets/subjects/maths_position_words-removebg-preview.png' };
-  if (lower.includes('sort') || lower.includes('comparison'))
-    return { emoji: '🔀', mascot: '📊', color: 'from-indigo-400 to-violet-500', sound: 'Sorting & Comparison!', image: '/assets/subjects/maths_sorting_comparison-removebg-preview.png' };
+    return { emoji: '⭕', mascot: '⬛', color: 'from-blue-400 to-cyan-500', sound: 'Shapes!', image: '/assets/subjects/maths_shapes_spatial_awareness-removebg-preview.png' };
+  if (lower.includes('position') || lower.includes('direction'))
+    return { emoji: '📍', mascot: '📌', color: 'from-pink-400 to-rose-500', sound: 'Position & Direction!', image: '/assets/subjects/maths_position_words-removebg-preview.png' };
   if (lower.includes('pattern'))
     return { emoji: '🔁', mascot: '🎨', color: 'from-yellow-400 to-orange-500', sound: 'Patterns!', image: '/assets/subjects/maths_patterns-removebg-preview.png' };
+  if (lower.includes('sort') || lower.includes('classification'))
+    return { emoji: '🔀', mascot: '📊', color: 'from-indigo-400 to-violet-500', sound: 'Sorting & Classification!', image: '/assets/subjects/maths_sorting_comparison-removebg-preview.png' };
+  if (lower.includes('time') || lower.includes('calendar'))
+    return { emoji: '🕒', mascot: '📅', color: 'from-teal-400 to-cyan-500', sound: 'Time & Calendar!', image: '/assets/subjects/maths_position_words-removebg-preview.png' };
+
+  if (lower.includes('pre-math') || lower.includes('concepts'))
+    return { emoji: '🧠', mascot: '🤔', color: 'from-purple-400 to-pink-500', sound: 'Pre-Math Concepts!', image: '/assets/subjects/maths_pre_math_concepts-removebg-preview.png' };
   return { emoji: '🔢', mascot: '🧮', color: 'from-orange-400 to-amber-500', sound: `${name}!` };
 }
 

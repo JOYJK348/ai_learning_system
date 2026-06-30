@@ -520,8 +520,11 @@ function UltimateLearnEngineInner() {
         // Tamil vowel lessons → TamilVowelQuiz
         const isTamilSubject = activeSubject?.name?.toLowerCase().includes('tamil') || activeSubject?.name?.toLowerCase().includes('தமிழ்');
         const chapterName = activeChapter?.name || '';
+
+        // ── UKG Tamil bypass: skip ALL LKG routing, let ActivityPlayer handle it ──
+        const isUKGStudent = studentProfile?.grade_name?.toUpperCase() === 'UKG';
         
-        if (isTamilSubject) {
+        if (isTamilSubject && !isUKGStudent) {
             const isVowelAU =
                 chapterName.includes('உயிர் எழுத்துக்கள் அ-ஊ') ||
                 (chapterName.toLowerCase().includes('vowel') && !chapterName.includes('எ-ஔ') && !chapterName.includes('எ-ஃ')) ||
@@ -577,7 +580,7 @@ function UltimateLearnEngineInner() {
             activeSubject?.name?.toLowerCase().includes('evs') ||
             activeSubject?.name?.toLowerCase().includes('gk') ||
             activeSubject?.name?.toLowerCase().includes('hindi');
-        if (!isGkOrEvsSubject && lower.includes('name') && !lower.includes('identity')) {
+        if (!isGkOrEvsSubject && (lower === 'my name' || lower === 'my name writing') && !lower.includes('identity')) {
             setShowNameTrace(true);
             return;
         }
@@ -593,11 +596,13 @@ function UltimateLearnEngineInner() {
 
         // Pre-writing foundation strokes → trace → quiz (all trace, no buttons)
         // Only trigger for the actual Pre-Writing chapter (supports Tamil name "முன் எழுத்து பயிற்சிகள்")
+        // Skip entirely for UKG Tamil lessons — they have their own ActivityPlayer games
         const isPreWritingChapter =
+            !isUKGStudent && (
             activeChapter?.name?.toLowerCase().includes('pre-writing') ||
             activeChapter?.name?.toLowerCase().includes('pattern') ||
             activeChapter?.name?.toLowerCase().includes('முன் எழுத்து') ||
-            activeChapter?.name?.toLowerCase().includes('பயிற்சி');
+            activeChapter?.name?.toLowerCase().includes('பயிற்சி'));
 
         if (isPreWritingChapter && (
             lower.includes('standing') || lower.includes('sleeping') || lower.includes('slanting') ||

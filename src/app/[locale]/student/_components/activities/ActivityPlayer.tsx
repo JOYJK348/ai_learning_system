@@ -47,6 +47,44 @@ import OppositesQuiz from './OppositesQuiz';
 import VocabularyQuiz from './VocabularyQuiz';
 import SimpleGrammarQuiz from './SimpleGrammarQuiz';
 import SentenceBuilderQuiz from './SentenceBuilderQuiz';
+import NumberRecognitionQuiz from './NumberRecognitionQuiz';
+import CountingObjectsQuiz from './CountingObjectsQuiz';
+import CountAndWriteQuiz from './CountAndWriteQuiz';
+import NumberNamesQuiz from './NumberNamesQuiz';
+import MissingNumbersQuiz from './MissingNumbersQuiz';
+import BeforeAfterBetweenQuiz from './BeforeAfterBetweenQuiz';
+import AdditionObjectsQuiz from './AdditionObjectsQuiz';
+import SingleDigitAdditionQuiz from './SingleDigitAdditionQuiz';
+import NumberBondsQuiz from './NumberBondsQuiz';
+import TakingAwayQuiz from './TakingAwayQuiz';
+import SubtractionObjectsQuiz from './SubtractionObjectsQuiz';
+import SimpleSubtractionQuiz from './SimpleSubtractionQuiz';
+import GreaterSmallerQuiz from './GreaterSmallerQuiz';
+import EqualGroupsQuiz from './EqualGroupsQuiz';
+import LongAndShortQuiz from './LongAndShortQuiz';
+import ThickAndThinQuiz from './ThickAndThinQuiz';
+import HeavyLightFullEmptyQuiz from './HeavyLightFullEmptyQuiz';
+import FlatShapesQuiz from './FlatShapesQuiz';
+import SpecialShapesQuiz from './SpecialShapesQuiz';
+import ShapePuzzlesQuiz from './ShapePuzzlesQuiz';
+import AboveBelowLeftRightQuiz from './AboveBelowLeftRightQuiz';
+import FrontBehindNearFarQuiz from './FrontBehindNearFarQuiz';
+import AbAbcPatternsQuiz from './AbAbcPatternsQuiz';
+import ShapeObjectPatternsQuiz from './ShapeObjectPatternsQuiz';
+import SortingColorShapeQuiz from './SortingColorShapeQuiz';
+import SortingSizeQuantityQuiz from './SortingSizeQuantityQuiz';
+import DayNightDaysQuiz from './DayNightDaysQuiz';
+import MonthsTodayTomorrowQuiz from './MonthsTodayTomorrowQuiz';
+import ClockRecognitionQuiz from './ClockRecognitionQuiz';
+import UyirEzhuthukkalIntroQuiz from './UyirEzhuthukkalIntroQuiz';
+import TamilLetterOrderQuiz from './TamilLetterOrderQuiz';
+import TamilMeiIntroQuiz from './TamilMeiIntroQuiz';
+import TamilSoundQuiz from './TamilSoundQuiz';
+import TamilUyirmeiQuiz1 from './TamilUyirmeiQuiz1';
+import TamilUyirmeiQuiz2 from './TamilUyirmeiQuiz2';
+import TamilWordBuilderQuiz from './TamilWordBuilderQuiz';
+import TamilTwoLetterWordsQuiz from './TamilTwoLetterWordsQuiz';
+import TamilThreeLetterWordsQuiz from './TamilThreeLetterWordsQuiz';
 
 type Props = {
   lessonId: string;
@@ -90,6 +128,44 @@ const ACTIVITY_TYPE_MAP: Record<number, string> = {
   31: 'vocabulary_quiz',
   32: 'simple_grammar_quiz',
   33: 'sentence_builder_quiz',
+  34: 'number_recognition_quiz',
+  35: 'counting_objects_quiz',
+  36: 'count_and_write_quiz',
+  37: 'number_names_quiz',
+  38: 'missing_numbers_quiz',
+  39: 'before_after_between_quiz',
+  40: 'addition_objects_quiz',
+  41: 'single_digit_addition_quiz',
+  42: 'number_bonds_quiz',
+  43: 'taking_away_quiz',
+  44: 'subtraction_objects_quiz',
+  45: 'simple_subtraction_quiz',
+  46: 'greater_smaller_quiz',
+  47: 'equal_groups_quiz',
+  48: 'long_and_short_quiz',
+  49: 'thick_and_thin_quiz',
+  50: 'heavy_light_full_empty_quiz',
+  51: 'flat_shapes_quiz',
+  52: 'special_shapes_quiz',
+  53: 'shape_puzzles_quiz',
+  54: 'above_below_left_right_quiz',
+  55: 'front_behind_near_far_quiz',
+  56: 'ab_abc_patterns_quiz',
+  57: 'shape_object_patterns_quiz',
+  58: 'sorting_color_shape_quiz',
+  59: 'sorting_size_quantity_quiz',
+  60: 'day_night_days_quiz',
+  61: 'months_today_tomorrow_quiz',
+  62: 'clock_recognition_quiz',
+  63: 'uyir_ezhuthukkal_intro_quiz',
+  64: 'tamil_letter_order_quiz',
+  65: 'tamil_mei_intro_quiz',
+  66: 'tamil_sound_quiz',
+  67: 'tamil_uyirmei_quiz1',
+  68: 'tamil_uyirmei_quiz2',
+  69: 'tamil_word_builder_quiz',
+  70: 'tamil_two_letter_words_quiz',
+  71: 'tamil_three_letter_words_quiz',
 };
 
 export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onClose, studentName, subjectName }: Props) {
@@ -111,6 +187,7 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
     if (!rawActivities) return undefined;
     
     const lowerTitle = lessonTitle.toLowerCase();
+    console.log('ActivityPlayer Matching debug:', { lessonTitle, lowerTitle, hasMatch: lowerTitle.includes('ஈரெழுத்து') });
     
     // High-priority English Topic Overrides (Trigger instantly regardless of profile query timing)
     if (lowerTitle.includes('what are vowels')) {
@@ -361,6 +438,285 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
           attempt: null,
         }
       ] as Activity[];
+    }
+    // High-priority Number Recognition Lesson Overrides
+    if (lowerTitle.includes('number recognition 1 to 50') || lowerTitle.includes('number recognition 51 to 100')) {
+      const deducedMode = lowerTitle.includes('1 to 50') ? '1_50' : '51_100';
+      return [
+        {
+          id: `${lessonId}-numrec`,
+          name: 'Number Recognition Game',
+          activity_type_id: 34,
+          config: { mode: deducedMode },
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    // High-priority Counting Objects Lesson Overrides
+    if (lowerTitle.includes('counting objects')) {
+      return [
+        {
+          id: `${lessonId}-countobj`,
+          name: 'Counting Objects Game',
+          activity_type_id: 35,
+          config: {},
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    // High-priority Count and Write Lesson Overrides
+    if (lowerTitle.includes('count and write')) {
+      return [
+        {
+          id: `${lessonId}-countwrite`,
+          name: 'Count and Write Game',
+          activity_type_id: 36,
+          config: {},
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    // High-priority Number Names Lesson Overrides
+    if (lowerTitle.includes('number names')) {
+      return [
+        {
+          id: `${lessonId}-numnames`,
+          name: 'Number Names Game',
+          activity_type_id: 37,
+          config: {},
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    // High-priority Missing Numbers Lesson Overrides
+    if (lowerTitle.includes('missing numbers')) {
+      return [
+        {
+          id: `${lessonId}-missingnums`,
+          name: 'Missing Numbers Game',
+          activity_type_id: 38,
+          config: {},
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    // High-priority Before After Between Lesson Overrides
+    if (lowerTitle.includes('before, after and between') || lowerTitle.includes('before after between')) {
+      return [
+        {
+          id: `${lessonId}-bab`,
+          name: 'Before After Between Game',
+          activity_type_id: 39,
+          config: {},
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    // High-priority Addition Using Objects Lesson Overrides
+    if (lowerTitle.includes('addition using objects')) {
+      return [
+        {
+          id: `${lessonId}-addobj`,
+          name: 'Addition Using Objects Game',
+          activity_type_id: 40,
+          config: {},
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    // High-priority Single Digit Addition Lesson Overrides
+    if (lowerTitle.includes('single digit addition')) {
+      return [
+        {
+          id: `${lessonId}-singleadd`,
+          name: 'Single Digit Addition Game',
+          activity_type_id: 41,
+          config: {},
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    // High-priority Number Bonds Lesson Overrides
+    if (lowerTitle.includes('number bonds')) {
+      return [
+        {
+          id: `${lessonId}-numbonds`,
+          name: 'Number Bonds Game',
+          activity_type_id: 42,
+          config: {},
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    // High-priority Taking Away Concept Lesson Overrides
+    if (lowerTitle.includes('taking away concept') || lowerTitle.includes('taking away')) {
+      return [
+        {
+          id: `${lessonId}-takeaway`,
+          name: 'Taking Away Game',
+          activity_type_id: 43,
+          config: {},
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    // High-priority Subtraction Using Objects Lesson Overrides
+    if (lowerTitle.includes('subtraction using objects')) {
+      return [
+        {
+          id: `${lessonId}-subobj`,
+          name: 'Subtraction Using Objects Game',
+          activity_type_id: 44,
+          config: {},
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    // High-priority Simple Subtraction Lesson Overrides
+    if (lowerTitle.includes('simple subtraction')) {
+      return [
+        {
+          id: `${lessonId}-simplesub`,
+          name: 'Simple Subtraction Game',
+          activity_type_id: 45,
+          config: {},
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    // High-priority Greater Than Smaller Than Lesson Overrides
+    if (lowerTitle.includes('greater than') || lowerTitle.includes('smaller than') || lowerTitle.includes('greater than, smaller than')) {
+      return [
+        {
+          id: `${lessonId}-greatersmaller`,
+          name: 'Greater Than Smaller Than Game',
+          activity_type_id: 46,
+          config: {},
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    // High-priority Equal Groups Lesson Overrides
+    if (lowerTitle.includes('equal groups')) {
+      return [
+        {
+          id: `${lessonId}-equalgroups`,
+          name: 'Equal Groups Matcher Game',
+          activity_type_id: 47,
+          config: {},
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    // High-priority Long and Short Lesson Overrides
+    if (lowerTitle.includes('long and short') || lowerTitle.includes('long & short')) {
+      return [{ id: `${lessonId}-longshort`, name: 'Long and Short Game', activity_type_id: 48, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Thick and Thin Lesson Overrides
+    if (lowerTitle.includes('thick and thin') || lowerTitle.includes('thick & thin')) {
+      return [{ id: `${lessonId}-thickthin`, name: 'Thick and Thin Game', activity_type_id: 49, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Heavy Light Full Empty Lesson Overrides
+    if (lowerTitle.includes('heavy') || lowerTitle.includes('light') || lowerTitle.includes('full') || lowerTitle.includes('empty')) {
+      return [{ id: `${lessonId}-heavylight`, name: 'Heavy Light Full Empty Game', activity_type_id: 50, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Flat Shapes (Rectangle & Oval) Lesson Overrides
+    if (lowerTitle.includes('flat shapes') || (lowerTitle.includes('rectangle') && lowerTitle.includes('oval'))) {
+      return [{ id: `${lessonId}-flatshapes`, name: 'Flat Shapes Game', activity_type_id: 51, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Special Shapes (Star & Diamond) Lesson Overrides
+    if (lowerTitle.includes('special shapes') || (lowerTitle.includes('star') && lowerTitle.includes('diamond'))) {
+      return [{ id: `${lessonId}-specialshapes`, name: 'Special Shapes Game', activity_type_id: 52, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Shape Puzzles Lesson Overrides
+    if (lowerTitle.includes('shape puzzle') || lowerTitle.includes('shape puzzles')) {
+      return [{ id: `${lessonId}-shapepuzzles`, name: 'Shape Puzzles Game', activity_type_id: 53, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Above / Below & Left / Right Lesson Overrides
+    if (lowerTitle.includes('above / below') || lowerTitle.includes('above/below') || lowerTitle.includes('left / right') || lowerTitle.includes('left/right')) {
+      return [{ id: `${lessonId}-abovebelowleftright`, name: 'Above Below Left Right Game', activity_type_id: 54, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Front / Behind & Near / Far Lesson Overrides
+    if (lowerTitle.includes('front / behind') || lowerTitle.includes('front/behind') || lowerTitle.includes('near / far') || lowerTitle.includes('near/far')) {
+      return [{ id: `${lessonId}-frontbehindnearfar`, name: 'Front Behind Near Far Game', activity_type_id: 55, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority AB and ABC Patterns Lesson Overrides
+    if (lowerTitle.includes('ab and abc') || lowerTitle.includes('ab & abc') || lowerTitle.includes('ab and abc patterns')) {
+      return [{ id: `${lessonId}-ababcpatterns`, name: 'AB and ABC Patterns Game', activity_type_id: 56, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Shape and Object Patterns Lesson Overrides
+    if (lowerTitle.includes('shape and object') || lowerTitle.includes('shape & object') || (lowerTitle.includes('shape') && lowerTitle.includes('pattern') && !lowerTitle.includes('puzzle') && !lowerTitle.includes('special'))) {
+      return [{ id: `${lessonId}-shapeobjectpatterns`, name: 'Shape and Object Patterns Game', activity_type_id: 57, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Sorting by Color and Shape Lesson Overrides
+    if (lowerTitle.includes('sorting by color') || (lowerTitle.includes('sorting') && lowerTitle.includes('color') && lowerTitle.includes('shape'))) {
+      return [{ id: `${lessonId}-sortingcolorshape`, name: 'Sorting by Color and Shape Game', activity_type_id: 58, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Sorting by Size and Quantity Lesson Overrides
+    if (lowerTitle.includes('sorting by size') || (lowerTitle.includes('sorting') && lowerTitle.includes('size') && lowerTitle.includes('quantity'))) {
+      return [{ id: `${lessonId}-sortingsizequantity`, name: 'Sorting by Size and Quantity Game', activity_type_id: 59, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Day / Night & Days of Week Lesson Overrides
+    if (lowerTitle.includes('day / night') || lowerTitle.includes('day/night') || lowerTitle.includes('days of week') || lowerTitle.includes('days of the week')) {
+      return [{ id: `${lessonId}-daynightdays`, name: 'Day / Night & Days of Week Game', activity_type_id: 60, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Months & Today / Tomorrow Lesson Overrides
+    if (lowerTitle.includes('months') || lowerTitle.includes('today / tomorrow') || lowerTitle.includes('today/tomorrow') || lowerTitle.includes('months & today')) {
+      return [{ id: `${lessonId}-monthstodaytomorrow`, name: 'Months & Today / Tomorrow Game', activity_type_id: 61, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Clock Recognition (O'clock) Lesson Overrides
+    if (lowerTitle.includes('clock') || lowerTitle.includes('o\'clock')) {
+      return [{ id: `${lessonId}-clockrecognition`, name: 'Clock Recognition Game', activity_type_id: 62, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Uyir Ezhuthukkal Intro Lesson Overrides
+    if ((lowerTitle.includes('அறிமுகம்') && !lowerTitle.includes('ஈரெழுத்து') && !lowerTitle.includes('மூவெழுத்து')) || lowerTitle.includes('uyir ezhuthukkal') || lowerTitle.includes('அ - ஔ')) {
+      return [{ id: `${lessonId}-uyirezhuthukkalintro`, name: 'Uyir Ezhuthukkal Intro Game', activity_type_id: 63, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Tamil Letter Order Lesson Overrides
+    if (lowerTitle.includes('வரிசைமுறை') || lowerTitle.includes('letter order') || lowerTitle.includes('order')) {
+      return [{ id: `${lessonId}-tamilletterorder`, name: 'Tamil Letter Order Game', activity_type_id: 64, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Tamil Mei Intro Lesson Overrides
+    if (lowerTitle.includes('க் முதல் ன் வரை') || lowerTitle.includes('மெய்') || lowerTitle.includes('consonants') || lowerTitle.includes('mei ezhuthukkal')) {
+      return [{ id: `${lessonId}-tamilmeiintro`, name: 'Tamil Mei Intro Game', activity_type_id: 65, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Tamil Sound Quiz Lesson Overrides
+    if (lowerTitle.includes('ஒலி கேட்டுத் தேர்வு') || lowerTitle.includes('முதல் எழுத்து கண்டுபிடி') || lowerTitle.includes('ஒலி') || lowerTitle.includes('sound quiz') || lowerTitle.includes('sound test')) {
+      return [{ id: `${lessonId}-tamilsoundquiz`, name: 'Tamil Sound Quiz', activity_type_id: 66, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Tamil Uyirmei Quiz 1 (க முதல் ன வரிசை)
+    if (lowerTitle.includes('க முதல் ன வரிசை') || lowerTitle.includes('க முதல் ன')) {
+      return [{ id: `${lessonId}-tamiluyirmei1`, name: 'Tamil Uyirmei Quiz 1', activity_type_id: 67, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Tamil Uyirmei Quiz 2 (கா முதல் னா வரிசை)
+    if (lowerTitle.includes('கா முதல் னா வரிசை') || lowerTitle.includes('கா முதல் னா')) {
+      return [{ id: `${lessonId}-tamiluyirmei2`, name: 'Tamil Uyirmei Quiz 2', activity_type_id: 68, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Tamil Word Builder (எழுத்து சேர்த்தல்)
+    if (lowerTitle.includes('எழுத்து சேர்த்தல்') || lowerTitle.includes('மரம்') || lowerTitle.includes('கல்') || lowerTitle.includes('சேர்த்தல்')) {
+      return [{ id: `${lessonId}-tamilwordbuilder`, name: 'Tamil Word Builder', activity_type_id: 69, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Tamil Two Letter Words (ஈரெழுத்து சொற்கள் அறிமுகம்)
+    if (lowerTitle.includes('ஈரெழுத்து') || lowerTitle.includes('two letter') || lowerTitle.includes('two-letter')) {
+      return [{ id: `${lessonId}-tamiltwoletter`, name: 'Tamil Two Letter Words', activity_type_id: 70, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Tamil Three Letter Words (மூவெழுத்து சொற்கள் அறிமுகம்)
+    if (lowerTitle.includes('மூவெழுத்து') || lowerTitle.includes('three letter') || lowerTitle.includes('three-letter')) {
+      return [{ id: `${lessonId}-tamilthreeletter`, name: 'Tamil Three Letter Words', activity_type_id: 71, config: {}, sort_order: 1, attempt: null }] as Activity[];
     }
 
     const isEnglish = subjectName?.toLowerCase().includes('english') || lessonTitle.toLowerCase().includes('letter');
@@ -670,6 +1026,18 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   const getShapesSpatialConceptKey = () => {
     if (!isMathSubject) return null;
     const lower = lessonTitle.toLowerCase();
+    
+    // Bypass for UKG Advanced shapes, position, pattern, and sorting lessons to let them play custom new quizzes
+    // Bypass for UKG Advanced shapes, position, pattern, sorting, and time lessons to let them play custom new quizzes
+    if (lower.includes('oval') || lower.includes('special shapes') || lower.includes('puzzle') ||
+        lower.includes('above / below') || lower.includes('above/below') ||
+        lower.includes('front / behind') || lower.includes('front/behind') ||
+        lower.includes('pattern') || lower.includes('patterns') ||
+        lower.includes('sorting') || lower.includes('classification') ||
+        lower.includes('day') || lower.includes('night') || lower.includes('months') || lower.includes('clock') || lower.includes('tomorrow')) {
+      return null;
+    }
+
     if (lower.includes('circle') && lower.includes('square')) return 'circle-square';
     if (lower.includes('triangle') || lower.includes('rectangle')) return 'triangle-rectangle';
     if (lower.includes('around')) return 'shapes-around';
@@ -700,6 +1068,8 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
 
   const getNumberAdventureConceptKey = () => {
     if (!isMathSubject) return null;
+    const isUKG = studentProfile?.grade_name?.toUpperCase() === 'UKG';
+    if (isUKG) return null;
     const lower = lessonTitle.toLowerCase();
     if (lower.includes('10')) return null;
     if (lower.includes('1') && lower.includes('2')) return 'numbers-1-2';
@@ -722,6 +1092,8 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
 
   const getNumberAdventure610ConceptKey = () => {
     if (!isMathSubject) return null;
+    const isUKG = studentProfile?.grade_name?.toUpperCase() === 'UKG';
+    if (isUKG) return null;
     const lower = lessonTitle.toLowerCase();
     if (lower.includes('6') && lower.includes('7')) return 'numbers-6-7';
     if (lower.includes('8') && lower.includes('10')) return 'numbers-8-10';
@@ -1128,6 +1500,82 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
         return <SimpleGrammarQuiz mode={act.config?.mode as any} {...commonProps} />;
       case 'sentence_builder_quiz':
         return <SentenceBuilderQuiz mode={act.config?.mode as any} {...commonProps} />;
+      case 'number_recognition_quiz':
+        return <NumberRecognitionQuiz mode={act.config?.mode as any} {...commonProps} />;
+      case 'counting_objects_quiz':
+        return <CountingObjectsQuiz {...commonProps} />;
+      case 'count_and_write_quiz':
+        return <CountAndWriteQuiz {...commonProps} />;
+      case 'number_names_quiz':
+        return <NumberNamesQuiz {...commonProps} />;
+      case 'missing_numbers_quiz':
+        return <MissingNumbersQuiz {...commonProps} />;
+      case 'before_after_between_quiz':
+        return <BeforeAfterBetweenQuiz {...commonProps} />;
+      case 'addition_objects_quiz':
+        return <AdditionObjectsQuiz {...commonProps} />;
+      case 'single_digit_addition_quiz':
+        return <SingleDigitAdditionQuiz {...commonProps} />;
+      case 'number_bonds_quiz':
+        return <NumberBondsQuiz {...commonProps} />;
+      case 'taking_away_quiz':
+        return <TakingAwayQuiz {...commonProps} />;
+      case 'subtraction_objects_quiz':
+        return <SubtractionObjectsQuiz {...commonProps} />;
+      case 'simple_subtraction_quiz':
+        return <SimpleSubtractionQuiz {...commonProps} />;
+      case 'greater_smaller_quiz':
+        return <GreaterSmallerQuiz {...commonProps} />;
+      case 'equal_groups_quiz':
+        return <EqualGroupsQuiz {...commonProps} />;
+      case 'long_and_short_quiz':
+        return <LongAndShortQuiz {...commonProps} />;
+      case 'thick_and_thin_quiz':
+        return <ThickAndThinQuiz {...commonProps} />;
+      case 'heavy_light_full_empty_quiz':
+        return <HeavyLightFullEmptyQuiz {...commonProps} />;
+      case 'flat_shapes_quiz':
+        return <FlatShapesQuiz {...commonProps} />;
+      case 'special_shapes_quiz':
+        return <SpecialShapesQuiz {...commonProps} />;
+      case 'shape_puzzles_quiz':
+        return <ShapePuzzlesQuiz {...commonProps} />;
+      case 'above_below_left_right_quiz':
+        return <AboveBelowLeftRightQuiz {...commonProps} />;
+      case 'front_behind_near_far_quiz':
+        return <FrontBehindNearFarQuiz {...commonProps} />;
+      case 'ab_abc_patterns_quiz':
+        return <AbAbcPatternsQuiz {...commonProps} />;
+      case 'shape_object_patterns_quiz':
+        return <ShapeObjectPatternsQuiz {...commonProps} />;
+      case 'sorting_color_shape_quiz':
+        return <SortingColorShapeQuiz {...commonProps} />;
+      case 'sorting_size_quantity_quiz':
+        return <SortingSizeQuantityQuiz {...commonProps} />;
+      case 'day_night_days_quiz':
+        return <DayNightDaysQuiz {...commonProps} />;
+      case 'months_today_tomorrow_quiz':
+        return <MonthsTodayTomorrowQuiz {...commonProps} />;
+      case 'clock_recognition_quiz':
+        return <ClockRecognitionQuiz {...commonProps} />;
+      case 'uyir_ezhuthukkal_intro_quiz':
+        return <UyirEzhuthukkalIntroQuiz {...commonProps} />;
+      case 'tamil_letter_order_quiz':
+        return <TamilLetterOrderQuiz {...commonProps} />;
+      case 'tamil_mei_intro_quiz':
+        return <TamilMeiIntroQuiz {...commonProps} />;
+      case 'tamil_sound_quiz':
+        return <TamilSoundQuiz {...commonProps} />;
+      case 'tamil_uyirmei_quiz1':
+        return <TamilUyirmeiQuiz1 {...commonProps} />;
+      case 'tamil_uyirmei_quiz2':
+        return <TamilUyirmeiQuiz2 {...commonProps} />;
+      case 'tamil_word_builder_quiz':
+        return <TamilWordBuilderQuiz lessonTitle={lessonTitle} {...commonProps} />;
+      case 'tamil_two_letter_words_quiz':
+        return <TamilTwoLetterWordsQuiz {...commonProps} />;
+      case 'tamil_three_letter_words_quiz':
+        return <TamilThreeLetterWordsQuiz {...commonProps} />;
       default:
         return (
           <div className="flex flex-col items-center gap-4 p-8">
@@ -1144,14 +1592,14 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/40 backdrop-blur-md">
-      <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-2 sm:p-4 bg-slate-900/40 backdrop-blur-md">
+      <div className="relative w-full max-w-lg sm:max-w-2xl max-h-[92vh] flex flex-col overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
         {/* Playful background blobs */}
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[50%] bg-sky-100/50 rounded-full blur-[60px] pointer-events-none" />
 
         {/* Header */}
-        <div className="relative z-10 flex items-center justify-between px-6 pt-5 pb-3 border-b border-amber-100/60 bg-amber-50/30">
+        <div className="relative z-10 flex-shrink-0 flex items-center justify-between px-6 pt-5 pb-3 border-b border-amber-100/60 bg-amber-50/30">
           <span className="text-xs sm:text-sm font-black text-amber-700/80 tracking-wider">
             {currentIndex + 1} / {activities?.length || 0}
           </span>
@@ -1172,7 +1620,7 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
         </div>
 
         {/* Activity body */}
-        <div className="relative z-10 p-4 sm:p-6 min-h-[350px] flex flex-col justify-center">
+        <div className="relative z-10 p-4 sm:p-6 overflow-y-auto flex-1 flex flex-col justify-center">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentActivity?.id || 'done'}
