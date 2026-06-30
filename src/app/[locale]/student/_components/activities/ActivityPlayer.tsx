@@ -85,6 +85,12 @@ import TamilUyirmeiQuiz2 from './TamilUyirmeiQuiz2';
 import TamilWordBuilderQuiz from './TamilWordBuilderQuiz';
 import TamilTwoLetterWordsQuiz from './TamilTwoLetterWordsQuiz';
 import TamilThreeLetterWordsQuiz from './TamilThreeLetterWordsQuiz';
+import TamilFillBlanksQuiz from './TamilFillBlanksQuiz';
+import TamilPictureQuiz from './TamilPictureQuiz';
+import TamilSoundShapeQuiz from './TamilSoundShapeQuiz';
+import TamilWordReadingQuiz from './TamilWordReadingQuiz';
+import TamilSentenceReadingQuiz from './TamilSentenceReadingQuiz';
+import UkgEvsQuiz from './UkgEvsQuiz';
 
 type Props = {
   lessonId: string;
@@ -166,6 +172,12 @@ const ACTIVITY_TYPE_MAP: Record<number, string> = {
   69: 'tamil_word_builder_quiz',
   70: 'tamil_two_letter_words_quiz',
   71: 'tamil_three_letter_words_quiz',
+  72: 'tamil_fill_blanks_quiz',
+  73: 'tamil_picture_quiz',
+  74: 'tamil_sound_shape_quiz',
+  75: 'tamil_word_reading_quiz',
+  76: 'tamil_sentence_reading_quiz',
+  77: 'ukg_evs_quiz',
 };
 
 export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onClose, studentName, subjectName }: Props) {
@@ -185,9 +197,14 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
 
   const activities = useMemo(() => {
     if (!rawActivities) return undefined;
-    
+
+    const isUKG = studentProfile?.grade_name?.toUpperCase() === 'UKG';
+    const isEvs = subjectName?.toLowerCase().includes('environmental') || subjectName?.toLowerCase().includes('studies') || subjectName?.toLowerCase().includes('evs');
+    if (isUKG && isEvs) {
+      return [{ id: `${lessonId}-ukgevs`, name: 'UKG EVS Level Up Quiz', activity_type_id: 77, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+
     const lowerTitle = lessonTitle.toLowerCase();
-    console.log('ActivityPlayer Matching debug:', { lessonTitle, lowerTitle, hasMatch: lowerTitle.includes('ஈரெழுத்து') });
     
     // High-priority English Topic Overrides (Trigger instantly regardless of profile query timing)
     if (lowerTitle.includes('what are vowels')) {
@@ -695,7 +712,7 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
       return [{ id: `${lessonId}-tamilmeiintro`, name: 'Tamil Mei Intro Game', activity_type_id: 65, config: {}, sort_order: 1, attempt: null }] as Activity[];
     }
     // High-priority Tamil Sound Quiz Lesson Overrides
-    if (lowerTitle.includes('ஒலி கேட்டுத் தேர்வு') || lowerTitle.includes('முதல் எழுத்து கண்டுபிடி') || lowerTitle.includes('ஒலி') || lowerTitle.includes('sound quiz') || lowerTitle.includes('sound test')) {
+    if (lowerTitle.includes('ஒலி கேட்டுத் தேர்வு') || lowerTitle.includes('முதல் எழுத்து') || lowerTitle.includes('முதல் எழுத்தை') || (lowerTitle.includes('ஒலி') && !lowerTitle.includes('வடிவங்களை')) || lowerTitle.includes('sound quiz') || lowerTitle.includes('sound test')) {
       return [{ id: `${lessonId}-tamilsoundquiz`, name: 'Tamil Sound Quiz', activity_type_id: 66, config: {}, sort_order: 1, attempt: null }] as Activity[];
     }
     // High-priority Tamil Uyirmei Quiz 1 (க முதல் ன வரிசை)
@@ -718,9 +735,29 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
     if (lowerTitle.includes('மூவெழுத்து') || lowerTitle.includes('three letter') || lowerTitle.includes('three-letter')) {
       return [{ id: `${lessonId}-tamilthreeletter`, name: 'Tamil Three Letter Words', activity_type_id: 71, config: {}, sort_order: 1, attempt: null }] as Activity[];
     }
+    // High-priority Tamil Fill Blanks (கோடிட்ட இடங்களை நிரப்பு)
+    if (lowerTitle.includes('கோடிட்ட') || lowerTitle.includes('நிரப்பு') || lowerTitle.includes('fill') || lowerTitle.includes('blank')) {
+      return [{ id: `${lessonId}-tamilfillblanks`, name: 'Tamil Fill Blanks', activity_type_id: 72, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Tamil Picture Quiz (படம் பார்த்து சொல்)
+    if (lowerTitle.includes('படம் பார்த்து சொல்') || lowerTitle.includes('படம்') || lowerTitle.includes('படங்கள்') || lowerTitle.includes('பார்த்து') || lowerTitle.includes('சொல்') || lowerTitle.includes('picture to word')) {
+      return [{ id: `${lessonId}-tamilpicturequiz`, name: 'Tamil Picture Quiz', activity_type_id: 73, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Tamil Sound Shape Quiz (ஒலி வடிவங்களை அறிதல்)
+    if (lowerTitle.includes('ஒலி வடிவங்களை அறிதல்') || lowerTitle.includes('வடிவங்களை') || lowerTitle.includes('sound shape') || lowerTitle.includes('sound-shape')) {
+      return [{ id: `${lessonId}-tamilsoundshape`, name: 'Tamil Sound Shape Quiz', activity_type_id: 74, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Tamil Word Reading Quiz (சொற்களை வாசித்தல்)
+    if (lowerTitle.includes('சொற்களை வாசித்தல்') || lowerTitle.includes('வாசித்தல்') || lowerTitle.includes('words reading') || lowerTitle.includes('reading words') || lowerTitle.includes('sight words')) {
+      return [{ id: `${lessonId}-tamilwordreading`, name: 'Tamil Word Reading Quiz', activity_type_id: 75, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Tamil Sentence Reading Quiz (எளிய வாக்கியங்கள்)
+    if (lowerTitle.includes('எளிய வாக்கியங்கள்') || lowerTitle.includes('வாக்கியங்கள்') || lowerTitle.includes('sentence reading') || lowerTitle.includes('reading sentences')) {
+      return [{ id: `${lessonId}-tamilsentencereading`, name: 'Tamil Sentence Reading Quiz', activity_type_id: 76, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
 
     const isEnglish = subjectName?.toLowerCase().includes('english') || lessonTitle.toLowerCase().includes('letter');
-    const isUKG = studentProfile?.grade_name?.toUpperCase() === 'UKG';
+    // isUKG is resolved above
 
     if (isUKG && isEnglish) {
       if (lowerTitle.includes('capital letters')) {
@@ -1128,6 +1165,10 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   const sortingComparisonConceptKey = getSortingComparisonConceptKey();
 
   const getEvsConceptKey = () => {
+    const isUKG = studentProfile?.grade_name?.toUpperCase() === 'UKG';
+    const isEvsSubject = subjectName?.toLowerCase().includes('environmental') || subjectName?.toLowerCase().includes('studies') || subjectName?.toLowerCase().includes('evs');
+    if (isUKG && isEvsSubject) return null; // Let UKG EVS play the new level up quiz
+
     const lower = lessonTitle.toLowerCase();
     // Hindi lessons
     if (subjectName?.toLowerCase().includes('hindi')) {
@@ -1576,6 +1617,18 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
         return <TamilTwoLetterWordsQuiz {...commonProps} />;
       case 'tamil_three_letter_words_quiz':
         return <TamilThreeLetterWordsQuiz {...commonProps} />;
+      case 'tamil_fill_blanks_quiz':
+        return <TamilFillBlanksQuiz {...commonProps} />;
+      case 'tamil_picture_quiz':
+        return <TamilPictureQuiz {...commonProps} />;
+      case 'tamil_sound_shape_quiz':
+        return <TamilSoundShapeQuiz {...commonProps} />;
+      case 'tamil_word_reading_quiz':
+        return <TamilWordReadingQuiz {...commonProps} />;
+      case 'tamil_sentence_reading_quiz':
+        return <TamilSentenceReadingQuiz {...commonProps} />;
+      case 'ukg_evs_quiz':
+        return <UkgEvsQuiz lessonTitle={lessonTitle} {...commonProps} />;
       default:
         return (
           <div className="flex flex-col items-center gap-4 p-8">
