@@ -3,6 +3,7 @@ import * as tamil from './tamil';
 import * as maths from './maths';
 import * as evs from './evs';
 import * as hindi from './hindi';
+import * as ukgEnglish from './ukg/english';
 import { type TutorialStep } from './english';
 
 export { type TutorialStep };
@@ -132,10 +133,18 @@ export function getSubjectVisuals(name: string) {
   };
 }
 
+
 /**
  * Returns chapter visual details dynamically.
  */
-export function getChapterVisuals(subjectName: string, name: string): { emoji: string; mascot: string; color: string; sound: string; image?: string } {
+export function getChapterVisuals(subjectName: string, name: string, gradeName?: string): { emoji: string; mascot: string; color: string; sound: string; image?: string } {
+  const isUKG = gradeName?.toUpperCase() === 'UKG';
+  if (isUKG) {
+    if (!isTamilSubject(subjectName) && !isHindiSubject(subjectName) && !isMathsSubject(subjectName) && !isEvsSubject(subjectName)) {
+      return ukgEnglish.getChapterVisuals(name);
+    }
+  }
+
   if (isTamilSubject(subjectName)) {
     return tamil.getChapterVisuals(name);
   }
@@ -154,7 +163,14 @@ export function getChapterVisuals(subjectName: string, name: string): { emoji: s
 /**
  * Returns lesson visual details dynamically.
  */
-export function getLessonVisuals(subjectName: string, title: string) {
+export function getLessonVisuals(subjectName: string, title: string, gradeName?: string) {
+  const isUKG = gradeName?.toUpperCase() === 'UKG';
+  if (isUKG) {
+    if (!isTamilSubject(subjectName) && !isHindiSubject(subjectName) && !isMathsSubject(subjectName) && !isEvsSubject(subjectName)) {
+      return ukgEnglish.getLessonVisuals(title);
+    }
+  }
+
   if (isTamilSubject(subjectName)) {
     return tamil.getLessonVisuals(title);
   }
@@ -173,7 +189,14 @@ export function getLessonVisuals(subjectName: string, title: string) {
 /**
  * Builds the tutorial steps dynamically.
  */
-export function buildTutorial(subjectName: string, title: string, studentName?: string): TutorialStep[] {
+export function buildTutorial(subjectName: string, title: string, studentName?: string, gradeName?: string): TutorialStep[] {
+  const isUKG = gradeName?.toUpperCase() === 'UKG';
+  if (isUKG) {
+    if (!isTamilSubject(subjectName) && !isHindiSubject(subjectName) && !isMathsSubject(subjectName) && !isEvsSubject(subjectName)) {
+      return ukgEnglish.buildTutorial(title, studentName);
+    }
+  }
+
   if (isTamilSubject(subjectName)) {
     return tamil.buildTutorial(title, studentName);
   }

@@ -28,6 +28,15 @@ import {
   HINDI_LEVELS
 } from './quizData';
 
+import {
+  UKG_ENGLISH_LEVELS,
+  UKG_TAMIL_LEVELS,
+  UKG_MATH_LEVELS,
+  UKG_EVS_LEVELS,
+  UKG_GK_LEVELS,
+  UKG_HINDI_LEVELS
+} from './ukgQuizData';
+
 // ─── HELPERS ───
 
 function FamilyMedia({ emojiOrPath, className = "w-10 h-10 object-contain" }: { emojiOrPath: string; className?: string }) {
@@ -672,6 +681,7 @@ export default function QuizArena() {
   const queryClient = useQueryClient();
 
   const { subjects, studentProfile, studentDashboard } = useData();
+  const isUKG = studentProfile?.grade_name?.toUpperCase() === 'UKG';
   const [mounted, setMounted] = useState(false);
   
   // Views: 'dashboard' | 'levels' | 'quiz_player' | 'score_card'
@@ -683,6 +693,24 @@ export default function QuizArena() {
 
   // Subject Quiz Levels state
   const [activeSubject, setActiveSubject] = useState<'tamil' | 'english' | 'math' | 'evs' | 'gk' | 'hindi'>('tamil');
+  const activeLevels = useMemo(() => {
+    if (isUKG) {
+      if (activeSubject === 'tamil') return UKG_TAMIL_LEVELS;
+      if (activeSubject === 'english') return UKG_ENGLISH_LEVELS;
+      if (activeSubject === 'evs') return UKG_EVS_LEVELS;
+      if (activeSubject === 'gk') return UKG_GK_LEVELS;
+      if (activeSubject === 'hindi') return UKG_HINDI_LEVELS;
+      return UKG_MATH_LEVELS;
+    }
+    if (activeSubject === 'tamil') return TAMIL_LEVELS;
+    if (activeSubject === 'english') return ENGLISH_LEVELS;
+    if (activeSubject === 'evs') return EVS_LEVELS;
+    if (activeSubject === 'gk') return GK_LEVELS;
+    if (activeSubject === 'hindi') return HINDI_LEVELS;
+    return MATH_LEVELS;
+  }, [activeSubject, isUKG]);
+
+  // Subject Quiz Levels state
   const [activeLevel, setActiveLevel] = useState<Level | null>(null);
   const [levelScores, setLevelScores] = useState<Record<number, number>>({});
   
@@ -1610,13 +1638,8 @@ export default function QuizArena() {
                   hindi:   { label: 'Hindi Quiz Arena',     sub: 'Learn Hindi Vowels & Words',grad: 'from-rose-400 via-pink-500 to-red-400',      img: '/assets/subjects/hindi-removebg-preview.png', icon: '📙' },
                 };
                 const cfg = subjectConfig[activeSubject] ?? subjectConfig.english;
-                const activeLevels = activeSubject === 'tamil' ? TAMIL_LEVELS 
-                                   : activeSubject === 'english' ? ENGLISH_LEVELS 
-                                   : activeSubject === 'evs' ? EVS_LEVELS 
-                                   : activeSubject === 'gk' ? GK_LEVELS 
-                                   : activeSubject === 'hindi' ? HINDI_LEVELS 
-                                   : MATH_LEVELS;
-                const maxSubjectStars = activeLevels.length * 5;
+                const activeLevelsList = activeLevels;
+                const maxSubjectStars = activeLevelsList.length * 5;
                 const totalStars = Object.keys(levelScores).reduce((acc, id) => acc + Math.min(levelScores[Number(id)] || 0, 5), 0);
 
                 return (
@@ -1664,7 +1687,7 @@ export default function QuizArena() {
               {/* ── LEVELS GRID LIST ── */}
               <div className="relative max-w-6xl mx-auto w-full px-6 pt-12 pb-24 z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-                  {(activeSubject === 'tamil' ? TAMIL_LEVELS : activeSubject === 'english' ? ENGLISH_LEVELS : activeSubject === 'evs' ? EVS_LEVELS : activeSubject === 'gk' ? GK_LEVELS : activeSubject === 'hindi' ? HINDI_LEVELS : MATH_LEVELS).map((level, index) => {
+                  {activeLevels.map((level, index) => {
                     const unlocked = unlockedLevels.includes(level.id);
                     const bestScore = Math.min(levelScores[level.id] || 0, 5);
                     const isCompleted = levelScores[level.id] !== undefined;

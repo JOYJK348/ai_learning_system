@@ -24,6 +24,7 @@ import LetterCheckpoint from '../_components/activities/LetterCheckpoint';
 import TamilVowelQuiz from '../_components/activities/TamilVowelQuiz';
 import TamilMeiQuiz from '../_components/activities/TamilMeiQuiz';
 import TamilWordShowcase from '../_components/activities/TamilWordShowcase';
+import { cleanSoundTerms } from '@/core/data/curriculum/ukg/english';
 
 
 import TutorialPlayer from '../_components/activities/TutorialPlayer';
@@ -517,50 +518,54 @@ function UltimateLearnEngineInner() {
         const lower = lesson.title.toLowerCase();
 
         // Tamil vowel lessons → TamilVowelQuiz
+        const isTamilSubject = activeSubject?.name?.toLowerCase().includes('tamil') || activeSubject?.name?.toLowerCase().includes('தமிழ்');
         const chapterName = activeChapter?.name || '';
-        const isVowelAU =
-            chapterName.includes('உயிர் எழுத்துக்கள் அ-ஊ') ||
-            (chapterName.toLowerCase().includes('vowel') && !chapterName.includes('எ-ஔ') && !chapterName.includes('எ-ஃ')) ||
-            ['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ'].includes(lower.trim());
-        const isVowelEAU =
-            chapterName.includes('உயிர் எழுத்துக்கள் எ-ஔ') ||
-            chapterName.includes('உயிர் எழுத்துக்கள் எ-ஃ') ||
-            ['எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ', 'ஃ'].includes(lower.trim());
-        if (isVowelAU) {
-            setShowVowelQuiz('a-u');
-            return;
-        }
-        if (isVowelEAU) {
-            setShowVowelQuiz('e-au');
-            return;
-        }
-
-        // Tamil consonant lessons → TamilMeiQuiz (both வரிசை 1 & 2)
-        const isMeiChapter = chapterName.includes('மெய் எழுத்துக்கள்');
-        const isMeiSet1 = isMeiChapter && (lower.includes('ய்') || lower.includes('ர்') || lower.includes('ல்') || lower.includes('வ்'));
-        const isMeiSet2 = isMeiChapter && (lower.includes('ழ்') || lower.includes('ள்') || lower.includes('ற்') || lower.includes('ன்'));
-        const isMeiSet3 = isMeiChapter && (lower.includes('க்') || lower.includes('ங்') || lower.includes('ச்') || lower.includes('ஞ்'));
-        const isMeiSet4 = isMeiChapter && (lower.includes('ட்') || lower.includes('ண்') || lower.includes('த்') || lower.includes('ந்'));
-        const isMeiSet5 = isMeiChapter && (lower.includes('ப்') || lower.includes('ம்'));
-        if (isMeiSet1) { setShowMeiQuiz('set-1'); return; }
-        if (isMeiSet2) { setShowMeiQuiz('set-2'); return; }
-        if (isMeiSet3) { setShowMeiQuiz('set-3'); return; }
-        if (isMeiSet4) { setShowMeiQuiz('set-4'); return; }
-        if (isMeiSet5) { setShowMeiQuiz('set-5'); return; }
-
-        // Tamil simple words → TamilWordShowcase
-        const isWordChapter = chapterName.includes('எளிய சொற்கள்');
-        if (isWordChapter) {
-            if (lower.includes('உயிரெழுத்து') || lower.includes('vowel')) {
-                setShowWordShowcase('set-1');
-            } else if (lower.includes('அடிப்படை') || lower.includes('simple') || lower.includes('அம்மா')) {
-                setShowWordShowcase('set-2');
-            } else if (lower.includes('விலங்குகள்') || lower.includes('animal')) {
-                setShowWordShowcase('set-3');
-            } else {
-                setShowWordShowcase('set-4');
+        
+        if (isTamilSubject) {
+            const isVowelAU =
+                chapterName.includes('உயிர் எழுத்துக்கள் அ-ஊ') ||
+                (chapterName.toLowerCase().includes('vowel') && !chapterName.includes('எ-ஔ') && !chapterName.includes('எ-ஃ')) ||
+                ['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ'].includes(lower.trim());
+            const isVowelEAU =
+                chapterName.includes('உயிர் எழுத்துக்கள் எ-ஔ') ||
+                chapterName.includes('உயிர் எழுத்துக்கள் எ-ஃ') ||
+                ['எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ', 'ஃ'].includes(lower.trim());
+            if (isVowelAU) {
+                setShowVowelQuiz('a-u');
+                return;
             }
-            return;
+            if (isVowelEAU) {
+                setShowVowelQuiz('e-au');
+                return;
+            }
+
+            // Tamil consonant lessons → TamilMeiQuiz (both வரிசை 1 & 2)
+            const isMeiChapter = chapterName.includes('மெய் எழுத்துக்கள்');
+            const isMeiSet1 = isMeiChapter && (lower.includes('ய்') || lower.includes('ர்') || lower.includes('ல்') || lower.includes('வ்'));
+            const isMeiSet2 = isMeiChapter && (lower.includes('ழ்') || lower.includes('ள்') || lower.includes('ற்') || lower.includes('ன்'));
+            const isMeiSet3 = isMeiChapter && (lower.includes('க்') || lower.includes('ங்') || lower.includes('ச்') || lower.includes('ஞ்'));
+            const isMeiSet4 = isMeiChapter && (lower.includes('ட்') || lower.includes('ண்') || lower.includes('த்') || lower.includes('ந்'));
+            const isMeiSet5 = isMeiChapter && (lower.includes('ப்') || lower.includes('ம்'));
+            if (isMeiSet1) { setShowMeiQuiz('set-1'); return; }
+            if (isMeiSet2) { setShowMeiQuiz('set-2'); return; }
+            if (isMeiSet3) { setShowMeiQuiz('set-3'); return; }
+            if (isMeiSet4) { setShowMeiQuiz('set-4'); return; }
+            if (isMeiSet5) { setShowMeiQuiz('set-5'); return; }
+
+            // Tamil simple words → TamilWordShowcase
+            const isWordChapter = chapterName.includes('எளிய சொற்கள்');
+            if (isWordChapter) {
+                if (lower.includes('உயிரெழுத்து') || lower.includes('vowel')) {
+                    setShowWordShowcase('set-1');
+                } else if (lower.includes('அடிப்படை') || lower.includes('simple') || lower.includes('அம்மா')) {
+                    setShowWordShowcase('set-2');
+                } else if (lower.includes('விலங்குகள்') || lower.includes('animal')) {
+                    setShowWordShowcase('set-3');
+                } else {
+                    setShowWordShowcase('set-4');
+                }
+                return;
+            }
         }
 
         // "My Name Writing" → direct name tracing (exclude GK/EVS/Hindi subjects)
@@ -938,7 +943,7 @@ function UltimateLearnEngineInner() {
                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20 justify-items-center">
                                             {activeSubject.chapters.map((chapter, idx) => {
                                                 const subjectVisuals = getSubjectVisuals(activeSubject.name);
-                                                const visuals = getChapterVisuals(activeSubject.name, chapter.name);
+                                                const visuals = getChapterVisuals(activeSubject.name, chapter.name, studentProfile?.grade_name);
                                                 return (
                                                     <motion.button
                                                         key={chapter.id}
@@ -999,7 +1004,7 @@ function UltimateLearnEngineInner() {
 
                                                         {/* Clean text directly on card (No white container) - matching DashboardHome */}
                                                         <h3 className="text-white font-black text-base sm:text-xl tracking-tight leading-tight drop-shadow-[0_2px_2px_rgba(0,0,0,0.4)] uppercase w-full text-center mt-2">
-                                                            {chapter.name}
+                                                            {cleanSoundTerms(chapter.name)}
                                                         </h3>
                                                     </motion.button>
                                                 );
@@ -1023,9 +1028,9 @@ function UltimateLearnEngineInner() {
                                                 transition={{ type: 'spring', stiffness: 200 }}
                                                 className="w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-[2rem] bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-5xl shadow-xl border-4 border-white mb-4"
                                             >
-                                                {getChapterVisuals(activeSubject.name, activeChapter.name).mascot}
+                                                {getChapterVisuals(activeSubject.name, activeChapter.name, studentProfile?.grade_name).mascot}
                                             </motion.div>
-                                            <h2 className="text-3xl font-black text-indigo-950 uppercase tracking-tighter">{activeChapter.name}</h2>
+                                            <h2 className="text-3xl font-black text-indigo-950 uppercase tracking-tighter">{cleanSoundTerms(activeChapter.name)}</h2>
                                             <p className="text-[11px] font-bold text-indigo-950/50 mt-2">
                                                 {(() => {
                                                     const filtered = activeChapter.lessons.filter(l => {
@@ -1088,10 +1093,10 @@ function UltimateLearnEngineInner() {
                                                         </div>
                                                         <h3 className={`text-base sm:text-lg font-black mb-1 tracking-tight ${lesson.is_unlocked ? 'text-indigo-950' : 'text-gray-500'
                                                             }`}>
-                                                            {lesson.title}
+                                                            {cleanSoundTerms(lesson.title)}
                                                         </h3>
                                                         {lesson.description && (
-                                                            <p className="text-[10px] font-bold text-indigo-900/40 mb-3 leading-tight line-clamp-1">{lesson.description}</p>
+                                                            <p className="text-[10px] font-bold text-indigo-900/40 mb-3 leading-tight line-clamp-1">{cleanSoundTerms(lesson.description)}</p>
                                                         )}
                                                         <div className={`w-full py-2.5 rounded-2xl text-[10px] font-black shadow-lg flex items-center justify-center gap-2 transition-all ${lesson.progress?.status === 'completed'
                                                                 ? 'bg-emerald-500 text-white'

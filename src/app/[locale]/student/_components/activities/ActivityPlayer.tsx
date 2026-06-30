@@ -27,6 +27,26 @@ import EvsExploreGame from './EvsExploreGame';
 import HindiLetterQuiz from './HindiLetterQuiz';
 import { useData } from '@/context/DataContext';
 import { getLetterData } from '@/core/data/letterData';
+import AlphabetBoard from './AlphabetBoard';
+import MemoryMatch from './MemoryMatch';
+import LetterMatchQuiz from './LetterMatchQuiz';
+import MissingLettersQuiz from './MissingLettersQuiz';
+import WordBuilderQuiz from './WordBuilderQuiz';
+import LetterDragFillQuiz from './LetterDragFillQuiz';
+import WordSorterQuiz from './WordSorterQuiz';
+import FeedMascotQuiz from './FeedMascotQuiz';
+import GridFinderMatch from './GridFinderMatch';
+import VowelCollectorQuiz from './VowelCollectorQuiz';
+import VowelShowcase from './VowelShowcase';
+import ConsonantShowcase from './ConsonantShowcase';
+import ConsonantCollectorQuiz from './ConsonantCollectorQuiz';
+import VowelsInWordsQuiz from './VowelsInWordsQuiz';
+import WordFamilyQuiz from './WordFamilyQuiz';
+import SightWordsQuiz from './SightWordsQuiz';
+import OppositesQuiz from './OppositesQuiz';
+import VocabularyQuiz from './VocabularyQuiz';
+import SimpleGrammarQuiz from './SimpleGrammarQuiz';
+import SentenceBuilderQuiz from './SentenceBuilderQuiz';
 
 type Props = {
   lessonId: string;
@@ -50,11 +70,32 @@ const ACTIVITY_TYPE_MAP: Record<number, string> = {
   11: 'word_showcase',
   12: 'balloon_pop',
   13: 'quiz',
+  14: 'alphabet_board',
+  15: 'memory_match',
+  16: 'letter_match_quiz',
+  17: 'missing_letters_quiz',
+  18: 'word_builder_quiz',
+  19: 'letter_drag_fill_quiz',
+  20: 'word_sorter_quiz',
+  21: 'feed_mascot_quiz',
+  22: 'grid_finder_match',
+  23: 'vowel_collector_quiz',
+  24: 'vowel_showcase_quiz',
+  25: 'consonant_showcase_quiz',
+  26: 'consonant_collector_quiz',
+  27: 'vowels_in_words_quiz',
+  28: 'word_family_quiz',
+  29: 'sight_words_quiz',
+  30: 'opposites_quiz',
+  31: 'vocabulary_quiz',
+  32: 'simple_grammar_quiz',
+  33: 'sentence_builder_quiz',
 };
 
 export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onClose, studentName, subjectName }: Props) {
   const params = useParams();
   const isTamil = params?.locale === 'ta';
+  const { studentProfile } = useData();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const queryClient = useQueryClient();
@@ -69,8 +110,390 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   const activities = useMemo(() => {
     if (!rawActivities) return undefined;
     
-    const isEnglish = subjectName?.toLowerCase().includes('english') || lessonTitle.toLowerCase().includes('letter');
+    const lowerTitle = lessonTitle.toLowerCase();
     
+    // High-priority English Topic Overrides (Trigger instantly regardless of profile query timing)
+    if (lowerTitle.includes('what are vowels')) {
+      return [
+        {
+          id: `${lessonId}-vowelshow`,
+          name: 'Vowel Showcase Board',
+          activity_type_id: 24,
+          config: {},
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    if (lowerTitle.includes('find vowels in words') || lowerTitle.includes('vowels in words')) {
+      return [
+        {
+          id: `${lessonId}-vowelsinwords`,
+          name: 'Vowels In Words Counting Board',
+          activity_type_id: 27,
+          config: {},
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    if (lowerTitle.includes('a e i o u') || lowerTitle.includes('aeiou')) {
+      return [
+        {
+          id: `${lessonId}-vowelcol`,
+          name: 'Vowel Collector Board',
+          activity_type_id: 23,
+          config: {},
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    if (lowerTitle.includes('consonant')) {
+      return [
+        {
+          id: `${lessonId}-consonantshow`,
+          name: 'Consonant Showcase Board',
+          activity_type_id: 25,
+          config: {},
+          sort_order: 1,
+          attempt: null,
+        },
+        {
+          id: `${lessonId}-consonantcol`,
+          name: 'Consonant Collector Board',
+          activity_type_id: 26,
+          config: {},
+          sort_order: 2,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    if (lowerTitle.includes('at family') || lowerTitle.includes('cat, bat, mat')) {
+      return [
+        {
+          id: `${lessonId}-atfamily`,
+          name: 'AT Family Constructor Board',
+          activity_type_id: 28,
+          config: { mode: 'AT' },
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    if (lowerTitle.includes('an family') || lowerTitle.includes('man, fan, can')) {
+      return [
+        {
+          id: `${lessonId}-anfamily`,
+          name: 'AN Family Constructor Board',
+          activity_type_id: 28,
+          config: { mode: 'AN' },
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    if (lowerTitle.includes('in family') || lowerTitle.includes('pin, tin, fin')) {
+      return [
+        {
+          id: `${lessonId}-infamily`,
+          name: 'IN Family Constructor Board',
+          activity_type_id: 28,
+          config: { mode: 'IN' },
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    if (lowerTitle.includes('ot & og') || lowerTitle.includes('ot and og') || lowerTitle.includes('hot, dog')) {
+      return [
+        {
+          id: `${lessonId}-otogfamily`,
+          name: 'OT & OG Family Constructor Board',
+          activity_type_id: 28,
+          config: { mode: 'OT_OG' },
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    if (lowerTitle.includes('mixed cvc') || lowerTitle.includes('cvc words review')) {
+      return [
+        {
+          id: `${lessonId}-mixedcvc`,
+          name: 'Mixed CVC Words Review Board',
+          activity_type_id: 28,
+          config: { mode: 'MIXED' },
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    if (lowerTitle.includes('sight words')) {
+      const deducedMode = (() => {
+        if (lowerTitle.includes('i, am, is')) return 'I_AM_IS';
+        if (lowerTitle.includes('a, the')) return 'A_THE';
+        if (lowerTitle.includes('my, you')) return 'MY_YOU';
+        if (lowerTitle.includes('this, that')) return 'THIS_THAT';
+        if (lowerTitle.includes('here, there')) return 'HERE_THERE';
+        return 'I_AM_IS';
+      })();
+
+      return [
+        {
+          id: `${lessonId}-sightwords`,
+          name: 'Sight Words Montessori Puzzle',
+          activity_type_id: 29,
+          config: { mode: deducedMode },
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    // High-priority Opposites Lesson Overrides
+    if (lowerTitle.includes('big / small') || lowerTitle.includes('big and small') || 
+        lowerTitle.includes('tall / short') || lowerTitle.includes('tall and short') ||
+        lowerTitle.includes('hot / cold') || lowerTitle.includes('hot and cold') ||
+        lowerTitle.includes('up / down') || lowerTitle.includes('up and down') ||
+        lowerTitle.includes('open / close') || lowerTitle.includes('open and close') ||
+        lowerTitle.includes('fast / slow') || lowerTitle.includes('fast and slow')) {
+      
+      const deducedMode = (() => {
+        if (lowerTitle.includes('big')) return 'BIG_SMALL';
+        if (lowerTitle.includes('tall')) return 'TALL_SHORT';
+        if (lowerTitle.includes('hot')) return 'HOT_COLD';
+        if (lowerTitle.includes('up')) return 'UP_DOWN';
+        if (lowerTitle.includes('open')) return 'OPEN_CLOSE';
+        if (lowerTitle.includes('fast')) return 'FAST_SLOW';
+        return 'BIG_SMALL';
+      })();
+
+      return [
+        {
+          id: `${lessonId}-opposites`,
+          name: 'Opposite Words Connector Game',
+          activity_type_id: 30,
+          config: { mode: deducedMode },
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+    // High-priority Naming Words Lesson Overrides
+    if (lowerTitle.includes('animals') || lowerTitle.includes('birds') || 
+        lowerTitle.includes('fruits') || lowerTitle.includes('vegetables') || 
+        lowerTitle.includes('body parts') || lowerTitle.includes('family members') || 
+        lowerTitle.includes('school objects')) {
+      
+      const deducedMode = (() => {
+        if (lowerTitle.includes('animal')) return 'ANIMALS';
+        if (lowerTitle.includes('bird')) return 'BIRDS';
+        if (lowerTitle.includes('fruit')) return 'FRUITS';
+        if (lowerTitle.includes('veg')) return 'VEGETABLES';
+        if (lowerTitle.includes('body')) return 'BODY_PARTS';
+        if (lowerTitle.includes('family')) return 'FAMILY';
+        if (lowerTitle.includes('school')) return 'SCHOOL';
+        return 'ANIMALS';
+      })();
+
+      return [
+        {
+          id: `${lessonId}-vocab`,
+          name: 'Naming Words Matching Challenge',
+          activity_type_id: 31,
+          config: { mode: deducedMode },
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+
+    // High-priority Simple Grammar Lesson Overrides
+    // Note: "Sight Words: this, that" is already caught earlier by the sight words override block,
+    // so checking for this+that here is safe and only hits the grammar lesson "This / That".
+    if (lowerTitle.includes('one & many') || lowerTitle.includes('one and many') ||
+        lowerTitle.includes('male & female') || lowerTitle.includes('male and female') ||
+        lowerTitle.includes('he / she') || lowerTitle.includes('he/she') ||
+        (lowerTitle.includes('this') && lowerTitle.includes('that') && !lowerTitle.includes('sight'))) {
+
+      const deducedMode = (() => {
+        if (lowerTitle.includes('one')) return 'ONE_MANY';
+        // Check THIS_THAT BEFORE male/female to avoid false 'his' match inside 'this'
+        if (lowerTitle.includes('this') && lowerTitle.includes('that')) return 'THIS_THAT';
+        if (lowerTitle.includes('he') && lowerTitle.includes('she')) return 'HE_SHE';
+        if (lowerTitle.includes('male') || lowerTitle.includes('female')) return 'MALE_FEMALE';
+        return 'ONE_MANY';
+      })();
+
+      return [
+        {
+          id: `${lessonId}-grammar`,
+          name: 'Simple Grammar Challenge',
+          activity_type_id: 32,
+          config: { mode: deducedMode },
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+
+    // High-priority Sentence Formation Lesson Overrides
+    if (lowerTitle.includes('two-word') || lowerTitle.includes('two word') ||
+        lowerTitle.includes('three-word') || lowerTitle.includes('three word') ||
+        lowerTitle.includes('four-word') || lowerTitle.includes('four word') ||
+        lowerTitle.includes('reading simple sentences')) {
+
+      const deducedMode = (() => {
+        if (lowerTitle.includes('two')) return 'TWO_WORD';
+        if (lowerTitle.includes('three')) return 'THREE_WORD';
+        if (lowerTitle.includes('four')) return 'FOUR_WORD';
+        if (lowerTitle.includes('reading')) return 'READING';
+        return 'TWO_WORD';
+      })();
+
+      return [
+        {
+          id: `${lessonId}-sentence`,
+          name: 'Sentence Builder Challenge',
+          activity_type_id: 33,
+          config: { mode: deducedMode },
+          sort_order: 1,
+          attempt: null,
+        }
+      ] as Activity[];
+    }
+
+    const isEnglish = subjectName?.toLowerCase().includes('english') || lessonTitle.toLowerCase().includes('letter');
+    const isUKG = studentProfile?.grade_name?.toUpperCase() === 'UKG';
+
+    if (isUKG && isEnglish) {
+      if (lowerTitle.includes('capital letters')) {
+        return [
+          {
+            id: `${lessonId}-board`,
+            name: 'A-Z Capitals Sound Board',
+            activity_type_id: 14,
+            config: { capital: true },
+            sort_order: 1,
+            attempt: null,
+          },
+          {
+            id: `${lessonId}-find`,
+            name: 'Find the Capital Letter',
+            activity_type_id: 13,
+            config: {
+              mode: 'beginning_sound',
+              letters: ['A', 'B', 'C', 'D', 'E', 'F'],
+            },
+            sort_order: 2,
+            attempt: null,
+          }
+        ] as Activity[];
+      }
+      if (lowerTitle.includes('small letters')) {
+        return [
+          {
+            id: `${lessonId}-board`,
+            name: 'a-z Small Letters Sound Board',
+            activity_type_id: 14,
+            config: { capital: false },
+            sort_order: 1,
+            attempt: null,
+          },
+          {
+            id: `${lessonId}-memory`,
+            name: 'Capital to Small Memory Match',
+            activity_type_id: 15,
+            config: {
+              pairs: [
+                { a: 'A', b: 'a' },
+                { a: 'B', b: 'b' },
+                { a: 'C', b: 'c' },
+                { a: 'D', b: 'd' }
+              ]
+            },
+            sort_order: 2,
+            attempt: null,
+          }
+        ] as Activity[];
+      }
+      if (lowerTitle.includes('matching')) {
+        return [
+          {
+            id: `${lessonId}-match`,
+            name: 'Capital & Small Match Yes/No Quiz',
+            activity_type_id: 16,
+            config: {},
+            sort_order: 1,
+            attempt: null,
+          }
+        ] as Activity[];
+      }
+      if (lowerTitle.includes('missing')) {
+        return [
+          {
+            id: `${lessonId}-missing`,
+            name: 'Missing Letters Sequence Quest',
+            activity_type_id: 17,
+            config: {},
+            sort_order: 1,
+            attempt: null,
+          }
+        ] as Activity[];
+      }
+      if (lowerTitle.includes('starting') || lowerTitle.includes('beginning')) {
+        return [
+          {
+            id: `${lessonId}-starting`,
+            name: 'Starting Letter Dino Feast',
+            activity_type_id: 21,
+            config: {},
+            sort_order: 1,
+            attempt: null,
+          }
+        ] as Activity[];
+      }
+      if (lowerTitle.includes('ending')) {
+        return [
+          {
+            id: `${lessonId}-ending`,
+            name: 'Ending Letter Connect Quiz',
+            activity_type_id: 21,
+            config: {
+              mode: 'ending',
+            },
+            sort_order: 1,
+            attempt: null,
+          }
+        ] as Activity[];
+      }
+
+      if (lowerTitle.includes('recognition') || lowerTitle.includes('picture & letter')) {
+        return [
+          {
+            id: `${lessonId}-gridmatch`,
+            name: 'Picture & Letter Grid Finder',
+            activity_type_id: 22,
+            config: {},
+            sort_order: 1,
+            attempt: null,
+          }
+        ] as Activity[];
+      }
+      if (lowerTitle.includes('phonics') || lowerTitle.includes('sound')) {
+        return [
+          {
+            id: `${lessonId}-builder`,
+            name: 'Word Builder Starting Letters Quest',
+            activity_type_id: 18,
+            config: {},
+            sort_order: 1,
+            attempt: null,
+          }
+        ] as Activity[];
+      }
+    }
+
     if (rawActivities.length > 0) {
       return rawActivities;
     }
@@ -204,17 +627,26 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
     if (activities && currentIndex < activities.length - 1) {
       setCurrentIndex(prev => prev + 1);
     } else if (activities && newCompleted.size >= activities.length) {
-      progressMutation.mutate(undefined, {
-        onSuccess: () => setTimeout(onComplete, 500),
-        onError: () => setTimeout(onComplete, 500),
-      });
+      progressMutation.mutate(undefined);
+      onComplete();
     }
 
-    // Submit attempt in background (fire-and-forget, don't block UI)
-    submitMutation.mutate({ activityId, body: data });
-  }, [submitMutation, completedIds, currentIndex, activities, progressMutation, onComplete]);
+    // Submit attempt in background using real DB activity ID if available
+    let targetActivityId = activityId;
+    if (rawActivities && rawActivities.length > 0) {
+      const rawAct = rawActivities[currentIndex] || rawActivities[0];
+      if (rawAct) {
+        targetActivityId = rawAct.id;
+      }
+    }
+
+    submitMutation.mutate({ activityId: targetActivityId, body: data });
+  }, [submitMutation, completedIds, currentIndex, activities, progressMutation, onComplete, rawActivities]);
+
+  const isMathSubject = subjectName?.toLowerCase().includes('math') || subjectName?.toLowerCase().includes('கணிதம்');
 
   const getPreMathConceptKey = () => {
+    if (!isMathSubject) return null;
     const lower = lessonTitle.toLowerCase();
     if (lower.includes('big')) return 'big-small';
     if (lower.includes('tall')) return 'tall-short';
@@ -236,23 +668,22 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   }, [activities, submitMutation, progressMutation, onComplete]);
 
   const getShapesSpatialConceptKey = () => {
+    if (!isMathSubject) return null;
     const lower = lessonTitle.toLowerCase();
     if (lower.includes('circle') && lower.includes('square')) return 'circle-square';
     if (lower.includes('triangle') || lower.includes('rectangle')) return 'triangle-rectangle';
     if (lower.includes('around')) return 'shapes-around';
     if (lower.includes('detective') || lower.includes('find')) return 'find-shape';
-    // Require BOTH 'shape' and 'sort' so that sorting-chapter lessons don't match here
     if (lower.includes('shape') && lower.includes('sort')) return 'shape-sorting';
     if (lower.includes('above') || lower.includes('below')) return 'above-below';
     if (lower.includes('top') || lower.includes('bottom')) return 'top-bottom';
     if (lower.includes('left') || lower.includes('right')) return 'left-right';
     if (lower.includes('near') || lower.includes('far')) return 'near-far';
     if (lower.includes('open') || lower.includes('close')) return 'open-close';
-    // Pattern subtypes — check specific ones before generic catch-all
     if (lower.includes('color') && lower.includes('pattern')) return 'color-patterns';
     if (lower.includes('shape') && lower.includes('pattern')) return 'shape-patterns';
     if (lower.includes('number') && lower.includes('pattern')) return 'number-patterns';
-    if (lower.includes('pattern')) return 'color-patterns'; // default to color patterns
+    if (lower.includes('pattern')) return 'color-patterns';
     return null;
   };
   const shapesSpatialConceptKey = getShapesSpatialConceptKey();
@@ -268,9 +699,9 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   }, [activities, submitMutation, progressMutation, onComplete]);
 
   const getNumberAdventureConceptKey = () => {
+    if (!isMathSubject) return null;
     const lower = lessonTitle.toLowerCase();
     if (lower.includes('10')) return null;
-    // Match only when it belongs to the numbers 1-5 chapter
     if (lower.includes('1') && lower.includes('2')) return 'numbers-1-2';
     if (lower.includes('3') && lower.includes('4')) return 'numbers-3-4';
     if (lower.includes('5') && !lower.includes('1')) return 'number-5';
@@ -290,6 +721,7 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   }, [activities, submitMutation, progressMutation, onComplete]);
 
   const getNumberAdventure610ConceptKey = () => {
+    if (!isMathSubject) return null;
     const lower = lessonTitle.toLowerCase();
     if (lower.includes('6') && lower.includes('7')) return 'numbers-6-7';
     if (lower.includes('8') && lower.includes('10')) return 'numbers-8-10';
@@ -311,6 +743,7 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   }, [activities, submitMutation, progressMutation, onComplete]);
 
   const getSortingComparisonConceptKey = () => {
+    if (!isMathSubject) return null;
     const lower = lessonTitle.toLowerCase();
     // Require 'sort' + 'color'/'size' together — prevents "Color Patterns" / "Size Patterns" from matching here
     if (lower.includes('sort') && lower.includes('color')) return 'sort-by-color';
@@ -644,11 +1077,57 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
       case 'name':
         return <NameTraceActivity config={act.config} studentName={act.config?.name as string} {...commonProps} />;
       case 'vowel_quiz':
-        return <TamilVowelQuiz config={act.config} {...commonProps} />;
+        {
+          const isEnglishSubject = subjectName?.toLowerCase().includes('english') || lessonTitle.toLowerCase().includes('letter') || lessonTitle.toLowerCase().includes('vowel');
+          if (isEnglishSubject) {
+            return <VowelCollectorQuiz {...commonProps} />;
+          }
+          return <TamilVowelQuiz config={act.config} {...commonProps} />;
+        }
       case 'mei_quiz':
         return <TamilMeiQuiz config={act.config} {...commonProps} />;
       case 'word_showcase':
         return <TamilWordShowcase config={act.config} {...commonProps} />;
+      case 'alphabet_board':
+        return <AlphabetBoard capital={!!act.config?.capital} {...commonProps} />;
+      case 'memory_match':
+        return <MemoryMatch config={act.config as any} {...commonProps} />;
+      case 'letter_match_quiz':
+        return <LetterMatchQuiz {...commonProps} />;
+      case 'missing_letters_quiz':
+        return <MissingLettersQuiz {...commonProps} />;
+      case 'word_builder_quiz':
+        return <WordBuilderQuiz {...commonProps} />;
+      case 'letter_drag_fill_quiz':
+        return <LetterDragFillQuiz mode={act.config?.mode as any} {...commonProps} />;
+      case 'word_sorter_quiz':
+        return <WordSorterQuiz mode={act.config?.mode as any} {...commonProps} />;
+      case 'feed_mascot_quiz':
+        return <FeedMascotQuiz mode={act.config?.mode as any} {...commonProps} />;
+      case 'grid_finder_match':
+        return <GridFinderMatch {...commonProps} />;
+      case 'vowel_collector_quiz':
+        return <VowelCollectorQuiz {...commonProps} />;
+      case 'vowel_showcase_quiz':
+        return <VowelShowcase {...commonProps} />;
+      case 'consonant_showcase_quiz':
+        return <ConsonantShowcase {...commonProps} />;
+      case 'consonant_collector_quiz':
+        return <ConsonantCollectorQuiz {...commonProps} />;
+      case 'vowels_in_words_quiz':
+        return <VowelsInWordsQuiz {...commonProps} />;
+      case 'word_family_quiz':
+        return <WordFamilyQuiz mode={act.config?.mode as any} {...commonProps} />;
+      case 'sight_words_quiz':
+        return <SightWordsQuiz mode={act.config?.mode as any} {...commonProps} />;
+      case 'opposites_quiz':
+        return <OppositesQuiz mode={act.config?.mode as any} {...commonProps} />;
+      case 'vocabulary_quiz':
+        return <VocabularyQuiz mode={act.config?.mode as any} {...commonProps} />;
+      case 'simple_grammar_quiz':
+        return <SimpleGrammarQuiz mode={act.config?.mode as any} {...commonProps} />;
+      case 'sentence_builder_quiz':
+        return <SentenceBuilderQuiz mode={act.config?.mode as any} {...commonProps} />;
       default:
         return (
           <div className="flex flex-col items-center gap-4 p-8">
@@ -704,19 +1183,11 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
               className="w-full"
             >
               {allDone ? (
-                <div className="flex flex-col items-center gap-5 px-4 py-8 text-center">
-                  <span className="text-6xl sm:text-7xl animate-bounce">🎉</span>
-                  <h2 className="text-2xl sm:text-3xl font-black text-amber-950 font-sans">{lessonTitle}</h2>
-                  <p className="text-base sm:text-lg font-black text-emerald-600 font-sans">
-                    {isTamil ? 'பாடம் வெற்றிகரமாக முடிந்தது! 🎉' : 'Lesson Complete! 🎉'}
+                <div className="flex flex-col items-center gap-4 py-16 text-center">
+                  <div className="w-10 h-10 rounded-full border-[3px] border-indigo-600/20 border-t-indigo-600 animate-spin mx-auto" />
+                  <p className="text-sm font-bold text-slate-500 font-sans mt-2">
+                    {isTamil ? 'சேமிக்கப்படுகிறது...' : 'Saving progress...'}
                   </p>
-                  <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    onClick={onComplete}
-                    className="px-8 py-3.5 bg-emerald-500 text-white font-black text-base sm:text-lg rounded-full shadow-lg hover:bg-emerald-400 transition-all border-b-4 border-emerald-700 active:scale-95 font-sans"
-                  >
-                    {isTamil ? 'பாடங்களுக்குத் திரும்பு ➡️' : 'Back to Lessons ➡️'}
-                  </motion.button>
                 </div>
               ) : currentActivity ? (
                 renderActivity()
