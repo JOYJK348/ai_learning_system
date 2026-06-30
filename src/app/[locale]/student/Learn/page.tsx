@@ -523,7 +523,16 @@ function UltimateLearnEngineInner() {
 
         // ── UKG Tamil bypass: skip ALL LKG routing, let ActivityPlayer handle it ──
         const isUKGStudent = studentProfile?.grade_name?.toUpperCase() === 'UKG';
-        
+
+        // ── UKG Hindi / GK / EVS bypass: go straight to ActivityPlayer, skip all LKG intercepts ──
+        const isHindiSubject = activeSubject?.name?.toLowerCase().includes('hindi');
+        const isGkSubject = activeSubject?.name?.toLowerCase().includes('general') || activeSubject?.name?.toLowerCase().includes('gk') || activeSubject?.name?.toLowerCase().includes('knowledge');
+        const isEvsSubject = activeSubject?.name?.toLowerCase().includes('evs') || activeSubject?.name?.toLowerCase().includes('environment') || activeSubject?.name?.toLowerCase().includes('studies');
+        if (isUKGStudent && (isHindiSubject || isGkSubject || isEvsSubject)) {
+            // ActivityPlayer will pick up the right quiz via activity_type_id 79/78/77
+            return;
+        }
+
         if (isTamilSubject && !isUKGStudent) {
             const isVowelAU =
                 chapterName.includes('உயிர் எழுத்துக்கள் அ-ஊ') ||
