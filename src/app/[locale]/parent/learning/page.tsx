@@ -49,7 +49,7 @@ export default function ParentLearningPage() {
     queryKey: parentKeys.childChapterProgress(activeChildId ?? ''),
     queryFn: () => parentApi.childChapterProgress(activeChildId!),
     enabled: !!activeChildId,
-    staleTime: 60_000,
+    staleTime: 0,
     retry: false,
   });
 
@@ -149,41 +149,41 @@ export default function ParentLearningPage() {
           ) : (
             <div className={styles.subjectsGridVisual}>
               {chapterProgress.map((subject: any) => {
-                const subCompleted = subject.chapters?.filter((c: any) => c.is_complete).length || 0;
-                const subTotal = subject.chapters?.length || 0;
-                const pct = subTotal > 0 ? Math.round((subCompleted / subTotal) * 100) : 0;
-                const theme = getSubjectTheme(subject.name);
-                const emoji = subject.name.toLowerCase().includes('tamil') ? '📚' :
-                              subject.name.toLowerCase().includes('math') ? '✏️' :
-                              subject.name.toLowerCase().includes('english') ? '🌟' : '🚀';
-                
-                return (
-                  <div
-                    key={subject.id}
-                    className={styles.subjectCardVisual}
-                    style={{ background: theme.bg, borderColor: theme.border }}
-                    onClick={() => setRoadmapSubjectId(subject.id)}
-                  >
-                    <div className={styles.subjectCardVisualHeader}>
-                      <div className={styles.subjectCardIcon}>
-                        {emoji}
-                      </div>
-                      <span className={styles.kpiChange} style={{ color: theme.text, fontWeight: 900 }}>
-                        {pct}% Done
-                      </span>
-                    </div>
-                    <div className={styles.subjectCardVisualBody}>
-                      <h4 style={{ color: theme.text }}>{subject.name}</h4>
-                      <p>{subCompleted} of {subTotal} chapters done</p>
-                      <div className={styles.subjectCardProgressTrack}>
-                        <div
-                          className={styles.subjectCardProgressFill}
-                          style={{ width: `${pct}%`, background: theme.fill }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                );
+                 const totalLessons = subject.chapters?.reduce((sum: number, c: any) => sum + (c.total_lessons || 0), 0) || 0;
+                 const completedLessons = subject.chapters?.reduce((sum: number, c: any) => sum + (c.completed_lessons || 0), 0) || 0;
+                 const pct = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+                 const theme = getSubjectTheme(subject.name);
+                 const emoji = subject.name.toLowerCase().includes('tamil') ? '📚' :
+                               subject.name.toLowerCase().includes('math') ? '✏️' :
+                               subject.name.toLowerCase().includes('english') ? '🌟' : '🚀';
+                 
+                 return (
+                   <div
+                     key={subject.id}
+                     className={styles.subjectCardVisual}
+                     style={{ background: theme.bg, borderColor: theme.border }}
+                     onClick={() => setRoadmapSubjectId(subject.id)}
+                   >
+                     <div className={styles.subjectCardVisualHeader}>
+                       <div className={styles.subjectCardIcon}>
+                         {emoji}
+                       </div>
+                       <span className={styles.kpiChange} style={{ color: theme.text, fontWeight: 900 }}>
+                         {pct}% Done
+                       </span>
+                     </div>
+                     <div className={styles.subjectCardVisualBody}>
+                       <h4 style={{ color: theme.text }}>{subject.name}</h4>
+                       <p>{completedLessons} of {totalLessons} lessons done</p>
+                       <div className={styles.subjectCardProgressTrack}>
+                         <div
+                           className={styles.subjectCardProgressFill}
+                           style={{ width: `${pct}%`, background: theme.fill }}
+                         />
+                       </div>
+                     </div>
+                   </div>
+                 );
               })}
             </div>
           )}

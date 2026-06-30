@@ -673,6 +673,109 @@ function CountBubble({ emoji }: { emoji: string }) {
   );
 }
 
+// ─── MAP-BASED LOCK/UNLOCK DICTIONARY FOR LKG & UKG ───
+
+const LKG_MAPPINGS: Record<string, Record<number, string>> = {
+  tamil: {
+    1: 'f750d0ef-3fc2-44b5-89a5-0abfcc618479',
+    2: 'e9efc803-66fe-4574-a4e0-ef8ce18f104a',
+    3: 'c6035e74-6b37-409e-a0c0-c58bb4f64fee',
+    4: '27869c1b-70c6-4019-965f-619c799eb0e0',
+    5: '260d91dd-1d8b-4964-8311-3ff589c38e5a',
+    6: '45b61435-fe57-4e0c-a893-68bc25d96d53'
+  },
+  english: {
+    1: '389a705c-d602-4f1e-bae6-7fdb736f3e53',
+    2: 'b90f5a71-dcef-4a2b-925a-3e6d33be6364',
+    3: 'fba5b58b-a115-4c45-ad62-34c3589575eb',
+    4: 'c02f1643-7c13-450a-9004-d57ac6857ac3',
+    5: '60569fa2-ef55-4902-80a0-e98c9d7c95ed',
+    6: 'c1381ec5-b99a-49e0-84e2-21aad7a10ab7'
+  },
+  math: {
+    1: '1bebe881-2bb2-4b9e-817f-67739b354c78',
+    2: '44ddcd38-4a6b-4eca-b7ee-12d4ce9fe6f4',
+    3: 'e2fa68cf-10d2-4772-9814-aeb72f529bdf',
+    4: '5f7d8cee-3073-4174-ab82-401fedb3fa44',
+    5: '2ebb61ce-1133-4a74-b8d5-5265319ffd07',
+    6: '252dd393-ece6-4561-863d-194e9b292f9b'
+  },
+  evs: {
+    1: '0d6b2ccc-01e0-4496-b30f-e6f7f5be3d21',
+    2: 'a22e6df2-ff59-418b-89b2-2c39d7d72901',
+    3: '5cc91f99-b121-4baa-813d-61260abbdffa',
+    4: '2b200e99-464a-45df-839b-ac3282fb07a1',
+    5: '66df4a08-281d-4aa3-917a-722de6658a79',
+    6: '092a2e60-8ab5-4833-b948-056641af9df7'
+  },
+  gk: {
+    1: '03aebd95-bb93-4bc6-b798-bd6a633479e3',
+    2: 'ea05392e-4a72-493b-bad7-340a97f55a33',
+    3: 'a8ae08aa-2adb-454e-b591-d57edc838ee7',
+    4: '88fcbba2-8e90-4e22-b5a2-1b78ace2b249',
+    5: '45bcf53f-e78c-4844-a154-c4154cd2fbf5',
+    6: 'c41443c3-2451-443b-90cc-cd2aa6894c22'
+  },
+  hindi: {
+    1: 'f6fe8926-03ac-4a54-85ca-46359d2fcb88',
+    2: 'a698e1c8-50d0-43c0-9cb5-882718447740',
+    3: '4fc361c1-d830-4ebe-b0e2-e4cfb7085c92',
+    4: 'd5ae93a6-0786-4d66-a59a-06c5eb0ca029',
+    5: '5a169e75-fb5f-40d9-a1f2-eaa4f18435d3'
+  }
+};
+
+const UKG_MAPPINGS: Record<string, Record<number, string>> = {
+  tamil: {
+    1: '25d02c49-0147-4c0c-8881-3e972d676f51',
+    2: 'fc055c28-c24b-4235-aea1-9f355ae9ee8b',
+    3: 'd156da6d-e314-4de9-9ff1-096ea30f7149',
+    4: 'e8e47198-ea22-4424-9731-b7481310cce2',
+    5: 'c5a6b893-ff8c-44dc-af1a-0396c179c614',
+    6: 'b76ca6d1-2446-474c-a367-fe69b30c5cc8'
+  },
+  english: {
+    1: '07464656-1cb1-4357-a3ac-7fb8619f188e',
+    2: '855280c4-042c-4efc-9446-b5df38dafee9',
+    3: '858f6bf9-b2ed-45fa-b7a4-4e171b514eab',
+    4: 'a0422422-7b97-483e-a9a0-03abe16418b9',
+    5: '58817258-b01e-4dbb-bc67-12a869f979bb',
+    6: 'd6c8a229-8c1f-4f08-bb40-d19e8b0b2101'
+  },
+  math: {
+    1: '7f0dced1-7b34-4f38-acc3-0fe6d4e8fa7b',
+    2: '2c1520dc-be89-4b8f-a73a-02b876e1f986',
+    3: '125917f0-c595-40fa-bdfa-a0f12c63a6a1',
+    4: '837f636d-0bc0-4e79-9eb6-a7b57175ab79',
+    5: '76a17127-dfb8-4147-a973-0b0f9bfc19e7',
+    6: '78baf022-0ca1-4b44-843d-5b25b89bcaac'
+  },
+  evs: {
+    1: '094a5bf5-224a-47b3-bbea-08ce742c9725',
+    2: '3e4e4aa9-14bf-4b9b-a5cb-9494c192485f',
+    3: 'c36950e9-ba19-4a77-9afc-359ef2d19d9d',
+    4: 'd42f06ba-10d7-42a5-94bb-0f0495de2129',
+    5: '483272a4-eee6-4cef-a545-64437c0cb7a2',
+    6: '438db244-e359-404b-899d-28258080058d'
+  },
+  gk: {
+    1: '413ba6f0-cb13-44c3-bebf-72d3708985f9',
+    2: '8bd93e54-adeb-49d3-9369-10764099e939',
+    3: '21708b59-5458-4240-8ad9-24f2cab44b27',
+    4: '9e3d7ff8-3d4e-4cbf-b6eb-12dfabbf7042',
+    5: 'c72a9ccc-bc2f-4d32-a2ac-048e5b9372d0',
+    6: '070220d8-dfba-4ce5-8976-8841b5b54d83'
+  },
+  hindi: {
+    1: 'ee3acb00-ecf1-427d-ad8b-962df2aad0e7',
+    2: '76b3512d-0f03-42d1-ae20-0493f14f0824',
+    3: 'bc72d0cf-2404-428d-a8d9-a52187aaacc0',
+    4: '88c9115e-7eb8-42d9-aaf1-97cad5e5d836',
+    5: '957b78b6-fab6-4f11-b62e-cba157110d6d',
+    6: '13b309fb-604a-4c4f-a7ca-43dda117bdb4'
+  }
+};
+
 // ─── MAIN PORTAL ARENA ───
 
 export default function QuizArena() {
@@ -738,196 +841,37 @@ export default function QuizArena() {
 
   // Dynamically compute unlocked quiz levels based on completed chapters in Database
   const unlockedLevels = useMemo(() => {
-    if (activeSubject === 'tamil') {
-      const tamilSubject = subjects.find(s => 
-        s.name.toLowerCase().includes('tamil') || 
-        s.name.includes('தமிழ்')
-      );
-      if (!tamilSubject) {
-        return [1]; // fallback default
+    const activeSubjectMap = isUKG ? UKG_MAPPINGS[activeSubject] : LKG_MAPPINGS[activeSubject];
+    if (!activeSubjectMap) return [1];
+
+    const matchingSubject = subjects.find(s => {
+      const nameLower = s.name.toLowerCase();
+      if (activeSubject === 'tamil') return nameLower.includes('tamil') || nameLower.includes('தமிழ்');
+      if (activeSubject === 'english') return nameLower.includes('english') || nameLower.includes('ஆங்கிலம்');
+      if (activeSubject === 'math') return nameLower.includes('math') || nameLower.includes('mathe') || nameLower.includes('கணிதம்');
+      if (activeSubject === 'evs') return nameLower.includes('environmental') || nameLower.includes('evs');
+      if (activeSubject === 'gk') return nameLower.includes('gk') || nameLower.includes('general knowledge');
+      if (activeSubject === 'hindi') return nameLower.includes('hindi') || nameLower.includes('हिन्दी');
+      return false;
+    });
+
+    if (!matchingSubject) return [1];
+
+    const isLessonCompleted = (lessonId: string): boolean => {
+      const lesson = matchingSubject.chapters
+        .flatMap(c => c.lessons)
+        .find(l => l.id === lessonId);
+      return lesson?.progress?.status === 'completed';
+    };
+
+    const unlocked: number[] = [1];
+    Object.entries(activeSubjectMap).forEach(([lvlId, lesId]) => {
+      if (isLessonCompleted(lesId)) {
+        unlocked.push(Number(lvlId));
       }
-
-      const isLessonCompleted = (lessonId: string): boolean => {
-        const lesson = tamilSubject.chapters
-          .flatMap(c => c.lessons)
-          .find(l => l.id === lessonId);
-        return lesson?.progress?.status === 'completed';
-      };
-
-      const unlocked: number[] = [1];
-      const mappings: Record<number, string> = {
-        1: 'f750d0ef-3fc2-44b5-89a5-0abfcc618479',
-        2: 'e9efc803-66fe-4574-a4e0-ef8ce18f104a',
-        3: 'c6035e74-6b37-409e-a0c0-c58bb4f64fee',
-        4: '27869c1b-70c6-4019-965f-619c799eb0e0',
-        5: '260d91dd-1d8b-4964-8311-3ff589c38e5a',
-        6: '45b61435-fe57-4e0c-a893-68bc25d96d53',
-      };
-      Object.entries(mappings).forEach(([lvlId, lesId]) => {
-        if (isLessonCompleted(lesId)) {
-          unlocked.push(Number(lvlId));
-        }
-      });
-      return Array.from(new Set(unlocked));
-    } else if (activeSubject === 'english') {
-      const englishSubject = subjects.find(s => 
-        s.name.toLowerCase().includes('english') || 
-        s.name.includes('ஆங்கிலம்')
-      );
-      if (!englishSubject) {
-        return [1];
-      }
-
-      const isLessonCompleted = (lessonId: string): boolean => {
-        const lesson = englishSubject.chapters
-          .flatMap(c => c.lessons)
-          .find(l => l.id === lessonId);
-        return lesson?.progress?.status === 'completed';
-      };
-
-      const unlocked: number[] = [1];
-      const mappings: Record<number, string> = {
-        1: '389a705c-d602-4f1e-bae6-7fdb736f3e53',
-        2: 'b90f5a71-dcef-4a2b-925a-3e6d33be6364',
-        3: 'fba5b58b-a115-4c45-ad62-34c3589575eb',
-        4: 'c02f1643-7c13-450a-9004-d57ac6857ac3',
-        5: '60569fa2-ef55-4902-80a0-e98c9d7c95ed',
-        6: 'c1381ec5-b99a-49e0-84e2-21aad7a10ab7',
-      };
-      Object.entries(mappings).forEach(([lvlId, lesId]) => {
-        if (isLessonCompleted(lesId)) {
-          unlocked.push(Number(lvlId));
-        }
-      });
-      return Array.from(new Set(unlocked));
-
-    } else if (activeSubject === 'evs') {
-      const evsSubject = subjects.find(s => 
-        s.name.toLowerCase().includes('evs') || 
-        s.name.toLowerCase().includes('environmental')
-      );
-      if (!evsSubject) {
-        return [1];
-      }
-
-      const isLessonCompleted = (lessonId: string): boolean => {
-        const lesson = evsSubject.chapters
-          .flatMap(c => c.lessons)
-          .find(l => l.id === lessonId);
-        return lesson?.progress?.status === 'completed';
-      };
-
-      const unlocked: number[] = [1];
-      const mappings: Record<number, string> = {
-        1: '0d6b2ccc-01e0-4496-b30f-e6f7f5be3d21',
-        2: 'a22e6df2-ff59-418b-89b2-2c39d7d72901',
-        3: '5cc91f99-b121-4baa-813d-61260abbdffa',
-        4: '2b200e99-464a-45df-839b-ac3282fb07a1',
-        5: '66df4a08-281d-4aa3-917a-722de6658a79',
-        6: '092a2e60-8ab5-4833-b948-056641af9df7',
-      };
-      Object.entries(mappings).forEach(([lvlId, lesId]) => {
-        if (isLessonCompleted(lesId)) {
-          unlocked.push(Number(lvlId));
-        }
-      });
-      return Array.from(new Set(unlocked));
-    } else if (activeSubject === 'gk') {
-      const gkSubject = subjects.find(s => 
-        s.name.toLowerCase().includes('gk') || 
-        s.name.toLowerCase().includes('general knowledge')
-      );
-      if (!gkSubject) {
-        return [1];
-      }
-
-      const isLessonCompleted = (lessonId: string): boolean => {
-        const lesson = gkSubject.chapters
-          .flatMap(c => c.lessons)
-          .find(l => l.id === lessonId);
-        return lesson?.progress?.status === 'completed';
-      };
-
-      const unlocked: number[] = [1];
-      const mappings: Record<number, string> = {
-        1: '03aebd95-bb93-4bc6-b798-bd6a633479e3',
-        2: 'ea05392e-4a72-493b-bad7-340a97f55a33',
-        3: 'a8ae08aa-2adb-454e-b591-d57edc838ee7',
-        4: '88fcbba2-8e90-4e22-b5a2-1b78ace2b249',
-        5: '45bcf53f-e78c-4844-a154-c4154cd2fbf5',
-        6: 'c41443c3-2451-443b-90cc-cd2aa6894c22',
-      };
-      Object.entries(mappings).forEach(([lvlId, lesId]) => {
-        if (isLessonCompleted(lesId)) {
-          unlocked.push(Number(lvlId));
-        }
-      });
-      return Array.from(new Set(unlocked));
-    } else if (activeSubject === 'hindi') {
-      const hindiSubject = subjects.find(s => 
-        s.name.toLowerCase().includes('hindi') || 
-        s.name.includes('हिन्दी')
-      );
-      if (!hindiSubject) {
-        return [1];
-      }
-
-      const isLessonCompleted = (lessonId: string): boolean => {
-        const lesson = hindiSubject.chapters
-          .flatMap(c => c.lessons)
-          .find(l => l.id === lessonId);
-        return lesson?.progress?.status === 'completed';
-      };
-
-      const unlocked: number[] = [1];
-      const mappings: Record<number, string> = {
-        1: 'f6fe8926-03ac-4a54-85ca-46359d2fcb88',
-        2: 'a698e1c8-50d0-43c0-9cb5-882718447740',
-        3: '4fc361c1-d830-4ebe-b0e2-e4cfb7085c92',
-        4: 'd5ae93a6-0786-4d66-a59a-06c5eb0ca029',
-        5: '5a169e75-fb5f-40d9-a1f2-eaa4f18435d3',
-      };
-      Object.entries(mappings).forEach(([lvlId, lesId]) => {
-        if (isLessonCompleted(lesId)) {
-          unlocked.push(Number(lvlId));
-        }
-      });
-      return Array.from(new Set(unlocked));
-    } else {
-      const mathSubject = subjects.find(s => 
-
-        s.name.toLowerCase().includes('math') || 
-        s.name.toLowerCase().includes('mathe') ||
-        s.name.includes('கணிதம்')
-      );
-      if (!mathSubject) {
-        return [1];
-      }
-
-      const isLessonCompleted = (lessonId: string): boolean => {
-        const lesson = mathSubject.chapters
-          .flatMap(c => c.lessons)
-          .find(l => l.id === lessonId);
-        return lesson?.progress?.status === 'completed';
-      };
-
-      const unlocked: number[] = [1];
-      const mappings: Record<number, string> = {
-        1: '1bebe881-2bb2-4b9e-817f-67739b354c78',
-        2: '44ddcd38-4a6b-4eca-b7ee-12d4ce9fe6f4',
-        3: 'e2fa68cf-10d2-4772-9814-aeb72f529bdf',
-        4: '5f7d8cee-3073-4174-ab82-401fedb3fa44',
-        5: '2ebb61ce-1133-4a74-b8d5-5265319ffd07',
-        6: '252dd393-ece6-4561-863d-194e9b292f9b',
-      };
-      Object.entries(mappings).forEach(([lvlId, lesId]) => {
-        if (isLessonCompleted(lesId)) {
-          unlocked.push(Number(lvlId));
-        }
-      });
-      return Array.from(new Set(unlocked));
-    }
-  }, [subjects, activeSubject]);
+    });
+    return Array.from(new Set(unlocked));
+  }, [subjects, activeSubject, isUKG]);
 
   // Set mounted state and reset levelScores when student profile changes (prevent cross-child score bleed)
   useEffect(() => {
@@ -941,65 +885,8 @@ export default function QuizArena() {
     const scoresMap: Record<number, number> = {};
     const allLessons = subjects.flatMap(s => s.chapters.flatMap(c => c.lessons));
     
-    const tamilMappings: Record<number, string> = {
-      1: 'f750d0ef-3fc2-44b5-89a5-0abfcc618479',
-      2: 'e9efc803-66fe-4574-a4e0-ef8ce18f104a',
-      3: 'c6035e74-6b37-409e-a0c0-c58bb4f64fee',
-      4: '27869c1b-70c6-4019-965f-619c799eb0e0',
-      5: '260d91dd-1d8b-4964-8311-3ff589c38e5a',
-      6: '45b61435-fe57-4e0c-a893-68bc25d96d53',
-    };
-
-    const englishMappings: Record<number, string> = {
-      1: '389a705c-d602-4f1e-bae6-7fdb736f3e53',
-      2: 'b90f5a71-dcef-4a2b-925a-3e6d33be6364',
-      3: 'fba5b58b-a115-4c45-ad62-34c3589575eb',
-      4: 'c02f1643-7c13-450a-9004-d57ac6857ac3',
-      5: '60569fa2-ef55-4902-80a0-e98c9d7c95ed',
-      6: 'c1381ec5-b99a-49e0-84e2-21aad7a10ab7',
-    };
-
-    const mathMappings: Record<number, string> = {
-      1: '1bebe881-2bb2-4b9e-817f-67739b354c78',
-      2: '44ddcd38-4a6b-4eca-b7ee-12d4ce9fe6f4',
-      3: 'e2fa68cf-10d2-4772-9814-aeb72f529bdf',
-      4: '5f7d8cee-3073-4174-ab82-401fedb3fa44',
-      5: '2ebb61ce-1133-4a74-b8d5-5265319ffd07',
-      6: '252dd393-ece6-4561-863d-194e9b292f9b',
-    };
-
-    const evsMappings: Record<number, string> = {
-      1: '0d6b2ccc-01e0-4496-b30f-e6f7f5be3d21',
-      2: 'a22e6df2-ff59-418b-89b2-2c39d7d72901',
-      3: '5cc91f99-b121-4baa-813d-61260abbdffa',
-      4: '2b200e99-464a-45df-839b-ac3282fb07a1',
-      5: '66df4a08-281d-4aa3-917a-722de6658a79',
-      6: '092a2e60-8ab5-4833-b948-056641af9df7',
-    };
-
-    const gkMappings: Record<number, string> = {
-      1: '03aebd95-bb93-4bc6-b798-bd6a633479e3',
-      2: 'ea05392e-4a72-493b-bad7-340a97f55a33',
-      3: 'a8ae08aa-2adb-454e-b591-d57edc838ee7',
-      4: '88fcbba2-8e90-4e22-b5a2-1b78ace2b249',
-      5: '45bcf53f-e78c-4844-a154-c4154cd2fbf5',
-      6: 'c41443c3-2451-443b-90cc-cd2aa6894c22',
-    };
-
-    const hindiMappings: Record<number, string> = {
-      1: 'f6fe8926-03ac-4a54-85ca-46359d2fcb88',
-      2: 'a698e1c8-50d0-43c0-9cb5-882718447740',
-      3: '4fc361c1-d830-4ebe-b0e2-e4cfb7085c92',
-      4: 'd5ae93a6-0786-4d66-a59a-06c5eb0ca029',
-      5: '5a169e75-fb5f-40d9-a1f2-eaa4f18435d3',
-    };
-
-    const mappings = activeSubject === 'tamil' ? tamilMappings 
-                     : activeSubject === 'english' ? englishMappings 
-                     : activeSubject === 'evs' ? evsMappings
-                     : activeSubject === 'gk' ? gkMappings
-                     : activeSubject === 'hindi' ? hindiMappings
-                     : mathMappings;
+    const mappings = isUKG ? UKG_MAPPINGS[activeSubject] : LKG_MAPPINGS[activeSubject];
+    if (!mappings) return;
 
     Object.entries(mappings).forEach(([levelId, lessonId]) => {
       const match = allLessons.find(l => l.id === lessonId);
@@ -1013,7 +900,7 @@ export default function QuizArena() {
       }
     });
     setLevelScores(scoresMap);
-  }, [subjects, studentProfile, activeSubject]);
+  }, [subjects, studentProfile, activeSubject, isUKG]);
 
   useEffect(() => {
     if (activeQuiz || activeGame || view !== 'dashboard') {
@@ -1243,102 +1130,90 @@ export default function QuizArena() {
             }));
           }
 
-          // Lesson ID mappings for lesson_progress update
-          const tamilLessonMappings: Record<number, string> = {
-            1: 'f750d0ef-3fc2-44b5-89a5-0abfcc618479',
-            2: 'e9efc803-66fe-4574-a4e0-ef8ce18f104a',
-            3: 'c6035e74-6b37-409e-a0c0-c58bb4f64fee',
-            4: '27869c1b-70c6-4019-965f-619c799eb0e0',
-            5: '260d91dd-1d8b-4964-8311-3ff589c38e5a',
-            6: '45b61435-fe57-4e0c-a893-68bc25d96d53',
-          };
-          const englishLessonMappings: Record<number, string> = {
-            1: '389a705c-d602-4f1e-bae6-7fdb736f3e53',
-            2: 'b90f5a71-dcef-4a2b-925a-3e6d33be6364',
-            3: 'fba5b58b-a115-4c45-ad62-34c3589575eb',
-            4: 'c02f1643-7c13-450a-9004-d57ac6857ac3',
-            5: '60569fa2-ef55-4902-80a0-e98c9d7c95ed',
-            6: 'c1381ec5-b99a-49e0-84e2-21aad7a10ab7',
-          };
-          const mathLessonMappings: Record<number, string> = {
-            1: '1bebe881-2bb2-4b9e-817f-67739b354c78',
-            2: '44ddcd38-4a6b-4eca-b7ee-12d4ce9fe6f4',
-            3: 'e2fa68cf-10d2-4772-9814-aeb72f529bdf',
-            4: '5f7d8cee-3073-4174-ab82-401fedb3fa44',
-            5: '2ebb61ce-1133-4a74-b8d5-5265319ffd07',
-            6: '252dd393-ece6-4561-863d-194e9b292f9b',
-          };
-          const evsLessonMappings: Record<number, string> = {
-            1: '0d6b2ccc-01e0-4496-b30f-e6f7f5be3d21',
-            2: 'a22e6df2-ff59-418b-89b2-2c39d7d72901',
-            3: '5cc91f99-b121-4baa-813d-61260abbdffa',
-            4: '2b200e99-464a-45df-839b-ac3282fb07a1',
-            5: '66df4a08-281d-4aa3-917a-722de6658a79',
-            6: '092a2e60-8ab5-4833-b948-056641af9df7',
-          };
-          const gkLessonMappings: Record<number, string> = {
-            1: '03aebd95-bb93-4bc6-b798-bd6a633479e3',
-            2: 'ea05392e-4a72-493b-bad7-340a97f55a33',
-            3: 'a8ae08aa-2adb-454e-b591-d57edc838ee7',
-            4: '88fcbba2-8e90-4e22-b5a2-1b78ace2b249',
-            5: '45bcf53f-e78c-4844-a154-c4154cd2fbf5',
-            6: 'c41443c3-2451-443b-90cc-cd2aa6894c22',
-          };
-          const hindiLessonMappings: Record<number, string> = {
-            1: 'f6fe8926-03ac-4a54-85ca-46359d2fcb88',
-            2: 'a698e1c8-50d0-43c0-9cb5-882718447740',
-            3: '4fc361c1-d830-4ebe-b0e2-e4cfb7085c92',
-            4: 'd5ae93a6-0786-4d66-a59a-06c5eb0ca029',
-            5: '5a169e75-fb5f-40d9-a1f2-eaa4f18435d3',
-          };
+          // Static mapping for lesson ID
+          const activeSubjectMap = isUKG ? UKG_MAPPINGS[activeSubject] : LKG_MAPPINGS[activeSubject];
+          const lessonId = activeSubjectMap ? activeSubjectMap[activeLevel.id] : null;
 
-          // Quiz ID mappings (lesson_id -> quiz_id) for quiz_attempts tracking
+          // Universal Lesson ID -> Quiz ID mapping
           const lessonToQuizId: Record<string, string> = {
-            'f750d0ef-3fc2-44b5-89a5-0abfcc618479': 'bba383c9-f361-49ee-9120-80b316d3b656', // உயிர் எழுத்துக்கள் 1 வினா
-            'e9efc803-66fe-4574-a4e0-ef8ce18f104a': 'bbb47af9-98bb-41e3-a830-f2056a3b0686', // எ ஏ ஐ ஒ ஓ ஔ ஃ Quiz
-            'c6035e74-6b37-409e-a0c0-c58bb4f64fee': '0158c95e-ae42-4c63-bb82-767e619bde91', // க் ங் ச் ஞ் Quiz
-            '27869c1b-70c6-4019-965f-619c799eb0e0': '23c1cff2-6d47-47c1-a837-387a937cdc5d', // ட் ண் த் ந் Quiz
-            '260d91dd-1d8b-4964-8311-3ff589c38e5a': '0235ea86-fb0d-4694-ac8d-e7e4e8238faa', // ப் ம் Quiz
-            '45b61435-fe57-4e0c-a893-68bc25d96d53': 'e3369193-b3e6-4cdc-86b0-a6b295fe5945', // உயிரெழுத்து சார்ந்த சொற்கள் Quiz
-            '389a705c-d602-4f1e-bae6-7fdb736f3e53': '0fa7eb99-d9c6-4072-87b7-80cc7113e77b', // Pre-Writing Exam Quiz
-            'b90f5a71-dcef-4a2b-925a-3e6d33be6364': '0d155284-9adb-42ac-8bd5-489ac177a64f', // Letter M - Mango Quiz
-            'fba5b58b-a115-4c45-ad62-34c3589575eb': '76b635cb-74bc-4c2d-916d-8a76dcbf7b6e', // Pick the Card Quiz
-            'c02f1643-7c13-450a-9004-d57ac6857ac3': '2c35659c-d262-4710-9d5f-a2389d8b1acd', // Simple Words: Cat, Dog, Sun, Moon Quiz
-            '60569fa2-ef55-4902-80a0-e98c9d7c95ed': 'c3afd736-cce8-4e8f-80d1-fecb5b91335f', // My Name Writing Quiz
-            'c1381ec5-b99a-49e0-84e2-21aad7a10ab7': 'ad80173f-ab56-4f02-a130-25a7c93dee5f', // Little Red Riding Hood Quiz
-            '1bebe881-2bb2-4b9e-817f-67739b354c78': '6b795e3c-5804-4aa7-b694-6ed96c73cc52', // Same & Different Quiz
-            '44ddcd38-4a6b-4eca-b7ee-12d4ce9fe6f4': '656dad63-a603-4cd5-bc96-1a867f8d3bdb', // Shape Sorting Quiz
-            'e2fa68cf-10d2-4772-9814-aeb72f529bdf': '74eaf6ce-ed6e-4954-b8a1-d0f57c6ab905', // Numbers 1-5 Review Quiz
-            '5f7d8cee-3073-4174-ab82-401fedb3fa44': '79f4d6f4-e426-478b-b95e-bbf783e0e841', // Before & After Quiz
-            '2ebb61ce-1133-4a74-b8d5-5265319ffd07': '3aa6c98e-a2cc-4c7e-9d5e-a8430ecaf0f3', // Open & Close Quiz
-            '252dd393-ece6-4561-863d-194e9b292f9b': '7a2e23bf-bbc7-4db0-9a97-b438b74fff05', // Patterns Final Quiz
-            '0d6b2ccc-01e0-4496-b30f-e6f7f5be3d21': 'd3309997-0e81-46c9-b354-0da523b645aa', // My Body Quiz
-            'a22e6df2-ff59-418b-89b2-2c39d7d72901': '672b2074-ec9f-4fad-b985-f732a38c3a01', // Family Quiz
-            '5cc91f99-b121-4baa-813d-61260abbdffa': '7b6a5788-dee2-41b9-90e1-f4f74a4f419d', // Pet & Wild Quiz
-            '2b200e99-464a-45df-839b-ac3282fb07a1': '0835020d-c5a3-4b6d-9279-1f7ff7d06c94', // Parts of a Plant Quiz
-            '66df4a08-281d-4aa3-917a-722de6658a79': 'f5a800b2-9f1c-480f-89cb-32a1b0f2e2f7', // Land Transport Quiz
-            '092a2e60-8ab5-4833-b948-056641af9df7': '7c429cee-b456-4c34-a5f2-75785945349e', // Clean Habits Quiz
-            '03aebd95-bb93-4bc6-b798-bd6a633479e3': 'e4be2404-244d-45c1-9cb5-bf89778db520', // My Name & Identity Quiz
-            'ea05392e-4a72-493b-bad7-340a97f55a33': 'e3846c53-9e05-4aa9-8490-2f2579f86ffc', // Basic Colors Quiz
-            'a8ae08aa-2adb-454e-b591-d57edc838ee7': 'd9bfe7f5-bde2-4857-8896-c770f448e385', // Animal Names Quiz
-            '88fcbba2-8e90-4e22-b5a2-1b78ace2b249': 'a10dda7a-04d7-4522-8b7d-66a26fdc5ace', // Places Quiz
-            '45bcf53f-e78c-4844-a154-c4154cd2fbf5': '093b85a8-03bf-487d-a657-dc2a19f0236f', // Road Safety Quiz
-            'c41443c3-2451-443b-90cc-cd2aa6894c22': 'd1610c41-e2bd-4ddc-a7e6-7fc5e48f6e6d', // Sky Objects Quiz
-            'd5bafdc2-6180-46cf-b84a-883c2b0dad08': '89fad8b3-9ff7-45d6-ba02-04742c65dce2', // खड़ी और लेटी रेखा (रेखा पहचान)
-            'f6fe8926-03ac-4a54-85ca-46359d2fcb88': '6c7fa009-861e-4c60-82a2-aaf2b82f15b1', // अ और आ पहचान
-            'a698e1c8-50d0-43c0-9cb5-882718447740': '9e11dfb6-cb50-45c0-9b84-a621aeb71670', // क वर्ग पहचान
-            '4fc361c1-d830-4ebe-b0e2-e4cfb7085c92': 'b7cd60e2-f856-43bb-b452-7767f7c4b659', // सरल शब्द पहचान
-            'd5ae93a6-0786-4d66-a59a-06c5eb0ca029': 'ceb3c6fb-f8fe-4500-9284-b9000a50f57b', // बोलना अभ्यास
-            '5a169e75-fb5f-40d9-a1f2-eaa4f18435d3': 'da126a2f-aac8-4f26-a958-92fde6da6058', // कविता प्रश्न
+            'f750d0ef-3fc2-44b5-89a5-0abfcc618479': 'bba383c9-f361-49ee-9120-80b316d3b656',
+            'e9efc803-66fe-4574-a4e0-ef8ce18f104a': 'bbb47af9-98bb-41e3-a830-f2056a3b0686',
+            'c6035e74-6b37-409e-a0c0-c58bb4f64fee': '0158c95e-ae42-4c63-bb82-767e619bde91',
+            '27869c1b-70c6-4019-965f-619c799eb0e0': '23c1cff2-6d47-47c1-a837-387a937cdc5d',
+            '260d91dd-1d8b-4964-8311-3ff589c38e5a': '0235ea86-fb0d-4694-ac8d-e7e4e8238faa',
+            '45b61435-fe57-4e0c-a893-68bc25d96d53': 'e3369193-b3e6-4cdc-86b0-a6b295fe5945',
+            '389a705c-d602-4f1e-bae6-7fdb736f3e53': '0fa7eb99-d9c6-4072-87b7-80cc7113e77b',
+            'b90f5a71-dcef-4a2b-925a-3e6d33be6364': '0d155284-9adb-42ac-8bd5-489ac177a64f',
+            'fba5b58b-a115-4c45-ad62-34c3589575eb': '76b635cb-74bc-4c2d-916d-8a76dcbf7b6e',
+            'c02f1643-7c13-450a-9004-d57ac6857ac3': '2c35659c-d262-4710-9d5f-a2389d8b1acd',
+            '60569fa2-ef55-4902-80a0-e98c9d7c95ed': 'c3afd736-cce8-4e8f-80d1-fecb5b91335f',
+            'c1381ec5-b99a-49e0-84e2-21aad7a10ab7': 'ad80173f-ab56-4f02-a130-25a7c93dee5f',
+            '1bebe881-2bb2-4b9e-817f-67739b354c78': '6b795e3c-5804-4aa7-b694-6ed96c73cc52',
+            '44ddcd38-4a6b-4eca-b7ee-12d4ce9fe6f4': '656dad63-a603-4cd5-bc96-1a867f8d3bdb',
+            'e2fa68cf-10d2-4772-9814-aeb72f529bdf': '74eaf6ce-ed6e-4954-b8a1-d0f57c6ab905',
+            '5f7d8cee-3073-4174-ab82-401fedb3fa44': '79f4d6f4-e426-478b-b95e-bbf783e0e841',
+            '2ebb61ce-1133-4a74-b8d5-5265319ffd07': '3aa6c98e-a2cc-4c7e-9d5e-a8430ecaf0f3',
+            '252dd393-ece6-4561-863d-194e9b292f9b': '7a2e23bf-bbc7-4db0-9a97-b438b74fff05',
+            '0d6b2ccc-01e0-4496-b30f-e6f7f5be3d21': 'd3309997-0e81-46c9-b354-0da523b645aa',
+            'a22e6df2-ff59-418b-89b2-2c39d7d72901': '672b2074-ec9f-4fad-b985-f732a38c3a01',
+            '5cc91f99-b121-4baa-813d-61260abbdffa': '7b6a5788-dee2-41b9-90e1-f4f74a4f419d',
+            '2b200e99-464a-45df-839b-ac3282fb07a1': '0835020d-c5a3-4b6d-9279-1f7ff7d06c94',
+            '66df4a08-281d-4aa3-917a-722de6658a79': 'f5a800b2-9f1c-480f-89cb-32a1b0f2e2f7',
+            '092a2e60-8ab5-4833-b948-056641af9df7': '7c429cee-b456-4c34-a5f2-75785945349e',
+            '03aebd95-bb93-4bc6-b798-bd6a633479e3': 'e4be2404-244d-45c1-9cb5-bf89778db520',
+            'ea05392e-4a72-493b-bad7-340a97f55a33': 'e3846c53-9e05-4aa9-8490-2f2579f86ffc',
+            'a8ae08aa-2adb-454e-b591-d57edc838ee7': 'd9bfe7f5-bde2-4857-8896-c770f448e385',
+            '88fcbba2-8e90-4e22-b5a2-1b78ace2b249': 'a10dda7a-04d7-4522-8b7d-66a26fdc5ace',
+            '45bcf53f-e78c-4844-a154-c4154cd2fbf5': '093b85a8-03bf-487d-a657-dc2a19f0236f',
+            'c41443c3-2451-443b-90cc-cd2aa6894c22': 'd1610c41-e2bd-4ddc-a7e6-7fc5e48f6e6d',
+            'f6fe8926-03ac-4a54-85ca-46359d2fcb88': '6c7fa009-861e-4c60-82a2-aaf2b82f15b1',
+            'a698e1c8-50d0-43c0-9cb5-882718447740': '9e11dfb6-cb50-45c0-9b84-a621aeb71670',
+            '4fc361c1-d830-4ebe-b0e2-e4cfb7085c92': 'b7cd60e2-f856-43bb-b452-7767f7c4b659',
+            'd5ae93a6-0786-4d66-a59a-06c5eb0ca029': 'ceb3c6fb-f8fe-4500-9284-b9000a50f57b',
+            '5a169e75-fb5f-40d9-a1f2-eaa4f18435d3': 'da126a2f-aac8-4f26-a958-92fde6da6058',
+            // UKG Tamil
+            '25d02c49-0147-4c0c-8881-3e972d676f51': '15f5fe29-ca56-4e74-92df-5435127a6bef',
+            'fc055c28-c24b-4235-aea1-9f355ae9ee8b': '82624c67-b519-4230-82c5-b7aa7dc73f9f',
+            'd156da6d-e314-4de9-9ff1-096ea30f7149': '3183b7d5-2cb5-4b90-86d1-3404d7c12d50',
+            'e8e47198-ea22-4424-9731-b7481310cce2': 'b3d2f9e3-798d-447a-985c-c12eeb98ba4d',
+            'c5a6b893-ff8c-44dc-af1a-0396c179c614': '09daeb81-4207-487e-95aa-78c896aae422',
+            'b76ca6d1-2446-474c-a367-fe69b30c5cc8': 'c61a63bb-0d39-4ecf-8047-bba9ee2fb364',
+            // UKG English
+            '07464656-1cb1-4357-a3ac-7fb8619f188e': '38b6ceee-066a-4b85-93c7-7f8d05e51546',
+            '855280c4-042c-4efc-9446-b5df38dafee9': 'ad9818b3-7920-4333-988c-a6f11ca36514',
+            '858f6bf9-b2ed-45fa-b7a4-4e171b514eab': '5f02c661-be6e-430f-8006-fd6ba31862f4',
+            'a0422422-7b97-483e-a9a0-03abe16418b9': '368ff367-95de-4127-972c-d9b19a63c35e',
+            '58817258-b01e-4dbb-bc67-12a869f979bb': 'cb3a3d20-7a20-47b1-9bde-288a39078c8e',
+            'd6c8a229-8c1f-4f08-bb40-d19e8b0b2101': 'd3798fda-2c44-4493-ba23-ffabab6a69cb',
+            // UKG Math
+            '7f0dced1-7b34-4f38-acc3-0fe6d4e8fa7b': 'b06685fc-e309-41fd-82d6-7ee22d93648c',
+            '2c1520dc-be89-4b8f-a73a-02b876e1f986': '4f78c782-4e87-433b-b4c1-0d1ffe0efc4e',
+            '125917f0-c595-40fa-bdfa-a0f12c63a6a1': 'b1857688-7b38-475d-80b3-b5882a2261dc',
+            '837f636d-0bc0-4e79-9eb6-a7b57175ab79': '797d1a3d-7eb7-4f7a-9887-973231c31b80',
+            '76a17127-dfb8-4147-a973-0b0f9bfc19e7': '5faee62f-cb1f-475f-8d00-baf895d81ebd',
+            '78baf022-0ca1-4b44-843d-5b25b89bcaac': 'e3316571-8cee-49ae-8e80-00c1e57530ee',
+            // UKG EVS
+            '094a5bf5-224a-47b3-bbea-08ce742c9725': '30e4ca0f-7e62-4c27-9912-0d14cabd09ef',
+            '3e4e4aa9-14bf-4b9b-a5cb-9494c192485f': '93d239bc-0b1c-4a5e-8dad-3bba8db4b906',
+            'c36950e9-ba19-4a77-9afc-359ef2d19d9d': 'e1d5281e-6424-4db7-bed9-a084c9a8d8e2',
+            'd42f06ba-10d7-42a5-94bb-0f0495de2129': '5417ceba-21e7-41d1-bf9e-2674b7dd4bbe',
+            '483272a4-eee6-4cef-a545-64437c0cb7a2': '4f94c696-5122-466f-bad8-86af7152b67d',
+            '438db244-e359-404b-899d-28258080058d': '2525867a-f4f0-4a82-8d5c-0c795d8af690',
+            // UKG GK
+            '413ba6f0-cb13-44c3-bebf-72d3708985f9': '7a5f3dc6-01dc-4db2-9440-fedcb09d3f7b',
+            '8bd93e54-adeb-49d3-9369-10764099e939': '705465a2-8723-4dae-a357-5f6ed161169f',
+            '21708b59-5458-4240-8ad9-24f2cab44b27': 'ee75cda5-a93d-4cca-a566-18b466310373',
+            '9e3d7ff8-3d4e-4cbf-b6eb-12dfabbf7042': '2d56ddf2-d320-43c8-a930-7c31fd2b98b7',
+            'c72a9ccc-bc2f-4d32-a2ac-048e5b9372d0': '603eb98a-2ef2-4226-a419-38e9eef2bcf0',
+            '070220d8-dfba-4ce5-8976-8841b5b54d83': '21cbc466-9c15-4bbc-95a0-dc6bae0df856',
+            // UKG Hindi
+            'ee3acb00-ecf1-427d-ad8b-962df2aad0e7': '839c7b6f-f099-4688-92d8-67f3c24399de',
+            '76b3512d-0f03-42d1-ae20-0493f14f0824': '7f1fafc0-613a-461e-a179-1de2c4a2312a',
+            'bc72d0cf-2404-428d-a8d9-a52187aaacc0': '3312a8ee-33b8-45d1-bbac-2fc8adb41c99',
+            '88c9115e-7eb8-42d9-aaf1-97cad5e5d836': 'b820e577-1da7-4b5d-8084-1674525ae4de',
+            '957b78b6-fab6-4f11-b62e-cba157110d6d': 'de38792e-826a-41d1-be1a-e02417a4bb31',
+            '13b309fb-604a-4c4f-a7ca-43dda117bdb4': 'dd0b47de-2cfb-4041-8c85-8e56ac040eba'
           };
-
-          const lessonMappings = activeSubject === 'tamil' ? tamilLessonMappings 
-                           : activeSubject === 'english' ? englishLessonMappings 
-                           : activeSubject === 'evs' ? evsLessonMappings
-                           : activeSubject === 'gk' ? gkLessonMappings
-                           : activeSubject === 'hindi' ? hindiLessonMappings
-                           : mathLessonMappings;
-          const lessonId = lessonMappings[activeLevel.id];
 
           if (lessonId) {
             // Always update lesson progress (best score)
@@ -1358,7 +1233,7 @@ export default function QuizArena() {
               });
             }
 
-             // ALWAYS record quiz_attempt (so parent portal sees every attempt)
+            // ALWAYS record quiz_attempt (so parent portal sees every attempt)
             const quizId = lessonToQuizId[lessonId];
             if (quizId) {
               studentApi.submitQuizScore(lessonId, quizId, {
@@ -1667,7 +1542,7 @@ export default function QuizArena() {
                       <div className="text-center sm:text-left">
                         <div className="inline-flex items-center gap-1.5 bg-white/30 border border-white/40 px-4 py-1.5 rounded-full mb-3 shadow-inner">
                           <span className="text-sm">{cfg.icon}</span>
-                          <span className="text-[10px] font-black text-indigo-950 uppercase tracking-[0.25em]">Levels Roadmap</span>
+                          <span className="text-[10px] font-black text-indigo-950 uppercase tracking-[0.25em]">{isUKG ? 'Challenge Map' : 'Levels Roadmap'}</span>
                         </div>
                         <h1 className="text-3xl sm:text-5xl font-black text-white leading-none tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] uppercase">
                           {cfg.label}
@@ -1730,7 +1605,7 @@ export default function QuizArena() {
                             {/* Level tag pill */}
                             <span className={`text-[10px] font-black uppercase tracking-widest px-3.5 py-1 rounded-full border shadow-sm mb-3 leading-none
                               ${unlocked ? 'bg-white/20 text-white border-white/30' : 'bg-slate-350 text-slate-600 border-slate-450'}`}>
-                              Lv {level.id}
+                              {isUKG ? 'Mission' : 'Lv'} {level.id}
                             </span>
 
                             {/* Level Title and English name */}
@@ -1762,9 +1637,9 @@ export default function QuizArena() {
                               <div className="w-full">
                                 <div className="w-full py-3 bg-white text-indigo-950 font-black rounded-2xl flex items-center justify-center gap-2 shadow-lg hover:bg-slate-50 active:scale-95 transition-all text-sm uppercase tracking-wider">
                                   {isCompleted ? (
-                                    <>PLAY AGAIN <RotateCcw size={14} className="stroke-[3]" /></>
+                                    <>{isUKG ? 'CHALLENGE AGAIN' : 'PLAY AGAIN'} <RotateCcw size={14} className="stroke-[3]" /></>
                                   ) : (
-                                    <>START QUIZ <Play size={14} fill="currentColor" /></>
+                                    <>{isUKG ? 'JUMP IN' : 'START QUIZ'} <Play size={14} fill="currentColor" /></>
                                   )}
                                 </div>
 
@@ -2310,7 +2185,7 @@ export default function QuizArena() {
                   onClick={() => setView('levels')}
                   className="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-black text-base sm:text-lg rounded-2xl shadow-lg border-b-4 border-teal-750 active:scale-95"
                 >
-                  நிலைகளுக்குத் திரும்பு ➡️
+                  {isUKG ? 'சவால்களுக்குத் திரும்பு ➡️' : 'நிலைகளுக்குத் திரும்பு ➡️'}
                 </button>
 
               </div>

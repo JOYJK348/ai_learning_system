@@ -111,6 +111,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       queryClient.invalidateQueries({ queryKey: studentKeys.lessons });
       queryClient.invalidateQueries({ queryKey: studentKeys.dashboard });
       queryClient.invalidateQueries({ queryKey: studentKeys.me });
+      queryClient.invalidateQueries({ queryKey: ['parent'] });
     },
   });
 

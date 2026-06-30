@@ -139,7 +139,7 @@ export default function ParentDashboard() {
   const { data: progressData, error: progressError, isLoading: progressLoading } = useQuery({
     queryKey: parentKeys.childProgress(activeChildId ?? ''),
     queryFn: () => parentApi.childProgress(activeChildId!),
-    enabled: !!activeChildId, staleTime: 60_000,
+    enabled: !!activeChildId, staleTime: 0,
     retry: false,
   });
 
@@ -155,7 +155,7 @@ export default function ParentDashboard() {
   const { data: chapterData, error: chapterError, isLoading: chapterLoading } = useQuery({
     queryKey: parentKeys.childChapterProgress(activeChildId ?? ''),
     queryFn: () => parentApi.childChapterProgress(activeChildId!),
-    enabled: !!activeChildId, staleTime: 60_000,
+    enabled: !!activeChildId, staleTime: 0,
     retry: false,
   });
 
@@ -269,9 +269,9 @@ export default function ParentDashboard() {
   };
 
   // Math to get overall stats
-  const totalChapters = chapterProgress.reduce((sum: number, s: any) => sum + (s.chapters?.length || 0), 0);
-  const completedChapters = chapterProgress.reduce((sum: number, s: any) => sum + (s.chapters?.filter((c: any) => c.is_complete).length || 0), 0);
-  const overallPercentage = totalChapters > 0 ? Math.round((completedChapters / totalChapters) * 100) : 0;
+  const totalLessonsAll = chapterProgress.reduce((sum: number, s: any) => sum + (s.chapters?.reduce((acc: number, c: any) => acc + (c.total_lessons || 0), 0) || 0), 0);
+  const completedLessonsAll = chapterProgress.reduce((sum: number, s: any) => sum + (s.chapters?.reduce((acc: number, c: any) => acc + (c.completed_lessons || 0), 0) || 0), 0);
+  const overallPercentage = totalLessonsAll > 0 ? Math.round((completedLessonsAll / totalLessonsAll) * 100) : 0;
 
   // Simplified smiley & status messages for uneducated parents
   const getStatusSmiley = (pct: number) => {
@@ -462,9 +462,9 @@ export default function ParentDashboard() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', margin: '0.5rem 0 1.5rem', width: '100%' }}>
                   {chapterProgress.map((sub: any) => {
                     const theme = getSubjectTheme(sub.name);
-                    const totalCh = sub.chapters?.length || 0;
-                    const compCh = sub.chapters?.filter((c: any) => c.is_complete).length || 0;
-                    const subPct = totalCh > 0 ? Math.round((compCh / totalCh) * 100) : 0;
+                    const totalLessons = sub.chapters?.reduce((sum: number, c: any) => sum + (c.total_lessons || 0), 0) || 0;
+                    const completedLessons = sub.chapters?.reduce((sum: number, c: any) => sum + (c.completed_lessons || 0), 0) || 0;
+                    const subPct = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
                     
                     return (
                       <div key={sub.id} style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', background: '#f8fafc', padding: '0.85rem 1.15rem', borderRadius: '1rem', border: '1px solid rgba(15, 23, 42, 0.04)' }}>

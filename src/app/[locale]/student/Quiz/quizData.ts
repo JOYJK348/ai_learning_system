@@ -8,7 +8,7 @@ export type Option = {
 export type Question = {
   type: 'trace' | 'sequence' | 'find' | 'match' | 'choice' | 'spelling' | 'sorting' | 'order' | 'math_compare' | 'math_count' | 'math_pattern';
   instruction: string;
-  instructionTa: string;
+  instructionTa?: string;
   letter?: string;
   sequence?: string[];
   options: Option[];
