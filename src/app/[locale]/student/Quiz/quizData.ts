@@ -6,7 +6,7 @@ export type Option = {
 };
 
 export type Question = {
-  type: 'trace' | 'sequence' | 'find' | 'match' | 'choice' | 'spelling' | 'sorting' | 'order' | 'math_compare' | 'math_count' | 'math_pattern' | 'drag_hunt' | 'garden_repair' | 'sentence_train' | 'story_cave' | 'detective_highlight' | 'writing_lab' | 'connect_pairs' | 'grid_search' | 'learn_card';
+  type: 'trace' | 'sequence' | 'find' | 'match' | 'choice' | 'spelling' | 'sorting' | 'order' | 'math_compare' | 'math_count' | 'math_pattern' | 'drag_hunt' | 'garden_repair' | 'sentence_train' | 'story_cave' | 'detective_highlight' | 'writing_lab' | 'connect_pairs' | 'grid_search' | 'learn_card' | 'letter_board' | 'combo_chart';
   instruction?: string;
   instructionTa?: string;
   letter?: string;
@@ -31,6 +31,13 @@ export type Question = {
   explanationTa?: string;
   examples?: string[];
   clockTime?: string;
+  // letter_board fields
+  boardTitle?: string;
+  boardSubtitle?: string;
+  letters?: string[];
+  color?: string;
+  // combo_chart fields
+  combos?: { consonant: string; vowel: string; result: string }[];
 };
 
 export type Level = {

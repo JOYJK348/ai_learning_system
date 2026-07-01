@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { GRADE1_ENGLISH_LEVELS, GRADE1_MATH_LEVELS } from '../../Quiz/grade1QuizData';
+import { GRADE1_ENGLISH_LEVELS, GRADE1_MATH_LEVELS, GRADE1_TAMIL_LEVELS } from '../../Quiz/grade1QuizData';
 
 export function shuffleArray<T>(array: T[]): T[] {
   const arr = [...array];
@@ -289,22 +289,6 @@ function renderVisualValue(val: string, isMath?: boolean) {
 }
 
 function renderTrainCoachItem(word: string, isMath?: boolean) {
-  if (!isMath) return <span>{word}</span>;
-
-  const num = parseInt(word);
-  if (!isNaN(num)) {
-    const scaleHeight = 45 + Math.min(45, (num / 100) * 45);
-    return (
-      <div 
-        style={{ height: `${scaleHeight}px` }} 
-        className="flex flex-col items-center justify-end w-14 sm:w-16 bg-gradient-to-t from-purple-500 to-indigo-400 border-2 border-white rounded-2xl shadow-md text-white font-black px-1 pb-2.5 transition-all relative select-none"
-      >
-        <span className="text-base sm:text-lg font-mono tracking-tight">{word}</span>
-        <div className="absolute top-1 left-1.5 right-1.5 h-1 bg-white/30 rounded-full" />
-      </div>
-    );
-  }
-
   if (word === '➔' || word === '->') {
     return (
       <div className="w-10 h-10 rounded-full bg-amber-100 border-2 border-amber-300 flex items-center justify-center text-amber-650 shadow-inner select-none shrink-0">
@@ -321,8 +305,34 @@ function renderTrainCoachItem(word: string, isMath?: boolean) {
     );
   }
 
-  return <span className="font-mono text-base font-black">{word}</span>;
+  const num = parseInt(word);
+  if (!isNaN(num)) {
+    const scaleHeight = 45 + Math.min(45, (num / 100) * 45);
+    return (
+      <div 
+        style={{ height: `${scaleHeight}px` }} 
+        className="flex flex-col items-center justify-end w-14 sm:w-16 bg-gradient-to-t from-purple-500 to-indigo-400 border-2 border-white rounded-2xl shadow-md text-white font-black px-1 pb-2.5 transition-all relative select-none"
+      >
+        <span className="text-base sm:text-lg font-mono tracking-tight">{word}</span>
+        <div className="absolute top-1 left-1.5 right-1.5 h-1 bg-white/30 rounded-full" />
+      </div>
+    );
+  }
+
+  // Colorful train coaches for kids spelling Tamil/English words
+  return (
+    <div className="flex flex-col items-center justify-center min-w-[55px] h-[55px] px-3.5 bg-gradient-to-br from-amber-400 via-orange-400 to-red-400 border-3 border-white rounded-2xl shadow-lg text-white font-black transition-all relative select-none active:scale-95">
+      <span className="text-base sm:text-lg drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.3)]">{word}</span>
+      {/* Train details */}
+      <div className="absolute top-1 left-2 w-2 h-2 rounded-full bg-white/35" />
+      <div className="absolute top-1 right-2 w-2 h-2 rounded-full bg-white/35" />
+      {/* Wheels */}
+      <div className="absolute -bottom-1.5 left-3 w-3 h-3 rounded-full bg-slate-800 border border-white" />
+      <div className="absolute -bottom-1.5 right-3 w-3 h-3 rounded-full bg-slate-800 border border-white" />
+    </div>
+  );
 }
+
 
 /* ==========================================================================
    SIMPLE TRACING CANVAS
@@ -475,8 +485,8 @@ export function SimpleTraceCanvas({ letter, onComplete }: { letter: string; onCo
     const setup = async () => {
       const canvas = canvasRef.current;
       if (!canvas) return;
-      const w = canvas.parentElement?.clientWidth || 300;
-      const h = 280;
+      const w = canvas.parentElement?.clientWidth || 320;
+      const h = Math.max(340, Math.min(420, Math.round(w * 0.9)));
       setDimensions({ w, h });
 
       canvas.width = w;
@@ -695,7 +705,7 @@ export function SimpleTraceCanvas({ letter, onComplete }: { letter: string; onCo
 
   return (
     <div className="flex flex-col items-center gap-4 w-full">
-      <div className="relative w-full h-[280px] rounded-[2rem] border-4 border-[#b45309] shadow-inner bg-[#fffdf9] overflow-hidden touch-none">
+      <div className="relative w-full h-[340px] sm:h-[400px] rounded-[2rem] border-4 border-[#b45309] shadow-inner bg-[#fffdf9] overflow-hidden touch-none">
         <canvas
           ref={guideCanvasRef}
           className="absolute inset-0 pointer-events-none touch-none w-full h-full"
@@ -717,7 +727,7 @@ export function SimpleTraceCanvas({ letter, onComplete }: { letter: string; onCo
           </div>
         )}
       </div>
-      <div className="flex gap-4 w-full max-w-xs justify-center font-sans">
+      <div className="flex gap-3 w-full font-sans">
         <button
           onClick={handleReset}
           className="flex-1 py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-2xl shadow active:scale-95 transition-all text-sm"
@@ -1203,54 +1213,47 @@ export function Grade1SentenceTrain({ question, onAnswer, isMath }: { question: 
   };
 
   return (
-    <div className={`flex flex-col items-center gap-6 w-full mt-4 font-sans p-6 rounded-[2.5rem] relative overflow-hidden transition-all duration-350
-      ${isMath ? 'bg-gradient-to-br from-purple-50 to-indigo-50/50 border-4 border-purple-200 shadow-md' : ''}`}>
+    <div className={`flex flex-col items-center gap-6 w-full mt-4 font-sans p-6 rounded-[2.5rem] relative overflow-hidden transition-all duration-350 bg-gradient-to-b from-sky-100 to-indigo-100/40 border-4 border-white shadow-2xl
+      ${isMath ? 'bg-gradient-to-br from-purple-50 to-indigo-50/50' : ''}`}>
       
-      <div className={`relative flex flex-col items-center justify-center p-6 rounded-[3rem] border-4 w-full min-h-[160px] shadow-inner overflow-hidden z-10
-        ${isMath ? 'bg-white border-purple-200' : 'bg-gradient-to-r from-indigo-50 to-sky-50 border-indigo-200'}`}>
-        {!isMath && (
-          <div className="absolute bottom-6 left-0 right-0 h-2 bg-slate-300 flex justify-between px-4 pointer-events-none">
-            {Array.from({ length: 12 }).map((_, i) => (
-              <div key={i} className="w-1.5 h-6 bg-slate-400 -mt-2 rounded-full" />
-            ))}
-          </div>
-        )}
+      {/* Decorative background sky elements */}
+      <div className="absolute top-2 left-6 text-2xl opacity-20 pointer-events-none select-none">☁️</div>
+      <div className="absolute bottom-16 right-6 text-xl opacity-20 pointer-events-none select-none">✨</div>
 
-        <div className="flex flex-wrap items-center gap-1.5 z-10 pb-6">
-          <div className={`w-18 h-14 rounded-l-2xl rounded-tr-lg border-2 border-white shadow flex items-center justify-center relative shrink-0
-            ${isMath ? 'bg-gradient-to-br from-purple-400 to-indigo-500' : 'bg-gradient-to-br from-red-400 to-rose-500'}`}>
-            <span className="text-2xl select-none">{isMath ? '🧮' : '🚂'}</span>
-            {!isMath && <div className="absolute -top-3 right-3 w-3 h-5 bg-slate-800 rounded-t-sm" />}
-          </div>
-
+      {/* Cloud Felt Board (Spelling Area) */}
+      <div className="relative flex flex-col items-center justify-center p-6 rounded-[2.5rem] border-4 border-sky-200/80 w-full min-h-[140px] shadow-lg overflow-hidden z-10 bg-white/70 backdrop-blur-sm">
+        
+        {/* Soft floating clouds container */}
+        <div className="flex flex-wrap items-center justify-center gap-3.5 z-10">
           {selectedIndices.map((wordIdx, idx) => (
             <button
               key={idx}
               onClick={() => handleWordSelect(wordIdx)}
-              className={isMath 
-                ? "shrink-0 active:scale-95 transition-all outline-none border-none p-0 bg-transparent flex items-end justify-center"
-                : "px-4 py-3 border-2 border-white rounded-2xl shadow text-white font-black tracking-wide shrink-0 active:scale-95 bg-gradient-to-br from-blue-400 to-indigo-500 text-sm uppercase"}
+              className="flex items-center justify-center min-w-[54px] h-[54px] px-3 bg-gradient-to-br from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white font-black text-xl sm:text-2xl rounded-2xl shadow-lg border-2 border-white transform hover:scale-105 active:scale-95 transition-all select-none"
+              style={{ fontFamily: '"Noto Sans Tamil", sans-serif' }}
             >
-              {renderTrainCoachItem(shuffledWords[wordIdx], isMath)}
+              {shuffledWords[wordIdx]}
             </button>
           ))}
 
           {Array.from({ length: Math.max(0, question.words.length - selectedIndices.length) }).map((_, i) => (
             <div 
               key={i} 
-              className={`w-16 h-12 border-2 border-dashed rounded-2xl shrink-0
-                ${isMath ? 'border-purple-200 bg-purple-50/20' : 'border-slate-300 bg-slate-200/50'}`} 
-            />
+              className="w-12 h-12 border-2 border-dashed border-sky-300 bg-sky-50/50 rounded-2xl shrink-0 flex items-center justify-center text-sky-300 font-bold select-none"
+            >
+              ☁️
+            </div>
           ))}
         </div>
       </div>
 
       {isWrong && (
-        <span className="text-rose-500 font-extrabold text-sm relative z-10">That sequence isn't correct. Try rearranging! {isMath ? '🧮' : '🚂'}</span>
+        <span className="text-rose-500 font-black text-sm relative z-10 animate-bounce">Oops! Try sorting differently! 🌟</span>
       )}
 
+      {/* Star / Bubble Letter options */}
       {!isCorrect && (
-        <div className="flex flex-wrap gap-2.5 justify-center max-w-md mt-2 relative z-10 items-end">
+        <div className="flex flex-wrap gap-3 justify-center max-w-md mt-2 relative z-10">
           {shuffledWords.map((word, i) => {
             const isUsed = selectedIndices.includes(i);
             return (
@@ -1258,38 +1261,34 @@ export function Grade1SentenceTrain({ question, onAnswer, isMath }: { question: 
                 key={i}
                 disabled={isUsed}
                 onClick={() => handleWordSelect(i)}
-                className={isUsed 
-                  ? 'bg-slate-100 border-slate-200 text-slate-350 cursor-not-allowed scale-95 opacity-55 px-5 py-3 rounded-2xl font-black border-2 shadow' 
-                  : isMath 
-                    ? 'p-0 border-none bg-transparent hover:scale-105 active:scale-95 flex items-end justify-center shrink-0'
-                    : 'px-5 py-3 rounded-2xl font-black border-2 shadow transition-all duration-200 bg-white border-indigo-100 text-indigo-955 text-sm uppercase tracking-wide hover:border-indigo-350 hover:bg-indigo-50/50 active:scale-95'}
+                className={`flex items-center justify-center min-w-[58px] h-[58px] px-4 font-black text-xl sm:text-2xl rounded-full border-3 shadow-md transition-all duration-200 select-none transform hover:-translate-y-1
+                  ${isUsed 
+                    ? 'bg-slate-100/50 border-slate-200 text-slate-300 cursor-not-allowed scale-95 opacity-40' 
+                    : 'bg-white border-sky-100 text-indigo-950 hover:border-sky-300 active:scale-95 shadow-sky-100/60'}`}
+                style={{ fontFamily: '"Noto Sans Tamil", sans-serif' }}
               >
-                {isMath && isUsed ? (
-                  <span className="font-mono text-base font-black text-slate-300 select-none px-4 py-3">{word}</span>
-                ) : (
-                  renderTrainCoachItem(word, isMath)
-                )}
+                {word}
               </button>
             );
           })}
         </div>
       )}
 
+      {/* Controls */}
       {!isCorrect && selectedIndices.length > 0 && (
-        <div className="flex gap-3 justify-center w-full max-w-sm mt-2 relative z-10">
+        <div className="flex gap-3 justify-center w-full max-w-sm mt-1 relative z-10">
           <button
             onClick={handleClear}
-            className="flex-1 py-3.5 bg-slate-200 border-2 border-white text-slate-700 font-black rounded-2xl shadow active:scale-95 text-xs uppercase"
+            className="flex-1 py-3 bg-white/80 border border-sky-200 text-indigo-950/70 font-black rounded-2xl shadow-sm active:scale-95 text-xs transition-all"
           >
             Clear 🔄
           </button>
           {selectedIndices.length === question.words.length && (
             <button
               onClick={handleCheck}
-              className={`flex-[2] py-3.5 border-2 border-white text-white font-black rounded-2xl shadow-lg active:scale-95 text-xs uppercase tracking-wider
-                ${isMath ? 'bg-gradient-to-r from-purple-500 to-indigo-500 shadow-purple-900/35' : 'bg-gradient-to-r from-blue-500 to-indigo-500'}`}
+              className="flex-[2] py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-black rounded-2xl shadow-lg hover:brightness-110 active:scale-95 text-xs tracking-wider transition-all"
             >
-              Check Order! 🏁
+              சரிபார்க்கவும்! ✨
             </button>
           )}
         </div>
@@ -1674,7 +1673,40 @@ const GRADE1_LESSON_LEVEL_NUM: Record<string, number> = {
   'a745cdf9-4425-40f5-8b5f-fd3242b740dc': 42,
   '233c3356-c533-47f5-bf92-2f0aafd07264': 43,
   '010821cd-efa3-4097-bb7f-048d753cf27b': 44,
-  '685b5290-5d9a-498f-90e8-2a242fd9d4d7': 45
+  '685b5290-5d9a-498f-90e8-2a242fd9d4d7': 45,
+
+  // --- Tamil Lesson UUIDs ---
+  'd05d60ce-2053-4068-b9aa-45e81912e80d': 1, // Vowels Revision
+  '402e5fee-2ac6-4ecd-addb-0382f1d3dc5b': 2, // Consonants Revision
+  '075e431f-1d90-4b98-9b52-975eaa076543': 3, // Intro to Uyirmei
+  'db0aa369-f847-4c49-b1e1-bef3ff49a2dd': 4, // Combination Practice
+  '9206802c-20bf-4b4d-960f-5b67aaebc2de': 5, // Ordering Letters
+  '8f03fcdc-fb8f-4af7-82bc-7a85e50f4e90': 6, // Ka Series
+  'b2c32a7a-3f6d-4c38-98d4-a0c7e03e5d66': 7, // Cha Series
+  'bfeaba3a-5032-4a1a-9530-7bdd53b18120': 8, // Tha Series
+  '44e9173f-8623-47be-a658-b273594555cd': 9, // Pa Series
+  '3e89ad77-6954-475a-91d9-cf87592d5828': 10, // Ma Series
+  'c491ba6a-2af4-4a62-ba3f-c187e4f45f59': 11, // Full practice
+  'f1c77e2e-d364-4ca0-9231-330ee28075fd': 12, // 2-Letter Words
+  '2f0c8077-63e3-4a0f-b0a1-f3098afe3a2f': 13, // 3-Letter Words
+  'e73e6f69-3791-43ad-8d5b-78d7b17905f0': 14, // Reading Simple Words
+  'f44994e6-a1b2-40b6-bb6e-ba20f9fe5239': 15, // Find Word from Picture
+  '4ae65faf-7dae-4f99-8b1c-be3f06cc8084': 16, // Word Splitting
+  '5d6e373a-2aa3-4e94-adf2-c7e1f3da2103': 17, // Word Joining
+  '2e60cd3f-edd2-4d80-9d77-6d57db3b888a': 18, // Reading Simple Sentences
+  'b9fc2c1b-e94d-4810-80ff-3f37f41f10dd': 19, // Word - Image Matching
+  'cbbcd706-bbcf-4112-9923-a93f191ee3be': 20, // Q&A
+  '084d299e-3571-423b-961e-3dc2b3022bf4': 21, // Short Story Comprehension
+  'f0e835fa-7a9b-4b88-a61e-941828c7ea29': 22, // Sequencing Events
+  'c1b43010-97c9-4305-90db-97b1e43a0861': 23, // Noun Introduction
+  'a9af574f-00c8-49a8-a7dd-6a6485a92a40': 24, // Action Words
+  '81b386f2-68ac-4c50-adb9-e036c90124d2': 25, // Singular/Plural
+  '4c1b892d-8db9-4b4b-b441-993345c857f6': 26, // Opposites
+  '70e19cdd-d1e0-4722-9fac-b7d31b9e9c64': 27, // Word Classification
+  'dd7cacd6-f5b3-4cc8-8b02-165e417faa64': 28, // Tamil Songs
+  'f3c8d488-7c9e-49b9-abfe-59d9c6c1e701': 29, // Simple Poems
+  'f2742e51-0256-4dd0-8d34-dde1d30c62e6': 30, // Short Stories
+  'eb3f8e7c-b04b-418c-8ce7-5fda2190c535': 31  // Story comprehension
 };
 
 export const GRADE1_MATH_LESSON_IDS = new Set([
@@ -1725,10 +1757,295 @@ export const GRADE1_MATH_LESSON_IDS = new Set([
   '685b5290-5d9a-498f-90e8-2a242fd9d4d7'
 ]);
 
+export const GRADE1_TAMIL_LESSON_IDS = new Set([
+  'd05d60ce-2053-4068-b9aa-45e81912e80d',
+  '402e5fee-2ac6-4ecd-addb-0382f1d3dc5b',
+  '075e431f-1d90-4b98-9b52-975eaa076543',
+  'db0aa369-f847-4c49-b1e1-bef3ff49a2dd',
+  '9206802c-20bf-4b4d-960f-5b67aaebc2de',
+  '8f03fcdc-fb8f-4af7-82bc-7a85e50f4e90',
+  'b2c32a7a-3f6d-4c38-98d4-a0c7e03e5d66',
+  'bfeaba3a-5032-4a1a-9530-7bdd53b18120',
+  '44e9173f-8623-47be-a658-b273594555cd',
+  '3e89ad77-6954-475a-91d9-cf87592d5828',
+  'c491ba6a-2af4-4a62-ba3f-c187e4f45f59',
+  'f1c77e2e-d364-4ca0-9231-330ee28075fd',
+  '2f0c8077-63e3-4a0f-b0a1-f3098afe3a2f',
+  'e73e6f69-3791-43ad-8d5b-78d7b17905f0',
+  'f44994e6-a1b2-40b6-bb6e-ba20f9fe5239',
+  '4ae65faf-7dae-4f99-8b1c-be3f06cc8084',
+  '5d6e373a-2aa3-4e94-adf2-c7e1f3da2103',
+  '2e60cd3f-edd2-4d80-9d77-6d57db3b888a',
+  'b9fc2c1b-e94d-4810-80ff-3f37f41f10dd',
+  'cbbcd706-bbcf-4112-9923-a93f191ee3be',
+  '084d299e-3571-423b-961e-3dc2b3022bf4',
+  'f0e835fa-7a9b-4b88-a61e-941828c7ea29',
+  'c1b43010-97c9-4305-90db-97b1e43a0861',
+  'a9af574f-00c8-49a8-a7dd-6a6485a92a40',
+  '81b386f2-68ac-4c50-adb9-e036c90124d2',
+  '4c1b892d-8db9-4b4b-b441-993345c857f6',
+  '70e19cdd-d1e0-4722-9fac-b7d31b9e9c64',
+  'dd7cacd6-f5b3-4cc8-8b02-165e417faa64',
+  'f3c8d488-7c9e-49b9-abfe-59d9c6c1e701',
+  'f2742e51-0256-4dd0-8d34-dde1d30c62e6',
+  'eb3f8e7c-b04b-418c-8ce7-5fda2190c535'
+]);
+
+/* ==========================================================================
+   TAMIL COMBO CHART — uyirmei combination chart card (learn before practice)
+   Shows: மெய் + உயிர் = உயிர்மெய் in a beautiful grouped table
+   ========================================================================== */
+function TamilComboChart({ question, onAnswer }: { question: any; onAnswer: (opt: any) => void }) {
+  const combos: { consonant: string; vowel: string; result: string }[] = question.combos || [];
+
+  // Theme styling (purple/indigo theme)
+  const style = {
+    bg: 'from-purple-500 via-indigo-500 to-blue-500',
+    cardBg: 'from-purple-50 via-indigo-50/30 to-blue-50/20',
+    border: 'border-indigo-200',
+    btn: 'from-indigo-500 via-purple-500 to-pink-500',
+    btnBorder: 'border-indigo-700',
+    itemBg: 'bg-indigo-50',
+    accentText: 'text-indigo-600'
+  };
+
+  return (
+    <div className="w-full flex flex-col items-center gap-4 px-1 max-h-[82vh]">
+      {/* Scrollable Container Poster */}
+      <div className={`relative w-full rounded-[2.5rem] bg-gradient-to-b ${style.cardBg} border-4 border-white shadow-2xl overflow-hidden flex flex-col`}>
+        
+        {/* Banner strip */}
+        <div className={`w-full py-3 px-5 bg-gradient-to-r ${style.bg} text-white flex-shrink-0`}>
+          <h2 className="text-sm sm:text-base font-black tracking-wide" style={{ fontFamily: '"Noto Sans Tamil", serif' }}>
+            {question.boardTitle || 'உயிர்மெய் அட்டவணை'}
+          </h2>
+          <p className="text-[10px] font-bold opacity-90">{question.boardSubtitle || 'Uyirmei Combination Poster'}</p>
+        </div>
+
+        {/* Scrollable Poster board grid */}
+        <div className="p-4 overflow-y-auto max-h-[50vh] scrollbar-thin">
+          <div className="grid grid-cols-3 gap-2.5">
+            {combos.map((combo, idx) => (
+              <div
+                key={idx}
+                className="relative flex flex-col items-center bg-white border border-slate-100 rounded-xl p-2 shadow-sm hover:scale-105 transition-transform"
+              >
+                {/* Consonant in small badge */}
+                <span className="text-[9px] font-black text-slate-400 select-none">
+                  {combo.consonant} + {combo.vowel}
+                </span>
+
+                {/* Arrow indicator */}
+                <div className="text-[9px] text-slate-300 font-extrabold my-0.5 select-none">⬇</div>
+
+                {/* Big Result Letter */}
+                <div className={`flex items-center justify-center w-11 h-11 rounded-lg ${style.itemBg} shadow-inner`}>
+                  <span
+                    className={`text-2xl font-black ${style.accentText}`}
+                    style={{ fontFamily: '"Noto Sans Tamil", "Latha", serif' }}
+                  >
+                    {combo.result}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Hint footer */}
+        <div className="mx-4 mb-4 mt-2 rounded-xl bg-white/80 px-4 py-2 border border-white/95 text-center flex-shrink-0">
+          <p className="text-[10px] font-bold text-slate-500">
+            👀 அட்டவணையை முழுமையாகப் படித்துப் பழகுக! (Review the whole board!)
+          </p>
+        </div>
+      </div>
+
+      {/* Start Practice button directly underneath */}
+      <button
+        onClick={() => onAnswer({ text: 'ready', correct: true })}
+        className={`w-full py-3 sm:py-4 rounded-2xl bg-gradient-to-r ${style.btn} text-white font-black text-sm sm:text-base shadow-md border-b-4 ${style.btnBorder} active:scale-95 active:border-b-2 transition-all duration-150`}
+      >
+        🎯 பயிற்சி தொடங்குவோம்! (Start Practice!)
+      </button>
+    </div>
+  );
+}
+
+/* ==========================================================================
+   TAMIL LETTER BOARD — shows all letters on ONE card, then starts tracing
+   ========================================================================== */
+function TamilLetterBoard({ question, onAnswer }: { question: any; onAnswer: (opt: any) => void }) {
+  const letters: string[] = question.letters || [];
+  const isVowels = question.boardTitle?.includes('உயிர்');
+
+  // Two palette themes: cyan-blue for vowels, purple-pink for consonants
+  const theme = isVowels
+    ? { outer: 'from-cyan-400 to-blue-500', card: 'from-cyan-50 via-sky-50 to-blue-50', badge: 'bg-cyan-100 text-cyan-800', chip: 'bg-white border-cyan-200 text-cyan-900 shadow-cyan-100', chipHover: 'hover:bg-cyan-50', btn: 'from-cyan-500 to-blue-600', btnBorder: 'border-cyan-700', counter: 'text-cyan-600' }
+    : { outer: 'from-purple-400 to-pink-500', card: 'from-purple-50 via-fuchsia-50 to-pink-50', badge: 'bg-purple-100 text-purple-800', chip: 'bg-white border-purple-200 text-purple-900 shadow-purple-100', chipHover: 'hover:bg-purple-50', btn: 'from-purple-500 to-pink-600', btnBorder: 'border-purple-700', counter: 'text-purple-600' };
+
+  return (
+    <div className="w-full flex flex-col items-center gap-4 px-1">
+      {/* Board Card */}
+      <div className={`relative w-full rounded-[2rem] bg-gradient-to-br ${theme.card} border-4 border-white shadow-2xl overflow-hidden`}>
+        {/* Gradient top bar */}
+        <div className={`w-full h-2 bg-gradient-to-r ${theme.outer}`} />
+
+        {/* Header */}
+        <div className="px-5 pt-4 pb-3 flex items-center justify-between">
+          <div>
+            <h2 className="text-lg sm:text-xl font-black text-slate-800 leading-tight" style={{ fontFamily: '"Noto Sans Tamil", serif' }}>
+              {question.boardTitle}
+            </h2>
+            <p className="text-xs font-semibold text-slate-400 mt-0.5">{question.boardSubtitle}</p>
+          </div>
+          <span className={`text-xs font-black px-3 py-1.5 rounded-full ${theme.badge} uppercase tracking-wider`}>
+            {letters.length} எழுத்து
+          </span>
+        </div>
+
+        {/* Letter grid */}
+        <div className="px-4 pb-5">
+          <div className="grid grid-cols-4 sm:grid-cols-5 gap-2.5">
+            {letters.map((letter, idx) => (
+              <div
+                key={idx}
+                className={`flex items-center justify-center rounded-2xl border-2 ${theme.chip} ${theme.chipHover} shadow-sm aspect-square transition-transform hover:scale-105 select-none`}
+              >
+                <span
+                  className="text-2xl sm:text-3xl font-black leading-none"
+                  style={{ fontFamily: '"Noto Sans Tamil", "Latha", serif' }}
+                >
+                  {letter}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Hint strip */}
+        <div className="mx-4 mb-4 rounded-xl bg-white/60 px-4 py-2.5 text-center border border-white/80">
+          <p className="text-xs sm:text-sm font-bold text-slate-500">
+            👀 எல்லா எழுத்துக்களையும் பார்த்து நினைவு வை! &nbsp;&middot;&nbsp; Look and remember all letters!
+          </p>
+        </div>
+      </div>
+
+      {/* Start Tracing CTA */}
+      <button
+        onClick={() => onAnswer({ text: 'ready', correct: true })}
+        className={`w-full py-3 sm:py-4 rounded-2xl bg-gradient-to-r ${theme.btn} text-white font-black text-sm sm:text-base shadow-md border-b-4 ${theme.btnBorder} active:scale-95 active:border-b-2 transition-all duration-150 flex items-center justify-center gap-2`}
+      >
+        <span>✍️</span>
+        <span>எழுதலாம்! — Start Tracing!</span>
+      </button>
+
+    </div>
+  );
+}
+
+/* ==========================================================================
+   TAMIL LETTER SHOWCASE → TRACE COMPONENT
+   Phase 1: Big beautiful letter card
+   Phase 2: Drawing canvas (SimpleTraceCanvas)
+   ========================================================================== */
+function TamilLetterShowcaseAndTrace({ letter, instructionTa, onComplete }: { letter: string; instructionTa?: string; onComplete: () => void }) {
+  const [phase, setPhase] = useState<'showcase' | 'trace'>('showcase');
+
+  // Gradient palette cycles through vibrant colours
+  const palettes = [
+    { bg: 'from-purple-400 via-pink-400 to-rose-400', card: 'from-purple-50 to-pink-50', ring: 'ring-purple-300', btn: 'from-purple-500 to-pink-500', border: 'border-purple-600', dot: 'bg-purple-200' },
+    { bg: 'from-cyan-400 via-teal-400 to-emerald-400', card: 'from-cyan-50 to-teal-50', ring: 'ring-cyan-300', btn: 'from-cyan-500 to-teal-500', border: 'border-teal-600', dot: 'bg-cyan-200' },
+    { bg: 'from-amber-400 via-orange-400 to-red-400', card: 'from-amber-50 to-orange-50', ring: 'ring-amber-300', btn: 'from-amber-500 to-orange-500', border: 'border-orange-600', dot: 'bg-amber-200' },
+    { bg: 'from-indigo-400 via-blue-400 to-sky-400', card: 'from-indigo-50 to-blue-50', ring: 'ring-indigo-300', btn: 'from-indigo-500 to-blue-500', border: 'border-indigo-600', dot: 'bg-indigo-200' },
+    { bg: 'from-rose-400 via-fuchsia-400 to-violet-400', card: 'from-rose-50 to-fuchsia-50', ring: 'ring-rose-300', btn: 'from-rose-500 to-fuchsia-500', border: 'border-rose-600', dot: 'bg-rose-200' },
+  ];
+  // Pick palette based on letter char code for consistency
+  const palette = palettes[letter.charCodeAt(0) % palettes.length];
+
+  if (phase === 'trace') {
+    return (
+      <div className="w-full flex flex-col items-center gap-4">
+        <div className={`w-full px-3 py-2 rounded-2xl bg-gradient-to-r ${palette.bg} text-white text-center`}>
+          <span className="text-lg font-black tracking-wide">எழுதுக: {letter} ✍️</span>
+        </div>
+        <SimpleTraceCanvas letter={letter} onComplete={onComplete} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full flex flex-col items-center gap-5 px-1">
+      {/* Showcase Card */}
+      <div className={`relative w-full bg-gradient-to-br ${palette.card} border-4 border-white ring-4 ${palette.ring} rounded-[2.5rem] shadow-2xl overflow-hidden`}>
+        {/* Decorative blobs */}
+        <div className={`absolute -top-8 -right-8 w-36 h-36 rounded-full opacity-30 bg-gradient-to-br ${palette.bg} blur-2xl pointer-events-none`} />
+        <div className={`absolute -bottom-8 -left-8 w-28 h-28 rounded-full opacity-20 bg-gradient-to-br ${palette.bg} blur-xl pointer-events-none`} />
+
+        {/* Top badge */}
+        <div className="flex justify-center pt-5">
+          <span className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/70 backdrop-blur-sm text-xs font-black uppercase tracking-widest text-slate-700 shadow-sm`}>
+            ✨ தமிழ் எழுத்து
+          </span>
+        </div>
+
+        {/* Giant Letter */}
+        <div className="flex items-center justify-center py-6 sm:py-8">
+          <div
+            className={`relative flex items-center justify-center w-44 h-44 sm:w-56 sm:h-56 rounded-[2rem] bg-white shadow-xl ring-4 ${palette.ring} select-none`}
+            style={{ fontFamily: '"Noto Sans Tamil", "Latha", serif' }}
+          >
+            {/* Dot decorations */}
+            <div className={`absolute top-3 right-3 w-3 h-3 rounded-full ${palette.dot} opacity-80`} />
+            <div className={`absolute bottom-3 left-3 w-2 h-2 rounded-full ${palette.dot} opacity-60`} />
+            <span
+              className="text-[7rem] sm:text-[9rem] font-black leading-none"
+              style={{
+                background: `linear-gradient(135deg, #1e293b 0%, #334155 100%)`,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.12))'
+              }}
+            >
+              {letter}
+            </span>
+          </div>
+        </div>
+
+        {/* Tamil label */}
+        {instructionTa && (
+          <div className="px-6 pb-2 text-center">
+            <p className="text-sm sm:text-base font-bold text-slate-600" style={{ fontFamily: '"Noto Sans Tamil", serif' }}>
+              {instructionTa}
+            </p>
+          </div>
+        )}
+
+        {/* Fun fact strip */}
+        <div className={`mx-4 mb-5 rounded-2xl bg-white/60 backdrop-blur-sm border border-white/80 py-3 px-4 text-center`}>
+          <p className="text-xs sm:text-sm font-bold text-slate-500">
+            👆 Look carefully at the shape! Then trace it with your finger.
+          </p>
+        </div>
+      </div>
+
+      {/* CTA Button */}
+      <button
+        onClick={() => setPhase('trace')}
+        className={`w-full py-5 rounded-[1.5rem] bg-gradient-to-r ${palette.btn} text-white font-black text-xl sm:text-2xl shadow-lg border-b-4 ${palette.border} active:scale-95 active:border-b-2 transition-all duration-150 flex items-center justify-center gap-3`}
+      >
+        <span>✍️</span>
+        <span>எழுதலாம்!</span>
+        <span className="text-base opacity-80">(Let's Trace!)</span>
+      </button>
+    </div>
+  );
+}
+
 export function Grade1EnglishActivityPlayer({ lessonId, onComplete }: { lessonId: string; onComplete: (data: any) => void }) {
   const levelNum = GRADE1_LESSON_LEVEL_NUM[lessonId] || 1;
   const isMath = GRADE1_MATH_LESSON_IDS.has(lessonId);
-  const levelsSource = isMath ? GRADE1_MATH_LEVELS : GRADE1_ENGLISH_LEVELS;
+  const isTamil = GRADE1_TAMIL_LESSON_IDS.has(lessonId);
+  const levelsSource = isTamil ? GRADE1_TAMIL_LEVELS : (isMath ? GRADE1_MATH_LEVELS : GRADE1_ENGLISH_LEVELS);
   const levelData = levelsSource.find((l) => l.id === levelNum) || levelsSource[0];
   
   const [qIndex, setQIndex] = useState(0);
@@ -1742,7 +2059,6 @@ export function Grade1EnglishActivityPlayer({ lessonId, onComplete }: { lessonId
     if (qIndex + 1 < levelData.questions.length) {
       setQIndex(qIndex + 1);
     } else {
-      // Completed all questions, call back!
       const correctCount = scores.filter(Boolean).length;
       onComplete({
         score: correctCount,
@@ -1770,32 +2086,40 @@ export function Grade1EnglishActivityPlayer({ lessonId, onComplete }: { lessonId
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 w-full max-w-lg mx-auto font-sans p-4">
+    <div className="flex flex-col items-center gap-4 w-full max-w-lg mx-auto font-sans px-3 py-3">
       {/* Quiz Progress header */}
-      <div className="w-full flex items-center justify-between px-2">
-        <span className="text-sm font-black text-slate-800">
-          Question {qIndex + 1} of {levelData.questions.length}
+      <div className="w-full flex items-center justify-between px-1">
+        <span className="text-sm font-black text-slate-700">
+          {qIndex + 1} / {levelData.questions.length}
         </span>
-        <div className="flex gap-1">
+        <div className="flex gap-1 flex-wrap justify-end max-w-[70%]">
           {levelData.questions.map((_, i) => (
             <div
               key={i}
-              className={`w-3.5 h-3.5 rounded-full transition-all
-                ${i === qIndex ? 'bg-amber-400 scale-110 ring-2 ring-amber-300' : i < scores.length ? scores[i] ? 'bg-emerald-500' : 'bg-rose-500' : 'bg-slate-200'}`}
+              className={`w-3 h-3 rounded-full transition-all
+                ${i === qIndex ? 'bg-amber-400 scale-125 ring-2 ring-amber-300' : i < scores.length ? scores[i] ? 'bg-emerald-500' : 'bg-rose-500' : 'bg-slate-200'}`}
             />
           ))}
         </div>
       </div>
 
-      {/* Instruction */}
-      <div className="text-center mt-2 px-4 py-2.5 bg-amber-50 border-2 border-amber-200 rounded-[1.5rem] shadow-sm">
-        <p className="text-base font-extrabold text-[#78350f] m-0">
-          {currentQuestion.instruction}
-        </p>
-      </div>
+      {/* Instruction — hidden for trace, letter_board, and combo_chart (they have their own headers) */}
+      {currentQuestion.type !== 'trace' && currentQuestion.type !== 'letter_board' && currentQuestion.type !== 'combo_chart' && (
+        <div className="w-full text-center px-4 py-2.5 bg-amber-50 border-2 border-amber-200 rounded-[1.5rem] shadow-sm">
+          <p className="text-sm sm:text-base font-extrabold text-[#78350f] m-0 leading-snug">
+            {currentQuestion.instruction}
+          </p>
+        </div>
+      )}
 
       {/* Embedded interactive game renderers */}
-      <div className="w-full py-4 min-h-[300px] flex items-center justify-center">
+      <div className="w-full flex items-center justify-center">
+        {currentQuestion.type === 'combo_chart' && (
+          <TamilComboChart key={qIndex} question={currentQuestion} onAnswer={handleAnswer} />
+        )}
+        {currentQuestion.type === 'letter_board' && (
+          <TamilLetterBoard key={qIndex} question={currentQuestion} onAnswer={handleAnswer} />
+        )}
         {currentQuestion.type === 'learn_card' && (
           <Grade1LearnCard key={qIndex} question={currentQuestion} onAnswer={handleAnswer} isMath={isMath} />
         )}
@@ -1821,7 +2145,11 @@ export function Grade1EnglishActivityPlayer({ lessonId, onComplete }: { lessonId
           <Grade1DetectiveZone key={qIndex} question={currentQuestion} onAnswer={handleAnswer} />
         )}
         {currentQuestion.type === 'trace' && currentQuestion.letter && (
-          <SimpleTraceCanvas key={qIndex} letter={currentQuestion.letter} onComplete={() => handleAnswer({ text: 'trace', correct: true })} />
+          <SimpleTraceCanvas
+            key={qIndex}
+            letter={currentQuestion.letter}
+            onComplete={() => handleAnswer({ text: 'trace', correct: true })}
+          />
         )}
         {currentQuestion.type === 'writing_lab' && (
           <Grade1WritingLab key={qIndex} question={currentQuestion} onAnswer={handleAnswer} />
@@ -1832,9 +2160,9 @@ export function Grade1EnglishActivityPlayer({ lessonId, onComplete }: { lessonId
       {selectedAnswer !== null && (
         <button
           onClick={handleNext}
-          className="w-full py-4 mt-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-black text-base sm:text-lg rounded-2xl shadow-lg border-b-4 border-teal-700 active:scale-95 transition-all"
+          className="w-full py-4 mt-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-black text-base sm:text-lg rounded-2xl shadow-lg border-b-4 border-teal-700 active:scale-95 transition-all"
         >
-          {qIndex + 1 < levelData.questions.length ? 'Next Challenge! ➡️' : 'Finish Challenge! 🎉'}
+          {qIndex + 1 < levelData.questions.length ? 'Next Letter! ➡️' : 'Finish! 🎉'}
         </button>
       )}
     </div>

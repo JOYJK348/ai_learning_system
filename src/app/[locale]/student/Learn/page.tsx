@@ -208,13 +208,14 @@ function ConsonantIcon({ group, className = '' }: { group: string; className?: s
 }
 
 function getConsonantKey(title: string): string | null {
-  if (title.includes('க்') && title.includes('ங்')) return 'ka-group';
-  if (title.includes('ட்') && title.includes('ண்')) return 'ta-group';
-  if (title.includes('ப்') && title.includes('ம்') && !title.includes('க்')) return 'pa-group';
-  if (title.includes('ய்') && title.includes('ர்')) return 'ya-group';
-  if (title.includes('ழ்') && title.includes('ள்')) return 'zha-group';
+  if (title.includes('க்') && title.includes('ங்') && !title.includes('சொல்') && !title.includes('படம்')) return 'ka-group';
+  if (title.includes('ட்') && title.includes('ண்') && !title.includes('சொல்') && !title.includes('படம்')) return 'ta-group';
+  if (title.includes('ப்') && title.includes('ம்') && !title.includes('க்') && !title.includes('சொல்') && !title.includes('படம்')) return 'pa-group';
+  if (title.includes('ய்') && title.includes('ர்') && !title.includes('சொல்') && !title.includes('படம்')) return 'ya-group';
+  if (title.includes('ழ்') && title.includes('ள்') && !title.includes('சொல்') && !title.includes('படம்')) return 'zha-group';
   return null;
 }
+
 
 
 /* ─── SIMPLE WORDS SVG ICONS ─── */
@@ -306,9 +307,9 @@ function WordsIcon({ type, className = '' }: { type: string; className?: string 
 
 function getWordsKey(title: string): string | null {
   if (title.includes('விலங்கு') || title.toLowerCase().includes('animal')) return 'animals';
-  if (title.includes('பொருட்கள்') || title.toLowerCase().includes('things') || title.includes('சுற்றியுள்ள')) return 'things';
+  if (title.includes('படம்') || title.includes('பொருட்கள்') || title.toLowerCase().includes('things') || title.includes('சுற்றியுள்ள')) return 'things';
   if (title.includes('உயிரெழுத்து') || title.includes('உயிர்எழுத்து')) return 'vowel-words';
-  if (title.includes('அடிப்படை') || title.includes('தினமும்') || title.includes('எளிய தமிழ்')) return 'basic-words';
+  if (title.includes('சொல்') || title.includes('சொற்கள்') || title.includes('வாசித்தல்') || title.includes('பிரித்தல்') || title.includes('சேர்த்தல்') || title.includes('அடிப்படை') || title.includes('தினமும்') || title.includes('எளிய தமிழ்')) return 'basic-words';
   return null;
 }
 
@@ -525,12 +526,18 @@ function UltimateLearnEngineInner() {
         const isUKGStudent = studentProfile?.grade_name?.toUpperCase() === 'UKG';
         const isGrade1Student = studentProfile?.grade_name?.toUpperCase() === 'GRADE 1' || studentProfile?.grade_name?.toUpperCase() === 'CLASS 1';
 
-        // ── UKG / Grade 1 Hindi / GK / EVS bypass: go straight to ActivityPlayer, skip all LKG intercepts ──
+        // ── UKG / Grade 1 Hindi / GK / EVS / Tamil bypass: go straight to ActivityPlayer, skip all LKG intercepts ──
         const isHindiSubject = activeSubject?.name?.toLowerCase().includes('hindi');
         const isGkSubject = activeSubject?.name?.toLowerCase().includes('general') || activeSubject?.name?.toLowerCase().includes('gk') || activeSubject?.name?.toLowerCase().includes('knowledge');
         const isEvsSubject = activeSubject?.name?.toLowerCase().includes('evs') || activeSubject?.name?.toLowerCase().includes('environment') || activeSubject?.name?.toLowerCase().includes('studies');
-        if ((isUKGStudent || isGrade1Student) && (isHindiSubject || isGkSubject || isEvsSubject)) {
-            // ActivityPlayer will pick up the right quiz via activity_type_id 79/78/77
+        if ((isUKGStudent || isGrade1Student) && (isHindiSubject || isGkSubject || isEvsSubject || isTamilSubject)) {
+            // Already set activeLesson(lesson) on line 517.
+            // Reset any LKG/UKG overrides that might be active/stale:
+            setShowVowelQuiz(null);
+            setShowMeiQuiz(null);
+            setShowWordShowcase(null);
+            setShowNameTrace(false);
+            // return early to skip LKG vowel/mei overrides
             return;
         }
 

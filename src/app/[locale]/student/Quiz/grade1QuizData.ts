@@ -805,7 +805,6 @@ export const GRADE1_ENGLISH_LEVELS: Level[] = [
   }
 ];
 
-export const GRADE1_TAMIL_LEVELS: Level[] = [];
 export const GRADE1_MATH_LEVELS: Level[] = [
   // --- CHAPTER 1: NUMBERS BEYOND 100 🔢 ---
   {
@@ -1420,3 +1419,884 @@ export const GRADE1_MATH_LEVELS: Level[] = [
 export const GRADE1_EVS_LEVELS: Level[] = [];
 export const GRADE1_GK_LEVELS: Level[] = [];
 export const GRADE1_HINDI_LEVELS: Level[] = [];
+
+export const GRADE1_TAMIL_LEVELS: Level[] = [
+  // --- CHAPTER 1: எழுத்து உலகம் 🌈 (Levels 1 - 5) ---
+  {
+    id: 1,
+    title: 'உயிர் எழுத்து மீள்பார்வை 🌈',
+    titleEn: 'Vowels Revision',
+    mascot: '🌈',
+    color: 'from-cyan-400 to-blue-500',
+    borderColor: 'border-cyan-300',
+    questions: [
+      { type: 'letter_board' as any, instruction: 'உயிர் எழுத்துக்கள் - Tamil Vowels 🌈', instructionTa: 'எல்லா உயிர் எழுத்துக்களையும் பார்க்கவும்!', boardTitle: 'உயிர் எழுத்துக்கள்', boardSubtitle: 'Tamil Vowels (12+1)', letters: ['அ','ஆ','இ','ஈ','உ','ஊ','எ','ஏ','ஐ','ஒ','ஓ','ஔ','ஃ'], color: 'from-cyan-400 to-blue-500', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: அ ✍️', instructionTa: 'எழுத்தை எழுதுக: அ', letter: 'அ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ஆ ✍️', instructionTa: 'எழுத்தை எழுதுக: ஆ', letter: 'ஆ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: இ ✍️', instructionTa: 'எழுத்தை எழுதுக: இ', letter: 'இ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ஈ ✍️', instructionTa: 'எழுத்தை எழுதுக: ஈ', letter: 'ஈ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: உ ✍️', instructionTa: 'எழுத்தை எழுதுக: உ', letter: 'உ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ஊ ✍️', instructionTa: 'எழுத்தை எழுதுக: ஊ', letter: 'ஊ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: எ ✍️', instructionTa: 'எழுத்தை எழுதுக: எ', letter: 'எ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ஏ ✍️', instructionTa: 'எழுத்தை எழுதுக: ஏ', letter: 'ஏ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ஐ ✍️', instructionTa: 'எழுத்தை எழுதுக: ஐ', letter: 'ஐ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ஒ ✍️', instructionTa: 'எழுத்தை எழுதுக: ஒ', letter: 'ஒ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ஓ ✍️', instructionTa: 'எழுத்தை எழுதுக: ஓ', letter: 'ஓ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ஔ ✍️', instructionTa: 'எழுத்தை எழுதுக: ஔ', letter: 'ஔ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ஃ ✍️', instructionTa: 'எழுத்தை எழுதுக: ஃ', letter: 'ஃ', options: [] }
+    ]
+  },
+  {
+    id: 2,
+    title: 'மெய் எழுத்து மீள்பார்வை 🦁',
+    titleEn: 'Consonants Revision',
+    mascot: '🦁',
+    color: 'from-cyan-400 to-blue-500',
+    borderColor: 'border-cyan-300',
+    questions: [
+      { type: 'letter_board' as any, instruction: 'மெய் எழுத்துக்கள் - Tamil Consonants 🦁', instructionTa: 'எல்லா மெய் எழுத்துக்களையும் பார்க்கவும்!', boardTitle: 'மெய் எழுத்துக்கள்', boardSubtitle: 'Tamil Consonants (18)', letters: ['க்','ங்','ச்','ஞ்','ட்','ண்','த்','ந்','ப்','ம்','ய்','ர்','ல்','வ்','ழ்','ள்','ற்','ன்'], color: 'from-purple-400 to-pink-500', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: க் ✍️', instructionTa: 'எழுத்தை எழுதுக: க்', letter: 'க்', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ங் ✍️', instructionTa: 'எழுத்தை எழுதுக: ங்', letter: 'ங்', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ச் ✍️', instructionTa: 'எழுத்தை எழுதுக: ச்', letter: 'ச்', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ஞ் ✍️', instructionTa: 'எழுத்தை எழுதுக: ஞ்', letter: 'ஞ்', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ட் ✍️', instructionTa: 'எழுத்தை எழுதுக: ட்', letter: 'ட்', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ண் ✍️', instructionTa: 'எழுத்தை எழுதுக: ண்', letter: 'ண்', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: த் ✍️', instructionTa: 'எழுத்தை எழுதுக: த்', letter: 'த்', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ந் ✍️', instructionTa: 'எழுத்தை எழுதுக: ந்', letter: 'ந்', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ப் ✍️', instructionTa: 'எழுத்தை எழுதுக: ப்', letter: 'ப்', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ம் ✍️', instructionTa: 'எழுத்தை எழுதுக: ம்', letter: 'ம்', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ய் ✍️', instructionTa: 'எழுத்தை எழுதுக: ய்', letter: 'ய்', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ர் ✍️', instructionTa: 'எழுத்தை எழுதுக: ர்', letter: 'ர்', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ல் ✍️', instructionTa: 'எழுத்தை எழுதுக: ல்', letter: 'ல்', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: வ் ✍️', instructionTa: 'எழுத்தை எழுதுக: வ்', letter: 'வ்', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ழ் ✍️', instructionTa: 'எழுத்தை எழுதுக: ழ்', letter: 'ழ்', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ள் ✍️', instructionTa: 'எழுத்தை எழுதுக: ள்', letter: 'ள்', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ற் ✍️', instructionTa: 'எழுத்தை எழுதுக: ற்', letter: 'ற்', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ன் ✍️', instructionTa: 'எழுத்தை எழுதுக: ன்', letter: 'ன்', options: [] }
+    ]
+  },
+  {
+    id: 3,
+    title: 'உயிர்மெய் அறிமுகம் 🔤',
+    titleEn: 'Introduction to Uyirmei',
+    mascot: '🔤',
+    color: 'from-cyan-400 to-blue-500',
+    borderColor: 'border-cyan-300',
+    questions: [
+      {
+        type: 'combo_chart' as any,
+        instruction: 'மெய் + உயிர் = உயிர்மெய் ✎️',
+        instructionTa: 'எல்லா உயிர்மெய் சேர்க்கைகளையும் பார்க்கவும்!',
+        boardTitle: 'உயிர்மெய் சேர்க்கை அறிமுகம்',
+        boardSubtitle: 'Consonant + Vowel = Uyirmei',
+        combos: [
+          { consonant: 'க்', vowel: 'அ', result: 'க' },
+          { consonant: 'ச்', vowel: 'அ', result: 'ச' },
+          { consonant: 'த்', vowel: 'அ', result: 'த' },
+          { consonant: 'ப்', vowel: 'அ', result: 'ப' },
+          { consonant: 'ம்', vowel: 'அ', result: 'ம' },
+          { consonant: 'ல்', vowel: 'அ', result: 'ல' },
+          { consonant: 'க்', vowel: 'ஆ', result: 'கா' },
+          { consonant: 'ச்', vowel: 'ஆ', result: 'சா' },
+          { consonant: 'த்', vowel: 'ஆ', result: 'தா' },
+          { consonant: 'ப்', vowel: 'ஆ', result: 'பா' },
+          { consonant: 'ம்', vowel: 'ஆ', result: 'மா' },
+          { consonant: 'ல்', vowel: 'ஆ', result: 'லா' },
+        ],
+        options: []
+      },
+      { type: 'connect_pairs' as any, instruction: 'Join letters together! 🔗', instructionTa: 'எழுத்துக்களை இணைக்கவும்! 🔗', pairs: [{ left: 'க் + அ', right: 'க' }, { left: 'ச் + அ', right: 'ச' }, { left: 'த் + அ', right: 'த' }], options: [] }
+    ]
+  },
+  {
+    id: 4,
+    title: 'உயிர்மெய் சேர்க்கை பயிற்சி 🤝',
+    titleEn: 'Combination Practice',
+    mascot: '🤝',
+    color: 'from-cyan-400 to-blue-500',
+    borderColor: 'border-cyan-300',
+    questions: [
+      {
+        type: 'combo_chart' as any,
+        instruction: 'மெய் + உயிர் = உயிர்மெய் ✎️',
+        instructionTa: 'இந்த சேர்க்கைகளை மனன் செய்து பயிற்சி செய்திடுக!',
+        boardTitle: 'உயிர்மெய் சேர்க்கை பயிற்சி',
+        boardSubtitle: 'Combination Practice Chart',
+        combos: [
+          { consonant: 'ப்', vowel: 'அ', result: 'ப' },
+          { consonant: 'ம்', vowel: 'அ', result: 'ம' },
+          { consonant: 'ல்', vowel: 'அ', result: 'ல' },
+          { consonant: 'ப்', vowel: 'ஆ', result: 'பா' },
+          { consonant: 'ம்', vowel: 'ஆ', result: 'மா' },
+          { consonant: 'ல்', vowel: 'ஆ', result: 'லா' },
+          { consonant: 'ப்', vowel: 'இ', result: 'பி' },
+          { consonant: 'ம்', vowel: 'இ', result: 'மி' },
+          { consonant: 'ல்', vowel: 'இ', result: 'லி' },
+        ],
+        options: []
+      },
+      { type: 'connect_pairs' as any, instruction: 'Join letters together! 🔗', instructionTa: 'எழுத்துக்களை இணைக்கவும்! 🔗', pairs: [{ left: 'ப் + அ', right: 'ப' }, { left: 'ம் + அ', right: 'ம' }, { left: 'ல் + அ', right: 'ல' }], options: [] }
+    ]
+  },
+  {
+    id: 5,
+    title: 'எழுத்து வரிசை அமைத்தல் 🚂',
+    titleEn: 'Ordering Letters',
+    mascot: '🚂',
+    color: 'from-cyan-400 to-blue-500',
+    borderColor: 'border-cyan-300',
+    questions: [
+      { type: 'sentence_train' as any, instruction: 'Arrange vowels in correct order! 🚂', instructionTa: 'உயிர் எழுத்துக்களை வரிசைப்படுத்துக! 🚂', words: ['அ', 'ஆ', 'இ', 'ஈ'], correctSentence: 'அ ஆ இ ஈ', options: [] }
+    ]
+  },
+
+  // --- CHAPTER 2: உயிர்மெய் பயணம் 🔤 (Levels 6 - 11) ---
+  {
+    id: 6,
+    title: 'க வரிசை பயணம் 🚂',
+    titleEn: 'Ka Series',
+    mascot: '🚂',
+    color: 'from-purple-400 to-pink-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      {
+        type: 'combo_chart' as any,
+        boardTitle: 'க வரிசை அறிமுகம்',
+        boardSubtitle: 'Ka Series (All 12 Combinations)',
+        combos: [
+          { consonant: 'க்', vowel: 'அ', result: 'க' },
+          { consonant: 'க்', vowel: 'ஆ', result: 'கா' },
+          { consonant: 'க்', vowel: 'இ', result: 'கி' },
+          { consonant: 'க்', vowel: 'ஈ', result: 'கீ' },
+          { consonant: 'க்', vowel: 'உ', result: 'கு' },
+          { consonant: 'க்', vowel: 'ஊ', result: 'கூ' },
+          { consonant: 'க்', vowel: 'எ', result: 'கெ' },
+          { consonant: 'க்', vowel: 'ஏ', result: 'கே' },
+          { consonant: 'க்', vowel: 'ஐ', result: 'கை' },
+          { consonant: 'க்', vowel: 'ஒ', result: 'கொ' },
+          { consonant: 'க்', vowel: 'ஓ', result: 'கோ' },
+          { consonant: 'க்', vowel: 'ஔ', result: 'கௌ' }
+        ],
+        options: []
+      },
+      { type: 'connect_pairs' as any, instruction: 'Match Ka series! 🔗', instructionTa: 'க வரிசையை இணைக்கவும்! 🔗', pairs: [{ left: 'க் + அ', right: 'க' }, { left: 'க் + ஆ', right: 'கா' }, { left: 'க் + இ', right: 'கி' }], options: [] }
+    ]
+  },
+  {
+    id: 7,
+    title: 'ச வரிசை பயணம் 🚂',
+    titleEn: 'Cha Series',
+    mascot: '🚂',
+    color: 'from-purple-400 to-pink-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      {
+        type: 'combo_chart' as any,
+        boardTitle: 'ச வரிசை அறிமுகம்',
+        boardSubtitle: 'Cha Series (All 12 Combinations)',
+        combos: [
+          { consonant: 'ச்', vowel: 'அ', result: 'ச' },
+          { consonant: 'ச்', vowel: 'ஆ', result: 'சா' },
+          { consonant: 'ச்', vowel: 'இ', result: 'சி' },
+          { consonant: 'ச்', vowel: 'ஈ', result: 'சீ' },
+          { consonant: 'ச்', vowel: 'உ', result: 'சு' },
+          { consonant: 'ச்', vowel: 'ஊ', result: 'சூ' },
+          { consonant: 'ச்', vowel: 'எ', result: 'செ' },
+          { consonant: 'ச்', vowel: 'ஏ', result: 'சே' },
+          { consonant: 'ச்', vowel: 'ஐ', result: 'சை' },
+          { consonant: 'ச்', vowel: 'ஒ', result: 'சொ' },
+          { consonant: 'ச்', vowel: 'ஓ', result: 'சோ' },
+          { consonant: 'ச்', vowel: 'ஔ', result: 'சௌ' }
+        ],
+        options: []
+      },
+      { type: 'connect_pairs' as any, instruction: 'Match Cha series! 🔗', instructionTa: 'ச வரிசையை இணைக்கவும்! 🔗', pairs: [{ left: 'ச் + அ', right: 'ச' }, { left: 'ச் + ஆ', right: 'சா' }, { left: 'ச் + இ', right: 'சி' }], options: [] }
+    ]
+  },
+  {
+    id: 8,
+    title: 'த வரிசை பயணம் 🚂',
+    titleEn: 'Tha Series',
+    mascot: '🚂',
+    color: 'from-purple-400 to-pink-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      {
+        type: 'combo_chart' as any,
+        boardTitle: 'த வரிசை அறிமுகம்',
+        boardSubtitle: 'Tha Series (All 12 Combinations)',
+        combos: [
+          { consonant: 'த்', vowel: 'அ', result: 'த' },
+          { consonant: 'த்', vowel: 'ஆ', result: 'தா' },
+          { consonant: 'த்', vowel: 'இ', result: 'தி' },
+          { consonant: 'த்', vowel: 'ஈ', result: 'தீ' },
+          { consonant: 'த்', vowel: 'உ', result: 'து' },
+          { consonant: 'த்', vowel: 'ஊ', result: 'தூ' },
+          { consonant: 'த்', vowel: 'எ', result: 'தெ' },
+          { consonant: 'த்', vowel: 'ஏ', result: 'தே' },
+          { consonant: 'த்', vowel: 'ஐ', result: 'தை' },
+          { consonant: 'த்', vowel: 'ஒ', result: 'தொ' },
+          { consonant: 'த்', vowel: 'ஓ', result: 'தோ' },
+          { consonant: 'த்', vowel: 'ஔ', result: 'தௌ' }
+        ],
+        options: []
+      },
+      { type: 'connect_pairs' as any, instruction: 'Match Tha series! 🔗', instructionTa: 'த வரிசையை இணைக்கவும்! 🔗', pairs: [{ left: 'த் + அ', right: 'த' }, { left: 'த் + ஆ', right: 'தா' }, { left: 'த் + இ', right: 'தி' }], options: [] }
+    ]
+  },
+  {
+    id: 9,
+    title: 'ப வரிசை பயணம் 🚂',
+    titleEn: 'Pa Series',
+    mascot: '🚂',
+    color: 'from-purple-400 to-pink-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      {
+        type: 'combo_chart' as any,
+        boardTitle: 'ப வரிசை அறிமுகம்',
+        boardSubtitle: 'Pa Series (All 12 Combinations)',
+        combos: [
+          { consonant: 'ப்', vowel: 'அ', result: 'ப' },
+          { consonant: 'ப்', vowel: 'ஆ', result: 'பா' },
+          { consonant: 'ப்', vowel: 'இ', result: 'பி' },
+          { consonant: 'ப்', vowel: 'ஈ', result: 'பீ' },
+          { consonant: 'ப்', vowel: 'உ', result: 'பு' },
+          { consonant: 'ப்', vowel: 'ஊ', result: 'பூ' },
+          { consonant: 'ப்', vowel: 'எ', result: 'பெ' },
+          { consonant: 'ப்', vowel: 'ஏ', result: 'பே' },
+          { consonant: 'ப்', vowel: 'ஐ', result: 'பை' },
+          { consonant: 'ப்', vowel: 'ஒ', result: 'பொ' },
+          { consonant: 'ப்', vowel: 'ஓ', result: 'போ' },
+          { consonant: 'ப்', vowel: 'ஔ', result: 'பௌ' }
+        ],
+        options: []
+      },
+      { type: 'connect_pairs' as any, instruction: 'Match Pa series! 🔗', instructionTa: 'ப வரிசையை இணைக்கவும்! 🔗', pairs: [{ left: 'ப் + அ', right: 'ப' }, { left: 'ப் + ஆ', right: 'பா' }, { left: 'ப் + இ', right: 'பி' }], options: [] }
+    ]
+  },
+  {
+    id: 10,
+    title: 'ம வரிசை பயணம் 🚂',
+    titleEn: 'Ma Series',
+    mascot: '🚂',
+    color: 'from-purple-400 to-pink-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      {
+        type: 'combo_chart' as any,
+        boardTitle: 'ம வரிசை அறிமுகம்',
+        boardSubtitle: 'Ma Series (All 12 Combinations)',
+        combos: [
+          { consonant: 'ம்', vowel: 'அ', result: 'ம' },
+          { consonant: 'ம்', vowel: 'ஆ', result: 'மா' },
+          { consonant: 'ம்', vowel: 'இ', result: 'மி' },
+          { consonant: 'ம்', vowel: 'ஈ', result: 'மீ' },
+          { consonant: 'ம்', vowel: 'உ', result: 'மு' },
+          { consonant: 'ம்', vowel: 'ஊ', result: 'மூ' },
+          { consonant: 'ம்', vowel: 'எ', result: 'மெ' },
+          { consonant: 'ம்', vowel: 'ஏ', result: 'மே' },
+          { consonant: 'ம்', vowel: 'ஐ', result: 'மை' },
+          { consonant: 'ம்', vowel: 'ஒ', result: 'மொ' },
+          { consonant: 'ம்', vowel: 'ஓ', result: 'மோ' },
+          { consonant: 'ம்', vowel: 'ஔ', result: 'மௌ' }
+        ],
+        options: []
+      },
+      { type: 'connect_pairs' as any, instruction: 'Match Ma series! 🔗', instructionTa: 'ம வரிசையை இணைக்கவும்! 🔗', pairs: [{ left: 'ம் + அ', right: 'ம' }, { left: 'ம் + ஆ', right: 'மா' }, { left: 'ம் + இ', right: 'மி' }], options: [] }
+    ]
+  },
+  {
+    id: 11,
+    title: 'முழு உயிர்மெய் பயிற்சி 🏆',
+    titleEn: 'Full practice',
+    mascot: '🏆',
+    color: 'from-purple-400 to-pink-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      { type: 'connect_pairs' as any, instruction: 'Join dynamic combinations! 🔗', instructionTa: 'உயிர்மெய் சேர்க்கையை இணைக்கவும்! 🔗', pairs: [{ left: 'வ் + அ', right: 'வ' }, { left: 'ய் + ஆ', right: 'யா' }, { left: 'ந் + எ', right: 'நெ' }], options: [] }
+    ]
+  },
+
+  // --- CHAPTER 3: சொல் கட்டிடம் 🧱 (Levels 12 - 17) ---
+  {
+    id: 12,
+    title: 'ஈரெழுத்து சொற்கள் 🧱',
+    titleEn: '2-Letter Words',
+    mascot: '🧱',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      { type: 'sentence_train' as any, instruction: 'Make the word "பல்"! 🚂', instructionTa: '"பல்" என்ற சொல்லை உருவாக்குக! 🚂', words: ['ப', 'ல்'], correctSentence: 'ப ல்', options: [] },
+      { type: 'sentence_train' as any, instruction: 'Make the word "கல்"! 🚂', instructionTa: '"கல்" என்ற சொல்லை உருவாக்குக! 🚂', words: ['க', 'ல்'], correctSentence: 'க ல்', options: [] }
+    ]
+  },
+  {
+    id: 13,
+    title: 'மூவெழுத்து சொற்கள் 🧱',
+    titleEn: '3-Letter Words',
+    mascot: '🧱',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      { type: 'sentence_train' as any, instruction: 'Make the word "பலம்"! 🚂', instructionTa: '"பலம்" என்ற சொல்லை உருவாக்குக! 🚂', words: ['ப', 'ல', 'ம்'], correctSentence: 'ப ல ம்', options: [] },
+      { type: 'sentence_train' as any, instruction: 'Make the word "மரம்"! 🚂', instructionTa: '"மரம்" என்ற சொல்லை உருவாக்குக! 🚂', words: ['ம', 'ர', 'ம்'], correctSentence: 'ம ர ம்', options: [] }
+    ]
+  },
+  {
+    id: 14,
+    title: 'எளிய சொற்கள் வாசித்தல் 📖',
+    titleEn: 'Reading Simple Words',
+    mascot: '📖',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      { type: 'connect_pairs' as any, instruction: 'Match word to English meaning! 🔗', instructionTa: 'பொருத்தமான சொற்களை இணைக்கவும்! 🔗', pairs: [{ left: 'பல்', right: 'Tooth 🦷' }, { left: 'கல்', right: 'Stone 🪨' }, { left: 'மரம்', right: 'Tree 🌳' }], options: [] }
+    ]
+  },
+  {
+    id: 15,
+    title: 'படம் பார்த்து சொல் கண்டுபிடித்தல் 🔍',
+    titleEn: 'Find Word from Picture',
+    mascot: '🔍',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      { type: 'drag_hunt' as any, instruction: 'Find word for Kite 🪁', instructionTa: 'பானையில் உள்ள பட்டத்தைக் கண்டுபிடி! 🪁', matchImage: '🪁', options: [{ text: 'பட்டம்', correct: true }, { text: 'பந்து', correct: false }, { text: 'பலம்', correct: false }] }
+    ]
+  },
+  {
+    id: 16,
+    title: 'சொல் பிரித்தல் ✂️',
+    titleEn: 'Word Splitting',
+    mascot: '✂️',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      {
+        type: 'learn_card' as any,
+        conceptTitle: 'சொல் பிரித்தல் ✂️ (Word Splitting)',
+        explanation: 'ஒரு சொல்லை அதன் தனித்தனி எழுத்துக்களாகப் பிரித்து எழுதுவதே சொல் பிரித்தல் ஆகும். இதைக் கற்றுக்கொள்வதன் மூலம் சொற்களின் கட்டமைப்பை எளிதாகப் புரிந்துகொள்ள முடியும்.',
+        explanationTa: 'Spitting a word means breaking it down into its individual letters. This helps you understand how words are built!',
+        mascot: '✂️',
+        examples: [
+          'படம் = ப + ட + ம்',
+          'பல் = ப + ல்',
+          'மரம் = ம + ர + ம்',
+          'வயல் = வ + ய + ல்'
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Split words into letters! 🔗',
+        instructionTa: 'சொற்களை எழுத்துக்களாகப் பிரிக்கவும்! 🔗',
+        pairs: [
+          { left: 'படம்', right: 'ப + ட + ம்' },
+          { left: 'கண்', right: 'க + ண்' },
+          { left: 'மரம்', right: 'ம + ர + ம்' },
+          { left: 'பல்', right: 'ப + ல்' },
+          { left: 'வயல்', right: 'w + ய + ல்' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 17,
+    title: 'சொல் சேர்த்தல் 🤝',
+    titleEn: 'Word Joining',
+    mascot: '🤝',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      {
+        type: 'learn_card' as any,
+        conceptTitle: 'சொல் சேர்த்தல் 🤝 (Word Joining)',
+        explanation: 'தனித்தனியாக உள்ள எழுத்துக்களை ஒன்றாகச் சேர்த்து ஒரு புதிய சொல்லை உருவாக்குவதே சொல் சேர்த்தல் ஆகும். இது எழுத்துக்களைக் கூட்டிப் படிப்பதற்கு உதவும்!',
+        explanationTa: 'Joining separate letters together to form a meaningful word. This helps you spell and read easily!',
+        mascot: '🤝',
+        examples: [
+          'வ + ய + ல் = வயல்',
+          'கு + டை = குடை',
+          'அ + ம் + மா = அம்மா',
+          'ப + ள் + ளி = பள்ளி'
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Join letters to make words! 🔗',
+        instructionTa: 'எழுத்துக்களைச் சேர்த்து சொல் உருவாக்குக! 🔗',
+        pairs: [
+          { left: 'வ + ய + ல்', right: 'வயல்' },
+          { left: 'கு + டை', right: 'குடை' },
+          { left: 'அ + ம் + மா', right: 'அம்மா' },
+          { left: 'ப + ள் + ளி', right: 'பள்ளி' },
+          { left: 'ப + ன் + து', right: 'பந்து' }
+        ],
+        options: []
+      }
+    ]
+  },
+
+  // --- CHAPTER 4: வாசிப்பு உலகம் 📖 (Levels 18 - 22) ---
+  {
+    id: 18,
+    title: 'சிறு வாக்கியம் வாசித்தல் 📖',
+    titleEn: 'Read Short Sentences',
+    mascot: '📖',
+    color: 'from-indigo-400 to-blue-500',
+    borderColor: 'border-indigo-300',
+    questions: [
+      { type: 'sentence_train' as any, instruction: 'Form sentence: "இது என் வீடு" 🚂', instructionTa: '"இது என் வீடு" வாக்கியத்தை அமைக்கவும்! 🚂', words: ['இது', 'என்', 'வீடு'], correctSentence: 'இது என் வீடு', options: [] },
+      { type: 'sentence_train' as any, instruction: 'Form sentence: "அம்மா எனக்கு பிடிக்கும்" 🚂', instructionTa: '"அம்மா எனக்கு பிடிக்கும்" வாக்கியத்தை அமைக்கவும்! 🚂', words: ['அம்மா', 'எனக்கு', 'பிடிக்கும்'], correctSentence: 'அம்மா எனக்கு பிடிக்கும்', options: [] },
+      { type: 'sentence_train' as any, instruction: 'Form sentence: "மரம் நிழல் தரும்" 🚂', instructionTa: '"மரம் நிழல் தரும்" வாக்கியத்தை அமைக்கவும்! 🚂', words: ['மரம்', 'நிழல்', 'தரும்'], correctSentence: 'மரம் நிழல் தரும்', options: [] },
+      { type: 'sentence_train' as any, instruction: 'Form sentence: "பறவை வானில் பறக்கும்" 🚂', instructionTa: '"பறவை வானில் பறக்கும்" வாக்கியத்தை அமைக்கவும்! 🚂', words: ['பறவை', 'வானில்', 'பறக்கும்'], correctSentence: 'பறவை வானில் பறக்கும்', options: [] }
+    ]
+  },
+  {
+    id: 19,
+    title: 'சொல் - படம் இணைத்தல் 🎨',
+    titleEn: 'Word-Picture Matching',
+    mascot: '🎨',
+    color: 'from-indigo-400 to-blue-500',
+    borderColor: 'border-indigo-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match descriptions to items! 🔗',
+        instructionTa: 'சொற்றொடர்களைப் படங்களுடன் இணைக்கவும்! 🔗',
+        pairs: [
+          { left: 'அழகிய மலர்', right: 'Flower 🌸' },
+          { left: 'பறக்கும் பட்டம்', right: 'Kite 🪁' },
+          { left: 'ஓடும் முயல்', right: 'Rabbit 🐇' },
+          { left: 'பச்சை கிளி', right: 'Parrot 🦜' },
+          { left: 'சுவையான மாம்பழம்', right: 'Mango 🥭' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 20,
+    title: 'கேள்வி பதில் ❓',
+    titleEn: 'Simple Q&A',
+    mascot: '❓',
+    color: 'from-indigo-400 to-blue-500',
+    borderColor: 'border-indigo-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Where do fruits grow? 🌳', instructionTa: 'மரத்தில் இருப்பது எது? 🌳', sentence: 'மரத்தில் இருப்பது ___ ஆகும்.', options: [{ text: 'பழம்', correct: true }, { text: 'கல்', correct: false }] },
+      { type: 'garden_repair' as any, instruction: 'Who gives us milk? 🐄', instructionTa: 'பால் தரும் விலங்கு எது? 🐄', sentence: 'நமக்கு பால் தருவது ___ ஆகும்.', options: [{ text: 'பசு', correct: true }, { text: 'சிங்கம்', correct: false }] },
+      { type: 'garden_repair' as any, instruction: 'Which bird crows? 🐦', instructionTa: 'காக்கா என்று கத்துவது எது? 🐦', sentence: 'காக்கா என்று கத்துவது ___ ஆகும்.', options: [{ text: 'காகம்', correct: true }, { text: 'கிளி', correct: false }] },
+      { type: 'garden_repair' as any, instruction: 'What shines at night? 🌙', instructionTa: 'இரவில் வானில் ஒளிர்வது எது? 🌙', sentence: 'இரவில் வானில் ஒளிர்வது ___ ஆகும்.', options: [{ text: 'நிலா', correct: true }, { text: 'சூரியன்', correct: false }] }
+    ]
+  },
+  {
+    id: 21,
+    title: 'சிறு கதை புரிதல் 🦊',
+    titleEn: 'Story Comprehension',
+    mascot: '🦊',
+    color: 'from-indigo-400 to-blue-500',
+    borderColor: 'border-indigo-300',
+    questions: [
+      {
+        type: 'story_cave' as any,
+        storyText: 'ஆமையும் முயலும் பந்தயம் வைத்தன. முயல் வேகமாக ஓடி ஓய்வெடுத்தது. ஆமை மெதுவாகத் தொடர்ந்து ஓடி வென்றது.',
+        questionText: 'யார் பந்தயத்தில் வென்றது?',
+        options: [{ text: 'ஆமை 🐢', correct: true }, { text: 'முயல் 🐇', correct: false }]
+      },
+      {
+        type: 'story_cave' as any,
+        storyText: 'ஒரு காட்டில் சிங்கம் ஒன்று தூங்கிக் கொண்டிருந்தது. ஒரு சிறிய எலி அதன் மேல் விளையாடியது. சிங்கம் விழித்துக் கொண்டு எலியைப் பிடிக்க முயன்றது, ஆனால் எலி மன்னிப்புக் கேட்டதால் அதை விட்டுவிட்டது. பின்னர் ஒரு வேடன் வலையில் சிங்கம் சிக்கியபோது, எலி வலையைக் கடித்து சிங்கத்தைக் காப்பாற்றியது.',
+        questionText: 'சிங்கத்தைக் காப்பாற்றியது யார்?',
+        options: [{ text: 'எலி 🐭', correct: true }, { text: 'நரி 🦊', correct: false }]
+      },
+      {
+        type: 'story_cave' as any,
+        storyText: 'ஒரு குளத்தில் இரண்டு மீன்கள் இருந்தன. ஒரு நாள் கொக்கு ஒன்று வந்து மீன்களைப் பிடிக்க நினைத்தது. அறிவார்ந்த நண்டு ஒன்று கொக்கின் கழுத்தைக் கடித்து மீன்களைக் காப்பாற்றியது.',
+        questionText: 'கொக்கைக் கொன்றது எது?',
+        options: [{ text: 'நண்டு 🦀', correct: true }, { text: 'தவளை 🐸', correct: false }]
+      }
+    ]
+  },
+  {
+    id: 22,
+    title: 'நிகழ்வு வரிசை அமைத்தல் 📅',
+    titleEn: 'Arrange Story Sequence',
+    mascot: '📅',
+    color: 'from-indigo-400 to-blue-500',
+    borderColor: 'border-indigo-300',
+    questions: [
+      {
+        type: 'story_cave' as any,
+        isSequence: true,
+        storyText: 'தாகமுள்ள காகம் பானையில் கற்களைப் போட்டு தண்ணீர் குடித்த கதை.',
+        sequenceSteps: ['காகத்திற்கு தாகம் எடுத்தது', 'பானையில் நீர் குறைவாக இருந்தது', 'கற்களைப் போட்டு நீர் குடித்தது'],
+        options: []
+      },
+      {
+        type: 'story_cave' as any,
+        isSequence: true,
+        storyText: 'விதை முளைத்து செடியாக வளரும் படிநிலைகள்.',
+        sequenceSteps: ['விதை மண்ணில் விதைக்கப்பட்டது', 'வேர்கள் மண்ணில் பரவின', 'செடியில் இலைகள் முளைத்தன'],
+        options: []
+      },
+      {
+        type: 'story_cave' as any,
+        isSequence: true,
+        storyText: 'காலையில் பள்ளிக்குச் செல்லும் முன் செய்யும் காரியங்கள்.',
+        sequenceSteps: ['காலையில் படுக்கையிலிருந்து எழுந்தேன்', 'பற்களைத் துலக்கி குளித்தேன்', 'காலை உணவு சாப்பிட்டு பள்ளிக்குச் சென்றேன்'],
+        options: []
+      }
+    ]
+  },
+
+  // --- CHAPTER 5: இலக்கண தோட்டம் 🌱 (Levels 23 - 27) ---
+  {
+    id: 23,
+    title: 'பெயர்ச்சொல் அறிமுகம் 🏷️',
+    titleEn: 'Naming Words',
+    mascot: '🏷️',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      {
+        type: 'learn_card' as any,
+        conceptTitle: 'பெயர்ச்சொல் 🏷️ (பெயர் குறிக்கும் சொல்)',
+        explanation: 'ஒரு நபர், இடம், விலங்கு அல்லது பொருளின் பெயரைக் குறிக்கும் சொல் பெயர்ச்சொல் எனப்படும். (எ.கா: கண்ணன், மாடு, பள்ளி, புத்தகம்).',
+        explanationTa: 'பெயரைக் குறிக்கும் சொற்கள் பெயர்ச்சொற்கள் ஆகும். இது நபர், இடம், விலங்கு அல்லது பொருளைக் குறிக்கும்!',
+        mascot: '🏷️',
+        examples: [
+          'நபர் = கண்ணன் 👦',
+          'விலங்கு = பசு 🐄',
+          'இடம் = பள்ளி 🏫',
+          'பொருள் = புத்தகம் 📕'
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match name categories! 🔗',
+        instructionTa: 'பெயர்ச்சொற்களை அதன் வகையோடு இணைக்கவும்! 🔗',
+        pairs: [
+          { left: 'கண்ணன்', right: 'நபர் 👦' },
+          { left: 'வகுப்பறை', right: 'இடம் 🏫' },
+          { left: 'பசு', right: 'விலங்கு 🐄' },
+          { left: 'பேனா', right: 'பொருள் 🖊' },
+          { left: 'சிங்கம்', right: 'விலங்கு 🦁' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 24,
+    title: 'செயல் சொல் 🏃',
+    titleEn: 'Action Words',
+    mascot: '🏃',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      {
+        type: 'learn_card' as any,
+        conceptTitle: 'செயல் சொல் 🏃 (செயலை குறிக்கும் சொல்)',
+        explanation: 'நாம் செய்யும் ஒரு செயலைக் குறிக்கும் சொல் வினைச்சொல் அல்லது செயல்சொல் எனப்படும். (எ.கா: ஓடுதல், பாடுதல், எழுதுதல்).',
+        explanationTa: 'நாம் செய்யும் செயல்களை (விளையாடுதல், ஓடுதல், படித்தல்) குறிக்கும் சொற்கள் செயல் சொற்கள் ஆகும்.',
+        mascot: '🏃',
+        examples: [
+          'ஓடுதல் = ஓடினான் 🏃',
+          'பாடுதல் = பாடினாள் 🎤',
+          'எழுதுதல் = எழுதினான் ✍️',
+          'படித்தல் = படித்தான் 📖'
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match action words! 🔗',
+        instructionTa: 'செயல்களையும் சொற்களையும் இணைக்கவும்! 🔗',
+        pairs: [
+          { left: 'ஓடினான்', right: 'ஓடுதல் 🏃' },
+          { left: 'பாடினாள்', right: 'பாடுதல் 🎤' },
+          { left: 'எழுதினான்', right: 'எழுதுதல் ✍️' },
+          { left: 'விளையாடினான்', right: 'விளையாடுதல் ⚽' },
+          { left: 'படித்தான்', right: 'படித்தல் 📖' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 25,
+    title: 'ஒருமை / பன்மை 👥',
+    titleEn: 'Singular & Plural',
+    mascot: '👥',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      {
+        type: 'learn_card' as any,
+        conceptTitle: 'ஒருமை / பன்மை 👥 (Singular & Plural)',
+        explanation: 'ஒரே ஒரு பொருளை மட்டும் குறிப்பது ஒருமை எனப்படும். ஒன்றுக்கும் மேற்பட்ட பல பொருட்களைக் குறிப்பது பன்மை எனப்படும். (பொதுவாக பன்மை சொல்லின் இறுதியில் "கள்" சேரும்).',
+        explanationTa: 'Singular means one item, and Plural means more than one item (mostly adds -கள்).',
+        mascot: '👥',
+        examples: [
+          'பந்து ⚽ = பந்துகள் ⚽⚽',
+          'மரம் 🌳 = மரங்கள் 🌳🌳',
+          'பூ 🌸 = பூக்கள் 🌸🌸',
+          'மீன் 🐟 = மீன்கள் 🐟🐟'
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match Singular to Plural! 🔗',
+        instructionTa: 'ஒருமை - பன்மை சொற்களை இணைக்கவும்! 🔗',
+        pairs: [
+          { left: 'பந்து', right: 'பந்துகள் ⚽' },
+          { left: 'மரம்', right: 'மரங்கள் 🌳' },
+          { left: 'பூ', right: 'பூக்கள் 🌸' },
+          { left: 'மீன்', right: 'மீன்கள் 🐟' },
+          { left: 'பறவை', right: 'பறவைகள் 🐦' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 26,
+    title: 'எதிர்ச்சொற்கள் 🔄',
+    titleEn: 'Opposite Words',
+    mascot: '🔄',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      {
+        type: 'learn_card' as any,
+        conceptTitle: 'எதிர்ச்சொற்கள் 🔄 (எதிர் பொருள்)',
+        explanation: 'ஒரு சொல்லின் நேர்மாறான பொருளைத் தரும் சொல் எதிர்ச்சொல் எனப்படும். (எ.கா: பெரியது - சிறியது).',
+        explanationTa: 'ஒரு சொல்லிற்கு நேர்மாறான எதிர் கருத்து அல்லது பொருளைத் தரும் சொற்கள் எதிர்ச்சொற்கள் ஆகும்.',
+        mascot: '🔄',
+        examples: [
+          'பெரியது 🐘 x சிறியது 🐭',
+          'மேலே 🎈 x கீழே ⚓',
+          'உள்ளே 🚪 x வெளியே 🌳',
+          'பகல் ☀️ x இரவு 🌙'
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match Opposites! 🔗',
+        instructionTa: 'எதிர்ச்சொற்களை இணைக்கவும்! 🔗',
+        pairs: [
+          { left: 'பெரியது', right: 'சிறியது 🐭' },
+          { left: 'மேலே', right: 'கீழே ⚓' },
+          { left: 'உள்ளே', right: 'வெளியே 🌳' },
+          { left: 'பகல்', right: 'இரவு 🌙' },
+          { left: 'சூடு', right: 'குளிர் ❄️' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 27,
+    title: 'சொல் வகைப்படுத்தல் 📂',
+    titleEn: 'Word Categorization',
+    mascot: '📂',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      {
+        type: 'learn_card' as any,
+        conceptTitle: 'சொல் வகைப்படுத்தல் 📂 (சொற்களைப் பிரித்தல்)',
+        explanation: 'ஒரு சொல் எந்த வகையைச் சார்ந்தது (விலங்கு, இடம், பொருள், செயல்) என்று கண்டறிந்து சரியான பிரிவுடன் இணைக்கவும்.',
+        explanationTa: 'ஒவ்வொரு சொல்லையும் அதன் தகுந்த விவரங்களுடன் சரியாகப் பொருத்தி வகைப்படுத்த வேண்டும்.',
+        mascot: '📂',
+        examples: [
+          'நாய் = வீட்டு விலங்கு 🐶',
+          'வகுப்பறை = கல்வி கற்கும் இடம் 🏫',
+          'ஓடுதல் = உடற்பயிற்சி செயல் 🏃',
+          'படம் = காகிதப் பொருள் 🖼️'
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Categorize words correctly! 🔗',
+        instructionTa: 'சொற்களை வகைப்படுத்தவும்! 🔗',
+        pairs: [
+          { left: 'நாய்', right: 'வீட்டு விலங்கு 🐶' },
+          { left: 'ஓடு', right: 'வேகமாகச் செல்வது 🏃' },
+          { left: 'வகுப்பறை', right: 'பள்ளிப் பகுதி 🏫' },
+          { left: 'பாடு', right: 'இசைப் பாட்டு 🎤' },
+          { left: 'படம்', right: 'காட்சி ஓவியம் 🖼️' }
+        ],
+        options: []
+      }
+    ]
+  },
+
+  // --- CHAPTER 6: எழுதும் பயிற்சி ✏️ (Levels 28 - 32) ---
+  {
+    id: 28,
+    title: 'எழுத்து எழுதுதல் ✏️',
+    titleEn: 'Write Letters',
+    mascot: '✏️',
+    color: 'from-purple-400 to-pink-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      { type: 'trace' as any, instruction: 'Trace: ஆ ✍️', instructionTa: 'பலகையில் எழுதுக: ஆ ✍️', letter: 'ஆ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ஈ ✍️', instructionTa: 'பலகையில் எழுதுக: ஈ ✍️', letter: 'ஈ', options: [] }
+    ]
+  },
+  {
+    id: 29,
+    title: 'சொல் எழுதுதல் ✏️',
+    titleEn: 'Write Words',
+    mascot: '✏️',
+    color: 'from-purple-400 to-pink-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      { type: 'trace' as any, instruction: 'Trace: அம்மா ✍️', instructionTa: 'பலகையில் எழுதுக: அம்மா ✍️', letter: 'அம்மா', options: [] }
+    ]
+  },
+  {
+    id: 30,
+    title: 'விடுபட்ட எழுத்து நிரப்புதல் 🧩',
+    titleEn: 'Fill Missing Letters',
+    mascot: '🧩',
+    color: 'from-purple-400 to-pink-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill missing character for Mother 👩', instructionTa: 'விடுபட்ட எழுத்தை நிரப்புக: அ_மா 👩', sentence: 'அ_மா', options: [{ text: 'ம்', correct: true }, { text: 'ப்', correct: false }] }
+    ]
+  },
+  {
+    id: 31,
+    title: 'வாக்கியம் எழுதுதல் ✏️',
+    titleEn: 'Write Sentences',
+    mascot: '✏️',
+    color: 'from-purple-400 to-pink-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      { type: 'trace' as any, instruction: 'Trace: தமிழ் இனிது ✍️', instructionTa: 'பலகையில் எழுதுக: தமிழ் இனிது ✍️', letter: 'தமிழ் இனிது', options: [] }
+    ]
+  },
+  {
+    id: 32,
+    title: 'படம் பார்த்து எழுதுதல் 🎨',
+    titleEn: 'Write Picture Label',
+    mascot: '🎨',
+    color: 'from-purple-400 to-pink-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      { type: 'trace' as any, instruction: 'Trace word for apple 🍎', instructionTa: 'பலகையில் எழுதுக: ஆப்பிள் 🍎', letter: 'ஆப்பிள்', options: [] }
+    ]
+  },
+
+  // --- CHAPTER 7: சொற்களஞ்சியம் 🌍 (Levels 33 - 37) ---
+  {
+    id: 33,
+    title: 'உடல் உறுப்புகள் 🦵',
+    titleEn: 'Body Parts',
+    mascot: '🦵',
+    color: 'from-blue-400 to-cyan-500',
+    borderColor: 'border-blue-300',
+    questions: [
+      { type: 'connect_pairs' as any, instruction: 'Match body parts! 🔗', instructionTa: 'உடல் உறுப்புகளை இணைக்கவும்! 🔗', pairs: [{ left: 'கண்', right: 'Eye 👁️' }, { left: 'காது', right: 'Ear 👂' }, { left: 'மூக்கு', right: 'Nose 👃' }], options: [] }
+    ]
+  },
+  {
+    id: 34,
+    title: 'விலங்குகள் 🦁',
+    titleEn: 'Animals World',
+    mascot: '🦁',
+    color: 'from-blue-400 to-cyan-500',
+    borderColor: 'border-blue-300',
+    questions: [
+      { type: 'connect_pairs' as any, instruction: 'Match animal names! 🔗', instructionTa: 'விலங்குகளின் பெயர்களை இணைக்கவும்! 🔗', pairs: [{ left: 'யானை', right: 'Elephant 🐘' }, { left: 'சிங்கம்', right: 'Lion 🦁' }, { left: 'நாய்', right: 'Dog 🐶' }], options: [] }
+    ]
+  },
+  {
+    id: 35,
+    title: 'பறவைகள் 🦜',
+    titleEn: 'Birds Sanctuary',
+    mascot: '🦜',
+    color: 'from-blue-400 to-cyan-500',
+    borderColor: 'border-blue-300',
+    questions: [
+      { type: 'connect_pairs' as any, instruction: 'Match bird names! 🔗', instructionTa: 'பறவைகளின் பெயர்களை இணைக்கவும்! 🔗', pairs: [{ left: 'மயில்', right: 'Peacock 🦚' }, { left: 'கிளி', right: 'Parrot 🦜' }, { left: 'காகம்', right: 'Crow 🐦' }], options: [] }
+    ]
+  },
+  {
+    id: 36,
+    title: 'உணவுகள் 🍲',
+    titleEn: 'Food Items',
+    mascot: '🍲',
+    color: 'from-blue-400 to-cyan-500',
+    borderColor: 'border-blue-300',
+    questions: [
+      { type: 'connect_pairs' as any, instruction: 'Match food items! 🔗', instructionTa: 'உணவு வகைகளை இணைக்கவும்! 🔗', pairs: [{ left: 'பால்', right: 'Milk 🥛' }, { left: 'பழங்கள்', right: 'Fruits 🍎' }, { left: 'நீர்', right: 'Water 💧' }], options: [] }
+    ]
+  },
+  {
+    id: 37,
+    title: 'சுற்றுப்புற பொருட்கள் 🏫',
+    titleEn: 'Surrounding Objects',
+    mascot: '🏫',
+    color: 'from-blue-400 to-cyan-500',
+    borderColor: 'border-blue-300',
+    questions: [
+      { type: 'connect_pairs' as any, instruction: 'Match objects! 🔗', instructionTa: 'சுற்றுப்புற பொருட்களை இணைக்கவும்! 🔗', pairs: [{ left: 'புத்தகம்', right: 'Book 📖' }, { left: 'நாற்காலி', right: 'Chair 🪑' }, { left: 'மேஜை', right: 'Table 🪵' }], options: [] }
+    ]
+  },
+
+  // --- CHAPTER 8: பாடல் & கதை 🎵 (Levels 38 - 41) ---
+  {
+    id: 38,
+    title: 'தமிழ் பாடல்கள் 🎵',
+    titleEn: 'Tamil Songs',
+    mascot: '🎵',
+    color: 'from-rose-400 to-red-500',
+    borderColor: 'border-rose-350',
+    questions: [
+      { type: 'sentence_train' as any, instruction: 'Arrange song line! 🚂', instructionTa: 'பாடல் வரியை அமைக்கவும்! 🚂', words: ['கைவீசம்மா', 'கைவீசு'], correctSentence: 'கைவீசம்மா கைவீசு', options: [] }
+    ]
+  },
+  {
+    id: 39,
+    title: 'எளிய கவிதைகள் 📜',
+    titleEn: 'Simple Poetry',
+    mascot: '📜',
+    color: 'from-rose-400 to-red-500',
+    borderColor: 'border-rose-350',
+    questions: [
+      { type: 'connect_pairs' as any, instruction: 'Match rhyme lines! 🔗', instructionTa: 'பாடல் வரிகளை இணைக்கவும்! 🔗', pairs: [{ left: 'நிலா நிலா', right: 'ஓடி வா' }, { left: 'வண்ண வண்ண', right: 'பூக்கள்' }], options: [] }
+    ]
+  },
+  {
+    id: 40,
+    title: 'சிறு கதைகள் 📖',
+    titleEn: 'Fables Storybook',
+    mascot: '📖',
+    color: 'from-rose-400 to-red-500',
+    borderColor: 'border-rose-350',
+    questions: [
+      { type: 'story_cave' as any, storyText: 'ஆமையும் முயலும் பந்தயம் வைத்த கதையை நினைவுகூரவும்.', questionText: 'யார் வேகமாக ஓடி தூங்கியது?', options: [{ text: 'முயல் 🐇', correct: true }, { text: 'ஆமை 🐢', correct: false }] }
+    ]
+  },
+  {
+    id: 41,
+    title: 'கதை கருத்து புரிதல் 🧠',
+    titleEn: 'Moral Values',
+    mascot: '🧠',
+    color: 'from-rose-400 to-red-500',
+    borderColor: 'border-rose-350',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'What is the moral of tortoise race?', instructionTa: 'முயல் ஆமை கதையின் நீதி என்ன?', sentence: 'விடாமுயற்சி ___ தரும்.', options: [{ text: 'வெற்றி', correct: true }, { text: 'தோல்வி', correct: false }] }
+    ]
+  }
+];
