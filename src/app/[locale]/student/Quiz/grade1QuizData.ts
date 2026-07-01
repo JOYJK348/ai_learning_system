@@ -1416,7 +1416,954 @@ export const GRADE1_MATH_LEVELS: Level[] = [
   }
 ];
 
-export const GRADE1_EVS_LEVELS: Level[] = [];
+export const GRADE1_EVS_LEVELS: Level[] = [
+  // --- CHAPTER 1: Myself & My Body 🧒 (Levels 1 - 5) ---
+  {
+    id: 1,
+    title: 'My Body Parts Revision 🧒',
+    titleEn: 'My Body Parts Revision',
+    mascot: '🧒',
+    color: 'from-sky-400 to-blue-500',
+    borderColor: 'border-sky-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match body parts to their actions! 🔗',
+        pairs: [
+          { left: 'Hands 👐', right: 'To Write ✍️' },
+          { left: 'Legs 👣', right: 'To Walk 🚶' },
+          { left: 'Mouth 👄', right: 'To Speak 🗣️' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: 'Sense Organs & Their Uses 👀',
+    titleEn: 'Sense Organs & Their Uses',
+    mascot: '👀',
+    color: 'from-sky-400 to-blue-500',
+    borderColor: 'border-sky-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match sense organs to actions! 👃',
+        pairs: [
+          { left: 'Eyes 👀', right: 'To See 🌈' },
+          { left: 'Ears 👂', right: 'To Hear 🎵' },
+          { left: 'Nose 👃', right: 'To Smell 🌹' },
+          { left: 'Tongue 👅', right: 'To Taste 🍦' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: 'Healthy Food Habits 🍎',
+    titleEn: 'Healthy Food Habits',
+    mascot: '🍎',
+    color: 'from-sky-400 to-blue-500',
+    borderColor: 'border-sky-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select all Healthy Foods! 🥦',
+        gridItems: [
+          { text: 'Apple 🍎', correct: true },
+          { text: 'Spinach 🥬', correct: true },
+          { text: 'Milk 🥛', correct: true },
+          { text: 'Burger 🍔', correct: false },
+          { text: 'Fries 🍟', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 4,
+    title: 'Cleanliness & Personal Hygiene 🧼',
+    titleEn: 'Cleanliness & Hygiene',
+    mascot: '🧼',
+    color: 'from-sky-400 to-blue-500',
+    borderColor: 'border-sky-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match hygiene tools to uses! 🪥',
+        pairs: [
+          { left: 'Toothbrush 🪥', right: 'Clean Teeth 🦷' },
+          { left: 'Soap 🧼', right: 'Wash Hands 👐' },
+          { left: 'Nail Cutter ✂️', right: 'Trim Nails 💅' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 5,
+    title: 'Exercise & Good Habits 🏃',
+    titleEn: 'Exercise & Habits',
+    mascot: '🏃',
+    color: 'from-sky-400 to-blue-500',
+    borderColor: 'border-sky-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select all Good Habits! 🧼',
+        gridItems: [
+          { text: 'Sleep Early 🛌', correct: true },
+          { text: 'Exercise 🏃', correct: true },
+          { text: 'Drink Water 🥤', correct: true },
+          { text: 'Watch TV late 📺', correct: false },
+          { text: 'Skip breakfast 🥣', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+
+  // --- CHAPTER 2: My Family & Relationships 👨‍👩‍👧 (Levels 6 - 10) ---
+  {
+    id: 6,
+    title: 'Types of Families 👨‍👩‍👧‍👦',
+    titleEn: 'Types of Families',
+    mascot: '👨‍👩‍👧‍👦',
+    color: 'from-rose-400 to-pink-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match family types! 🔗',
+        pairs: [
+          { left: 'Parents + Kids 🏠', right: 'Nuclear Family 👨‍👩‍👧' },
+          { left: 'With Grandparents 🏰', right: 'Joint Family 👵👴' },
+          { left: 'Parents + Grandparents + Uncles 🏰', right: 'Big Joint Family 👨‍👩‍👧‍👦' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 7,
+    title: 'Family Members & Roles 👨‍👩‍👧',
+    titleEn: 'Family Members',
+    mascot: '👨‍👩‍👧',
+    color: 'from-rose-400 to-pink-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match relationship titles! 🔗',
+        pairs: [
+          { left: 'Fathers Father 👴', right: 'Grandfather 👴' },
+          { left: 'Mothers Mother 👵', right: 'Grandmother 👵' },
+          { left: 'Fathers Brother 👨', right: 'Uncle 👨' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 8,
+    title: 'Helping at Home 🧹',
+    titleEn: 'Helping at Home',
+    mascot: '🧹',
+    color: 'from-rose-400 to-pink-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select all helpful tasks! 🧹',
+        gridItems: [
+          { text: 'Watering plants 🌱', correct: true },
+          { text: 'Keeping toys back 🧸', correct: true },
+          { text: 'Cleaning desk 🧼', correct: true },
+          { text: 'Leaving toys on floor 🧩', correct: false },
+          { text: 'Wasting water 🚰', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 9,
+    title: 'Respect & Sharing 🤝',
+    titleEn: 'Respect & Sharing',
+    mascot: '🤝',
+    color: 'from-rose-400 to-pink-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      {
+        type: 'garden_repair' as any,
+        instruction: 'Complete the magic rule! 🌟',
+        sentence: 'When getting help from someone, we say ___.',
+        options: [
+          { text: 'Thank You 🙏', correct: true },
+          { text: 'Go Away ❌', correct: false },
+          { text: 'No ❌', correct: false }
+        ]
+      }
+    ]
+  },
+  {
+    id: 10,
+    title: 'My Daily Routine 📅',
+    titleEn: 'My Daily Routine',
+    mascot: '📅',
+    color: 'from-rose-400 to-pink-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      {
+        type: 'garden_repair' as any,
+        instruction: 'What is the first thing we do in the morning? 🌅',
+        sentence: 'When the alarm rings, we ___ first.',
+        options: [
+          { text: 'Wake Up ⏰', correct: true },
+          { text: 'Go to School 🎒', correct: false },
+          { text: 'Eat Lunch 🍱', correct: false }
+        ]
+      }
+    ]
+  },
+
+  // --- CHAPTER 3: Food & Nutrition 🍎 (Levels 11 - 15) ---
+  {
+    id: 11,
+    title: 'Types of Food 🍞',
+    titleEn: 'Types of Food',
+    mascot: '🍞',
+    color: 'from-orange-400 to-amber-500',
+    borderColor: 'border-orange-300',
+    questions: [
+      {
+        type: 'garden_repair' as any,
+        instruction: 'What type of food is Milk and Eggs? 🥚',
+        sentence: 'Milk and Eggs are ___ food that help us grow.',
+        options: [
+          { text: 'Body Building 💪', correct: true },
+          { text: 'Junk Food 🍕', correct: false },
+          { text: 'Spicy Food 🌶️', correct: false }
+        ]
+      }
+    ]
+  },
+  {
+    id: 12,
+    title: 'Healthy & Unhealthy Food 🥦',
+    titleEn: 'Healthy vs Unhealthy',
+    mascot: '🥦',
+    color: 'from-orange-400 to-amber-500',
+    borderColor: 'border-orange-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Classify Healthy vs Junk food! 🔗',
+        pairs: [
+          { left: 'Fresh Carrot 🥕', right: 'Crunchy Veggie 🥕' },
+          { left: 'Cold Soda 🥤', right: 'Sugary Junk 🥤' },
+          { left: 'Whole Milk 🥛', right: 'Calcium Drink 🥛' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 13,
+    title: 'Fruits & Vegetables 🥕',
+    titleEn: 'Fruits & Vegetables',
+    mascot: '🥕',
+    color: 'from-orange-400 to-amber-500',
+    borderColor: 'border-orange-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match item to type! 🔗',
+        pairs: [
+          { left: 'Sweet Mango 🥭', right: 'Sweet Fruit 🥭' },
+          { left: 'Green Spinach 🥬', right: 'Leafy Veggie 🥬' },
+          { left: 'Red Tomato 🍅', right: 'Juicy Fruit 🍅' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 14,
+    title: 'Food Sources 🌾',
+    titleEn: 'Food Sources',
+    mascot: '🌾',
+    color: 'from-orange-400 to-amber-500',
+    borderColor: 'border-orange-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Where does it come from? Match sources! 🔗',
+        pairs: [
+          { left: 'Wheat Flour 🌾', right: 'From Plants 🌾' },
+          { left: 'Fresh Eggs 🥚', right: 'From Hens 🐔' },
+          { left: 'Whole Milk 🥛', right: 'From Cows 🐮' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 15,
+    title: 'Balanced Meal Basics 🍱',
+    titleEn: 'Balanced Meal Basics',
+    mascot: '🍱',
+    color: 'from-orange-400 to-amber-500',
+    borderColor: 'border-orange-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select items for a balanced plate! 🍱',
+        gridItems: [
+          { text: 'Rice / Roti 🌾', correct: true },
+          { text: 'Dal / Pulse 🍛', correct: true },
+          { text: 'Green Salad 🥗', correct: true },
+          { text: 'Ice Cream 🍦', correct: false },
+          { text: 'Potato Chips 🍟', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+
+  // --- CHAPTER 4: Plants Around Us 🌱 (Levels 16 - 20) ---
+  {
+    id: 16,
+    title: 'Parts of Plant 🌱',
+    titleEn: 'Parts of Plant',
+    mascot: '🌱',
+    color: 'from-emerald-400 to-green-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match plant parts to their jobs! 🔗',
+        pairs: [
+          { left: 'Roots 🪵', right: 'Absorb Water 💧' },
+          { left: 'Stem 🎋', right: 'Support Leaves 🍃' },
+          { left: 'Flowers 🌸', right: 'Produce Seeds 🌾' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 17,
+    title: 'What Plants Need ☀️',
+    titleEn: 'What Plants Need',
+    mascot: '☀️',
+    color: 'from-emerald-400 to-green-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select all things a seed needs to grow! 🪴',
+        gridItems: [
+          { text: 'Water 💧', correct: true },
+          { text: 'Sunlight ☀️', correct: true },
+          { text: 'Soil 🌱', correct: true },
+          { text: 'Soda 🥤', correct: false },
+          { text: 'Dark Room 🚪', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 18,
+    title: 'Types of Plants 🌲',
+    titleEn: 'Types of Plants',
+    mascot: '🌲',
+    color: 'from-emerald-400 to-green-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match types of plants! 🌴',
+        pairs: [
+          { left: 'Mango Tree 🌳', right: 'Big Tree 🪵' },
+          { left: 'Rose Bush 🌹', right: 'Bushy Shrub 🪴' },
+          { left: 'Grapevine 🍇', right: 'Weak Climber 🍇' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 19,
+    title: 'Uses of Plants 🪵',
+    titleEn: 'Uses of Plants',
+    mascot: '🪵',
+    color: 'from-emerald-400 to-green-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'What do plants give us? Match them! 🔗',
+        pairs: [
+          { left: 'Cotton Plant ☁️', right: 'Shirt Cotton 👕' },
+          { left: 'Tulsi Herb 🌿', right: 'Medicines 💊' },
+          { left: 'Teak Tree 🌳', right: 'Chair Wood 🪑' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 20,
+    title: 'Saving Plants 🌍',
+    titleEn: 'Saving Plants',
+    mascot: '🌍',
+    color: 'from-emerald-400 to-green-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select all ways to save trees! 🌲',
+        gridItems: [
+          { text: 'Water daily 🚿', correct: true },
+          { text: 'Plant saplings 🌱', correct: true },
+          { text: 'Recycle paper 📄', correct: true },
+          { text: 'Pluck leaves 🍂', correct: false },
+          { text: 'Carve bark 🪵', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+
+  // --- CHAPTER 5: Animal World 🐾 (Levels 21 - 25) ---
+  {
+    id: 21,
+    title: 'Domestic Animals 🐴',
+    titleEn: 'Domestic Animals',
+    mascot: '🐴',
+    color: 'from-teal-400 to-cyan-500',
+    borderColor: 'border-teal-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match domestic animals to uses! 🥛',
+        pairs: [
+          { left: 'Cow 🐮', right: 'Gives Milk 🥛' },
+          { left: 'Sheep 🐑', right: 'Gives Wool 🧶' },
+          { left: 'Horse 🐴', right: 'Pulls Cart 🛞' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 22,
+    title: 'Wild Animals 🐅',
+    titleEn: 'Wild Animals',
+    mascot: '🐅',
+    color: 'from-teal-400 to-cyan-500',
+    borderColor: 'border-teal-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select wild forest animals! 🦁',
+        gridItems: [
+          { text: 'Tiger 🐯', correct: true },
+          { text: 'Elephant 🐘', correct: true },
+          { text: 'Monkey 🐵', correct: true },
+          { text: 'Cat 🐱', correct: false },
+          { text: 'Hen 🐔', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 23,
+    title: 'Animal Homes 🛖',
+    titleEn: 'Animal Homes',
+    mascot: '🛖',
+    color: 'from-teal-400 to-cyan-500',
+    borderColor: 'border-teal-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match animal shelter homes! 🏡',
+        pairs: [
+          { left: 'Dog 🐶', right: 'Kennel 🏠' },
+          { left: 'Lion 🦁', right: 'Forest Den 🪨' },
+          { left: 'Cow 🐮', right: 'Farm Shed 🛖' },
+          { left: 'Spider 🕷️', right: 'Web 🕸️' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 24,
+    title: 'Animal Food Habits 🥩',
+    titleEn: 'Animal Food Habits',
+    mascot: '🥩',
+    color: 'from-teal-400 to-cyan-500',
+    borderColor: 'border-teal-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'What do they eat? Match them! 🌽',
+        pairs: [
+          { left: 'Cow 🐮', right: 'Eats Grass 🌿' },
+          { left: 'Lion 🦁', right: 'Eats Meat 🥩' },
+          { left: 'Bear 🐻', right: 'Eats Both 🍎' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 25,
+    title: 'Caring for Animals 🐾',
+    titleEn: 'Caring for Animals',
+    mascot: '🐾',
+    color: 'from-teal-400 to-cyan-500',
+    borderColor: 'border-teal-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select all kind acts! 🐾',
+        gridItems: [
+          { text: 'Give water 🥛', correct: true },
+          { text: 'Keep shelter clean 🧹', correct: true },
+          { text: 'Feed grains 🌾', correct: true },
+          { text: 'Throw stones 🪨', correct: false },
+          { text: 'Tease tail 🐈', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+
+  // --- CHAPTER 6: Our Environment 🌍 (Levels 26 - 30) ---
+  {
+    id: 26,
+    title: 'Living & Non Living Things 🪨',
+    titleEn: 'Living & Non Living',
+    mascot: '🪨',
+    color: 'from-indigo-400 to-violet-500',
+    borderColor: 'border-indigo-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match classifications! 🔗',
+        pairs: [
+          { left: 'Dog 🐕', right: 'Living Thing 🌱' },
+          { left: 'Chair 🪑', right: 'Non Living 🪨' },
+          { left: 'Plant 🌿', right: 'Living Thing 🌱' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 27,
+    title: 'Air Around Us 💨',
+    titleEn: 'Air Around Us',
+    mascot: '💨',
+    color: 'from-indigo-400 to-violet-500',
+    borderColor: 'border-indigo-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match air properties and actions! 🎈',
+        pairs: [
+          { left: 'Moving Air 💨', right: 'Wind 🌬️' },
+          { left: 'Fill Balloon 🎈', right: 'Air Has Volume 🎈' },
+          { left: 'Fire burning 🕯️', right: 'Air Helps Burn 🔥' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 28,
+    title: 'Water Around Us 💧',
+    titleEn: 'Water Around Us',
+    mascot: '💧',
+    color: 'from-indigo-400 to-violet-500',
+    borderColor: 'border-indigo-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match sources to destinations! 🌊',
+        pairs: [
+          { left: 'Main Source 🌧️', right: 'Rain ☁️' },
+          { left: 'Flowing water 🏞️', right: 'River 🌊' },
+          { left: 'Salty ocean 🌊', right: 'Sea 🌊' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 29,
+    title: 'Weather Changes 🌦️',
+    titleEn: 'Weather Changes',
+    mascot: '🌦️',
+    color: 'from-indigo-400 to-violet-500',
+    borderColor: 'border-indigo-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match seasons to items! 🧥',
+        pairs: [
+          { left: 'Hot Summer ☀️', right: 'Cotton shirt 👕' },
+          { left: 'Cold Winter ❄️', right: 'Woolen sweater 🧥' },
+          { left: 'Wet Rain 🌧️', right: 'Umbrella ☔' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 30,
+    title: 'Save Environment 🚮',
+    titleEn: 'Save Environment',
+    mascot: '🚮',
+    color: 'from-indigo-400 to-violet-500',
+    borderColor: 'border-indigo-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Sort: Recycle ♻️ vs Waste 🗑️!',
+        pairs: [
+          { left: 'Glass bottle 🍾', right: 'Recycled Glass 🍾' },
+          { left: 'Plastic bottle 🧴', right: 'Recycled Plastic 🧴' },
+          { left: 'Food scraps 🍌', right: 'Compost Waste 🗑️' }
+        ],
+        options: []
+      }
+    ]
+  },
+
+  // --- CHAPTER 7: My Neighbourhood 🏡 (Levels 31 - 35) ---
+  {
+    id: 31,
+    title: 'Places Around Us 🏥',
+    titleEn: 'Places Around Us',
+    mascot: '🏥',
+    color: 'from-pink-400 to-rose-500',
+    borderColor: 'border-pink-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match helper places! 🏥',
+        pairs: [
+          { left: 'Doctor 🩺', right: 'Hospital 🏥' },
+          { left: 'Teacher 📚', right: 'School 🏫' },
+          { left: 'Firefighter 🧑‍🚒', right: 'Fire Station 🚒' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 32,
+    title: 'Community Helpers 🧑‍✈️',
+    titleEn: 'Community Helpers',
+    mascot: '🧑‍✈️',
+    color: 'from-pink-400 to-rose-500',
+    borderColor: 'border-pink-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Who helps us? Match helper tool! 🧯',
+        pairs: [
+          { left: 'Chef 🧑‍🍳', right: 'Frying Pan 🍳' },
+          { left: 'Postman 📬', right: 'Letter Bag ✉' },
+          { left: 'Gardener 🧑‍🌾', right: 'Watering Can 🚿' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 33,
+    title: 'School & Rules 🏫',
+    titleEn: 'School & Rules',
+    mascot: '🏫',
+    color: 'from-pink-400 to-rose-500',
+    borderColor: 'border-pink-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select all School Rules! 🏫',
+        gridItems: [
+          { text: 'Listen to teacher 👩‍🏫', correct: true },
+          { text: 'Raise hand 🙋', correct: true },
+          { text: 'Keep desk clean 🧼', correct: true },
+          { text: 'Run in corridor 🏃', correct: false },
+          { text: 'Shout loud 🗣️', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 34,
+    title: 'Public Places 🏦',
+    titleEn: 'Public Places',
+    mascot: '🏦',
+    color: 'from-pink-400 to-rose-500',
+    borderColor: 'border-pink-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match places to actions! 🏦',
+        pairs: [
+          { left: 'To catch a train 🚂', right: 'Railway Station 🚉' },
+          { left: 'To save money 💰', right: 'Bank 🏦' },
+          { left: 'To buy stamps ✉️', right: 'Post Office 🏤' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 35,
+    title: 'Safety Around Us ⚠️',
+    titleEn: 'Safety Around Us',
+    mascot: '⚠️',
+    color: 'from-pink-400 to-rose-500',
+    borderColor: 'border-pink-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'What should we do to stay safe? Match! 🛝',
+        pairs: [
+          { left: 'Sharp blade 🪒', right: 'Do NOT touch ❌' },
+          { left: 'Wet bathroom floor 🛝', right: 'Walk slowly 🚶' },
+          { left: 'Unknown stranger 👤', right: 'Do NOT talk ❌' }
+        ],
+        options: []
+      }
+    ]
+  },
+
+  // --- CHAPTER 8: Transport & Communication 🚗 (Levels 36 - 40) ---
+  {
+    id: 36,
+    title: 'Land Transport 🚆',
+    titleEn: 'Land Transport',
+    mascot: '🚆',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select land transport vehicles! 🚗',
+        gridItems: [
+          { text: 'Car 🚗', correct: true },
+          { text: 'Bus 🚌', correct: true },
+          { text: 'Bicycle 🚲', correct: true },
+          { text: 'Yacht ⛵', correct: false },
+          { text: 'Glider 🪂', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 37,
+    title: 'Water Transport ⛵',
+    titleEn: 'Water Transport',
+    mascot: '⛵',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select water transport! ⚓',
+        gridItems: [
+          { text: 'Cargo Ship 🚢', correct: true },
+          { text: 'Rowing Boat ⛵', correct: true },
+          { text: 'Speedboat 🚤', correct: true },
+          { text: 'Truck 🚚', correct: false },
+          { text: 'Rocket 🚀', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 38,
+    title: 'Air Transport 🚁',
+    titleEn: 'Air Transport',
+    mascot: '🚁',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select air transport! ✈️',
+        gridItems: [
+          { text: 'Aeroplane ✈️', correct: true },
+          { text: 'Helicopter 🚁', correct: true },
+          { text: 'Fighter Jet 🛩️', correct: true },
+          { text: 'Submarine 🚢', correct: false },
+          { text: 'Auto Rickshaw 🛺', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 39,
+    title: 'Road Safety Rules 🚦',
+    titleEn: 'Road Safety Rules',
+    mascot: '🚦',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'What should we do? Stop ➔ Look ➔ Cross! 🚦',
+        pairs: [
+          { left: 'Red light 🔴', right: 'Stop vehicle 🛑' },
+          { left: 'Zebra lines 🦓', right: 'Cross safely 🚶' },
+          { left: 'Before crossing 🚶', right: 'Look left and right 👀' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 40,
+    title: 'Communication Methods 📱',
+    titleEn: 'Communication Methods',
+    mascot: '📱',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match tools to actions! ✉️',
+        pairs: [
+          { left: 'Mobile Phone 📱', right: 'Quick call 📞' },
+          { left: 'Postcard ✉️', right: 'Written note 📮' },
+          { left: 'Television 📺', right: 'Broadcasting news 🗞️' }
+        ],
+        options: []
+      }
+    ]
+  },
+
+  // --- CHAPTER 9: Festivals & World Around Us 🎉 (Levels 41 - 45) ---
+  {
+    id: 41,
+    title: 'National Festivals 🎇',
+    titleEn: 'National Festivals',
+    mascot: '🎇',
+    color: 'from-rose-400 to-pink-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match national festivals! 🇮🇳',
+        pairs: [
+          { left: '15th August 🗺️', right: 'Independence Day 🇮🇳' },
+          { left: '26th January 🏛️', right: 'Republic Day 🏛️' },
+          { left: '2nd October 👓', right: 'Gandhi Jayanti 👓' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 42,
+    title: 'Different Cultures 🗺️',
+    titleEn: 'Different Cultures',
+    mascot: '🗺️',
+    color: 'from-rose-400 to-pink-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match cultural foods to states! 🍜',
+        pairs: [
+          { left: 'Sarson Ka Saag 🥬', right: 'Punjab 🌾' },
+          { left: 'Dhokla 🍛', right: 'Gujarat 🏙️' },
+          { left: 'Sambar Rice 🍛', right: 'Tamil Nadu 🌊' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 43,
+    title: 'Seasons 🌦️',
+    titleEn: 'Seasons',
+    mascot: '🌦️',
+    color: 'from-rose-400 to-pink-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match season to description! ❄️',
+        pairs: [
+          { left: 'Summer Season ☀️', right: 'Hot sunny days 🍦' },
+          { left: 'Winter Season ❄️', right: 'Cold snowy wind 🧣' },
+          { left: 'Monsoon Season ⛈️', right: 'Heavy rainfall 🌧️' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 44,
+    title: 'Earth & Sky Basics 🚀',
+    titleEn: 'Earth & Sky Basics',
+    mascot: '🚀',
+    color: 'from-rose-400 to-pink-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match elements in space! 🌌',
+        pairs: [
+          { left: 'Blue Planet 🌍', right: 'Our Earth 🗺️' },
+          { left: 'Hot gas ball ☀️', right: 'Sun ☀️' },
+          { left: 'Appears at night 🌙', right: 'Moon 🌙' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 45,
+    title: 'Caring for Nature 🌳',
+    titleEn: 'Caring for Nature',
+    mascot: '🌳',
+    color: 'from-rose-400 to-pink-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select kind acts for Earth! 🌍',
+        gridItems: [
+          { text: 'Throw trash in dustbin 🗑️', correct: true },
+          { text: 'Plant trees 🌳', correct: true },
+          { text: 'Save running water 🚰', correct: true },
+          { text: 'Litter in public 🚮', correct: false },
+          { text: 'Keep tap open 🚰', correct: false }
+        ],
+        options: []
+      }
+    ]
+  }
+];
+
 export const GRADE1_HINDI_LEVELS: Level[] = [];
 
 export const GRADE1_TAMIL_LEVELS: Level[] = [

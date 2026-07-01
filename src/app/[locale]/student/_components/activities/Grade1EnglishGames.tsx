@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { GRADE1_ENGLISH_LEVELS, GRADE1_MATH_LEVELS, GRADE1_TAMIL_LEVELS, GRADE1_GK_LEVELS } from '../../Quiz/grade1QuizData';
+import { GRADE1_ENGLISH_LEVELS, GRADE1_MATH_LEVELS, GRADE1_TAMIL_LEVELS, GRADE1_GK_LEVELS, GRADE1_EVS_LEVELS } from '../../Quiz/grade1QuizData';
 
 export function shuffleArray<T>(array: T[]): T[] {
   const arr = [...array];
@@ -1771,6 +1771,53 @@ const GRADE1_LESSON_LEVEL_NUM: Record<string, number> = {
   'f2742e51-0256-4dd0-8d34-dde1d30c62e6': 30, // Short Stories
   'eb3f8e7c-b04b-418c-8ce7-5fda2190c535': 31,  // Story comprehension
 
+  // --- Environmental Studies (EVS) Lesson UUIDs ---
+  '80cbf580-be8c-4098-bbff-16f9934dd93e': 1,
+  '644a8a8b-bb18-4792-9262-5b29fe2b895d': 2,
+  'ed19c4c2-e385-4bc6-ba8e-17061f0e6e32': 3,
+  '2322e16a-7f83-46f1-a36b-99546ddaa172': 4,
+  '735d30b8-2a20-43b5-b7c9-8ff3820eb2f1': 5,
+  'd6566052-c56d-4ad5-bcad-694f370ac053': 6,
+  '9864f09c-d751-4e4b-9e07-52c233a97dcc': 7,
+  '01d082c8-12d1-4e5f-8f89-43d3b7a9c23a': 8,
+  '58da0767-72f9-494f-8c6e-9b35e9058041': 9,
+  '9a81cbc3-d71c-492e-9188-3df0a8c1d12c': 10,
+  '166892bc-180c-4679-a059-1ac78251a547': 11,
+  '9bdf5f3d-8549-4e20-887f-083b97a99cc3': 12,
+  'c5d1dabc-06ee-4daa-9bd3-df6bfede6759': 13,
+  '293556ba-9cea-4db2-8598-fdd0496d8a89': 14,
+  'e8315072-a087-4f35-a1e1-f5d481130d56': 15,
+  '26d07eee-d07e-4a74-81f7-02922816989a': 16,
+  '1fa95155-9385-4419-9282-55d4c59b0fde': 17,
+  'd69feb5c-62f3-4894-8b99-949176a40955': 18,
+  '7a472eb2-a83f-49be-8086-9ab52cfb02f1': 19,
+  'be1460b6-0eeb-40c6-92fe-8bb5d9c2accb': 20,
+  '6900028d-4ec2-44b2-9fa4-141dd9a6db2e': 21,
+  'f4bdab9f-8581-45ad-8daf-acf5c020f6bb': 22,
+  'e4b79f71-7f8c-4429-8d7a-995594db1607': 23,
+  '9ee6c574-727b-4971-bd5a-0743914a06fc': 24,
+  '5f9f9a17-b9d7-43e2-84f6-e7db3409d049': 25,
+  'd4236fe9-1d96-4732-bba4-6802b3ce829f': 26,
+  'd16fccad-7341-4189-b0a0-ef5f33a5280a': 27,
+  'e3370e9f-4106-4b67-898d-328fa0641593': 28,
+  'e7a5ce1b-7599-4733-8710-b08185695ccb': 29,
+  '70df11d9-46cc-4e13-984c-31d1ffa901b8': 30,
+  '6111dd91-88e7-49d1-b9d6-4620bfe919a6': 31,
+  '04db5a78-2ff5-494c-9563-fa1c5f2e4824': 32,
+  'e07d5850-87e1-4308-9136-5f69ff20f157': 33,
+  'aae95e90-3a62-4494-b698-4397e9bf5826': 34,
+  '6afca9d0-339f-4a0d-985b-4e0319041241': 35,
+  'a722089f-1aff-4b2d-a0be-69636b0861ef': 36,
+  '0def1234-8f84-470d-bc3a-b1b149b296c6': 37,
+  '8eaf574a-8ab2-4908-bedc-9b441a6d062a': 38,
+  'e9c9c091-91a5-43ff-ac4a-2b55a9f316cc': 39,
+  '4093b0df-1b98-49b4-b459-831236a0f9a6': 40,
+  '0c6edc34-39f8-4e0b-b9c1-9913b18e29dc': 41,
+  'de631003-739c-43a3-911f-07fb8ffd29d9': 42,
+  'c59ff7e0-1449-469c-8e2a-c3d20c7d699e': 43,
+  '39b3832d-6baa-4dee-9d71-c5e1d886252f': 44,
+  'f8b6710b-2d28-49a1-bc85-1148a30266f6': 45,
+
   // --- General Knowledge (GK) Lesson UUIDs ---
   '892cd0a0-d5ea-48a2-a87a-9059cc573556': 1,
   'd7f55ee5-3d3d-49d5-b39e-ff6c9fa5a6b0': 2,
@@ -1937,6 +1984,54 @@ export const GRADE1_GK_LESSON_IDS = new Set([
   '9df7a99d-2b11-4718-92b8-b99176f484c0',
   '626c0c29-94a4-47a4-ac79-610bb5cfc5ae',
   '7430eb93-2bea-4335-8f26-900963caf22e'
+]);
+
+export const GRADE1_EVS_LESSON_IDS = new Set([
+  '80cbf580-be8c-4098-bbff-16f9934dd93e',
+  '644a8a8b-bb18-4792-9262-5b29fe2b895d',
+  'ed19c4c2-e385-4bc6-ba8e-17061f0e6e32',
+  '2322e16a-7f83-46f1-a36b-99546ddaa172',
+  '735d30b8-2a20-43b5-b7c9-8ff3820eb2f1',
+  'd6566052-c56d-4ad5-bcad-694f370ac053',
+  '9864f09c-d751-4e4b-9e07-52c233a97dcc',
+  '01d082c8-12d1-4e5f-8f89-43d3b7a9c23a',
+  '58da0767-72f9-494f-8c6e-9b35e9058041',
+  '9a81cbc3-d71c-492e-9188-3df0a8c1d12c',
+  '166892bc-180c-4679-a059-1ac78251a547',
+  '9bdf5f3d-8549-4e20-887f-083b97a99cc3',
+  'c5d1dabc-06ee-4daa-9bd3-df6bfede6759',
+  '293556ba-9cea-4db2-8598-fdd0496d8a89',
+  'e8315072-a087-4f35-a1e1-f5d481130d56',
+  '26d07eee-d07e-4a74-81f7-02922816989a',
+  '1fa95155-9385-4419-9282-55d4c59b0fde',
+  'd69feb5c-62f3-4894-8b99-949176a40955',
+  '7a472eb2-a83f-49be-8086-9ab52cfb02f1',
+  'be1460b6-0eeb-40c6-92fe-8bb5d9c2accb',
+  '6900028d-4ec2-44b2-9fa4-141dd9a6db2e',
+  'f4bdab9f-8581-45ad-8daf-acf5c020f6bb',
+  'e4b79f71-7f8c-4429-8d7a-995594db1607',
+  '9ee6c574-727b-4971-bd5a-0743914a06fc',
+  '5f9f9a17-b9d7-43e2-84f6-e7db3409d049',
+  'd4236fe9-1d96-4732-bba4-6802b3ce829f',
+  'd16fccad-7341-4189-b0a0-ef5f33a5280a',
+  'e3370e9f-4106-4b67-898d-328fa0641593',
+  'e7a5ce1b-7599-4733-8710-b08185695ccb',
+  '70df11d9-46cc-4e13-984c-31d1ffa901b8',
+  '6111dd91-88e7-49d1-b9d6-4620bfe919a6',
+  '04db5a78-2ff5-494c-9563-fa1c5f2e4824',
+  'e07d5850-87e1-4308-9136-5f69ff20f157',
+  'aae95e90-3a62-4494-b698-4397e9bf5826',
+  '6afca9d0-339f-4a0d-985b-4e0319041241',
+  'a722089f-1aff-4b2d-a0be-69636b0861ef',
+  '0def1234-8f84-470d-bc3a-b1b149b296c6',
+  '8eaf574a-8ab2-4908-bedc-9b441a6d062a',
+  'e9c9c091-91a5-43ff-ac4a-2b55a9f316cc',
+  '4093b0df-1b98-49b4-b459-831236a0f9a6',
+  '0c6edc34-39f8-4e0b-b9c1-9913b18e29dc',
+  'de631003-739c-43a3-911f-07fb8ffd29d9',
+  'c59ff7e0-1449-469c-8e2a-c3d20c7d699e',
+  '39b3832d-6baa-4dee-9d71-c5e1d886252f',
+  'f8b6710b-2d28-49a1-bc85-1148a30266f6'
 ]);
 
 /* ==========================================================================
@@ -2194,7 +2289,16 @@ export function Grade1EnglishActivityPlayer({ lessonId, onComplete }: { lessonId
   const isMath = GRADE1_MATH_LESSON_IDS.has(lessonId);
   const isTamil = GRADE1_TAMIL_LESSON_IDS.has(lessonId);
   const isGk = GRADE1_GK_LESSON_IDS.has(lessonId);
-  const levelsSource = isTamil ? GRADE1_TAMIL_LEVELS : (isMath ? GRADE1_MATH_LEVELS : (isGk ? GRADE1_GK_LEVELS : GRADE1_ENGLISH_LEVELS));
+  const isEvs = GRADE1_EVS_LESSON_IDS.has(lessonId);
+  const levelsSource = isTamil 
+    ? GRADE1_TAMIL_LEVELS 
+    : (isMath 
+      ? GRADE1_MATH_LEVELS 
+      : (isGk 
+        ? GRADE1_GK_LEVELS 
+        : (isEvs 
+          ? GRADE1_EVS_LEVELS 
+          : GRADE1_ENGLISH_LEVELS)));
   const levelData = levelsSource.find((l) => l.id === levelNum) || levelsSource[0];
   
   const [qIndex, setQIndex] = useState(0);
@@ -2254,8 +2358,8 @@ export function Grade1EnglishActivityPlayer({ lessonId, onComplete }: { lessonId
 
       {/* Instruction — hidden for trace, letter_board, and combo_chart (they have their own headers) */}
       {currentQuestion.type !== 'trace' && currentQuestion.type !== 'letter_board' && currentQuestion.type !== 'combo_chart' && (
-        <div className="w-full text-center px-4 py-2.5 bg-amber-50 border-2 border-amber-200 rounded-[1.5rem] shadow-sm">
-          <p className="text-sm sm:text-base font-extrabold text-[#78350f] m-0 leading-snug">
+        <div className="w-full text-center px-3 py-2 sm:px-4 sm:py-2.5 bg-amber-50 border-2 border-amber-200 rounded-2xl sm:rounded-[1.5rem] shadow-sm">
+          <p className="text-xs sm:text-base font-extrabold text-[#78350f] m-0 leading-snug break-words">
             {currentQuestion.instruction}
           </p>
         </div>
@@ -2311,7 +2415,7 @@ export function Grade1EnglishActivityPlayer({ lessonId, onComplete }: { lessonId
           onClick={handleNext}
           className="w-full py-4 mt-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-black text-base sm:text-lg rounded-2xl shadow-lg border-b-4 border-teal-700 active:scale-95 transition-all"
         >
-          {qIndex + 1 < levelData.questions.length ? 'Next Letter! ➡️' : 'Finish! 🎉'}
+          {qIndex + 1 < levelData.questions.length ? 'Next! ➡️' : 'Finish! 🎉'}
         </button>
       )}
     </div>
