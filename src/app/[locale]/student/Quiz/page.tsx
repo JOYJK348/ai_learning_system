@@ -76,20 +76,20 @@ const GRADE1_LEVEL_DESCRIPTIONS: Record<string, Record<number, { desc: string; f
     6: { desc: 'Word mazes, odd-one-out detection, A-Z dictionary order & final capstone stories.', focus: 'Language Challenge' }
   },
   math: {
-    1: { desc: 'Numbers 1-20 comparison, order, and count verification.', focus: 'Counting & comparison' },
-    2: { desc: 'Addition models & number line calculation practice.', focus: 'Addition & calculations' },
-    3: { desc: 'Subtraction, basic shapes & spatial pattern recognition.', focus: 'Shapes & subtraction' },
-    4: { desc: 'Time measurement, calendar & clock reading evaluation.', focus: 'Time, calendar & clocks' },
-    5: { desc: 'Data representation, basic graphs & comparison analysis.', focus: 'Graphs & comparisons' },
-    6: { desc: 'Logical patterns, word problems & final arithmetic test.', focus: 'Logic, word problems & exams' }
+    1: { desc: 'Number builders, small-to-big ordering, missing number paths, expanded forms & card comparisons.', focus: 'Number World 🔢' },
+    2: { desc: 'Vertical block additions, carry calculations, number line jumps & fruit sum word problems.', focus: 'Addition Mission ➕' },
+    3: { desc: 'Take-away calculations, vertical subtractions, borrowing challenges & missing number paths.', focus: 'Subtraction Mission ➖' },
+    4: { desc: 'Group count conversions, repeated additions, table builders & skip counting sequences.', focus: 'Multiplication + Patterns ✖️' },
+    5: { desc: 'Shape buildings, 2D/3D categorizations, measurement weight matches & clock hours.', focus: 'Shapes + Measurement 📏' },
+    6: { desc: 'Money structures, purchasing bills calculations, fruit charts & logic sequences.', focus: 'Money + Data Logic 💰' }
   },
   evs: {
-    1: { desc: 'My Self, body parts & sensory organs relational evaluation.', focus: 'Human body & senses' },
-    2: { desc: 'My Family, home environments & community relationships test.', focus: 'Social relations & homes' },
-    3: { desc: 'Plants, leaves & clean environment classification exam.', focus: 'Flora, fauna & cleaning' },
-    4: { desc: 'Domestic & wild animals classification and habitat test.', focus: 'Animals & habitats' },
-    5: { desc: 'Food groups, healthy habits & hygiene maintenance rules.', focus: 'Food pyramid & hygiene' },
-    6: { desc: 'Weather, seasons, clothes & transport modes final test.', focus: 'Weather & transport final' }
+    1: { desc: 'Body parts functions, sensory organs, clean/unclean habit sortings & daily routine timelines.', focus: 'Myself & My Body 🧒' },
+    2: { desc: 'Family relations, domestic helping choices, fruit/veg sorts, food sources & healthy plates.', focus: 'Family & Food 👨‍👩‍👧' },
+    3: { desc: 'Plant parts builder, sunlight/water growth needs, animal homes, wild/domestic & food diets.', focus: 'Plant & Animal World 🌱' },
+    4: { desc: 'Living & non-living sorts, sunny/rainy weather matchups, water usage & saving Earth.', focus: 'Environment 🌍' },
+    5: { desc: 'Land/air/water transport routes, helper stations, public maps & road safety crossing routines.', focus: 'Transport & Community 🚗' },
+    6: { desc: 'Season clothings, day/night activities, cultural festivals & environmental safety capstones.', focus: 'World Around Us 🧠' }
   },
   gk: {
     1: { desc: 'General awareness, logic and reasoning test.', focus: 'Cognitive & logic test' },

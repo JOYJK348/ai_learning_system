@@ -334,677 +334,501 @@ export const GRADE1_ENGLISH_LEVELS: Level[] = [
 ];
 
 export const GRADE1_MATH_LEVELS: Level[] = [
-  // --- CHAPTER 1: NUMBERS BEYOND 100 🔢 ---
   {
     id: 1,
-    title: 'Numbers 101–200 🔢',
-    titleEn: 'Numbers 101–200',
+    title: 'Number World 🔢',
+    titleEn: 'Number World',
     mascot: '🔢',
     color: 'from-blue-400 to-indigo-500',
     borderColor: 'border-blue-300',
     questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Numbers 101 to 200 🔢', mascot: '🔢', explanation: 'Numbers beyond 100 are made of Hundreds, Tens, and Ones! 100 is One Hundred. 101 is One Hundred One!', explanationTa: '100க்கு மேல் உள்ள எண்கள்! 100 என்பது நூறு. 101 என்பது நூற்று ஒன்று!', examples: ['100 = Hundred', '101 = 100 + 1', '150 = 100 + 50', '200 = Two Hundred'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match number names! 🔗', pairs: [{ left: '105', right: 'One hundred five' }, { left: '120', right: 'One hundred twenty' }, { left: '199', right: 'One hundred ninety-nine' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Complete the sequence! 🔢', sentence: '101, 102, 103, ___', options: [{ text: '104', correct: true }, { text: '105', correct: false }, { text: '110', correct: false }] },
-      { type: 'grid_search' as any, instruction: 'Find all numbers between 120 and 130! 🔍', gridItems: [{ text: '125', correct: true, emoji: '✨' }, { text: '128', correct: true, emoji: '🌟' }, { text: '121', correct: true, emoji: '💫' }, { text: '105', correct: false, emoji: '❌' }, { text: '190', correct: false, emoji: '❌' }], options: [] }
+      {
+        type: 'choice' as any,
+        instruction: 'Number Builder: What number is: 3 Hundreds + 4 Tens + 5 Ones? 🧱',
+        options: [
+          { text: '345', correct: true },
+          { text: '543', correct: false },
+          { text: '354', correct: false }
+        ]
+      },
+      {
+        type: 'order' as any,
+        instruction: 'Number Order: Sort the numbers from Smallest to Largest! 📈',
+        options: [
+          { text: '124 ➔ 245 ➔ 356', correct: true },
+          { text: '356 ➔ 245 ➔ 124', correct: false },
+          { text: '245 ➔ 124 ➔ 356', correct: false }
+        ]
+      },
+      {
+        type: 'garden_repair' as any,
+        instruction: 'Missing Number: Complete the number path! 🛣️',
+        sentence: '120 ➔ _____ ➔ 122',
+        options: [
+          { text: '121', correct: true },
+          { text: '123', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Expanded Form: Choose the correct expansion for 325! 🧮',
+        options: [
+          { text: '300 + 20 + 5', correct: true },
+          { text: '30 + 20 + 5', correct: false },
+          { text: '300 + 2 + 5', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Number Comparison: Choose the correct relationship: 245 ___ 254 ⚖️',
+        options: [
+          { text: '245 is Less Than (<) 254', correct: true },
+          { text: '245 is Greater Than (>) 254', correct: false },
+          { text: '245 is Equal to (=) 254', correct: false }
+        ]
+      }
     ]
   },
   {
     id: 2,
-    title: 'Numbers 201–500 🔢',
-    titleEn: 'Numbers 201–500',
-    mascot: '🔢',
-    color: 'from-blue-400 to-indigo-500',
-    borderColor: 'border-blue-300',
+    title: 'Addition Mission ➕',
+    titleEn: 'Addition Mission',
+    mascot: '➕',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
     questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Numbers 201 to 500 🔢', mascot: '🔢', explanation: 'Let us count from 201 to 500! 200 is Two Hundred, 300 is Three Hundred, 400 is Four Hundred, and 500 is Five Hundred!', explanationTa: '201 முதல் 500 வரையிலான எண்கள்! 200, 300, 400, 500.', examples: ['201 = 200 + 1', '350 = 300 + 50', '499 = 400 + 99', '500 = Five Hundred'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match number names! 🔗', pairs: [{ left: '250', right: 'Two hundred fifty' }, { left: '305', right: 'Three hundred five' }, { left: '410', right: 'Four hundred ten' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Complete the sequence! 🔢', sentence: '298, 299, 300, ___', options: [{ text: '301', correct: true }, { text: '302', correct: false }, { text: '310', correct: false }] },
-      { type: 'grid_search' as any, instruction: 'Find all numbers in the 300s! 🔍', gridItems: [{ text: '345', correct: true, emoji: '✨' }, { text: '399', correct: true, emoji: '🌟' }, { text: '301', correct: true, emoji: '💫' }, { text: '299', correct: false, emoji: '❌' }, { text: '405', correct: false, emoji: '❌' }], options: [] }
+      {
+        type: 'choice' as any,
+        instruction: 'Vertical Addition: Solve 24 + 15! 🧮',
+        options: [
+          { text: '39', correct: true },
+          { text: '29', correct: false },
+          { text: '49', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Carry Addition: Solve 38 + 27! 💥',
+        options: [
+          { text: '65', correct: true },
+          { text: '55', correct: false },
+          { text: '61', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Number Line: Start at 15 and jump 6 steps forward. Where do you land? 🏃‍♂️',
+        options: [
+          { text: '21', correct: true },
+          { text: '20', correct: false },
+          { text: '22', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Picture Addition: Combine 🍎🍎 + 🍎🍎🍎! What is the total? 🍎',
+        options: [
+          { text: '5', correct: true },
+          { text: '4', correct: false },
+          { text: '6', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Word Problem: Ravi has 12 balls. He gets 5 more. How many balls does he have in total? ⚽',
+        options: [
+          { text: '17 balls', correct: true },
+          { text: '15 balls', correct: false },
+          { text: '12 balls', correct: false }
+        ]
+      }
     ]
   },
   {
     id: 3,
-    title: 'Numbers 501–999 🔢',
-    titleEn: 'Numbers 501–999 (intro)',
-    mascot: '🔢',
-    color: 'from-blue-400 to-indigo-500',
-    borderColor: 'border-blue-300',
+    title: 'Subtraction Mission ➖',
+    titleEn: 'Subtraction Mission',
+    mascot: '➖',
+    color: 'from-orange-400 to-amber-500',
+    borderColor: 'border-orange-300',
     questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Big Numbers: 501 to 999 🔢', mascot: '🔢', explanation: 'We are reaching the biggest 3-digit numbers! 600 is Six Hundred, 700 is Seven Hundred, 800 is Eight Hundred, 900 is Nine Hundred!', explanationTa: '999 வரையிலான பெரிய எண்கள்! 600, 700, 800, 900.', examples: ['555 = 500 + 55', '720 = 700 + 20', '888 = 800 + 88', '999 = Nine Hundred Ninety-Nine'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match values! 🔗', pairs: [{ left: '600', right: 'Six hundred' }, { left: '850', right: 'Eight hundred fifty' }, { left: '999', right: 'Nine hundred ninety-nine' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Complete the sequence! 🔢', sentence: '599, 600, 601, ___', options: [{ text: '602', correct: true }, { text: '605', correct: false }, { text: '598', correct: false }] },
-      { type: 'grid_search' as any, instruction: 'Find all numbers greater than 800! 🔍', gridItems: [{ text: '850', correct: true, emoji: '✨' }, { text: '920', correct: true, emoji: '🌟' }, { text: '805', correct: true, emoji: '💫' }, { text: '799', correct: false, emoji: '❌' }, { text: '500', correct: false, emoji: '❌' }], options: [] }
+      {
+        type: 'choice' as any,
+        instruction: 'Take Away: You have 10 toys. Remove 4 toys. How many are left? 🧸',
+        options: [
+          { text: '6 toys', correct: true },
+          { text: '4 toys', correct: false },
+          { text: '5 toys', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Subtraction Builder: Solve 45 - 12! ➖',
+        options: [
+          { text: '33', correct: true },
+          { text: '35', correct: false },
+          { text: '23', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Borrowing Subtraction: Solve 52 - 28! 💥',
+        options: [
+          { text: '24', correct: true },
+          { text: '34', correct: false },
+          { text: '26', correct: false }
+        ]
+      },
+      {
+        type: 'garden_repair' as any,
+        instruction: 'Missing Number: Find the missing subtractor! 🧩',
+        sentence: '18 - _____ = 10',
+        options: [
+          { text: '8', correct: true },
+          { text: '10', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Story Problem: There are 15 birds on a tree. 5 birds fly away. How many birds are left on the tree? 🐦',
+        options: [
+          { text: '10 birds', correct: true },
+          { text: '8 birds', correct: false },
+          { text: '12 birds', correct: false }
+        ]
+      }
     ]
   },
   {
     id: 4,
-    title: 'Place Value 🏠',
-    titleEn: 'Place Value (Ones, Tens, Hundreds)',
-    mascot: '🏠',
-    color: 'from-blue-400 to-indigo-500',
-    borderColor: 'border-blue-300',
+    title: 'Multiplication + Patterns ✖️',
+    titleEn: 'Multiplication + Patterns',
+    mascot: '✖️',
+    color: 'from-pink-400 to-rose-500',
+    borderColor: 'border-pink-300',
     questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Place Value Houses 🏠', mascot: '🏠', explanation: 'Every digit in a number has a home! In 345, 3 is in Hundreds house 🏠, 4 is in Tens house 🏠, and 5 is in Ones house 🏠!', explanationTa: 'இட மதிப்பு: 100கள், 10கள், 1கள்!', examples: ['345 = 3 Hundreds, 4 Tens, 5 Ones', '123 = 1 Hundred, 2 Tens, 3 Ones', '708 = 7 Hundreds, 0 Tens, 8 Ones'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Connect place value to digit! 🔗', pairs: [{ left: '4 in 452', right: '4 Hundreds' }, { left: '5 in 452', right: '5 Tens' }, { left: '2 in 452', right: '2 Ones' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'How many Hundreds are in 789? 🏠', sentence: 'There are ___ Hundreds in 789.', options: [{ text: '7', correct: true }, { text: '8', correct: false }, { text: '9', correct: false }] },
-      { type: 'grid_search' as any, instruction: 'Find all numbers with 5 in the Tens place! 🔍', gridItems: [{ text: '152', correct: true, emoji: '✨' }, { text: '258', correct: true, emoji: '🌟' }, { text: '50', correct: true, emoji: '💫' }, { text: '512', correct: false, emoji: '❌' }, { text: '305', correct: false, emoji: '❌' }], options: [] }
+      {
+        type: 'choice' as any,
+        instruction: 'Group Builder: What is the total of 3 groups with 2 objects in each group? 📦',
+        options: [
+          { text: '6 objects', correct: true },
+          { text: '5 objects', correct: false },
+          { text: '8 objects', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Repeated Addition: Convert 2 + 2 + 2 into a multiplication group sentence! 🔄',
+        options: [
+          { text: '3 × 2', correct: true },
+          { text: '2 × 2', correct: false },
+          { text: '3 × 3', correct: false }
+        ]
+      },
+      {
+        type: 'garden_repair' as any,
+        instruction: 'Skip Counting: Complete the skip counting pattern! 🦘',
+        sentence: '5, 10, 15, _____',
+        options: [
+          { text: '20', correct: true },
+          { text: '25', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Table Builder: Solve 2 × 3! ✖️',
+        options: [
+          { text: '6', correct: true },
+          { text: '5', correct: false },
+          { text: '8', correct: false }
+        ]
+      },
+      {
+        type: 'garden_repair' as any,
+        instruction: 'Number Pattern: Complete the pattern! 🧠',
+        sentence: '2, 4, 6, _____',
+        options: [
+          { text: '8', correct: true },
+          { text: '10', correct: false }
+        ]
+      }
     ]
   },
   {
     id: 5,
-    title: 'Expanded Form 📂',
-    titleEn: 'Expanded Form',
-    mascot: '📂',
-    color: 'from-blue-400 to-indigo-500',
-    borderColor: 'border-blue-300',
+    title: 'Shapes + Measurement 📏',
+    titleEn: 'Shapes + Measurement',
+    mascot: '📏',
+    color: 'from-amber-400 to-yellow-500',
+    borderColor: 'border-amber-300',
     questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Expanded Form 📂', mascot: '📂', explanation: 'Expanded form shows the value of each digit added together! For example, 256 = 200 + 50 + 6!', explanationTa: 'விரிவாக்கப்பட்ட வடிவம்: எண்களின் மதிப்பை பிரித்து எழுதுவது!', examples: ['123 = 100 + 20 + 3', '405 = 400 + 0 + 5', '990 = 900 + 90 + 0', '350 = 300 + 50 + 0'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match standard form to expanded form! 🔗', pairs: [{ left: '158', right: '100 + 50 + 8' }, { left: '206', right: '200 + 0 + 6' }, { left: '340', right: '300 + 40 + 0' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Complete the expanded form! 📂', sentence: '456 = 400 + ___ + 6', options: [{ text: '50', correct: true }, { text: '5', correct: false }, { text: '500', correct: false }] },
-      { type: 'sentence_train' as any, instruction: 'Assemble the expanded form of 325! 🚂', words: ['20', '300', '5', '+', '+'], correctSentence: '300 + 20 + 5', options: [] }
+      {
+        type: 'choice' as any,
+        instruction: 'Shape Builder: What object can you build using a circle, a square, and a triangle? 🏠',
+        options: [
+          { text: 'A Toy House 🏠', correct: true },
+          { text: 'A Ball ⚽', correct: false }
+        ]
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Shape Sort: Connect the shape to its dimension! 📦',
+        pairs: [
+          { left: 'Circle', right: 'Circle ➔ 2D Shape' },
+          { left: 'Sphere', right: 'Sphere ➔ 3D Shape' },
+          { left: 'Triangle', right: 'Triangle ➔ 2D Shape' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Measurement Match: Connect objects to their measurement types! ⚖️',
+        pairs: [
+          { left: 'Elephant', right: 'Heavy object' },
+          { left: 'Feather', right: 'Light object' },
+          { left: 'Ruler', right: 'Long object' }
+        ],
+        options: []
+      },
+      {
+        type: 'order' as any,
+        instruction: 'Time Routine: Sort the daily intervals in correct order! 🌅',
+        options: [
+          { text: 'Morning ➔ Afternoon ➔ Night', correct: true },
+          { text: 'Night ➔ Afternoon ➔ Morning', correct: false },
+          { text: 'Afternoon ➔ Morning ➔ Night', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Clock Reading: What time does the clock show when the small hand points to 3 and the big hand points to 12? 🕒',
+        options: [
+          { text: "3 o'clock 🕒", correct: true },
+          { text: "12 o'clock 🕛", correct: false },
+          { text: "6 o'clock 🕕", correct: false }
+        ]
+      }
     ]
   },
-
-  // --- CHAPTER 2: NUMBER COMPARISON & ORDERING 🏆 ---
   {
     id: 6,
-    title: 'Ascending Order 📈',
-    titleEn: 'Ascending Order',
-    mascot: '📈',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Ascending Order 📈', mascot: '📈', explanation: 'Ascending order means arranging numbers from SMALLEST to BIGGEST! Like going up the stairs: 12 ➔ 25 ➔ 58.', explanationTa: 'ஏறுவரிசை: எண்களை சிறியதில் இருந்து பெரியதாக அடுக்குவது! 📈', examples: ['5, 9, 12', '101, 150, 200', '300, 310, 320'], options: [] },
-      { type: 'sentence_train' as any, instruction: 'Arrange smallest to biggest: 58, 12, 35 🚂', words: ['58', '35', '12', '➔', '➔'], correctSentence: '12 ➔ 35 ➔ 58', options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match the sequences! 🔗', pairs: [{ left: '10, 20, 30', right: 'Ascending' }, { left: '50, 40, 30', right: 'Not Ascending' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Which number fits in this ascending line? 📈', sentence: '15 ➔ ___ ➔ 45', options: [{ text: '30', correct: true }, { text: '10', correct: false }, { text: '50', correct: false }] }
-    ]
-  },
-  {
-    id: 7,
-    title: 'Descending Order 📉',
-    titleEn: 'Descending Order',
-    mascot: '📉',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Descending Order 📉', mascot: '📉', explanation: 'Descending order means arranging numbers from BIGGEST to SMALLEST! Like coming down the stairs: 58 ➔ 35 ➔ 12.', explanationTa: 'இறங்குவரிசை: எண்களை பெரியதில் இருந்து சிறியதாக அடுக்குவது! 📉', examples: ['12, 9, 5', '200, 150, 101', '320, 310, 300'], options: [] },
-      { type: 'sentence_train' as any, instruction: 'Arrange biggest to smallest: 15, 95, 45 🚂', words: ['95', '15', '45', '➔', '➔'], correctSentence: '95 ➔ 45 ➔ 15', options: [] },
-      { type: 'garden_repair' as any, instruction: 'Which number fits in this descending line? 📉', sentence: '90 ➔ ___ ➔ 50', options: [{ text: '70', correct: true }, { text: '95', correct: false }, { text: '40', correct: false }] }
-    ]
-  },
-  {
-    id: 8,
-    title: 'Compare 2 Digits ⚖️',
-    titleEn: 'Compare 2 digit numbers',
-    mascot: '⚖️',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Comparing 2-Digit Numbers ⚖️', mascot: '⚖️', explanation: 'We use signs to compare numbers! Greater Than (>), Less Than (<), or Equal To (=). Look at the tens digit first!', explanationTa: 'இரண்டு இலக்க எண்களை ஒப்பிடுதல்: >, <, = குறியீடுகள்.', examples: ['45 > 23 (4 tens > 2 tens)', '12 < 18', '55 = 55'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Connect equations to signs! 🔗', pairs: [{ left: '45 ___ 23', right: '>' }, { left: '15 ___ 30', right: '<' }, { left: '99 ___ 99', right: '=' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Which sign makes this true? ⚖️', sentence: '78 ___ 87', options: [{ text: '<', correct: true }, { text: '>', correct: false }, { text: '=', correct: false }] }
-    ]
-  },
-  {
-    id: 9,
-    title: 'Compare 3 Digits ⚖️',
-    titleEn: 'Compare 3 digit numbers',
-    mascot: '⚖️',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Comparing 3-Digit Numbers ⚖️', mascot: '⚖️', explanation: 'Compare Hundreds first! If they are the same, check Tens, then Ones!', explanationTa: 'மூன்று இலக்க எண்களை ஒப்பிடுதல்! முதலில் 100கள் இடத்தை பார்க்கவும்.', examples: ['350 > 299 (3 Hundreds > 2 Hundreds)', '450 < 480 (5 Tens < 8 Tens)', '601 = 601'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Connect equations to signs! 🔗', pairs: [{ left: '500 ___ 499', right: '>' }, { left: '720 ___ 750', right: '<' }, { left: '888 ___ 888', right: '=' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Which sign is correct? ⚖️', sentence: '905 ___ 899', options: [{ text: '>', correct: true }, { text: '<', correct: false }, { text: '=', correct: false }] }
-    ]
-  },
-  {
-    id: 10,
-    title: 'Number Sequence 🧩',
-    titleEn: 'Number Sequence',
-    mascot: '🧩',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Number Sequences 🧩', mascot: '🧩', explanation: 'A number sequence follows a skip pattern! It can skip by 2s, 5s, or 10s.', explanationTa: 'எண் தொடர்கள்: குறிப்பிட்ட இடைவெளியில் எண்கள் வரும்.', examples: ['2, 4, 6, 8 (Skip by 2)', '5, 10, 15, 20 (Skip by 5)', '10, 20, 30, 40 (Skip by 10)'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match the skips! 🔗', pairs: [{ left: '10, 20, 30', right: 'Skip by 10' }, { left: '5, 10, 15', right: 'Skip by 5' }, { left: '2, 4, 6', right: 'Skip by 2' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Complete the skip sequence! 🧩', sentence: '110, 120, 130, ___', options: [{ text: '140', correct: true }, { text: '135', correct: false }, { text: '150', correct: false }] }
-    ]
-  },
-
-  // --- CHAPTER 3: ADDITION MASTER ➕ ---
-  {
-    id: 11,
-    title: 'No Carry Addition ➕',
-    titleEn: 'Addition without carry',
-    mascot: '➕',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Addition without Carry ➕', mascot: '➕', explanation: 'Add ones with ones, and tens with tens! E.g., 23 + 12 = 35. No regrouping needed!', explanationTa: 'மீதி இல்லாத கூட்டல்! 1களை 1களுடனும், 10களை 10களுடனும் கூட்டுங்கள்.', examples: ['23 + 12 = 35', '41 + 15 = 56', '50 + 23 = 73'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match equations to sums! 🔗', pairs: [{ left: '21 + 13', right: '34' }, { left: '42 + 25', right: '67' }, { left: '50 + 13', right: '63' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Add: 34 + 12 = ___', sentence: '34 + 12 = ___', options: [{ text: '46', correct: true }, { text: '56', correct: false }, { text: '48', correct: false }] }
-    ]
-  },
-  {
-    id: 12,
-    title: 'Addition with Carry ➕',
-    titleEn: 'Addition with carry',
-    mascot: '➕',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Addition with Carry ➕', mascot: '➕', explanation: 'When Ones add up to 10 or more, carry the Tens over to the Tens house! E.g. 15 + 17 = 32.', explanationTa: 'மீதி உள்ள கூட்டல்! 1கள் கூட்டும்போது 10க்கு மேல் வந்தால், மீதியை 10கள் வீட்டிற்கு கொண்டு செல்லுங்கள்.', examples: ['18 + 14 = 32 (8+4=12 Ones -> carry 1 to Tens)', '25 + 17 = 42', '36 + 28 = 64'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match the carry sums! 🔗', pairs: [{ left: '19 + 15', right: '34' }, { left: '28 + 14', right: '42' }, { left: '47 + 18', right: '65' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Solve: 25 + 17 = ___', sentence: '25 + 17 = ___', options: [{ text: '42', correct: true }, { text: '32', correct: false }, { text: '45', correct: false }] }
-    ]
-  },
-  {
-    id: 13,
-    title: '2-Digit Addition ➕',
-    titleEn: 'Add 2 digit numbers',
-    mascot: '➕',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Adding 2-Digit Numbers ➕', mascot: '➕', explanation: 'Add Ones first, then Tens. Make sure you align them correctly in column form!', explanationTa: 'இரண்டு இலக்க எண்களைக் கூட்டுதல். 1கள், பிறகு 10கள்.', examples: ['34 + 21 = 55', '56 + 18 = 74', '70 + 29 = 99'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match double-digit additions! 🔗', pairs: [{ left: '30 + 45', right: '75' }, { left: '55 + 22', right: '77' }, { left: '68 + 15', right: '83' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Find the total sum! ➕', sentence: '58 + 24 = ___', options: [{ text: '82', correct: true }, { text: '72', correct: false }, { text: '80', correct: false }] }
-    ]
-  },
-  {
-    id: 14,
-    title: 'Add 3 Numbers ➕',
-    titleEn: 'Add 3 digit numbers (basic)',
-    mascot: '➕',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Adding Three Numbers ➕', mascot: '➕', explanation: 'Add the first two numbers, then add the third number to their sum! E.g., 2 + 5 + 3 = 7 + 3 = 10!', explanationTa: 'மூன்று எண்களைக் கூட்டுதல்! முதல் இரண்டு எண்களைக் கூட்டி, அதனுடன் மூன்றாவது எண்ணைக் கூட்டவும்.', examples: ['3 + 4 + 2 = 9', '5 + 5 + 5 = 15', '10 + 20 + 30 = 60'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match triple sums! 🔗', pairs: [{ left: '4 + 6 + 2', right: '12' }, { left: '5 + 5 + 8', right: '18' }, { left: '10 + 10 + 10', right: '30' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Solve: 5 + 8 + 2 = ___', sentence: '5 + 8 + 2 = ___', options: [{ text: '15', correct: true }, { text: '13', correct: false }, { text: '18', correct: false }] }
-    ]
-  },
-  {
-    id: 15,
-    title: 'Addition Formats 📐',
-    titleEn: 'Horizontal & Vertical addition',
-    mascot: '📐',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Addition Formats 📐', mascot: '📐', explanation: 'Addition can be written in two ways! Horizontal (flat: 5 + 3 = 8) or Vertical (stacked vertically)! Both give the same result.', explanationTa: 'கூட்டல் வடிவங்கள்: படுக்கைவசமாக அல்லது செங்குத்தாக கூட்டுவது.', examples: ['Horizontal: 12 + 5 = 17', 'Vertical: 12 over 5 = 17'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Connect format matches! 🔗', pairs: [{ left: '12 + 8 = 20', right: 'Horizontal' }, { left: 'Vertical 15 + 5', right: '20' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Solve vertical addition: 24 + 13 = ___', sentence: 'Vertical: 24 + 13 = ___', options: [{ text: '37', correct: true }, { text: '27', correct: false }, { text: '47', correct: false }] }
-    ]
-  },
-  {
-    id: 16,
-    title: 'Addition Stories 📖',
-    titleEn: 'Addition word problems',
-    mascot: '📖',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Addition Word Problems 📖', mascot: '📖', explanation: 'Look for keyword clues like "in total", "all together", "sum", "plus", or "more"! E.g. 5 apples and 3 apples in total means 5 + 3 = 8.', explanationTa: 'கூட்டல் கணக்கு கதைகள்! "மொத்தம்", "ஒன்றாக" போன்ற வார்த்தைகளைக் கவனியுங்கள்.', examples: ['Rahul has 4 toy cars. He buys 2 more. Total = 4 + 2 = 6.', '3 birds on branch. 5 more fly in. Total = 3 + 5 = 8.'], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Sita has 12 balloons. Ram has 15 balloons. How many in total?', sentence: '12 + 15 = ___ balloons.', options: [{ text: '27', correct: true }, { text: '25', correct: false }, { text: '30', correct: false }] },
-      { type: 'garden_repair' as any, instruction: 'There are 20 boys and 15 girls in a class. What is the total strength?', sentence: 'Total students = ___', options: [{ text: '35', correct: true }, { text: '25', correct: false }, { text: '40', correct: false }] }
-    ]
-  },
-
-  // --- CHAPTER 4: SUBTRACTION HERO ➖ ---
-  {
-    id: 17,
-    title: 'No Borrow Subtraction ➖',
-    titleEn: 'Subtraction without borrowing',
-    mascot: '➖',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Subtraction without Borrowing ➖', mascot: '➖', explanation: 'Subtract ones from ones, and tens from tens! Simple subtraction without borrowing. E.g. 35 - 12 = 23.', explanationTa: 'கடன் வாங்காத கழித்தல்! 1களை 1களிலிருந்தும், 10களை 10களிலிருந்தும் கழியுங்கள்.', examples: ['35 - 12 = 23', '48 - 25 = 23', '90 - 40 = 50'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match equations to differences! 🔗', pairs: [{ left: '25 - 12', right: '13' }, { left: '48 - 20', right: '28' }, { left: '55 - 55', right: '0' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Solve: 45 - 23 = ___', sentence: '45 - 23 = ___', options: [{ text: '22', correct: true }, { text: '12', correct: false }, { text: '32', correct: false }] }
-    ]
-  },
-  {
-    id: 18,
-    title: 'Borrow Subtraction ➖',
-    titleEn: 'Subtraction with borrowing intro',
-    mascot: '➖',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Borrowing Introduction ➖', mascot: '➖', explanation: 'If the top Ones digit is smaller than the bottom, borrow 1 Ten from the Tens house! E.g. 32 - 17 = 15.', explanationTa: 'கடன் கழித்தல் அறிமுகம்! மேல் எண் சிறியதாக இருந்தால், 10கள் வீட்டிலிருந்து 1ஐ கடன் வாங்குங்கள்.', examples: ['32 - 17 = 15 (2 Ones borrowed 10 -> becomes 12 Ones)', '45 - 28 = 17', '50 - 15 = 35'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match borrowing differences! 🔗', pairs: [{ left: '30 - 15', right: '15' }, { left: '42 - 28', right: '14' }, { left: '60 - 25', right: '35' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Solve: 42 - 18 = ___', sentence: '42 - 18 = ___', options: [{ text: '24', correct: true }, { text: '34', correct: false }, { text: '26', correct: false }] }
-    ]
-  },
-  {
-    id: 19,
-    title: '2-Digit Subtraction ➖',
-    titleEn: '2 digit subtraction',
-    mascot: '➖',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: '2-Digit Subtraction ➖', mascot: '➖', explanation: 'Write numbers in columns, subtract Ones place, then Tens place. Don\'t forget to borrow if needed!', explanationTa: 'இரண்டு இலக்க கழித்தல் கணக்குகள்.', examples: ['54 - 23 = 31', '62 - 45 = 17', '99 - 50 = 49'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match double-digit subtractions! 🔗', pairs: [{ left: '95 - 40', right: '55' }, { left: '72 - 38', right: '34' }, { left: '80 - 12', right: '68' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Solve: 85 - 39 = ___', sentence: '85 - 39 = ___', options: [{ text: '46', correct: true }, { text: '56', correct: false }, { text: '48', correct: false }] }
-    ]
-  },
-  {
-    id: 20,
-    title: 'Missing Numbers 🔍',
-    titleEn: 'Missing number subtraction',
-    mascot: '🔍',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Finding Missing Numbers 🔍', mascot: '🔍', explanation: 'To find a missing number, subtract the difference from the starting number! E.g. 20 - ___ = 15. Think: 20 - 15 = 5!', explanationTa: 'விடுபட்ட கழித்தல் எண்களைக் கண்டறிதல்.', examples: ['10 - ___ = 7 (Missing is 3)', '25 - ___ = 20 (Missing is 5)', '50 - ___ = 30 (Missing is 20)'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match missing numbers! 🔗', pairs: [{ left: '15 - ___ = 10', right: '5' }, { left: '30 - ___ = 12', right: '18' }, { left: '100 - ___ = 60', right: '40' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Fill the blank: 45 - ___ = 35', sentence: '45 - ___ = 35', options: [{ text: '10', correct: true }, { text: '5', correct: false }, { text: '15', correct: false }] }
-    ]
-  },
-  {
-    id: 21,
-    title: 'Check Subtraction ✅',
-    titleEn: 'Checking subtraction',
-    mascot: '✅',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Check Subtraction with Addition ✅', mascot: '✅', explanation: 'You can check subtraction by adding the answer back! If 20 - 5 = 15, then 15 + 5 must equal 20!', explanationTa: 'கூட்டல் மூலம் கழித்தலைச் சரிபார்த்தல்! விடையையும் கழித்த எண்ணையும் கூட்டினால் முதல் எண் வர வேண்டும்.', examples: ['Check 15 - 5 = 10: 10 + 5 = 15 (Correct!)', 'Check 32 - 12 = 20: 20 + 12 = 32 (Correct!)'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Find the correct check equation! 🔗', pairs: [{ left: '30 - 10 = 20', right: '20 + 10 = 30' }, { left: '15 - 8 = 7', right: '7 + 8 = 15' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Which adds back to check 45 - 15 = 30?', sentence: 'Checking equation: ___ = 45', options: [{ text: '30 + 15', correct: true }, { text: '30 - 15', correct: false }, { text: '30 + 30', correct: false }] }
-    ]
-  },
-  {
-    id: 22,
-    title: 'Subtraction Stories 📖',
-    titleEn: 'Story problems',
-    mascot: '📖',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Subtraction Word Problems 📖', mascot: '📖', explanation: 'Look for keyword clues like "left", "remaining", "how many more", "take away", or "lost"! E.g. 10 birds, 3 fly away. Left = 10 - 3 = 7.', explanationTa: 'கழித்தல் கணக்கு கதைகள்! "மீதி", "போய்விட்டது" போன்ற வார்த்தைகளைக் கவனியுங்கள்.', examples: ['Ram had 15 sweets. He ate 5. Left = 15 - 5 = 10.', 'A tree has 12 apples. 4 fall down. Remaining = 12 - 4 = 8.'], options: [] },
-      { type: 'garden_repair' as any, instruction: 'A baker made 30 cupcakes. He sold 12. How many are left?', sentence: '30 - 12 = ___ cupcakes.', options: [{ text: '18', correct: true }, { text: '28', correct: false }, { text: '15', correct: false }] },
-      { type: 'garden_repair' as any, instruction: 'There were 25 frogs in a pond. 10 jumped out. How many remaining?', sentence: 'Remaining frogs = ___', options: [{ text: '15', correct: true }, { text: '5', correct: false }, { text: '20', correct: false }] }
-    ]
-  },
-
-  // --- CHAPTER 5: MULTIPLICATION INTRODUCTION ✖️ ---
-  {
-    id: 23,
-    title: 'Equal Groups 📦',
-    titleEn: 'Equal groups concept',
-    mascot: '📦',
-    color: 'from-violet-400 to-purple-500',
-    borderColor: 'border-violet-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Equal Groups Concept 📦', mascot: '📦', explanation: 'Multiplication is about equal groups! 3 groups of 2 cookies 🍪 means 3 groups with exactly 2 in each group. In total, that is 6 cookies!', explanationTa: 'சம குழுக்கள்! பெருக்கல் என்பது சம அளவுள்ள குழுக்களைக் கூட்டுவதாகும்.', examples: ['3 groups of 2 = 6', '2 groups of 5 = 10', '4 groups of 3 = 12'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match groups to total! 🔗', pairs: [{ left: '2 groups of 3', right: '6' }, { left: '3 groups of 4', right: '12' }, { left: '5 groups of 2', right: '10' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'If you have 4 boxes with 2 toys in each, how many toys?', sentence: '4 groups of 2 = ___ toys.', options: [{ text: '8', correct: true }, { text: '6', correct: false }, { text: '10', correct: false }] }
-    ]
-  },
-  {
-    id: 24,
-    title: 'Repeated Addition ➕',
-    titleEn: 'Repeated addition',
-    mascot: '➕',
-    color: 'from-violet-400 to-purple-500',
-    borderColor: 'border-violet-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Repeated Addition ➕', mascot: '➕', explanation: 'Multiplication is adding the same number repeatedly! Adding 2 four times: 2 + 2 + 2 + 2 = 8. This is written as 4 × 2 = 8!', explanationTa: 'தொடர் கூட்டல்! ஒரே எண்ணை மீண்டும் மீண்டும் கூட்டுவது பெருக்கலாகும்.', examples: ['3 + 3 = 2 × 3 = 6', '5 + 5 + 5 = 3 × 5 = 15', '10 + 10 = 2 × 10 = 20'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match addition to multiplication! 🔗', pairs: [{ left: '2 + 2 + 2', right: '3 × 2' }, { left: '5 + 5 + 5 + 5', right: '4 × 5' }, { left: '10 + 10', right: '2 × 10' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Complete equation: 3 + 3 + 3 + 3 = ___ × 3', sentence: 'Repeated: ___ × 3', options: [{ text: '4', correct: true }, { text: '3', correct: false }, { text: '5', correct: false }] }
-    ]
-  },
-  {
-    id: 25,
-    title: 'Skip Counting 🏃',
-    titleEn: 'Skip counting as multiplication',
-    mascot: '🏃',
-    color: 'from-violet-400 to-purple-500',
-    borderColor: 'border-violet-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Skip Counting 🏃', mascot: '🏃', explanation: 'Skip counting is jumps on the number line! Jumping by 5s three times gets you to 15. This is 3 × 5 = 15!', explanationTa: 'தாவி எண்ணுதல் பெருக்கல் ஆகும்! 5களாக தாவி எண்ணிப் பாருங்கள்.', examples: ['Jump by 2: 2, 4, 6, 8 (4 × 2 = 8)', 'Jump by 5: 5, 10, 15 (3 × 5 = 15)', 'Jump by 10: 10, 20 (2 × 10 = 20)'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Connect jumps to product! 🔗', pairs: [{ left: '3 jumps of 2', right: '6' }, { left: '2 jumps of 5', right: '10' }, { left: '4 jumps of 10', right: '40' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Count: 5, 10, 15, ___', sentence: 'Next in 5s skip = ___', options: [{ text: '20', correct: true }, { text: '25', correct: false }, { text: '30', correct: false }] }
-    ]
-  },
-  {
-    id: 26,
-    title: 'Tables 2, 5, 10 🔢',
-    titleEn: 'Tables 2,5,10',
-    mascot: '🔢',
-    color: 'from-violet-400 to-purple-500',
-    borderColor: 'border-violet-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Tables 2, 5, and 10 🔢', mascot: '🔢', explanation: 'Mastering multiplication tables helps us count super fast! Let us practice 2 times, 5 times, and 10 times tables!', explanationTa: '2, 5, 10 பெருக்கல் வாய்ப்பாடுகள்.', examples: ['2 × 4 = 8', '5 × 3 = 15', '10 × 5 = 50', '2 × 8 = 16'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match table answers! 🔗', pairs: [{ left: '2 × 5', right: '10' }, { left: '5 × 4', right: '20' }, { left: '10 × 3', right: '30' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Solve: 5 × 5 = ___', sentence: '5 × 5 = ___', options: [{ text: '25', correct: true }, { text: '20', correct: false }, { text: '30', correct: false }] }
-    ]
-  },
-
-  // --- CHAPTER 6: SHAPES & GEOMETRY 🟦 ---
-  {
-    id: 27,
-    title: '3D Shapes Intro 📦',
-    titleEn: '3D Shapes intro',
-    mascot: '📦',
-    color: 'from-fuchsia-400 to-pink-500',
-    borderColor: 'border-fuchsia-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: '3D Shapes Around Us 📦', mascot: '📦', explanation: 'Flat shapes are 2D, but solid shapes you can hold are 3D! Meet Sphere (ball ⚽), Cube (dice 🎲), and Cylinder (can 🥫)!', explanationTa: 'முப்பரிமாண வடிவங்கள் (3D)! பந்து, பகடை, உருளை.', examples: ['Sphere = Ball ⚽', 'Cube = Dice 🎲', 'Cylinder = Soda Can 🥫', 'Cone = Party Hat 🥳'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match shape to object! 🔗', pairs: [{ left: 'Sphere ⚽', right: 'ball' }, { left: 'Cube 🎲', right: 'dice' }, { left: 'Cone 🥳', right: 'party hat' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'What shape is a wooden block? 📦', sentence: 'A block is shaped like a ___.', options: [{ text: 'Cube 🎲', correct: true }, { text: 'Sphere ⚽', correct: false }, { text: 'Cylinder 🥫', correct: false }] }
-    ]
-  },
-  {
-    id: 28,
-    title: 'Faces & Edges 📐',
-    titleEn: 'Faces & edges',
-    mascot: '📐',
-    color: 'from-fuchsia-400 to-pink-500',
-    borderColor: 'border-fuchsia-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Faces, Edges, and Corners 📐', mascot: '📐', explanation: 'Faces are the flat parts 📄. Edges are the straight lines where faces meet 📏. Corners (Vertices) are the sharp points 📍!', explanationTa: 'வடிவியல் பாகங்கள்: முகங்கள், விளிம்புகள், முனைகள்.', examples: ['Cube has 6 flat faces, 12 edges, 8 corners', 'Sphere has 1 curved face, 0 edges, 0 corners'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match shape details! 🔗', pairs: [{ left: 'Cube', right: '6 flat faces' }, { left: 'Sphere', right: '0 flat faces' }, { left: 'Cone', right: '1 point corner' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'How many flat faces does a dice have? 🎲', sentence: 'A dice has ___ faces.', options: [{ text: '6', correct: true }, { text: '8', correct: false }, { text: '4', correct: false }] }
-    ]
-  },
-  {
-    id: 29,
-    title: 'Lines & Curves 〰️',
-    titleEn: 'Lines and curves',
-    mascot: '〰️',
-    color: 'from-fuchsia-400 to-pink-500',
-    borderColor: 'border-fuchsia-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Lines and Curves 〰️', mascot: '〰️', explanation: 'Lines can be Straight (vertical │, horizontal ─, slanting ╱) or Curved (wiggly 〰️ or circular ◯)!', explanationTa: 'கோடுகள் மற்றும் வளைவுகள்: நேர்க்கோடுகள் மற்றும் வளைகோடுகள்.', examples: ['Straight: Ruler, Pencil, Table edge', 'Curved: Ball, Cloud, Rainbow'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Categorize line types! 🔗', pairs: [{ left: 'Pencil ✏️', right: 'Straight line' }, { left: 'Coin 🪙', right: 'Curved line' }, { left: 'Sun ☀️', right: 'Curved outline' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'A triangle is made of only ___ lines.', sentence: 'Triangle outline = ___ lines.', options: [{ text: 'straight', correct: true }, { text: 'curved', correct: false }] }
-    ]
-  },
-  {
-    id: 30,
-    title: 'Symmetry 🪞',
-    titleEn: 'Symmetry',
-    mascot: '🪞',
-    color: 'from-fuchsia-400 to-pink-500',
-    borderColor: 'border-fuchsia-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Symmetry (Mirror Half) 🪞', mascot: '🪞', explanation: 'Symmetry means a line cuts a shape into two identical mirror halves! Like a butterfly 🦋, a heart ❤️, or a star ⭐️.', explanationTa: 'சமச்சீர்மை: ஒரு வடிவத்தை இரு சம பாகங்களாகப் பிரிப்பது.', examples: ['Butterfly 🦋 is symmetrical', 'Letter A is symmetrical', 'Alphabet F is NOT symmetrical'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match symmetry type! 🔗', pairs: [{ left: 'Butterfly 🦋', right: 'Symmetrical' }, { left: 'Flag 🚩', right: 'Not Symmetrical' }, { left: 'Circle ◯', right: 'Symmetrical' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Is the letter "M" symmetrical? 🪞', sentence: 'Letter M is ___ Symmetrical.', options: [{ text: 'Yes', correct: true }, { text: 'No', correct: false }] }
-    ]
-  },
-  {
-    id: 31,
-    title: 'Patterns 🧩',
-    titleEn: 'Patterns',
-    mascot: '🧩',
-    color: 'from-fuchsia-400 to-pink-500',
-    borderColor: 'border-fuchsia-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Repeated Patterns 🧩', mascot: '🧩', explanation: 'A pattern repeats in order! E.g. Circle, Square, Circle, Square. What comes next? A Circle!', explanationTa: 'வடிவங்களின் தொடர் அமைப்புகள் (Patterns).', examples: ['◯, ⬜, ◯, ⬜ (Repeating pattern)', '🔺, 🔹, 🔺, 🔹, 🔺', '★, ◯, ★, ◯'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match pattern extensions! 🔗', pairs: [{ left: '🔴, 🔵, 🔴, 🔵, ___', right: '🔴' }, { left: '⬜, ⬜, ◯, ⬜, ⬜, ___', right: '◯' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Complete pattern: 🔺, ⬜, 🔺, ⬜, ___', sentence: '🔺, ⬜, 🔺, ⬜, ___', options: [{ text: '🔺', correct: true }, { text: '⬜', correct: false }, { text: '◯', correct: false }] }
-    ]
-  },
-
-  // --- CHAPTER 7: MEASUREMENT PRO 📏 ---
-  {
-    id: 32,
-    title: 'Measuring Length 📏',
-    titleEn: 'Length measurement using units',
-    mascot: '📏',
-    color: 'from-sky-400 to-blue-500',
-    borderColor: 'border-sky-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Measuring Length 📏', mascot: '📏', explanation: 'We can measure length using non-standard units like Handspans 🖐️, Footsteps 👣, or paperclips 📎!', explanationTa: 'நீளத்தை அளவிடுதல்! கையின் ஜண், காலடிகள்.', examples: ['Desk = 5 Handspans 🖐️', 'Room width = 12 Footsteps 👣', 'Pencil = 4 Paperclips 📎'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match measuring tools! 🔗', pairs: [{ left: '🖐️', right: 'Handspan' }, { left: '👣', right: 'Footstep' }, { left: '📎', right: 'Paperclip' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'If a pen is 5 paperclips long, and a pencil is 8, which is longer?', sentence: 'The ___ is longer.', options: [{ text: 'pencil', correct: true }, { text: 'pen', correct: false }] }
-    ]
-  },
-  {
-    id: 33,
-    title: 'Compare Lengths 📏',
-    titleEn: 'Compare lengths',
-    mascot: '📏',
-    color: 'from-sky-400 to-blue-500',
-    borderColor: 'border-sky-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Comparing Lengths 📏', mascot: '📏', explanation: 'We use words like Tallest/Shortest or Longest/Shortest to compare! A giraffe 🦒 is tall, a rabbit 🐰 is short.', explanationTa: 'நீளங்களை ஒப்பிடுதல்! உயரமான - குட்டையான, நீளமான - குட்டையான.', examples: ['Giraffe = Tall 🦒', 'Rabbit = Short 🐰', 'Train = Long 🚂', 'Pencil = Short ✏️'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match heights! 🔗', pairs: [{ left: 'Giraffe 🦒', right: 'Tallest' }, { left: 'Cat 🐈', right: 'Shortest' }, { left: 'Ladder 🪜', right: 'Tall' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'A snake is ___ than an earthworm.', sentence: 'Snake is ___ than worm.', options: [{ text: 'longer', correct: true }, { text: 'shorter', correct: false }] }
-    ]
-  },
-  {
-    id: 34,
-    title: 'Weight: Heavy & Light ⚖️',
-    titleEn: 'Weight measurement',
-    mascot: '⚖️',
-    color: 'from-sky-400 to-blue-500',
-    borderColor: 'border-sky-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Weight: Heavy and Light ⚖️', mascot: '⚖️', explanation: 'Weight tells us how heavy or light an object is! E.g. An elephant 🐘 is heavy, but a feather 🪶 is light!', explanationTa: 'எடை அளவிடுதல்: கனமான - லேசான.', examples: ['Heavy = Elephant 🐘', 'Light = Feather 🪶', 'Heavy = Pumpkin 🎃', 'Light = Apple 🍎'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Categorize weights! 🔗', pairs: [{ left: 'Elephant 🐘', right: 'Heaviest' }, { left: 'Watermelon 🍉', right: 'Heavy' }, { left: 'Feather 🪶', right: 'Light' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'A feather is ___ than a book.', sentence: 'Feather is ___ than book.', options: [{ text: 'lighter', correct: true }, { text: 'heavier', correct: false }] }
-    ]
-  },
-  {
-    id: 35,
-    title: 'Capacity: Volume 🥛',
-    titleEn: 'Capacity',
-    mascot: '🥛',
-    color: 'from-sky-400 to-blue-500',
-    borderColor: 'border-sky-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Capacity (Liquid Volume) 🥛', mascot: '🥛', explanation: 'Capacity is how much liquid a container can hold! A big bucket 🪣 holds more water than a small cup 🥛.', explanationTa: 'கொள்ளளவு (திரவ அளவு)! வாளி அதிக தண்ணீர் பிடிக்கும்.', examples: ['Holds More = Bucket 🪣', 'Holds Less = Cup 🥛', 'Holds More = Jug 🏺', 'Holds Less = Spoon 🥄'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Compare capacities! 🔗', pairs: [{ left: 'Bathtub 🛁', right: 'Holds Most' }, { left: 'Jug 🏺', right: 'Holds More' }, { left: 'Spoon 🥄', right: 'Holds Least' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'A milk bottle holds ___ than a glass.', sentence: 'Bottle holds ___ than glass.', options: [{ text: 'more', correct: true }, { text: 'less', correct: false }] }
-    ]
-  },
-  {
-    id: 36,
-    title: 'Temperature Intro 🌡️',
-    titleEn: 'Temperature intro',
-    mascot: '🌡️',
-    color: 'from-sky-400 to-blue-500',
-    borderColor: 'border-sky-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Hot and Cold 🌡️', mascot: '🌡️', explanation: 'Temperature tells us how hot or cold something is! The sun ☀️ and fire 🔥 are hot. Ice 🧊 and snow ❄️ are cold.', explanationTa: 'வெப்பநிலை அறிமுகம்: சூடான - குளிர்ந்த.', examples: ['Hot = Hot Tea ☕', 'Cold = Ice Cream 🍦', 'Hot = Sun ☀️', 'Cold = Snowman ⛄'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match temperature! 🔗', pairs: [{ left: 'Fire 🔥', right: 'Hottest' }, { left: 'Soup 🍲', right: 'Hot' }, { left: 'Ice Cream 🍦', right: 'Cold' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Hot soup is ___ in temperature.', sentence: 'Soup is ___.', options: [{ text: 'hot 🍲', correct: true }, { text: 'cold ❄️', correct: false }] }
-    ]
-  },
-
-  // --- CHAPTER 8: TIME & MONEY EXPERT ⏰💰 ---
-  {
-    id: 37,
-    title: 'Clock Hours ⏰',
-    titleEn: 'Reading clock hours',
-    mascot: '⏰',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'How to Read a Clock ⏰', mascot: '⏰', explanation: 'A clock tells time! The short hand shows HOURS, the long hand shows MINUTES. When long hand points to 12, it is o\'clock!', explanationTa: 'கடிகாரத்தில் மணி பார்த்தல்! சிறிய முள் மணியையும், பெரிய முள் நிமிடத்தையும் குறிக்கும்.', examples: ['Short hand at 3, Long at 12 = 3 o\'clock', 'Short hand at 9, Long at 12 = 9 o\'clock'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match hands to time! 🔗', pairs: [{ left: 'Short: 5, Long: 12', right: '5:00' }, { left: 'Short: 10, Long: 12', right: '10:00' }, { left: 'Short: 12, Long: 12', right: '12:00' }], options: [] },
-      { type: 'garden_repair' as any, clockTime: '4:00', instruction: 'What time is shown on the clock? ⏰', sentence: 'The time is ___ o\'clock.', options: [{ text: '4', correct: true }, { text: '12', correct: false }, { text: '6', correct: false }] }
-    ]
-  },
-  {
-    id: 38,
-    title: 'Half Past Time ⏰',
-    titleEn: 'Half past time',
-    mascot: '⏰',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Half Past (Half Hour) ⏰', mascot: '⏰', explanation: 'When the minute hand travels halfway around the clock and points to 6, it is HALF PAST! That means 30 minutes past the hour.', explanationTa: 'அரை மணி நேரம்! நிமிட முள் 6ஐக் காட்டும்போது அரை மணி நேரமாகும்.', examples: ['Short hand between 1 and 2, Long at 6 = Half past 1 (1:30)', 'Short hand between 4 and 5, Long at 6 = Half past 4 (4:30)'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match digital time! 🔗', pairs: [{ left: 'Half past 2', right: '2:30' }, { left: 'Half past 7', right: '7:30' }, { left: 'Half past 12', right: '12:30' }], options: [] },
-      { type: 'garden_repair' as any, clockTime: '8:30', instruction: 'What time is shown on the clock? ⏰', sentence: 'The time is ___', options: [{ text: '8:30', correct: true }, { text: '9:30', correct: false }, { text: '8:00', correct: false }] }
-    ]
-  },
-  {
-    id: 39,
-    title: 'Calendar: Days & Months 📅',
-    titleEn: 'Calendar',
-    mascot: '📅',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Days and Months 📅', mascot: '📅', explanation: 'A calendar helps us track time! There are 7 days in a week (starting with Monday) and 12 months in a year (starting with January)!', explanationTa: 'நாள்காட்டி: வாரத்தின் 7 நாட்கள் மற்றும் ஆண்டின் 12 மாதங்கள்.', examples: ['7 Days = Week', '12 Months = Year', 'First Day = Monday', 'First Month = January'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match days and months! 🔗', pairs: [{ left: 'Day after Monday', right: 'Tuesday' }, { left: 'Month after January', right: 'February' }, { left: 'Last day of week', right: 'Sunday' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'How many months are in a year? 📅', sentence: 'There are ___ months in a year.', options: [{ text: '12', correct: true }, { text: '7', correct: false }, { text: '10', correct: false }] }
-    ]
-  },
-  {
-    id: 40,
-    title: 'Money Addition 💰',
-    titleEn: 'Money addition',
+    title: 'Money + Data Logic 💰',
+    titleEn: 'Money + Data Logic',
     mascot: '💰',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
+    color: 'from-purple-400 to-violet-500',
+    borderColor: 'border-purple-300',
     questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Adding Coins & Bills 💰', mascot: '💰', explanation: 'We use money (rupees ₹) to buy things! Adding money is just like normal addition. E.g. ₹5 coin + ₹10 bill = ₹15 total!', explanationTa: 'பணத்தைக் கூட்டுதல்! நாணயங்கள் மற்றும் ரூபாய் நோட்டுகள்.', examples: ['₹1 + ₹2 = ₹3', '₹5 + ₹5 = ₹10', '₹10 + ₹10 = ₹20', '₹50 + ₹10 = ₹60'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Add these coins! 🔗', pairs: [{ left: '₹2 + ₹5', right: '₹7' }, { left: '₹10 + ₹10', right: '₹20' }, { left: '₹5 + ₹5 + ₹2', right: '₹12' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'You buy a toy for ₹10 and an eraser for ₹5. How much do you spend?', sentence: 'Total spent = ₹___', options: [{ text: '15', correct: true }, { text: '20', correct: false }, { text: '12', correct: false }] }
-    ]
-  },
-  {
-    id: 41,
-    title: 'Money Subtraction 💰',
-    titleEn: 'Money subtraction',
-    mascot: '💰',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Spending and Change 💰', mascot: '💰', explanation: 'When you buy things, you subtract from the money you had! E.g. If you give ₹20 for a ₹15 chocolate, you get ₹5 back as change!', explanationTa: 'மீதிப் பணம்! செலவு செய்த பின் மீதமுள்ள பணத்தைக் கணக்கிடுதல்.', examples: ['₹10 - ₹2 spent = ₹8 left', '₹20 - ₹15 chocolate = ₹5 change', '₹50 - ₹10 toy = ₹40 change'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Calculate change! 🔗', pairs: [{ left: 'Have ₹10, spend ₹3', right: '₹7 left' }, { left: 'Have ₹20, spend ₹10', right: '₹10 left' }, { left: 'Have ₹50, spend ₹25', right: '₹25 left' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'You had ₹50. You spent ₹20 on a book. How much change do you get back?', sentence: 'Change = ₹___', options: [{ text: '30', correct: true }, { text: '20', correct: false }, { text: '40', correct: false }] }
-    ]
-  },
-
-  // --- CHAPTER 9: DATA & LOGIC 🧠 ---
-  {
-    id: 42,
-    title: 'Sorting Data 📊',
-    titleEn: 'Sorting information',
-    mascot: '📊',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Sorting and Grouping 📊', mascot: '📊', explanation: 'Sorting means putting things into groups based on how they are alike! E.g., putting all red toys 🔴 in one box, and blue toys 🔵 in another!', explanationTa: 'விவரங்களை வகைப்படுத்துதல்! நிறம், வடிவம் போன்றவற்றின் அடிப்படையில் பிரிப்பது.', examples: ['Group 1 = Apples 🍎🍎', 'Group 2 = Bananas 🍌🍌', 'Group 3 = Circles ◯◯'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Group the objects! 🔗', pairs: [{ left: 'Apple 🍎', right: 'Fruit' }, { left: 'Pencil ✏️', right: 'Stationery' }, { left: 'Lion 🦁', right: 'Animal' }], options: [] },
-      { type: 'grid_search' as any, instruction: 'Find all fruits! 🔍', gridItems: [{ text: 'apple', correct: true, emoji: '🍎' }, { text: 'banana', correct: true, emoji: '🍌' }, { text: 'carrot', correct: false, emoji: '❌' }, { text: 'pencil', correct: false, emoji: '❌' }], options: [] }
-    ]
-  },
-  {
-    id: 43,
-    title: 'Picture Graphs 📊',
-    titleEn: 'Picture graphs',
-    mascot: '📊',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Reading Picture Graphs 📊', mascot: '📊', explanation: 'Picture graphs use symbols or pictures to represent numbers! Count the emojis to find out how many there are in each category.', explanationTa: 'பட விளக்க வரைபடம் (Pictograph). படங்களை எண்ணி விவரங்களை அறிதல்.', examples: ['🍎🍎🍎 = 3 Apples', '🍌🍌 = 2 Bananas', '✏️✏️✏️✏️ = 4 Pencils'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match count to graph! 🔗', pairs: [{ left: '🍎🍎🍎', right: '3 apples' }, { left: '⭐', right: '1 star' }, { left: '🚗🚗🚗🚗', right: '4 cars' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Look at graph: 🍪🍪🍪🍪. How many cookies?', sentence: 'There are ___ cookies.', options: [{ text: '4', correct: true }, { text: '3', correct: false }, { text: '5', correct: false }] }
-    ]
-  },
-  {
-    id: 44,
-    title: 'Simple Tables 📊',
-    titleEn: 'Simple tables',
-    mascot: '📊',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Reading Simple Tables 📊', mascot: '📊', explanation: 'Tables organize information in rows and columns so they are easy to read! Let us read and compare totals!', explanationTa: 'அட்டவணைப் படுத்துதல்! வரிசைகள் மற்றும் நெடுவரிசைகளில் விவரங்களை வைப்பது.', examples: ['Cats | 5', 'Dogs | 3', 'Birds | 8', 'Most popular = Birds'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Match table totals! 🔗', pairs: [{ left: 'Apples: 5, Oranges: 3', right: 'More Apples' }, { left: 'Toys: 10, Games: 15', right: 'More Games' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'If a table says Red Balls: 8, Blue Balls: 12, which color has more?', sentence: 'There are more ___ balls.', options: [{ text: 'blue', correct: true }, { text: 'red', correct: false }] }
-    ]
-  },
-  {
-    id: 45,
-    title: 'Logical Patterns 🧠',
-    titleEn: 'Logical patterns',
-    mascot: '🧠',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'Logical Thinking Patterns 🧠', mascot: '🧠', explanation: 'Logic patterns use rules to solve puzzles! For example, if a number doubles every time: 2, 4, 8, what comes next? 16!', explanationTa: 'தர்க்கவியல் தொடர்கள்! விதிகளை கண்டறிந்து புதிர்களைத் தீர்ப்பது.', examples: ['1, 2, 3, 4 (Add 1)', '2, 4, 6, 8 (Add 2)', '10, 9, 8, 7 (Subtract 1)'], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Complete the logical jump! 🔗', pairs: [{ left: '2, 4, 6, 8, ___', right: '10' }, { left: '9, 8, 7, 6, ___', right: '5' }, { left: '10, 20, 30, ___', right: '40' }], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Solve logic sequence: 10, 8, 6, 4, ___', sentence: '10, 8, 6, 4, ___', options: [{ text: '2', correct: true }, { text: '3', correct: false }, { text: '0', correct: false }] }
+      {
+        type: 'choice' as any,
+        instruction: 'Money Builder: How can you build ₹10 using two coins? 🪙',
+        options: [
+          { text: '₹5 coin + ₹5 coin', correct: true },
+          { text: '₹2 coin + ₹2 coin', correct: false },
+          { text: '₹5 coin + ₹2 coin', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Shopping Challenge: You buy an item for ₹15. Which cash bills can you pay with? 💸',
+        options: [
+          { text: '₹10 note + ₹5 coin', correct: true },
+          { text: '₹10 note + ₹10 note', correct: false },
+          { text: '₹5 coin + ₹2 coin', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Data Reading: A picture graph shows: Apples (5 pictures), Oranges (3 pictures). Which fruit has more? 📊',
+        options: [
+          { text: 'Apples', correct: true },
+          { text: 'Oranges', correct: false }
+        ]
+      },
+      {
+        type: 'order' as any,
+        instruction: 'Logic Sort: Sort these numbers from smallest to largest! 📊',
+        options: [
+          { text: '5 ➔ 15 ➔ 25', correct: true },
+          { text: '25 ➔ 15 ➔ 5', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Maths Capstone: Solve the mixed puzzle: (10 + 5) - 3 = ___? 🧠',
+        options: [
+          { text: '12', correct: true },
+          { text: '15', correct: false },
+          { text: '10', correct: false }
+        ]
+      }
     ]
   }
 ];
-
-
 export const GRADE1_EVS_LEVELS: Level[] = [
-  // --- CHAPTER 1: Myself & My Body 🧒 (Levels 1 - 5) ---
   {
     id: 1,
-    title: 'My Body Parts Revision 🧒',
-    titleEn: 'My Body Parts Revision',
+    title: 'Myself & My Body 🧒',
+    titleEn: 'Myself & My Body',
     mascot: '🧒',
-    color: 'from-sky-400 to-blue-500',
-    borderColor: 'border-sky-300',
+    color: 'from-emerald-400 to-green-500',
+    borderColor: 'border-emerald-300',
     questions: [
       {
         type: 'connect_pairs' as any,
-        instruction: 'Match body parts to their actions! 🔗',
+        instruction: 'Body Parts: Connect body parts to their correct functions! 👁️',
         pairs: [
-          { left: 'Hands 👐', right: 'To Write ✍️' },
-          { left: 'Legs 👣', right: 'To Walk 🚶' },
-          { left: 'Mouth 👄', right: 'To Speak 🗣️' }
+          { left: 'Eye', right: 'Eye sees 👁️' },
+          { left: 'Ear', right: 'Ear hears 👂' },
+          { left: 'Nose', right: 'Nose smells 👃' }
         ],
         options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Sense Organs: Which organ do we use to taste sweet ice cream? 👅',
+        options: [
+          { text: 'Tongue 👅', correct: true },
+          { text: 'Nose 👃', correct: false },
+          { text: 'Skin 🖐️', correct: false }
+        ]
+      },
+      {
+        type: 'order' as any,
+        instruction: 'Healthy Habits: Sort the morning tasks in correct order! ⏰',
+        options: [
+          { text: 'Brush teeth ➔ Take bath ➔ Eat breakfast ➔ Go to school', correct: true },
+          { text: 'Go to school ➔ Eat breakfast ➔ Take bath ➔ Brush teeth', correct: false }
+        ]
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Habits Sort: Classify these habits correctly! 🧼',
+        pairs: [
+          { left: 'Washing hands', right: 'Clean hand habit 🧼' },
+          { left: 'Biting nails', right: 'Unclean nail habit 💅' },
+          { left: 'Brushing twice', right: 'Clean teeth habit 🪥' }
+        ],
+        options: []
+      },
+      {
+        type: 'order' as any,
+        instruction: 'Daily Routine: Sort the daily intervals in correct order! 🌅',
+        options: [
+          { text: 'Morning ➔ Afternoon ➔ Night', correct: true },
+          { text: 'Night ➔ Afternoon ➔ Morning', correct: false }
+        ]
       }
     ]
   },
   {
     id: 2,
-    title: 'Sense Organs & Their Uses 👀',
-    titleEn: 'Sense Organs & Their Uses',
-    mascot: '👀',
-    color: 'from-sky-400 to-blue-500',
-    borderColor: 'border-sky-300',
+    title: 'Family & Food 👨‍👩‍👧',
+    titleEn: 'Family & Food',
+    mascot: '👨‍👩‍👧',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
     questions: [
       {
+        type: 'choice' as any,
+        instruction: "Family Relations: Who is your father's mother? 👵",
+        options: [
+          { text: 'Grandmother 👵', correct: true },
+          { text: 'Aunt 👩', correct: false },
+          { text: 'Sister 👧', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Helping Hands: Choose the best action to help your parents at home! 🚿',
+        options: [
+          { text: 'Watering the plants 🚿', correct: true },
+          { text: 'Leaving toys on the floor 🧸', correct: false },
+          { text: 'Watching TV all day 📺', correct: false }
+        ]
+      },
+      {
         type: 'connect_pairs' as any,
-        instruction: 'Match sense organs to actions! 👃',
+        instruction: 'Food Sort: Connect items to their correct food groups! 🍎',
         pairs: [
-          { left: 'Eyes 👀', right: 'To See 🌈' },
-          { left: 'Ears 👂', right: 'To Hear 🎵' },
-          { left: 'Nose 👃', right: 'To Smell 🌹' },
-          { left: 'Tongue 👅', right: 'To Taste 🍦' }
+          { left: 'Apple', right: 'Apple is a Fruit 🍎' },
+          { left: 'Carrot', right: 'Carrot is a Vegetable 🥕' },
+          { left: 'Milk', right: 'Milk is a Healthy Drink 🥛' }
         ],
         options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Food Sources: Connect food items to their correct sources! 🥛',
+        pairs: [
+          { left: 'Milk', right: 'Milk from Cow 🐄' },
+          { left: 'Rice', right: 'Rice from Plant 🌾' },
+          { left: 'Egg', right: 'Egg from Hen 🐔' }
+        ],
+        options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Healthy Plate: Which combination makes a healthy balanced plate? 🥗',
+        options: [
+          { text: 'Grains, vegetables & fruits 🥗', correct: true },
+          { text: 'Chocolates, chips & soda 🍫', correct: false }
+        ]
       }
     ]
   },
   {
     id: 3,
-    title: 'Healthy Food Habits 🍎',
-    titleEn: 'Healthy Food Habits',
-    mascot: '🍎',
-    color: 'from-sky-400 to-blue-500',
-    borderColor: 'border-sky-300',
+    title: 'Plant & Animal World 🌱',
+    titleEn: 'Plant & Animal World',
+    mascot: '🌱',
+    color: 'from-lime-400 to-green-500',
+    borderColor: 'border-lime-300',
     questions: [
       {
-        type: 'grid_search' as any,
-        instruction: 'Select all Healthy Foods! 🥦',
-        gridItems: [
-          { text: 'Apple 🍎', correct: true },
-          { text: 'Spinach 🥬', correct: true },
-          { text: 'Milk 🥛', correct: true },
-          { text: 'Burger 🍔', correct: false },
-          { text: 'Fries 🍟', correct: false }
+        type: 'connect_pairs' as any,
+        instruction: 'Plant Parts: Connect plant parts to their descriptions! 🍃',
+        pairs: [
+          { left: 'Leaf', right: 'Green food factory leaf 🍃' },
+          { left: 'Root', right: 'Under soil water root 🪵' },
+          { left: 'Flower', right: 'Colorful seed creator flower 🌸' }
+        ],
+        options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Plant Needs: What are the three essential things plants need to grow? ☀️💧💨',
+        options: [
+          { text: 'Water + Sunlight + Air ☀️💧💨', correct: true },
+          { text: 'Soda + Toys + Shadow 🥤🧸🕶️', correct: false }
+        ]
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Animal Homes: Connect the animal to its home! 🦁',
+        pairs: [
+          { left: 'Lion', right: 'Lion lives in Den 🦁' },
+          { left: 'Bird', right: 'Bird lives in Nest 🪹' },
+          { left: 'Horse', right: 'Horse lives in Stable 🐎' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Animal Types: Classify these animals! 🐅',
+        pairs: [
+          { left: 'Tiger', right: 'Tiger is Wild 🐅' },
+          { left: 'Cow', right: 'Cow is Domestic 🐄' },
+          { left: 'Elephant', right: 'Elephant is Wild 🐘' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Animal Food: Connect the animal to the food it loves! 🥕',
+        pairs: [
+          { left: 'Rabbit', right: 'Rabbit eats Carrot 🥕' },
+          { left: 'Frog', right: 'Frog eats Insect 🪰' },
+          { left: 'Lion', right: 'Lion eats Meat 🥩' }
         ],
         options: []
       }
@@ -1012,887 +836,174 @@ export const GRADE1_EVS_LEVELS: Level[] = [
   },
   {
     id: 4,
-    title: 'Cleanliness & Personal Hygiene 🧼',
-    titleEn: 'Cleanliness & Hygiene',
-    mascot: '🧼',
+    title: 'Environment 🌍',
+    titleEn: 'Environment',
+    mascot: '🌍',
     color: 'from-sky-400 to-blue-500',
     borderColor: 'border-sky-300',
     questions: [
       {
         type: 'connect_pairs' as any,
-        instruction: 'Match hygiene tools to uses! 🪥',
+        instruction: 'Living & Non-Living: Classify these objects! 🐶',
         pairs: [
-          { left: 'Toothbrush 🪥', right: 'Clean Teeth 🦷' },
-          { left: 'Soap 🧼', right: 'Wash Hands 👐' },
-          { left: 'Nail Cutter ✂️', right: 'Trim Nails 💅' }
+          { left: 'Puppy', right: 'Puppy is Living 🐶' },
+          { left: 'Stone', right: 'Stone is Non-Living 🪨' },
+          { left: 'Tree', right: 'Tree is Living 🌳' }
         ],
         options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Weather Match: Connect clues to the correct weather! ☀️',
+        pairs: [
+          { left: 'Sun ☀️', right: 'Sunny hot day ☀️' },
+          { left: 'Rain 🌧️', right: 'Rainy wet day 🌧️' },
+          { left: 'Snow ❄️', right: 'Snowy cold day ❄️' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Water Conservation: Classify the water actions! 🚰',
+        pairs: [
+          { left: 'Drinking', right: 'Good drinking use 🚰' },
+          { left: 'Leaving tap open', right: 'Wasting water tap 🚱' },
+          { left: 'Watering plants', right: 'Good garden use 🪴' }
+        ],
+        options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Save Earth: Which action is best for saving our planet Earth? 🌳',
+        options: [
+          { text: 'Planting trees 🌳', correct: true },
+          { text: 'Throwing plastic in rivers 🌊', correct: false }
+        ]
+      },
+      {
+        type: 'order' as any,
+        instruction: 'Life Cycles: Sort the growth stages of a tree correctly! 🌱',
+        options: [
+          { text: 'Seed ➔ Plant ➔ Tree', correct: true },
+          { text: 'Tree ➔ Plant ➔ Seed', correct: false }
+        ]
       }
     ]
   },
   {
     id: 5,
-    title: 'Exercise & Good Habits 🏃',
-    titleEn: 'Exercise & Habits',
-    mascot: '🏃',
-    color: 'from-sky-400 to-blue-500',
-    borderColor: 'border-sky-300',
+    title: 'Transport & Community 🚗',
+    titleEn: 'Transport & Community',
+    mascot: '🚗',
+    color: 'from-violet-400 to-indigo-500',
+    borderColor: 'border-violet-300',
     questions: [
       {
-        type: 'grid_search' as any,
-        instruction: 'Select all Good Habits! 🧼',
-        gridItems: [
-          { text: 'Sleep Early 🛌', correct: true },
-          { text: 'Exercise 🏃', correct: true },
-          { text: 'Drink Water 🥤', correct: true },
-          { text: 'Watch TV late 📺', correct: false },
-          { text: 'Skip breakfast 🥣', correct: false }
+        type: 'connect_pairs' as any,
+        instruction: 'Transport Sort: Connect vehicles to their routes! ✈️',
+        pairs: [
+          { left: 'Car', right: 'Car runs on Land 🚗' },
+          { left: 'Ship', right: 'Ship sails in Water 🚢' },
+          { left: 'Airplane', right: 'Airplane flies in Air ✈️' }
         ],
         options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Vehicles: Connect vehicles to their paths! 🚂',
+        pairs: [
+          { left: 'Train', right: 'Train runs on Track 🚂' },
+          { left: 'Boat', right: 'Boat sails on Water ⛵' },
+          { left: 'Bus', right: 'Bus runs on Road 🚌' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Community Helpers: Connect helper to their place of work! 🩺',
+        pairs: [
+          { left: 'Doctor', right: 'Doctor at Hospital 🏥' },
+          { left: 'Teacher', right: 'Teacher at School 🏫' },
+          { left: 'Firefighter', right: 'Firefighter at Station 🚒' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Places: Match activities to correct places! 🏫',
+        pairs: [
+          { left: 'Play', right: 'Play at Park 🛝' },
+          { left: 'Study', right: 'Study at School 🏫' },
+          { left: 'Get medicine', right: 'Medicine at Hospital 🏥' }
+        ],
+        options: []
+      },
+      {
+        type: 'order' as any,
+        instruction: 'Road Safety: Sort road crossing steps correctly! 🚦',
+        options: [
+          { text: 'Stop ➔ Look left & right ➔ Cross when safe', correct: true },
+          { text: 'Cross directly ➔ Look left & right ➔ Stop', correct: false }
+        ]
       }
     ]
   },
-
-  // --- CHAPTER 2: My Family & Relationships 👨‍👩‍👧 (Levels 6 - 10) ---
   {
     id: 6,
-    title: 'Types of Families 👨‍👩‍👧‍👦',
-    titleEn: 'Types of Families',
-    mascot: '👨‍👩‍👧‍👦',
-    color: 'from-rose-400 to-pink-500',
-    borderColor: 'border-rose-300',
+    title: 'World Around Us 🧠',
+    titleEn: 'World Around Us',
+    mascot: '🧠',
+    color: 'from-purple-400 to-pink-500',
+    borderColor: 'border-purple-300',
     questions: [
       {
         type: 'connect_pairs' as any,
-        instruction: 'Match family types! 🔗',
+        instruction: 'Seasons Clothing: Connect clothes to seasons! 🧣',
         pairs: [
-          { left: 'Parents + Kids 🏠', right: 'Nuclear Family 👨‍👩‍👧' },
-          { left: 'With Grandparents 🏰', right: 'Joint Family 👵👴' },
-          { left: 'Parents + Grandparents + Uncles 🏰', right: 'Big Joint Family 👨‍👩‍👧‍👦' }
+          { left: 'Cotton shirts', right: 'Summer Season ☀️' },
+          { left: 'Raincoats', right: 'Rainy Season 🌧️' },
+          { left: 'Sweaters', right: 'Winter Season ❄️' }
         ],
         options: []
-      }
-    ]
-  },
-  {
-    id: 7,
-    title: 'Family Members & Roles 👨‍👩‍👧',
-    titleEn: 'Family Members',
-    mascot: '👨‍👩‍👧',
-    color: 'from-rose-400 to-pink-500',
-    borderColor: 'border-rose-300',
-    questions: [
+      },
       {
         type: 'connect_pairs' as any,
-        instruction: 'Match relationship titles! 🔗',
+        instruction: 'Day & Night: Connect activities to correct times! 🌓',
         pairs: [
-          { left: 'Fathers Father 👴', right: 'Grandfather 👴' },
-          { left: 'Mothers Mother 👵', right: 'Grandmother 👵' },
-          { left: 'Fathers Brother 👨', right: 'Uncle 👨' }
+          { left: 'See sun', right: 'Day time activity ☀️' },
+          { left: 'See stars', right: 'Night time activity 🌙' }
         ],
         options: []
-      }
-    ]
-  },
-  {
-    id: 8,
-    title: 'Helping at Home 🧹',
-    titleEn: 'Helping at Home',
-    mascot: '🧹',
-    color: 'from-rose-400 to-pink-500',
-    borderColor: 'border-rose-300',
-    questions: [
+      },
       {
-        type: 'grid_search' as any,
-        instruction: 'Select all helpful tasks! 🧹',
-        gridItems: [
-          { text: 'Watering plants 🌱', correct: true },
-          { text: 'Keeping toys back 🧸', correct: true },
-          { text: 'Cleaning desk 🧼', correct: true },
-          { text: 'Leaving toys on floor 🧩', correct: false },
-          { text: 'Wasting water 🚰', correct: false }
+        type: 'connect_pairs' as any,
+        instruction: 'Festivals: Match festivals to items! 🪔',
+        pairs: [
+          { left: 'Diwali', right: 'Festival of Lights 🪔' },
+          { left: 'Christmas', right: 'Festival of Trees 🎄' },
+          { left: 'Eid', right: 'Festival of Moon 🌙' }
         ],
         options: []
-      }
-    ]
-  },
-  {
-    id: 9,
-    title: 'Respect & Sharing 🤝',
-    titleEn: 'Respect & Sharing',
-    mascot: '🤝',
-    color: 'from-rose-400 to-pink-500',
-    borderColor: 'border-rose-300',
-    questions: [
+      },
       {
-        type: 'garden_repair' as any,
-        instruction: 'Complete the magic rule! 🌟',
-        sentence: 'When getting help from someone, we say ___.',
+        type: 'choice' as any,
+        instruction: 'Clean Environment: Choose the best action to keep our surroundings clean! 🗑️',
         options: [
-          { text: 'Thank You 🙏', correct: true },
-          { text: 'Go Away ❌', correct: false },
-          { text: 'No ❌', correct: false }
-        ]
-      }
-    ]
-  },
-  {
-    id: 10,
-    title: 'My Daily Routine 📅',
-    titleEn: 'My Daily Routine',
-    mascot: '📅',
-    color: 'from-rose-400 to-pink-500',
-    borderColor: 'border-rose-300',
-    questions: [
-      {
-        type: 'garden_repair' as any,
-        instruction: 'What is the first thing we do in the morning? 🌅',
-        sentence: 'When the alarm rings, we ___ first.',
-        options: [
-          { text: 'Wake Up ⏰', correct: true },
-          { text: 'Go to School 🎒', correct: false },
-          { text: 'Eat Lunch 🍱', correct: false }
-        ]
-      }
-    ]
-  },
-
-  // --- CHAPTER 3: Food & Nutrition 🍎 (Levels 11 - 15) ---
-  {
-    id: 11,
-    title: 'Types of Food 🍞',
-    titleEn: 'Types of Food',
-    mascot: '🍞',
-    color: 'from-orange-400 to-amber-500',
-    borderColor: 'border-orange-300',
-    questions: [
-      {
-        type: 'garden_repair' as any,
-        instruction: 'What type of food is Milk and Eggs? 🥚',
-        sentence: 'Milk and Eggs are ___ food that help us grow.',
-        options: [
-          { text: 'Body Building 💪', correct: true },
-          { text: 'Junk Food 🍕', correct: false },
-          { text: 'Spicy Food 🌶️', correct: false }
-        ]
-      }
-    ]
-  },
-  {
-    id: 12,
-    title: 'Healthy & Unhealthy Food 🥦',
-    titleEn: 'Healthy vs Unhealthy',
-    mascot: '🥦',
-    color: 'from-orange-400 to-amber-500',
-    borderColor: 'border-orange-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Classify Healthy vs Junk food! 🔗',
-        pairs: [
-          { left: 'Fresh Carrot 🥕', right: 'Crunchy Veggie 🥕' },
-          { left: 'Cold Soda 🥤', right: 'Sugary Junk 🥤' },
-          { left: 'Whole Milk 🥛', right: 'Calcium Drink 🥛' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 13,
-    title: 'Fruits & Vegetables 🥕',
-    titleEn: 'Fruits & Vegetables',
-    mascot: '🥕',
-    color: 'from-orange-400 to-amber-500',
-    borderColor: 'border-orange-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match item to type! 🔗',
-        pairs: [
-          { left: 'Sweet Mango 🥭', right: 'Sweet Fruit 🥭' },
-          { left: 'Green Spinach 🥬', right: 'Leafy Veggie 🥬' },
-          { left: 'Red Tomato 🍅', right: 'Juicy Fruit 🍅' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 14,
-    title: 'Food Sources 🌾',
-    titleEn: 'Food Sources',
-    mascot: '🌾',
-    color: 'from-orange-400 to-amber-500',
-    borderColor: 'border-orange-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Where does it come from? Match sources! 🔗',
-        pairs: [
-          { left: 'Wheat Flour 🌾', right: 'From Plants 🌾' },
-          { left: 'Fresh Eggs 🥚', right: 'From Hens 🐔' },
-          { left: 'Whole Milk 🥛', right: 'From Cows 🐮' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 15,
-    title: 'Balanced Meal Basics 🍱',
-    titleEn: 'Balanced Meal Basics',
-    mascot: '🍱',
-    color: 'from-orange-400 to-amber-500',
-    borderColor: 'border-orange-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select items for a balanced plate! 🍱',
-        gridItems: [
-          { text: 'Rice / Roti 🌾', correct: true },
-          { text: 'Dal / Pulse 🍛', correct: true },
-          { text: 'Green Salad 🥗', correct: true },
-          { text: 'Ice Cream 🍦', correct: false },
-          { text: 'Potato Chips 🍟', correct: false }
-        ],
-        options: []
-      }
-    ]
-  },
-
-  // --- CHAPTER 4: Plants Around Us 🌱 (Levels 16 - 20) ---
-  {
-    id: 16,
-    title: 'Parts of Plant 🌱',
-    titleEn: 'Parts of Plant',
-    mascot: '🌱',
-    color: 'from-emerald-400 to-green-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match plant parts to their jobs! 🔗',
-        pairs: [
-          { left: 'Roots 🪵', right: 'Absorb Water 💧' },
-          { left: 'Stem 🎋', right: 'Support Leaves 🍃' },
-          { left: 'Flowers 🌸', right: 'Produce Seeds 🌾' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 17,
-    title: 'What Plants Need ☀️',
-    titleEn: 'What Plants Need',
-    mascot: '☀️',
-    color: 'from-emerald-400 to-green-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select all things a seed needs to grow! 🪴',
-        gridItems: [
-          { text: 'Water 💧', correct: true },
-          { text: 'Sunlight ☀️', correct: true },
-          { text: 'Soil 🌱', correct: true },
-          { text: 'Soda 🥤', correct: false },
-          { text: 'Dark Room 🚪', correct: false }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 18,
-    title: 'Types of Plants 🌲',
-    titleEn: 'Types of Plants',
-    mascot: '🌲',
-    color: 'from-emerald-400 to-green-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match types of plants! 🌴',
-        pairs: [
-          { left: 'Mango Tree 🌳', right: 'Big Tree 🪵' },
-          { left: 'Rose Bush 🌹', right: 'Bushy Shrub 🪴' },
-          { left: 'Grapevine 🍇', right: 'Weak Climber 🍇' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 19,
-    title: 'Uses of Plants 🪵',
-    titleEn: 'Uses of Plants',
-    mascot: '🪵',
-    color: 'from-emerald-400 to-green-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'What do plants give us? Match them! 🔗',
-        pairs: [
-          { left: 'Cotton Plant ☁️', right: 'Shirt Cotton 👕' },
-          { left: 'Tulsi Herb 🌿', right: 'Medicines 💊' },
-          { left: 'Teak Tree 🌳', right: 'Chair Wood 🪑' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 20,
-    title: 'Saving Plants 🌍',
-    titleEn: 'Saving Plants',
-    mascot: '🌍',
-    color: 'from-emerald-400 to-green-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select all ways to save trees! 🌲',
-        gridItems: [
-          { text: 'Water daily 🚿', correct: true },
-          { text: 'Plant saplings 🌱', correct: true },
-          { text: 'Recycle paper 📄', correct: true },
-          { text: 'Pluck leaves 🍂', correct: false },
-          { text: 'Carve bark 🪵', correct: false }
-        ],
-        options: []
-      }
-    ]
-  },
-
-  // --- CHAPTER 5: Animal World 🐾 (Levels 21 - 25) ---
-  {
-    id: 21,
-    title: 'Domestic Animals 🐴',
-    titleEn: 'Domestic Animals',
-    mascot: '🐴',
-    color: 'from-teal-400 to-cyan-500',
-    borderColor: 'border-teal-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match domestic animals to uses! 🥛',
-        pairs: [
-          { left: 'Cow 🐮', right: 'Gives Milk 🥛' },
-          { left: 'Sheep 🐑', right: 'Gives Wool 🧶' },
-          { left: 'Horse 🐴', right: 'Pulls Cart 🛞' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 22,
-    title: 'Wild Animals 🐅',
-    titleEn: 'Wild Animals',
-    mascot: '🐅',
-    color: 'from-teal-400 to-cyan-500',
-    borderColor: 'border-teal-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select wild forest animals! 🦁',
-        gridItems: [
-          { text: 'Tiger 🐯', correct: true },
-          { text: 'Elephant 🐘', correct: true },
-          { text: 'Monkey 🐵', correct: true },
-          { text: 'Cat 🐱', correct: false },
-          { text: 'Hen 🐔', correct: false }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 23,
-    title: 'Animal Homes 🛖',
-    titleEn: 'Animal Homes',
-    mascot: '🛖',
-    color: 'from-teal-400 to-cyan-500',
-    borderColor: 'border-teal-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match animal shelter homes! 🏡',
-        pairs: [
-          { left: 'Dog 🐶', right: 'Kennel 🏠' },
-          { left: 'Lion 🦁', right: 'Forest Den 🪨' },
-          { left: 'Cow 🐮', right: 'Farm Shed 🛖' },
-          { left: 'Spider 🕷️', right: 'Web 🕸️' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 24,
-    title: 'Animal Food Habits 🥩',
-    titleEn: 'Animal Food Habits',
-    mascot: '🥩',
-    color: 'from-teal-400 to-cyan-500',
-    borderColor: 'border-teal-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'What do they eat? Match them! 🌽',
-        pairs: [
-          { left: 'Cow 🐮', right: 'Eats Grass 🌿' },
-          { left: 'Lion 🦁', right: 'Eats Meat 🥩' },
-          { left: 'Bear 🐻', right: 'Eats Both 🍎' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 25,
-    title: 'Caring for Animals 🐾',
-    titleEn: 'Caring for Animals',
-    mascot: '🐾',
-    color: 'from-teal-400 to-cyan-500',
-    borderColor: 'border-teal-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select all kind acts! 🐾',
-        gridItems: [
-          { text: 'Give water 🥛', correct: true },
-          { text: 'Keep shelter clean 🧹', correct: true },
-          { text: 'Feed grains 🌾', correct: true },
-          { text: 'Throw stones 🪨', correct: false },
-          { text: 'Tease tail 🐈', correct: false }
-        ],
-        options: []
-      }
-    ]
-  },
-
-  // --- CHAPTER 6: Our Environment 🌍 (Levels 26 - 30) ---
-  {
-    id: 26,
-    title: 'Living & Non Living Things 🪨',
-    titleEn: 'Living & Non Living',
-    mascot: '🪨',
-    color: 'from-indigo-400 to-violet-500',
-    borderColor: 'border-indigo-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match classifications! 🔗',
-        pairs: [
-          { left: 'Dog 🐕', right: 'Living Thing 🌱' },
-          { left: 'Chair 🪑', right: 'Non Living 🪨' },
-          { left: 'Plant 🌿', right: 'Living Thing 🌱' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 27,
-    title: 'Air Around Us 💨',
-    titleEn: 'Air Around Us',
-    mascot: '💨',
-    color: 'from-indigo-400 to-violet-500',
-    borderColor: 'border-indigo-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match air properties and actions! 🎈',
-        pairs: [
-          { left: 'Moving Air 💨', right: 'Wind 🌬️' },
-          { left: 'Fill Balloon 🎈', right: 'Air Has Volume 🎈' },
-          { left: 'Fire burning 🕯️', right: 'Air Helps Burn 🔥' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 28,
-    title: 'Water Around Us 💧',
-    titleEn: 'Water Around Us',
-    mascot: '💧',
-    color: 'from-indigo-400 to-violet-500',
-    borderColor: 'border-indigo-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match sources to destinations! 🌊',
-        pairs: [
-          { left: 'Main Source 🌧️', right: 'Rain ☁️' },
-          { left: 'Flowing water 🏞️', right: 'River 🌊' },
-          { left: 'Salty ocean 🌊', right: 'Sea 🌊' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 29,
-    title: 'Weather Changes 🌦️',
-    titleEn: 'Weather Changes',
-    mascot: '🌦️',
-    color: 'from-indigo-400 to-violet-500',
-    borderColor: 'border-indigo-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match seasons to items! 🧥',
-        pairs: [
-          { left: 'Hot Summer ☀️', right: 'Cotton shirt 👕' },
-          { left: 'Cold Winter ❄️', right: 'Woolen sweater 🧥' },
-          { left: 'Wet Rain 🌧️', right: 'Umbrella ☔' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 30,
-    title: 'Save Environment 🚮',
-    titleEn: 'Save Environment',
-    mascot: '🚮',
-    color: 'from-indigo-400 to-violet-500',
-    borderColor: 'border-indigo-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Sort: Recycle ♻️ vs Waste 🗑️!',
-        pairs: [
-          { left: 'Glass bottle 🍾', right: 'Recycled Glass 🍾' },
-          { left: 'Plastic bottle 🧴', right: 'Recycled Plastic 🧴' },
-          { left: 'Food scraps 🍌', right: 'Compost Waste 🗑️' }
-        ],
-        options: []
-      }
-    ]
-  },
-
-  // --- CHAPTER 7: My Neighbourhood 🏡 (Levels 31 - 35) ---
-  {
-    id: 31,
-    title: 'Places Around Us 🏥',
-    titleEn: 'Places Around Us',
-    mascot: '🏥',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match helper places! 🏥',
-        pairs: [
-          { left: 'Doctor 🩺', right: 'Hospital 🏥' },
-          { left: 'Teacher 📚', right: 'School 🏫' },
-          { left: 'Firefighter 🧑‍🚒', right: 'Fire Station 🚒' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 32,
-    title: 'Community Helpers 🧑‍✈️',
-    titleEn: 'Community Helpers',
-    mascot: '🧑‍✈️',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Who helps us? Match helper tool! 🧯',
-        pairs: [
-          { left: 'Chef 🧑‍🍳', right: 'Frying Pan 🍳' },
-          { left: 'Postman 📬', right: 'Letter Bag ✉' },
-          { left: 'Gardener 🧑‍🌾', right: 'Watering Can 🚿' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 33,
-    title: 'School & Rules 🏫',
-    titleEn: 'School & Rules',
-    mascot: '🏫',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select all School Rules! 🏫',
-        gridItems: [
-          { text: 'Listen to teacher 👩‍🏫', correct: true },
-          { text: 'Raise hand 🙋', correct: true },
-          { text: 'Keep desk clean 🧼', correct: true },
-          { text: 'Run in corridor 🏃', correct: false },
-          { text: 'Shout loud 🗣️', correct: false }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 34,
-    title: 'Public Places 🏦',
-    titleEn: 'Public Places',
-    mascot: '🏦',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match places to actions! 🏦',
-        pairs: [
-          { left: 'To catch a train 🚂', right: 'Railway Station 🚉' },
-          { left: 'To save money 💰', right: 'Bank 🏦' },
-          { left: 'To buy stamps ✉️', right: 'Post Office 🏤' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 35,
-    title: 'Safety Around Us ⚠️',
-    titleEn: 'Safety Around Us',
-    mascot: '⚠️',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'What should we do to stay safe? Match! 🛝',
-        pairs: [
-          { left: 'Sharp blade 🪒', right: 'Do NOT touch ❌' },
-          { left: 'Wet bathroom floor 🛝', right: 'Walk slowly 🚶' },
-          { left: 'Unknown stranger 👤', right: 'Do NOT talk ❌' }
-        ],
-        options: []
-      }
-    ]
-  },
-
-  // --- CHAPTER 8: Transport & Communication 🚗 (Levels 36 - 40) ---
-  {
-    id: 36,
-    title: 'Land Transport 🚆',
-    titleEn: 'Land Transport',
-    mascot: '🚆',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select land transport vehicles! 🚗',
-        gridItems: [
-          { text: 'Car 🚗', correct: true },
-          { text: 'Bus 🚌', correct: true },
-          { text: 'Bicycle 🚲', correct: true },
-          { text: 'Yacht ⛵', correct: false },
-          { text: 'Glider 🪂', correct: false }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 37,
-    title: 'Water Transport ⛵',
-    titleEn: 'Water Transport',
-    mascot: '⛵',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select water transport! ⚓',
-        gridItems: [
-          { text: 'Cargo Ship 🚢', correct: true },
-          { text: 'Rowing Boat ⛵', correct: true },
-          { text: 'Speedboat 🚤', correct: true },
-          { text: 'Truck 🚚', correct: false },
-          { text: 'Rocket 🚀', correct: false }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 38,
-    title: 'Air Transport 🚁',
-    titleEn: 'Air Transport',
-    mascot: '🚁',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select air transport! ✈️',
-        gridItems: [
-          { text: 'Aeroplane ✈️', correct: true },
-          { text: 'Helicopter 🚁', correct: true },
-          { text: 'Fighter Jet 🛩️', correct: true },
-          { text: 'Submarine 🚢', correct: false },
-          { text: 'Auto Rickshaw 🛺', correct: false }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 39,
-    title: 'Road Safety Rules 🚦',
-    titleEn: 'Road Safety Rules',
-    mascot: '🚦',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'What should we do? Stop ➔ Look ➔ Cross! 🚦',
-        pairs: [
-          { left: 'Red light 🔴', right: 'Stop vehicle 🛑' },
-          { left: 'Zebra lines 🦓', right: 'Cross safely 🚶' },
-          { left: 'Before crossing 🚶', right: 'Look left and right 👀' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 40,
-    title: 'Communication Methods 📱',
-    titleEn: 'Communication Methods',
-    mascot: '📱',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match tools to actions! ✉️',
-        pairs: [
-          { left: 'Mobile Phone 📱', right: 'Quick call 📞' },
-          { left: 'Postcard ✉️', right: 'Written note 📮' },
-          { left: 'Television 📺', right: 'Broadcasting news 🗞️' }
-        ],
-        options: []
-      }
-    ]
-  },
-
-  // --- CHAPTER 9: Festivals & World Around Us 🎉 (Levels 41 - 45) ---
-  {
-    id: 41,
-    title: 'National Festivals 🎇',
-    titleEn: 'National Festivals',
-    mascot: '🎇',
-    color: 'from-rose-400 to-pink-500',
-    borderColor: 'border-rose-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match national festivals! 🇮🇳',
-        pairs: [
-          { left: '15th August 🗺️', right: 'Independence Day 🇮🇳' },
-          { left: '26th January 🏛️', right: 'Republic Day 🏛️' },
-          { left: '2nd October 👓', right: 'Gandhi Jayanti 👓' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 42,
-    title: 'Different Cultures 🗺️',
-    titleEn: 'Different Cultures',
-    mascot: '🗺️',
-    color: 'from-rose-400 to-pink-500',
-    borderColor: 'border-rose-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match cultural foods to states! 🍜',
-        pairs: [
-          { left: 'Sarson Ka Saag 🥬', right: 'Punjab 🌾' },
-          { left: 'Dhokla 🍛', right: 'Gujarat 🏙️' },
-          { left: 'Sambar Rice 🍛', right: 'Tamil Nadu 🌊' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 43,
-    title: 'Seasons 🌦️',
-    titleEn: 'Seasons',
-    mascot: '🌦️',
-    color: 'from-rose-400 to-pink-500',
-    borderColor: 'border-rose-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match season to description! ❄️',
-        pairs: [
-          { left: 'Summer Season ☀️', right: 'Hot sunny days 🍦' },
-          { left: 'Winter Season ❄️', right: 'Cold snowy wind 🧣' },
-          { left: 'Monsoon Season ⛈️', right: 'Heavy rainfall 🌧️' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 44,
-    title: 'Earth & Sky Basics 🚀',
-    titleEn: 'Earth & Sky Basics',
-    mascot: '🚀',
-    color: 'from-rose-400 to-pink-500',
-    borderColor: 'border-rose-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match elements in space! 🌌',
-        pairs: [
-          { left: 'Blue Planet 🌍', right: 'Our Earth 🗺️' },
-          { left: 'Hot gas ball ☀️', right: 'Sun ☀️' },
-          { left: 'Appears at night 🌙', right: 'Moon 🌙' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 45,
-    title: 'Caring for Nature 🌳',
-    titleEn: 'Caring for Nature',
-    mascot: '🌳',
-    color: 'from-rose-400 to-pink-500',
-    borderColor: 'border-rose-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select kind acts for Earth! 🌍',
-        gridItems: [
           { text: 'Throw trash in dustbin 🗑️', correct: true },
-          { text: 'Plant trees 🌳', correct: true },
-          { text: 'Save running water 🚰', correct: true },
-          { text: 'Litter in public 🚮', correct: false },
-          { text: 'Keep tap open 🚰', correct: false }
-        ],
-        options: []
+          { text: 'Throw trash on road 🚮', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Safety First: What should you wear to keep yourself safe when riding a bicycle? 🪖',
+        options: [
+          { text: 'A Helmet 🪖', correct: true },
+          { text: 'Sunglasses 🕶️', correct: false }
+        ]
       }
     ]
   }
 ];
-
 export const GRADE1_TAMIL_LEVELS: Level[] = [
   {
     id: 1,
