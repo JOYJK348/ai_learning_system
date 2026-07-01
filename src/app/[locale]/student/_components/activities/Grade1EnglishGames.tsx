@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { GRADE1_ENGLISH_LEVELS, GRADE1_MATH_LEVELS, GRADE1_TAMIL_LEVELS, GRADE1_GK_LEVELS, GRADE1_EVS_LEVELS } from '../../Quiz/grade1QuizData';
+import { GRADE1_ENGLISH_LEVELS, GRADE1_MATH_LEVELS, GRADE1_TAMIL_LEVELS, GRADE1_GK_LEVELS, GRADE1_EVS_LEVELS, GRADE1_HINDI_LEVELS } from '../../Quiz/grade1QuizData';
 
 export function shuffleArray<T>(array: T[]): T[] {
   const arr = [...array];
@@ -1643,6 +1643,53 @@ export function Grade1WritingLab({ question, onAnswer }: { question: any; onAnsw
    SHARED ACTIVITY PLAYER WRAPPER FOR LEARN MAP VIEW
    ========================================================================== */
 const GRADE1_LESSON_LEVEL_NUM: Record<string, number> = {
+  // --- Hindi Lesson UUIDs ---
+  'e7d508d9-2d74-469b-b506-54205fb7c285': 1,
+  '16eddb34-b0c9-4b23-b06c-9ca9986bcd33': 2,
+  '1e595560-31b4-42ae-8f5d-4978ae2b5220': 3,
+  '0f99549a-5258-4d9f-904f-143a642ca86d': 4,
+  'd819f718-3364-497c-bfe7-9739a271cc83': 5,
+  'ba8bc449-4205-4631-a490-62eaa35fff48': 6,
+  '91a343e1-42c7-4a4a-9507-de1215981507': 7,
+  '1a63de20-88ac-4a41-ad4a-34a38dacb333': 8,
+  'e5ef5c5d-e0d8-4290-a128-c4c0c1a4c115': 9,
+  'b327919c-c69e-423b-bb61-4c89545384da': 10,
+  '1c5fe1b4-380b-4ccf-a8d9-405fa73b08ca': 11,
+  'db792aca-3836-4078-ae65-5e6ac4bd7a1e': 12,
+  'bd820d71-cb20-4ea6-b228-525980077bbb': 13,
+  '58e4a547-7688-4e34-915d-1cb721d69444': 14,
+  'c19f5539-9e41-4967-92e5-32924d5a1d1a': 15,
+  'a74ce89e-3a2f-4f73-9fac-3854d2445c65': 16,
+  'b9c33cc6-3b28-4a21-9c59-80a21b549d2f': 17,
+  '3dfe2a94-ec50-4d25-9fcf-1673186815e3': 18,
+  'c148ce38-3ddc-47da-9a97-4c076723751b': 19,
+  '61f8e07a-b65e-4bd7-89ee-5972a7c0a737': 20,
+  'dac605d2-8043-456b-a054-9392699c77e4': 21,
+  '51577da9-6ea7-4b4e-ac70-fe1286a2dbdf': 22,
+  'bb8caac8-21ac-4e0d-9c84-8b3b3d78fcd6': 23,
+  'a8535b31-8f94-47d2-8e40-cc154b86a581': 24,
+  '1e8de518-168d-47d7-abf3-d4846fc0762a': 25,
+  '7382139e-c5f3-486a-959e-6f2469fd39bb': 26,
+  '575db517-7c5f-4a77-8fde-e08856564981': 27,
+  'b1c1a59e-3a1f-4149-8037-785b0c0c78c8': 28,
+  '073f9dd5-5909-4ad3-825d-444fa0b81bd7': 29,
+  '5eec2992-2f45-4151-b539-7d9f2e8e767d': 30,
+  '599894c0-93ce-4a24-b2c0-cd72cd2c2af7': 31,
+  'd26ea9f1-ac31-4efa-8548-894dd87f3062': 32,
+  'c0936eeb-1328-40ea-8bbd-5293b30aa62d': 33,
+  '2fb8bb0c-8505-4a60-9063-8ed6bc5a4276': 34,
+  'f6819892-fc1f-4b9b-a13a-157cabcb0f53': 35,
+  '4702e04b-fdd7-4fba-9602-830cd46b3178': 36,
+  '8a4e8123-4936-4ab3-a25c-b6044b9c7700': 37,
+  'ab09a757-b5dc-48ce-8c77-fcc7da74044f': 38,
+  '0e9f95ef-762e-4ab3-8b06-c216eed927de': 39,
+  '1d044165-5b13-4c20-b18b-ad5a6aa4803d': 40,
+  '2c28fbb2-f589-4440-b6fa-94b641b890e3': 41,
+  '07a154c8-4c83-4ac4-9f9d-b5183fd59824': 42,
+  '2bd2ec50-e790-4c4d-ac7b-fdbdc74f6336': 43,
+  'e33fe119-3592-411b-864a-8f0ef99119f8': 44,
+  '754d9091-ff2e-4aa8-958e-4be886061e1b': 45,
+
   // --- English Lesson UUIDs ---
   '94fd7887-13fc-4e1e-96b4-66e6287ad14b': 1,
   '58b41e3f-5415-484d-9d21-c40f35088660': 2,
@@ -2034,6 +2081,54 @@ export const GRADE1_EVS_LESSON_IDS = new Set([
   'f8b6710b-2d28-49a1-bc85-1148a30266f6'
 ]);
 
+export const GRADE1_HINDI_LESSON_IDS = new Set([
+  'e7d508d9-2d74-469b-b506-54205fb7c285',
+  '16eddb34-b0c9-4b23-b06c-9ca9986bcd33',
+  '1e595560-31b4-42ae-8f5d-4978ae2b5220',
+  '0f99549a-5258-4d9f-904f-143a642ca86d',
+  'd819f718-3364-497c-bfe7-9739a271cc83',
+  'ba8bc449-4205-4631-a490-62eaa35fff48',
+  '91a343e1-42c7-4a4a-9507-de1215981507',
+  '1a63de20-88ac-4a41-ad4a-34a38dacb333',
+  'e5ef5c5d-e0d8-4290-a128-c4c0c1a4c115',
+  'b327919c-c69e-423b-bb61-4c89545384da',
+  '1c5fe1b4-380b-4ccf-a8d9-405fa73b08ca',
+  'db792aca-3836-4078-ae65-5e6ac4bd7a1e',
+  'bd820d71-cb20-4ea6-b228-525980077bbb',
+  '58e4a547-7688-4e34-915d-1cb721d69444',
+  'c19f5539-9e41-4967-92e5-32924d5a1d1a',
+  'a74ce89e-3a2f-4f73-9fac-3854d2445c65',
+  'b9c33cc6-3b28-4a21-9c59-80a21b549d2f',
+  '3dfe2a94-ec50-4d25-9fcf-1673186815e3',
+  'c148ce38-3ddc-47da-9a97-4c076723751b',
+  '61f8e07a-b65e-4bd7-89ee-5972a7c0a737',
+  'dac605d2-8043-456b-a054-9392699c77e4',
+  '51577da9-6ea7-4b4e-ac70-fe1286a2dbdf',
+  'bb8caac8-21ac-4e0d-9c84-8b3b3d78fcd6',
+  'a8535b31-8f94-47d2-8e40-cc154b86a581',
+  '1e8de518-168d-47d7-abf3-d4846fc0762a',
+  '7382139e-c5f3-486a-959e-6f2469fd39bb',
+  '575db517-7c5f-4a77-8fde-e08856564981',
+  'b1c1a59e-3a1f-4149-8037-785b0c0c78c8',
+  '073f9dd5-5909-4ad3-825d-444fa0b81bd7',
+  '5eec2992-2f45-4151-b539-7d9f2e8e767d',
+  '599894c0-93ce-4a24-b2c0-cd72cd2c2af7',
+  'd26ea9f1-ac31-4efa-8548-894dd87f3062',
+  'c0936eeb-1328-40ea-8bbd-5293b30aa62d',
+  '2fb8bb0c-8505-4a60-9063-8ed6bc5a4276',
+  'f6819892-fc1f-4b9b-a13a-157cabcb0f53',
+  '4702e04b-fdd7-4fba-9602-830cd46b3178',
+  '8a4e8123-4936-4ab3-a25c-b6044b9c7700',
+  'ab09a757-b5dc-48ce-8c77-fcc7da74044f',
+  '0e9f95ef-762e-4ab3-8b06-c216eed927de',
+  '1d044165-5b13-4c20-b18b-ad5a6aa4803d',
+  '2c28fbb2-f589-4440-b6fa-94b641b890e3',
+  '07a154c8-4c83-4ac4-9f9d-b5183fd59824',
+  '2bd2ec50-e790-4c4d-ac7b-fdbdc74f6336',
+  'e33fe119-3592-411b-864a-8f0ef99119f8',
+  '754d9091-ff2e-4aa8-958e-4be886061e1b'
+]);
+
 /* ==========================================================================
    TAMIL COMBO CHART — uyirmei combination chart card (learn before practice)
    Shows: மெய் + உயிர் = உயிர்மெய் in a beautiful grouped table
@@ -2119,7 +2214,7 @@ function TamilComboChart({ question, onAnswer }: { question: any; onAnswer: (opt
    ========================================================================== */
 function TamilLetterBoard({ question, onAnswer }: { question: any; onAnswer: (opt: any) => void }) {
   const letters: string[] = question.letters || [];
-  const isVowels = question.boardTitle?.includes('உயிர்');
+  const isVowels = question.boardTitle?.includes('உயிர்') || question.boardTitle?.includes('स्वर') || question.boardTitle?.includes('Vowel');
 
   // Two palette themes: cyan-blue for vowels, purple-pink for consonants
   const theme = isVowels
@@ -2136,13 +2231,13 @@ function TamilLetterBoard({ question, onAnswer }: { question: any; onAnswer: (op
         {/* Header */}
         <div className="px-5 pt-4 pb-3 flex items-center justify-between">
           <div>
-            <h2 className="text-lg sm:text-xl font-black text-slate-800 leading-tight" style={{ fontFamily: '"Noto Sans Tamil", serif' }}>
+            <h2 className="text-lg sm:text-xl font-black text-slate-800 leading-tight">
               {question.boardTitle}
             </h2>
             <p className="text-xs font-semibold text-slate-400 mt-0.5">{question.boardSubtitle}</p>
           </div>
           <span className={`text-xs font-black px-3 py-1.5 rounded-full ${theme.badge} uppercase tracking-wider`}>
-            {letters.length} எழுத்து
+            {letters.length} {question.boardTitle?.includes('உயிர்') ? 'எழுத்து' : (question.boardTitle?.includes('स्वर') ? 'वर्ण' : 'Letters')}
           </span>
         </div>
 
@@ -2156,7 +2251,6 @@ function TamilLetterBoard({ question, onAnswer }: { question: any; onAnswer: (op
               >
                 <span
                   className="text-2xl sm:text-3xl font-black leading-none"
-                  style={{ fontFamily: '"Noto Sans Tamil", "Latha", serif' }}
                 >
                   {letter}
                 </span>
@@ -2168,7 +2262,7 @@ function TamilLetterBoard({ question, onAnswer }: { question: any; onAnswer: (op
         {/* Hint strip */}
         <div className="mx-4 mb-4 rounded-xl bg-white/60 px-4 py-2.5 text-center border border-white/80">
           <p className="text-xs sm:text-sm font-bold text-slate-500">
-            👀 எல்லா எழுத்துக்களையும் பார்த்து நினைவு வை! &nbsp;&middot;&nbsp; Look and remember all letters!
+            {question.instructionTa || question.instruction || '👀 Look and remember all letters!'}
           </p>
         </div>
       </div>
@@ -2290,6 +2384,7 @@ export function Grade1EnglishActivityPlayer({ lessonId, onComplete }: { lessonId
   const isTamil = GRADE1_TAMIL_LESSON_IDS.has(lessonId);
   const isGk = GRADE1_GK_LESSON_IDS.has(lessonId);
   const isEvs = GRADE1_EVS_LESSON_IDS.has(lessonId);
+  const isHindi = GRADE1_HINDI_LESSON_IDS.has(lessonId);
   const levelsSource = isTamil 
     ? GRADE1_TAMIL_LEVELS 
     : (isMath 
@@ -2298,7 +2393,9 @@ export function Grade1EnglishActivityPlayer({ lessonId, onComplete }: { lessonId
         ? GRADE1_GK_LEVELS 
         : (isEvs 
           ? GRADE1_EVS_LEVELS 
-          : GRADE1_ENGLISH_LEVELS)));
+          : (isHindi
+            ? GRADE1_HINDI_LEVELS
+            : GRADE1_ENGLISH_LEVELS))));
   const levelData = levelsSource.find((l) => l.id === levelNum) || levelsSource[0];
   
   const [qIndex, setQIndex] = useState(0);

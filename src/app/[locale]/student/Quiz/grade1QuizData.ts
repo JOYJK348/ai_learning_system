@@ -2364,8 +2364,6 @@ export const GRADE1_EVS_LEVELS: Level[] = [
   }
 ];
 
-export const GRADE1_HINDI_LEVELS: Level[] = [];
-
 export const GRADE1_TAMIL_LEVELS: Level[] = [
   // --- CHAPTER 1: எழுத்து உலகம் 🌈 (Levels 1 - 5) ---
   {
@@ -4110,4 +4108,590 @@ export const GRADE1_GK_LEVELS: Level[] = [
       }
     ]
   }
+];
+
+export const GRADE1_HINDI_LEVELS: Level[] = [
+  // --- CHAPTER 1: वर्णमाला Revision ---
+  {
+    id: 1,
+    title: 'स्वर Revision 🇮🇳',
+    titleEn: 'Swar Revision',
+    mascot: '🇮🇳',
+    color: 'from-orange-400 to-red-500',
+    borderColor: 'border-orange-300',
+    questions: [
+      { type: 'letter_board' as any, instruction: 'स्वर (Vowels) 🗣️', instructionTa: 'सारे स्वर को देखें और याद रखें! (Look and remember all vowels!)', boardTitle: 'स्वर - Hindi Vowels', boardSubtitle: 'Hindi Vowels (11+2)', letters: ['अ', 'आ', 'इ', 'ई', 'उ', 'ऊ', 'ऋ', 'ए', 'ऐ', 'ओ', 'औ', 'अं', 'अः'], color: 'from-orange-400 to-red-500', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: अ ✍️', letter: 'अ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: आ ✍️', letter: 'आ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: इ ✍️', letter: 'इ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ई ✍️', letter: 'ई', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: उ ✍️', letter: 'उ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ऊ ✍️', letter: 'ऊ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ऋ ✍️', letter: 'ऋ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ए ✍️', letter: 'ए', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ऐ ✍️', letter: 'ऐ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ओ ✍️', letter: 'ओ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: औ ✍️', letter: 'औ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: अं ✍️', letter: 'अं', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: अः ✍️', letter: 'अः', options: [] },
+      { type: 'garden_repair' as any, instruction: 'Choose the Swar for: अनार 🍎', sentence: '___ - अनार', options: [{ text: 'अ', correct: true }, { text: 'क', correct: false }] }
+    ]
+  },
+  {
+    id: 2,
+    title: 'व्यंजन Revision 🇮🇳',
+    titleEn: 'Vyanjan Revision',
+    mascot: '🇮🇳',
+    color: 'from-orange-400 to-red-500',
+    borderColor: 'border-orange-300',
+    questions: [
+      { type: 'letter_board' as any, instruction: 'व्यंजन (Consonants) 🗣️', instructionTa: 'सारे व्यंजन को देखें और याद रखें! (Look and remember all consonants!)', boardTitle: 'व्यंजन - Hindi Consonants', boardSubtitle: 'Hindi Consonants (33+4)', letters: ['क', 'ख', 'ग', 'घ', 'ङ', 'च', 'छ', 'ज', 'झ', 'ञ', 'ट', 'ठ', 'ड', 'ढ', 'ण', 'त', 'थ', 'द', 'ध', 'न', 'प', 'फ', 'ब', 'भ', 'म', 'य', 'र', 'ल', 'व', 'श', 'ष', 'स', 'ह', 'क्ष', 'त्र', 'ज्ञ', 'श्र'], color: 'from-orange-400 to-red-500', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: क ✍️', letter: 'क', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ख ✍️', letter: 'ख', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ग ✍️', letter: 'ग', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: घ ✍️', letter: 'घ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ङ ✍️', letter: 'ङ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: च ✍️', letter: 'च', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: छ ✍️', letter: 'छ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ज ✍️', letter: 'ज', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: झ ✍️', letter: 'झ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ञ ✍️', letter: 'ञ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ट ✍️', letter: 'ट', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ठ ✍️', letter: 'ठ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ड ✍️', letter: 'ड', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ढ ✍️', letter: 'ढ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ण ✍️', letter: 'ण', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: त ✍️', letter: 'त', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: थ ✍️', letter: 'थ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: द ✍️', letter: 'द', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ध ✍️', letter: 'ध', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: न ✍️', letter: 'न', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: प ✍️', letter: 'प', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: फ ✍️', letter: 'फ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ब ✍️', letter: 'ब', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: भ ✍️', letter: 'भ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: म ✍️', letter: 'म', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: य ✍️', letter: 'य', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: र ✍️', letter: 'र', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ल ✍️', letter: 'ल', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: व ✍️', letter: 'व', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: श ✍️', letter: 'श', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ष ✍️', letter: 'ष', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: स ✍️', letter: 'स', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ह ✍️', letter: 'ह', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: क्ष ✍️', letter: 'क्ष', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: त्र ✍️', letter: 'त्र', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: ज्ञ ✍️', letter: 'ज्ञ', options: [] },
+      { type: 'trace' as any, instruction: 'Trace: श्र ✍️', letter: 'श्र', options: [] },
+      { type: 'garden_repair' as any, instruction: 'Choose the Vyanjan for: कबूतर 🐦', sentence: '___ - कबूतर', options: [{ text: 'क', correct: true }, { text: 'म', correct: false }] }
+    ]
+  },
+  {
+    id: 3,
+    title: 'वर्ण पहचान 🇮🇳',
+    titleEn: 'Letter Identification',
+    mascot: '🇮🇳',
+    color: 'from-orange-400 to-red-500',
+    borderColor: 'border-orange-300',
+    questions: [
+      { type: 'grid_search' as any, instruction: 'Select all Swar (Vowels)! 🔍', gridItems: [{ text: 'अ', correct: true }, { text: 'इ', correct: true }, { text: 'उ', correct: true }, { text: 'क', correct: false }, { text: 'च', correct: false }, { text: 'म', correct: false }], options: [] },
+      { type: 'grid_search' as any, instruction: 'Select all Vyanjan (Consonants)! 🔍', gridItems: [{ text: 'म', correct: true }, { text: 'प', correct: true }, { text: 'ल', correct: true }, { text: 'आ', correct: false }, { text: 'ई', correct: false }, { text: 'ऊ', correct: false }], options: [] }
+    ]
+  },
+  {
+    id: 4,
+    title: 'वर्ण क्रम 🇮🇳',
+    titleEn: 'Letter Order',
+    mascot: '🇮🇳',
+    color: 'from-orange-400 to-red-500',
+    borderColor: 'border-orange-300',
+    questions: [
+      { type: 'sentence_train' as any, instruction: 'Arrange Swar in correct order! 🚂', words: ['आ', 'अ', 'इ', 'ई'], correctSentence: 'अ आ इ ई', options: [] },
+      { type: 'sentence_train' as any, instruction: 'Arrange Vyanjan in correct order! 🚂', words: ['ख', 'क', 'ग', 'घ'], correctSentence: 'क ख ग घ', options: [] }
+    ]
+  },
+
+  // --- CHAPTER 2: मात्राएँ ---
+  {
+    id: 5,
+    title: 'आ की मात्रा ✏️',
+    titleEn: 'Aa Ki Matra',
+    mascot: '✏️',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      { type: 'learn_card' as any, conceptTitle: 'आ की मात्रा (ा) ✏️', explanation: 'Adding "ा" to a letter creates the "Aa" sound. E.g., क + ा = का, म + ा = मा.', mascot: 'ा', examples: ['का + न = कान 👂', 'हा + थ = हाथ ✋', 'ता + ला = ताला 🔒', 'मा + ला = माला 📿'], options: [] },
+      { type: 'garden_repair' as any, instruction: 'What does "कान" mean? 👂', sentence: 'कान means ___', options: [{ text: 'Ear 👂', correct: true }, { text: 'Hand ✋', correct: false }] },
+      { type: 'garden_repair' as any, instruction: 'Fill the blank to make AM (Mango)! 🥭', sentence: 'आ___', options: [{ text: 'म', correct: true }, { text: 'न', correct: false }, { text: 'ल', correct: false }] }
+    ]
+  },
+  {
+    id: 6,
+    title: 'इ की मात्रा ✏️',
+    titleEn: 'Short I Ki Matra',
+    mascot: '✏️',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      { type: 'learn_card' as any, conceptTitle: 'इ की मात्रा (ि) ✏️', explanation: 'The short "i" sound is placed before the letter. E.g. ि + क = कि.', mascot: 'ि', examples: ['कि + ता + ब = किताब 📖', 'दि + न = दिन ☀️', 'पि + न = पिन 📌', 'सि + ता + र = सितार 🎸'], options: [] },
+      { type: 'garden_repair' as any, instruction: 'What does "किताब" mean? 📖', sentence: 'किताब is a ___', options: [{ text: 'Book 📖', correct: true }, { text: 'Pin 📌', correct: false }] },
+      { type: 'garden_repair' as any, instruction: 'Complete the word: K-I-T-A-B 📖', sentence: 'कि___ब', options: [{ text: 'ता', correct: true }, { text: 'मा', correct: false }, { text: 'का', correct: false }] }
+    ]
+  },
+  {
+    id: 7,
+    title: 'ई की मात्रा ✏️',
+    titleEn: 'Long Ee Ki Matra',
+    mascot: '✏️',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      { type: 'learn_card' as any, conceptTitle: 'ई की मात्रा (ी) ✏️', explanation: 'The long "ee" sound is placed after the letter. E.g., क + ी = की, ह + ा + थ + ी = हाथी.', mascot: 'ी', examples: ['मछ + ल + ी = मछली 🐟', 'हा + थ + ी = हाथी 🐘', 'चा + ब + ी = चाबी 🔑', 'घ + ड़ + ी = घड़ी ⏰'], options: [] },
+      { type: 'garden_repair' as any, instruction: 'Identify the word for Elephant 🐘', sentence: 'हाथी is ___', options: [{ text: 'Elephant 🐘', correct: true }, { text: 'Fish 🐟', correct: false }] }
+    ]
+  },
+  {
+    id: 8,
+    title: 'उ की मात्रा ✏️',
+    titleEn: 'Short U Ki Matra',
+    mascot: '✏️',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      { type: 'learn_card' as any, conceptTitle: 'उ की मात्रा (ु) ✏️', explanation: 'The short "u" sound is placed under the letter. E.g., क + ु = कु, ग + ु + ल + ा + ब = गुलाब.', mascot: 'ु', examples: ['गु + ला + ब = गुलाब 🌹', 'पु + ल = पुल 🌉', 'ध + नु + ष = धनुष 🏹', 'गु + डि + या = गुड़िया 🪆'], options: [] },
+      { type: 'garden_repair' as any, instruction: 'What does "गुलाब" mean? 🌹', sentence: 'गुलाब is a ___', options: [{ text: 'Rose 🌹', correct: true }, { text: 'Bridge 🌉', correct: false }] }
+    ]
+  },
+  {
+    id: 9,
+    title: 'ऊ की मात्रा ✏️',
+    titleEn: 'Long Uu Ki Matra',
+    mascot: '✏️',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      { type: 'learn_card' as any, conceptTitle: 'ऊ की मात्रा (ू) ✏️', explanation: 'The long "uu" sound is placed under the letter. E.g., फ + ू = फू, फ + ू + ल = फूल.', mascot: 'ू', examples: ['फू + ल = फूल 🌸', 'चू + हा = चूहा 🐭', 'दू + ध = दूध 🥛', 'सूरज = सूरज 🌞'], options: [] },
+      { type: 'garden_repair' as any, instruction: 'Choose the word for Flower 🌸', sentence: 'फूल is ___', options: [{ text: 'Flower 🌸', correct: true }, { text: 'Milk 🥛', correct: false }] }
+    ]
+  },
+  {
+    id: 10,
+    title: 'ए, ऐ, ओ, औ की मात्राएँ ✏️',
+    titleEn: 'Combined Matras',
+    mascot: '✏️',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      { type: 'learn_card' as any, conceptTitle: 'ए, ऐ, ओ, औ की मात्राएँ ✏️', explanation: 'Let us learn upper and double matras: ए (े), ऐ (ै), ओ (ो), औ (ौ). E.g., सेब 🍎, बैल 🐂, मोर 🦚, पौधा 🌱.', mascot: 'े', examples: ['स + े + ब = सेब 🍎', 'म + ो + र = मोर 🦚', 'प + ौ + धा = पौधा 🌱', 'थ + ै + ला = थैला 🛍️'], options: [] },
+      { type: 'garden_repair' as any, instruction: 'Identify: मोर 🦚', sentence: 'मोर is ___', options: [{ text: 'Peacock 🦚', correct: true }, { text: 'Apple 🍎', correct: false }] }
+    ]
+  },
+
+  // --- CHAPTER 3: शब्द निर्माण ---
+  {
+    id: 11,
+    title: 'दो अक्षर वाले शब्द 🧱',
+    titleEn: 'Two Letter Words',
+    mascot: '🧱',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Combine घ + र to make: 🏠', sentence: 'घ + र = ___', options: [{ text: 'घर 🏠', correct: true }, { text: 'फल 🍎', correct: false }] },
+      { type: 'sentence_train' as any, instruction: 'Build the word: GHAR (Home)! 🏠', words: ['र', 'घ'], correctSentence: 'घ र', options: [] }
+    ]
+  },
+  {
+    id: 12,
+    title: 'तीन अक्षर वाले शब्द 🧱',
+    titleEn: 'Three Letter Words',
+    mascot: '🧱',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Choose the word for Lotus 🪷', sentence: 'कमल is ___', options: [{ text: 'Lotus 🪷', correct: true }, { text: 'Crocodile 🐊', correct: false }] },
+      { type: 'sentence_train' as any, instruction: 'Build the word: KAMAL (Lotus)! 🪷', words: ['ल', 'क', 'म'], correctSentence: 'क म ल', options: [] }
+    ]
+  },
+  {
+    id: 13,
+    title: 'चार अक्षर वाले शब्द 🧱',
+    titleEn: 'Four Letter Words',
+    mascot: '🧱',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Choose the word for Flask 🍶', sentence: 'थरमस is ___', options: [{ text: 'Flask 🍶', correct: true }, { text: 'Banyan 🌳', correct: false }] },
+      { type: 'sentence_train' as any, instruction: 'Build the word: SHARBAT (Juice)! 🥤', words: ['त', 'ब', 'र', 'श'], correctSentence: 'श र ब त', options: [] }
+    ]
+  },
+  {
+    id: 14,
+    title: 'समान शब्द 🧱',
+    titleEn: 'Rhyming Words',
+    mascot: '🧱',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Which word rhymes with: घर?', sentence: 'घर rhymes with ___', options: [{ text: 'पर', correct: true }, { text: 'मन', correct: false }] }
+    ]
+  },
+  {
+    id: 15,
+    title: 'शब्द पहचान 🧱',
+    titleEn: 'Word Identification',
+    mascot: '🧱',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      { type: 'grid_search' as any, instruction: 'Select all two-letter words! 🔍', gridItems: [{ text: 'घर', correct: true }, { text: 'फल', correct: true }, { text: 'जल', correct: true }, { text: 'कमल', correct: false }, { text: 'अचकन', correct: false }], options: [] }
+    ]
+  },
+  {
+    id: 16,
+    title: 'शब्द निर्माण 🧱',
+    titleEn: 'Word Construction',
+    mascot: '🧱',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      { type: 'sentence_train' as any, instruction: 'Assemble the letters to build: MATAR 🫛', words: ['र', 'म', 'ट'], correctSentence: 'म ट र', options: [] }
+    ]
+  },
+
+  // --- CHAPTER 4: शब्द भंडार ---
+  {
+    id: 17,
+    title: 'परिवार के शब्द 🍎',
+    titleEn: 'Family Words',
+    mascot: '🍎',
+    color: 'from-rose-400 to-red-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Identify: माता 👩', sentence: 'माता is ___', options: [{ text: 'Mother 👩', correct: true }, { text: 'Father 👨', correct: false }] }
+    ]
+  },
+  {
+    id: 18,
+    title: 'शरीर के अंग 🍎',
+    titleEn: 'Body Parts',
+    mascot: '🍎',
+    color: 'from-rose-400 to-red-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Identify: आँख 👀', sentence: 'आँख is ___', options: [{ text: 'Eye 👀', correct: true }, { text: 'Nose 👃', correct: false }] }
+    ]
+  },
+  {
+    id: 19,
+    title: 'पशु-पक्षी 🍎',
+    titleEn: 'Animals & Birds',
+    mascot: '🍎',
+    color: 'from-rose-400 to-red-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Identify: शेर 🦁', sentence: 'शेर is ___', options: [{ text: 'Lion 🦁', correct: true }, { text: 'Peacock 🦚', correct: false }] }
+    ]
+  },
+  {
+    id: 20,
+    title: 'फल-सब्जियाँ 🍎',
+    titleEn: 'Fruits & Veggies',
+    mascot: '🍎',
+    color: 'from-rose-400 to-red-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Identify: आम 🥭', sentence: 'आम is ___', options: [{ text: 'Mango 🥭', correct: true }, { text: 'Potato 🥔', correct: false }] }
+    ]
+  },
+  {
+    id: 21,
+    title: 'रंग और वस्तुएँ 🍎',
+    titleEn: 'Colors & Objects',
+    mascot: '🍎',
+    color: 'from-rose-400 to-red-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'What color is: लाल? 🔴', sentence: 'लाल means ___', options: [{ text: 'Red 🔴', correct: true }, { text: 'Blue 🔵', correct: false }] }
+    ]
+  },
+
+  // --- CHAPTER 5: व्याकरण ---
+  {
+    id: 22,
+    title: 'संज्ञा 🏫',
+    titleEn: 'Nouns',
+    mascot: '🏫',
+    color: 'from-violet-400 to-purple-500',
+    borderColor: 'border-violet-300',
+    questions: [
+      { type: 'learn_card' as any, conceptTitle: 'संज्ञा (Noun) 🏫', explanation: 'Noun is the name of a person, place, animal, or thing. E.g., राम (person), दिल्ली (place), शेर (animal), कलम (thing).', mascot: '🏫', examples: ['राम - Person', 'किताब - Thing', 'घर - Place', 'कुत्ता - Animal'], options: [] },
+      { type: 'grid_search' as any, instruction: 'Select all Nouns (संज्ञा)! 🔍', gridItems: [{ text: 'राम', correct: true }, { text: 'किताब', correct: true }, { text: 'घर', correct: true }, { text: 'दौड़ना', correct: false }, { text: 'खेलना', correct: false }], options: [] }
+    ]
+  },
+  {
+    id: 23,
+    title: 'क्रिया 🏫',
+    titleEn: 'Verbs',
+    mascot: '🏫',
+    color: 'from-violet-400 to-purple-500',
+    borderColor: 'border-violet-300',
+    questions: [
+      { type: 'learn_card' as any, conceptTitle: 'क्रिया (Verb) 🏃', explanation: 'Verb is an action word. E.g., लिखना (writing), पढ़ना (reading), खेलना (playing), दौड़ना (running).', mascot: '🏃', examples: ['लिखना - Writing', 'पढ़ना - Reading', 'खेलना - Playing'], options: [] },
+      { type: 'grid_search' as any, instruction: 'Select all Actions (क्रिया)! 🔍', gridItems: [{ text: 'पढ़ना', correct: true }, { text: 'खेलना', correct: true }, { text: 'दौड़ना', correct: true }, { text: 'पेड़', correct: false }, { text: 'सेब', correct: false }], options: [] }
+    ]
+  },
+  {
+    id: 24,
+    title: 'एकवचन और बहुवचन 🏫',
+    titleEn: 'Singular & Plural',
+    mascot: '🏫',
+    color: 'from-violet-400 to-purple-500',
+    borderColor: 'border-violet-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'What is the plural of: लड़का?', sentence: 'लड़का plural is ___', options: [{ text: 'लड़के', correct: true }, { text: 'ताले', correct: false }] }
+    ]
+  },
+  {
+    id: 25,
+    title: 'लिंग 🏫',
+    titleEn: 'Gender',
+    mascot: '🏫',
+    color: 'from-violet-400 to-purple-500',
+    borderColor: 'border-violet-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Match masculine & feminine pairs!', sentence: 'लड़का matches with ___', options: [{ text: 'लड़की', correct: true }, { text: 'बहन', correct: false }] }
+    ]
+  },
+  {
+    id: 26,
+    title: 'शब्द भेद परिचय 🏫',
+    titleEn: 'Parts of Speech Intro',
+    mascot: '🏫',
+    color: 'from-violet-400 to-purple-500',
+    borderColor: 'border-violet-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'What is: दौड़ना (running)? 🏃', sentence: 'दौड़ना is a ___', options: [{ text: 'क्रिया (Verb) 🏃', correct: true }, { text: 'संज्ञा (Noun) 🏫', correct: false }] }
+    ]
+  },
+
+  // --- CHAPTER 6: वाक्य रचना ---
+  {
+    id: 27,
+    title: 'सरल वाक्य 🚂',
+    titleEn: 'Simple Sentences',
+    mascot: '🚂',
+    color: 'from-sky-400 to-blue-500',
+    borderColor: 'border-sky-300',
+    questions: [
+      { type: 'sentence_train' as any, instruction: 'Assemble the sentence! 🚂', words: ['घर', 'चल', 'अब'], correctSentence: 'अब घर चल', options: [] }
+    ]
+  },
+  {
+    id: 28,
+    title: 'शब्दों से वाक्य बनाना 🚂',
+    titleEn: 'Making Sentences',
+    mascot: '🚂',
+    color: 'from-sky-400 to-blue-500',
+    borderColor: 'border-sky-300',
+    questions: [
+      { type: 'sentence_train' as any, instruction: 'Build sentence: Fruit eat! 🚂', words: ['खा', 'फल', 'अब'], correctSentence: 'अब फल खा', options: [] }
+    ]
+  },
+  {
+    id: 29,
+    title: 'वाक्य क्रम 🚂',
+    titleEn: 'Sentence Ordering',
+    mascot: '🚂',
+    color: 'from-sky-400 to-blue-500',
+    borderColor: 'border-sky-300',
+    questions: [
+      { type: 'sentence_train' as any, instruction: 'Put in correct order! 🚂', words: ['जा', 'स्कूल', 'रोज'], correctSentence: 'रोज स्कूल जा', options: [] }
+    ]
+  },
+  {
+    id: 30,
+    title: 'प्रश्न और उत्तर 🚂',
+    titleEn: 'Questions & Answers',
+    mascot: '🚂',
+    color: 'from-sky-400 to-blue-500',
+    borderColor: 'border-sky-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Choose the correct answer for: तुम्हारा नाम क्या है?', sentence: 'मेरा नाम ___ है।', options: [{ text: 'राहुल 👦', correct: true }, { text: 'सेब 🍎', correct: false }] }
+    ]
+  },
+  {
+    id: 31,
+    title: 'छोटा अनुच्छेद 🚂',
+    titleEn: 'Short Paragraph',
+    mascot: '🚂',
+    color: 'from-sky-400 to-blue-500',
+    borderColor: 'border-sky-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Fill the blank in paragraph!', sentence: 'यह एक बाग है। यहाँ सुंदर ___ खिले हैं।', options: [{ text: 'फूल 🌸', correct: true }, { text: 'किताब 📖', correct: false }] }
+    ]
+  },
+
+  // --- CHAPTER 7: पठन कौशल ---
+  {
+    id: 32,
+    title: 'शब्द पढ़ना 📖',
+    titleEn: 'Word Reading',
+    mascot: '📖',
+    color: 'from-pink-400 to-rose-500',
+    borderColor: 'border-pink-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Read: कलम 🖊️ What does it mean?', sentence: 'कलम means ___', options: [{ text: 'Pen 🖊️', correct: true }, { text: 'Pot 🪴', correct: false }] }
+    ]
+  },
+  {
+    id: 33,
+    title: 'वाक्य पढ़ना 📖',
+    titleEn: 'Sentence Reading',
+    mascot: '📖',
+    color: 'from-pink-400 to-rose-500',
+    borderColor: 'border-pink-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Read: यह आम है। 🥭 What does it mean?', sentence: 'यह आम है means ___', options: [{ text: 'This is a mango 🥭', correct: true }, { text: 'Ram is reading 📖', correct: false }] }
+    ]
+  },
+  {
+    id: 35,
+    title: 'छोटी कहानियाँ 📖',
+    titleEn: 'Short Stories',
+    mascot: '📖',
+    color: 'from-pink-400 to-rose-500',
+    borderColor: 'border-pink-300',
+    questions: [
+      { type: 'learn_card' as any, conceptTitle: 'प्यासा कौआ 🐦', explanation: 'एक कौआ बहुत प्यासा था। उसे एक घड़ा मिला। घड़े में पानी बहुत नीचे था। उसने घड़े में कंकड़ डाले। पानी ऊपर आ गया। कौए ने पानी पिया और उड़ गया!', mascot: '🐦', examples: ['कौआ - Crow', 'पानी - Water', 'घड़ा - Pot'], options: [] },
+      { type: 'garden_repair' as any, instruction: 'Based on story, what did the crow drop in the pot?', sentence: 'कौए ने घड़े में ___ डाले।', options: [{ text: 'कंकड़ (Pebbles)', correct: true }, { text: 'पत्ते (Leaves)', correct: false }] }
+    ]
+  },
+  {
+    id: 36,
+    title: 'कविता पठन 📖',
+    titleEn: 'Poem Reading',
+    mascot: '📖',
+    color: 'from-pink-400 to-rose-500',
+    borderColor: 'border-pink-300',
+    questions: [
+      { type: 'learn_card' as any, conceptTitle: 'चंदा मामा 🌙', explanation: 'चंदा मामा दूर के, पुए पकाएँ बूर के। आप खाएँ थाली में, मुन्ने को दें प्याली में!', mascot: '🌙', examples: ['चंदा मामा - Moon', 'प्याली - Cup', 'थाली - Plate'], options: [] },
+      { type: 'garden_repair' as any, instruction: 'Where does munna get the sweet?', sentence: 'मुन्ने को दें ___ में।', options: [{ text: 'प्याली (Cup)', correct: true }, { text: 'हाथ (Hand)', correct: false }] }
+    ]
+  },
+  {
+    id: 37,
+    title: 'समझ आधारित प्रश्न 📖',
+    titleEn: 'Comprehension',
+    mascot: '📖',
+    color: 'from-pink-400 to-rose-500',
+    borderColor: 'border-pink-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Read: राम आम खाता है। Who eats mango?', sentence: '___ आम खाता है।', options: [{ text: 'राम', correct: true }, { text: 'मोहन', correct: false }] }
+    ]
+  },
+
+  // --- CHAPTER 8: लेखन कौशल ---
+  {
+    id: 38,
+    title: 'अक्षर लेखन ✍️',
+    titleEn: 'Letter Writing',
+    mascot: '✍️',
+    color: 'from-lime-400 to-green-500',
+    borderColor: 'border-lime-300',
+    questions: [
+      { type: 'trace' as any, instruction: 'Trace the letter: ग ✍️', letter: 'ग', options: [] },
+      { type: 'trace' as any, instruction: 'Trace the letter: घ ✍️', letter: 'घ', options: [] }
+    ]
+  },
+  {
+    id: 39,
+    title: 'शब्द लेखन ✍️',
+    titleEn: 'Word Writing',
+    mascot: '✍️',
+    color: 'from-lime-400 to-green-500',
+    borderColor: 'border-lime-300',
+    questions: [
+      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Complete the word for Home: GH_R 🏠', sentence: 'घ_र', options: [{ text: 'र', correct: true }, { text: 'ल', correct: false }] }
+    ]
+  },
+  {
+    id: 40,
+    title: 'खाली स्थान भरना ✍️',
+    titleEn: 'Fill in the Blanks',
+    mascot: '✍️',
+    color: 'from-lime-400 to-green-500',
+    borderColor: 'border-lime-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Fill with correct letter: फ___', sentence: 'यह ___ है। (Fruit)', options: [{ text: 'फल 🍎', correct: true }, { text: 'घर 🏠', correct: false }] }
+    ]
+  },
+  {
+    id: 41,
+    title: 'वाक्य लेखन ✍️',
+    titleEn: 'Sentence Writing',
+    mascot: '✍️',
+    color: 'from-lime-400 to-green-500',
+    borderColor: 'border-lime-300',
+    questions: [
+      { type: 'writing_lab' as any, subType: 'complete', instruction: 'Complete the sentence: Ram is writing.', sentence: 'राम ___ रहा है।', options: [{ text: 'लिख', correct: true }, { text: 'खा', correct: false }] }
+    ]
+  },
+  {
+    id: 42,
+    title: 'चित्र आधारित लेखन ✍️',
+    titleEn: 'Picture Writing',
+    mascot: '✍️',
+    color: 'from-lime-400 to-green-500',
+    borderColor: 'border-lime-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Look at the picture: 🥭 What is it?', sentence: 'यह एक ___ है।', options: [{ text: 'आम 🥭', correct: true }, { text: 'सेब 🍎', correct: false }] }
+    ]
+  },
+
+  // --- CHAPTER 9: पुनरावृत्ति और भाषा खेल ---
+  {
+    id: 43,
+    title: 'अक्षर अभ्यास 🎯',
+    titleEn: 'Letter Game',
+    mascot: '🎯',
+    color: 'from-purple-400 to-indigo-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      { type: 'grid_search' as any, instruction: 'Select all letters that make the /ka/ sound! 🔍', gridItems: [{ text: 'क', correct: true }, { text: 'का', correct: true }, { text: 'को', correct: true }, { text: 'म', correct: false }, { text: 'प', correct: false }], options: [] }
+    ]
+  },
+  {
+    id: 44,
+    title: 'शब्द अभ्यास 🎯',
+    titleEn: 'Word Game',
+    mascot: '🎯',
+    color: 'from-purple-400 to-indigo-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Select the matching word for: आम 🥭', sentence: 'आम = ___', options: [{ text: 'आम 🥭', correct: true }, { text: 'घर 🏠', correct: false }] }
+    ]
+  },
+  {
+    id: 45,
+    title: 'वाक्य अभ्यास 🎯',
+    titleEn: 'Sentence Game',
+    mascot: '🎯',
+    color: 'from-purple-400 to-indigo-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      { type: 'sentence_train' as any, instruction: 'Assemble: Water drink! 🚂', words: ['पी', 'पानी', 'अब'], correctSentence: 'अब पानी पी', options: [] }
+    ]
+  },
+  {
+    id: 46,
+    title: 'कहानी अभ्यास 🎯',
+    titleEn: 'Story Game',
+    mascot: '🎯',
+    color: 'from-purple-400 to-indigo-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      { type: 'garden_repair' as any, instruction: 'Who flew away at the end of the story?', sentence: '___ उड़ गया।', options: [{ text: 'कौआ 🐦', correct: true }, { text: 'हाथी 🐘', correct: false }] }
+    ]
+  }
+
 ];

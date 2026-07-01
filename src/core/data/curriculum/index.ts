@@ -226,6 +226,7 @@ export function buildTutorial(subjectName: string, title: string, studentName?: 
 
   if (isGrade1) {
     if (isTamilSubject(subjectName)) return grade1Tamil.buildTutorial(title, studentName);
+    if (isHindiSubject(subjectName)) return grade1Hindi.buildTutorial(title, studentName);
     if (isMathsSubject(subjectName)) return grade1Maths.buildTutorial(title, studentName);
     if (isEvsSubject(subjectName)) return grade1Evs.buildTutorial(title, studentName);
     return grade1English.buildTutorial(title, studentName);
