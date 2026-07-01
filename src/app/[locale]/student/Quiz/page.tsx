@@ -44,7 +44,7 @@ import {
   GRADE1_EVS_LEVELS,
   GRADE1_GK_LEVELS,
   GRADE1_HINDI_LEVELS
-} from './grade1QuizData';
+} from './grade1ExamData';
 
 import {
   Grade1ConnectPairs,
