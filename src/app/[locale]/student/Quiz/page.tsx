@@ -37,7 +37,80 @@ import {
   UKG_HINDI_LEVELS
 } from './ukgQuizData';
 
+import {
+  GRADE1_ENGLISH_LEVELS,
+  GRADE1_TAMIL_LEVELS,
+  GRADE1_MATH_LEVELS,
+  GRADE1_EVS_LEVELS,
+  GRADE1_GK_LEVELS,
+  GRADE1_HINDI_LEVELS
+} from './grade1QuizData';
+
+import {
+  Grade1ConnectPairs,
+  Grade1GridSearch,
+  Grade1WordHunt,
+  Grade1GardenRepair,
+  Grade1SentenceTrain,
+  Grade1StoryCave,
+  Grade1DetectiveZone,
+  Grade1WritingLab,
+  Grade1LearnCard
+} from '../_components/activities/Grade1EnglishGames';
+
+const GRADE1_LEVEL_DESCRIPTIONS: Record<string, Record<number, { desc: string; focus: string }>> = {
+  tamil: {
+    1: { desc: 'உயிர்மெய் எழுத்து உருவாக்கம், எழுத்து அகரவரிசை & உயிர்மெய் வகைப்பாடு.', focus: 'எழுத்து உலகம் 🌈' },
+    2: { desc: 'மரம் சொல் உருவாக்கம், விடுபட்ட எழுத்துக்கள் & சரியான எழுத்துக்கூட்டல்.', focus: 'சொல் கட்டிடம் 🧱' },
+    3: { desc: 'பெயர்ச்சொல், வினைச்சொல், ஒருமை-பன்மை & எதிர்ச்சொல் வகைப்பாடு.', focus: 'சொல் வளம் + இலக்கணம் 🌱' },
+    4: { desc: 'வாக்கிய வடிவமைப்பு, கதை ஒழுங்கு & வாசிப்பு புரிதல் வினா-விடை.', focus: 'வாசிப்பு திறன் 📖' },
+    5: { desc: 'உயிர்மெய் எழுத்து எழுதுதல், சொல் எழுதுதல் & பட விவரிப்பு வாக்கியம்.', focus: 'எழுத்து பயிற்சி ✏️' },
+    6: { desc: 'சொல் புதிர், வேறுபட்ட சொல் கண்டறிதல் & தாவர வளர்ச்சி கதை ஒழுங்கு.', focus: 'மொழி சவால் 🧠' }
+  },
+  english: {
+    1: { desc: 'Word builders, missing letter pairs, syllable breaks & alphabetical ordering.', focus: 'Phonics + Word Formation' },
+    2: { desc: 'Category sorting, compound word constructs, opposites & plural matching.', focus: 'Vocabulary World' },
+    3: { desc: 'Sentence repair, pronouns, grammar sorts, punctuation & articles.', focus: 'Grammar Garden' },
+    4: { desc: 'Sentence ordering, paragraph sequencing & comprehension reading maps.', focus: 'Sentence & Reading' },
+    5: { desc: 'Contextual sentence completion, spelling fix & handwriting tracing.', focus: 'Writing Skills' },
+    6: { desc: 'Word mazes, odd-one-out detection, A-Z dictionary order & final capstone stories.', focus: 'Language Challenge' }
+  },
+  math: {
+    1: { desc: 'Numbers 1-20 comparison, order, and count verification.', focus: 'Counting & comparison' },
+    2: { desc: 'Addition models & number line calculation practice.', focus: 'Addition & calculations' },
+    3: { desc: 'Subtraction, basic shapes & spatial pattern recognition.', focus: 'Shapes & subtraction' },
+    4: { desc: 'Time measurement, calendar & clock reading evaluation.', focus: 'Time, calendar & clocks' },
+    5: { desc: 'Data representation, basic graphs & comparison analysis.', focus: 'Graphs & comparisons' },
+    6: { desc: 'Logical patterns, word problems & final arithmetic test.', focus: 'Logic, word problems & exams' }
+  },
+  evs: {
+    1: { desc: 'My Self, body parts & sensory organs relational evaluation.', focus: 'Human body & senses' },
+    2: { desc: 'My Family, home environments & community relationships test.', focus: 'Social relations & homes' },
+    3: { desc: 'Plants, leaves & clean environment classification exam.', focus: 'Flora, fauna & cleaning' },
+    4: { desc: 'Domestic & wild animals classification and habitat test.', focus: 'Animals & habitats' },
+    5: { desc: 'Food groups, healthy habits & hygiene maintenance rules.', focus: 'Food pyramid & hygiene' },
+    6: { desc: 'Weather, seasons, clothes & transport modes final test.', focus: 'Weather & transport final' }
+  },
+  gk: {
+    1: { desc: 'General awareness, logic and reasoning test.', focus: 'Cognitive & logic test' },
+    2: { desc: 'Simple objects, colors & vocabulary assessment.', focus: 'Objects & colors' },
+    3: { desc: 'Animal habitats, sounds & simple nature quiz.', focus: 'Nature & animals' },
+    4: { desc: 'Daily habits, colors, fruits & general safety rules.', focus: 'Life skills & safety' },
+    5: { desc: 'National symbols, flags & simple calculations.', focus: 'National symbols' },
+    6: { desc: 'Logic puzzles, general science & final oral evaluation.', focus: 'Final reasoning challenge' }
+  },
+  hindi: {
+    1: { desc: 'Hindi vowel (Swar) recognition and tracing test.', focus: 'Swar letters & writing' },
+    2: { desc: 'Hindi consonants (Vyanjan) recognition and tracing test.', focus: 'Vyanjan & tracing' },
+    3: { desc: 'Simple Hindi objects, shapes & spelling connection.', focus: 'Vocabulary matching' },
+    4: { desc: 'Three letter words spelling and sentence train practice.', focus: 'Three letter structures' },
+    5: { desc: 'Hindi numbers, colors and daily greetings evaluation.', focus: 'Numbers & greetings' },
+    6: { desc: 'Logic puzzles, word search & final Hindi comprehension.', focus: 'Final comprehensive exam' }
+  }
+};
+
 // ─── HELPERS ───
+
 
 function FamilyMedia({ emojiOrPath, className = "w-10 h-10 object-contain" }: { emojiOrPath: string; className?: string }) {
   const images: Record<string, string> = {
@@ -776,6 +849,59 @@ const UKG_MAPPINGS: Record<string, Record<number, string>> = {
   }
 };
 
+const GRADE1_MAPPINGS: Record<string, Record<number, string>> = {
+  tamil: {
+    1: 'd05d60ce-2053-4068-b9aa-45e81912e80d',
+    2: '402e5fee-2ac6-4ecd-addb-0382f1d3dc5b',
+    3: '075e431f-1d90-4b98-9b52-975eaa076543',
+    4: 'db0aa369-f847-4c49-b1e1-bef3ff49a2dd',
+    5: '9206802c-20bf-4b4d-960f-5b67aaebc2de',
+    6: '8f03fcdc-fb8f-4af7-82bc-7a85e50f4e90',
+  },
+  english: {
+    1: '94fd7887-13fc-4e1e-96b4-66e6287ad14b',
+    2: '58b41e3f-5415-484d-9d21-c40f35088660',
+    3: 'a3de0f82-cac1-4259-93eb-a156c2c7deef',
+    4: '73971c5a-7a1e-444a-afcb-9f55361cbd58',
+    5: 'aa945023-9696-4a94-a467-837f5a45fddf',
+    6: 'c55b50cf-4d2b-4792-90ec-bef36e058371',
+  },
+  math: {
+    1: 'c464394d-630b-4e9a-af81-a1dabf2b55f9',
+    2: '608889e3-6ac2-4192-ad6a-77a43053d876',
+    3: '35983bcf-e2f5-4fb1-a9a5-61dfe5c49db9',
+    4: '1a6e8fe0-3081-4aa8-b2bf-781e874f51c9',
+    5: '40c172ab-b06b-4d2c-b1bc-fc4388ffec89',
+    6: 'e303557d-9b47-4f5d-a91d-eb88b5ee2178',
+  },
+  evs: {
+    1: '80cbf580-be8c-4098-bbff-16f9934dd93e',
+    2: '644a8a8b-bb18-4792-9262-5b29fe2b895d',
+    3: 'ed19c4c2-e385-4bc6-ba8e-17061f0e6e32',
+    4: '2322e16a-7f83-46f1-a36b-99546ddaa172',
+    5: '735d30b8-2a20-43b5-b7c9-8ff3820eb2f1',
+    6: 'd6566052-c56d-4ad5-bcad-694f370ac053',
+  },
+  gk: {
+    1: '892cd0a0-d5ea-48a2-a87a-9059cc573556',
+    2: 'd7f55ee5-3d3d-49d5-b39e-ff6c9fa5a6b0',
+    3: '746a200f-b7fc-47f2-a321-96661c0eac11',
+    4: 'b415e7b6-6043-4fce-bade-bba6530c7d17',
+    5: '113edde3-3cc4-4b75-97e6-af520e571fcf',
+    6: 'f33bdd85-9e8f-49de-b157-d92b2f78ce84',
+  },
+  hindi: {
+    1: 'e7d508d9-2d74-469b-b506-54205fb7c285',
+    2: '16eddb34-b0c9-4b23-b06c-9ca9986bcd33',
+    3: '1e595560-31b4-42ae-8f5d-4978ae2b5220',
+    4: '0f99549a-5258-4d9f-904f-143a642ca86d',
+    5: 'd819f718-3364-497c-bfe7-9739a271cc83',
+    6: 'ba8bc449-4205-4631-a490-62eaa35fff48',
+  },
+};
+
+
+
 // ─── MAIN PORTAL ARENA ───
 
 export default function QuizArena() {
@@ -784,7 +910,8 @@ export default function QuizArena() {
   const queryClient = useQueryClient();
 
   const { subjects, studentProfile, studentDashboard } = useData();
-  const isUKG = studentProfile?.grade_name?.toUpperCase() === 'UKG';
+  const isUKG = studentProfile?.grade_name?.toUpperCase()?.replace(/\s+/g, '') === 'UKG';
+  const isGrade1 = studentProfile?.grade_name?.toUpperCase()?.replace(/\s+/g, '')?.includes('GRADE1');
   const [mounted, setMounted] = useState(false);
   
   // Views: 'dashboard' | 'levels' | 'quiz_player' | 'score_card'
@@ -797,6 +924,16 @@ export default function QuizArena() {
   // Subject Quiz Levels state
   const [activeSubject, setActiveSubject] = useState<'tamil' | 'english' | 'math' | 'evs' | 'gk' | 'hindi'>('tamil');
   const activeLevels = useMemo(() => {
+    if (isGrade1) {
+      if (activeSubject === 'tamil') return GRADE1_TAMIL_LEVELS.slice(0, 6);
+      if (activeSubject === 'english') return GRADE1_ENGLISH_LEVELS.slice(0, 6);
+      if (activeSubject === 'evs') return GRADE1_EVS_LEVELS.slice(0, 6);
+      if (activeSubject === 'gk') return GRADE1_GK_LEVELS.slice(0, 6);
+      if (activeSubject === 'hindi') return GRADE1_HINDI_LEVELS.slice(0, 6);
+      return GRADE1_MATH_LEVELS.slice(0, 6);
+    }
+
+
     if (isUKG) {
       if (activeSubject === 'tamil') return UKG_TAMIL_LEVELS;
       if (activeSubject === 'english') return UKG_ENGLISH_LEVELS;
@@ -811,7 +948,7 @@ export default function QuizArena() {
     if (activeSubject === 'gk') return GK_LEVELS;
     if (activeSubject === 'hindi') return HINDI_LEVELS;
     return MATH_LEVELS;
-  }, [activeSubject, isUKG]);
+  }, [activeSubject, isUKG, isGrade1]);
 
   // Subject Quiz Levels state
   const [activeLevel, setActiveLevel] = useState<Level | null>(null);
@@ -830,19 +967,35 @@ export default function QuizArena() {
     setSelectedLetter(null);
   }, [currentQuestionIndex, activeLevel]);
 
+  const quizQuestions = useMemo(() => {
+    if (!activeLevel) return [];
+
+    // Return active level questions directly (filtered to exclude study guides/learn cards)
+    return activeLevel.questions.filter(q => q.type !== 'learn_card' && q.type !== 'letter_board' && q.type !== 'combo_chart');
+  }, [activeLevel, activeSubject, isGrade1]);
+
+
   // Shuffle options for the current question to avoid predictable choices (e.g. Option 1 always being correct)
   const shuffledOptions = useMemo(() => {
-    if (!activeLevel) return [];
-    const question = activeLevel.questions[currentQuestionIndex];
+    if (quizQuestions.length === 0) return [];
+    const question = quizQuestions[currentQuestionIndex];
     if (!question || !question.options) return [];
     // Perform a seed-stable or simple shuffle when question index changes
     return [...question.options].sort(() => Math.random() - 0.5);
-  }, [activeLevel, currentQuestionIndex]);
+  }, [quizQuestions, currentQuestionIndex]);
+
 
   // Dynamically compute unlocked quiz levels based on completed chapters in Database
   const unlockedLevels = useMemo(() => {
-    const activeSubjectMap = isUKG ? UKG_MAPPINGS[activeSubject] : LKG_MAPPINGS[activeSubject];
+    if (isGrade1) {
+      return [1, 2, 3, 4, 5, 6];
+    }
+
+    const activeSubjectMap = isGrade1
+      ? GRADE1_MAPPINGS[activeSubject]
+      : (isUKG ? UKG_MAPPINGS[activeSubject] : LKG_MAPPINGS[activeSubject]);
     if (!activeSubjectMap) return [1];
+
 
     const matchingSubject = subjects.find(s => {
       const nameLower = s.name.toLowerCase();
@@ -871,7 +1024,7 @@ export default function QuizArena() {
       }
     });
     return Array.from(new Set(unlocked));
-  }, [subjects, activeSubject, isUKG]);
+  }, [subjects, activeSubject, isUKG, isGrade1]);
 
   // Set mounted state and reset levelScores when student profile changes (prevent cross-child score bleed)
   useEffect(() => {
@@ -885,7 +1038,9 @@ export default function QuizArena() {
     const scoresMap: Record<number, number> = {};
     const allLessons = subjects.flatMap(s => s.chapters.flatMap(c => c.lessons));
     
-    const mappings = isUKG ? UKG_MAPPINGS[activeSubject] : LKG_MAPPINGS[activeSubject];
+    const mappings = isGrade1
+      ? GRADE1_MAPPINGS[activeSubject]
+      : (isUKG ? UKG_MAPPINGS[activeSubject] : LKG_MAPPINGS[activeSubject]);
     if (!mappings) return;
 
     Object.entries(mappings).forEach(([levelId, lessonId]) => {
@@ -900,7 +1055,7 @@ export default function QuizArena() {
       }
     });
     setLevelScores(scoresMap);
-  }, [subjects, studentProfile, activeSubject, isUKG]);
+  }, [subjects, studentProfile, activeSubject, isUKG, isGrade1]);
 
   useEffect(() => {
     if (activeQuiz || activeGame || view !== 'dashboard') {
@@ -938,7 +1093,7 @@ export default function QuizArena() {
         color: 'bg-emerald-100 text-emerald-600',
         border: 'border-emerald-300',
         progress: 0,
-        lessons: 6,
+        lessons: isGrade1 ? 6 : (isUKG ? 6 : 6),
         isTamilQuiz: true,
         isEnglishQuiz: false,
         isMathQuiz: false,
@@ -953,7 +1108,7 @@ export default function QuizArena() {
         color: 'bg-amber-105 text-amber-600',
         border: 'border-amber-300',
         progress: 0,
-        lessons: 6,
+        lessons: isGrade1 ? 6 : (isUKG ? 6 : 6),
         isTamilQuiz: false,
         isEnglishQuiz: true,
         isMathQuiz: false,
@@ -968,7 +1123,7 @@ export default function QuizArena() {
         color: 'bg-indigo-100 text-indigo-650',
         border: 'border-indigo-300',
         progress: 0,
-        lessons: 6,
+        lessons: isGrade1 ? 6 : (isUKG ? 6 : 6),
         isTamilQuiz: false,
         isEnglishQuiz: false,
         isMathQuiz: true,
@@ -983,7 +1138,7 @@ export default function QuizArena() {
         color: 'bg-lime-100 text-lime-650',
         border: 'border-lime-300',
         progress: 0,
-        lessons: 6,
+        lessons: isGrade1 ? 6 : (isUKG ? 6 : 6),
         isTamilQuiz: false,
         isEnglishQuiz: false,
         isMathQuiz: false,
@@ -998,7 +1153,7 @@ export default function QuizArena() {
         color: 'bg-purple-100 text-purple-650',
         border: 'border-purple-300',
         progress: 0,
-        lessons: 6,
+        lessons: isGrade1 ? 6 : (isUKG ? 6 : 6),
         isTamilQuiz: false,
         isEnglishQuiz: false,
         isMathQuiz: false,
@@ -1013,7 +1168,7 @@ export default function QuizArena() {
         color: 'bg-rose-100 text-rose-600',
         border: 'border-rose-300',
         progress: 0,
-        lessons: 6,
+        lessons: isGrade1 ? 6 : (isUKG ? 5 : 5),
         isTamilQuiz: false,
         isEnglishQuiz: false,
         isMathQuiz: false,
@@ -1021,6 +1176,8 @@ export default function QuizArena() {
         isGkQuiz: false,
         isHindiQuiz: true
       }
+
+
     ];
 
     if (!mounted) return DEFAULT_CATEGORIES;
@@ -1046,7 +1203,7 @@ export default function QuizArena() {
           id: apiSubject.id,
           title: apiSubject.name,
           progress: apiSubject.chapters.length > 0 ? Math.round(apiSubject.chapters.filter(c => c.completion_percentage >= 100).length / apiSubject.chapters.length * 100) : 0,
-          lessons: apiSubject.chapters.flatMap(c => c.lessons).length,
+          lessons: defCat.lessons,
         };
       }
       return defCat;
@@ -1071,7 +1228,8 @@ export default function QuizArena() {
     });
 
     return [...merged, ...extraSubjects];
-  }, [subjects, mounted]);
+  }, [subjects, mounted, isGrade1, isUKG]);
+
 
   const startDailyThree = () => {
     const randomLesson = allLessonsFlat[Math.floor(Math.random() * allLessonsFlat.length)];
@@ -1102,6 +1260,55 @@ export default function QuizArena() {
     setView('quiz_player');
   };
 
+  const handleGrade1Complete = (score: number) => {
+    if (activeLevel) {
+      const finalScore = score;
+      const currentBest = levelScores[activeLevel.id] || 0;
+      if (finalScore > currentBest) {
+        setLevelScores(prev => ({
+          ...prev,
+          [activeLevel.id]: finalScore
+        }));
+      }
+
+      const lessonId = GRADE1_MAPPINGS[activeSubject]?.[activeLevel.id];
+      if (lessonId) {
+        // Update lesson progress
+        studentApi.updateProgress(lessonId, {
+          status: 'completed',
+          completion_percentage: 100,
+          quiz_completed: true,
+          quiz_score: finalScore,
+          quiz_max_score: 5
+        }).then(() => {
+          queryClient.invalidateQueries({ queryKey: studentKeys.lessons });
+          queryClient.invalidateQueries({ queryKey: studentKeys.dashboard });
+          queryClient.invalidateQueries({ queryKey: studentKeys.me });
+        }).catch((err) => {
+          console.error("Failed to sync progress to DB:", err);
+        });
+
+        // Submit quiz score using deterministic quiz UUID
+        const quizId = lessonId.slice(0, -12) + '000000000000';
+        studentApi.submitQuizScore(lessonId, quizId, {
+          score: finalScore,
+          max_score: 5,
+        }).then(() => {
+          queryClient.invalidateQueries({ queryKey: studentKeys.lessons });
+          queryClient.invalidateQueries({ queryKey: studentKeys.dashboard });
+          queryClient.invalidateQueries({ queryKey: studentKeys.me });
+          queryClient.invalidateQueries({ queryKey: ['parent'] });
+          queryClient.invalidateQueries({ queryKey: ['parent', 'children'] });
+          queryClient.invalidateQueries({ queryKey: ['parent', 'child'] });
+        }).catch((err) => {
+          console.error("Failed to record quiz attempt:", err);
+        });
+      }
+      setScores(Array(5).fill(1).map((_, i) => i < score ? 1 : 0));
+      setView('score_card');
+    }
+  };
+
   const handleAnswer = (option: Option) => {
     if (selectedOptionText !== null) return; // Prevent double taps
 
@@ -1112,8 +1319,10 @@ export default function QuizArena() {
     // Smooth next transition without red cross or stress animations
     setTimeout(() => {
       setSelectedOptionText(null);
-      if (activeLevel && currentQuestionIndex < activeLevel.questions.length - 1) {
+      const maxQCount = Math.min(quizQuestions.length, 5);
+      if (activeLevel && currentQuestionIndex < maxQCount - 1) {
         setCurrentQuestionIndex(idx => idx + 1);
+
       } else {
         setView('score_card');
         
@@ -1131,7 +1340,9 @@ export default function QuizArena() {
           }
 
           // Static mapping for lesson ID
-          const activeSubjectMap = isUKG ? UKG_MAPPINGS[activeSubject] : LKG_MAPPINGS[activeSubject];
+          const activeSubjectMap = isGrade1
+            ? GRADE1_MAPPINGS[activeSubject]
+            : (isUKG ? UKG_MAPPINGS[activeSubject] : LKG_MAPPINGS[activeSubject]);
           const lessonId = activeSubjectMap ? activeSubjectMap[activeLevel.id] : null;
 
           // Universal Lesson ID -> Quiz ID mapping
@@ -1234,7 +1445,9 @@ export default function QuizArena() {
             }
 
             // ALWAYS record quiz_attempt (so parent portal sees every attempt)
-            const quizId = lessonToQuizId[lessonId];
+            const quizId = isGrade1
+              ? lessonId.slice(0, -12) + '000000000000'
+              : lessonToQuizId[lessonId];
             if (quizId) {
               studentApi.submitQuizScore(lessonId, quizId, {
                 score: finalScore,
@@ -1613,10 +1826,27 @@ export default function QuizArena() {
                               <h3 className="text-2xl font-black leading-tight drop-shadow-md font-sans truncate">
                                 {level.title.split('(')[0].trim()}
                               </h3>
-                              <p className="text-xs font-extrabold opacity-90 font-sans truncate">
-                                {level.titleEn}
-                              </p>
+                              {isGrade1 ? (
+                                (() => {
+                                  const customMeta = GRADE1_LEVEL_DESCRIPTIONS[activeSubject]?.[level.id] || { desc: level.titleEn, focus: 'Assessment' };
+                                  return (
+                                    <div className="mt-1.5 space-y-1 flex flex-col items-center">
+                                      <span className="inline-block text-[9px] bg-white/25 text-white border border-white/20 px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider">
+                                        🎯 {customMeta.focus}
+                                      </span>
+                                      <p className="text-[10px] leading-normal opacity-95 font-bold line-clamp-2 px-1 text-white/90 max-w-[240px]">
+                                        {customMeta.desc}
+                                      </p>
+                                    </div>
+                                  );
+                                })()
+                              ) : (
+                                <p className="text-xs font-extrabold opacity-90 font-sans truncate">
+                                  {level.titleEn}
+                                </p>
+                              )}
                             </div>
+
 
                             {/* Scoreboard / Stars container */}
                             {unlocked && (
@@ -1667,13 +1897,30 @@ export default function QuizArena() {
 
           {/* 3. ACTIVE QUIZ PLAYER VIEW */}
           {view === 'quiz_player' && activeLevel && (
-            <div
-              key="player"
-              
-              
-              
-              className="w-full flex flex-col gap-6 max-w-xl mx-auto pt-4"
-            >
+            isGrade1 ? (
+              <Grade1ProfessionalExamPlayer
+                activeLevel={activeLevel}
+                quizQuestions={quizQuestions}
+                currentQuestionIndex={currentQuestionIndex}
+                setCurrentQuestionIndex={setCurrentQuestionIndex}
+                scores={scores}
+                setScores={setScores}
+                selectedOptionText={selectedOptionText}
+                setSelectedOptionText={setSelectedOptionText}
+                setView={setView}
+                activeSubject={activeSubject}
+                levelScores={levelScores}
+                setLevelScores={setLevelScores}
+                queryClient={queryClient}
+                studentKeys={studentKeys}
+                studentApi={studentApi}
+              />
+            ) : (
+              <div
+                key="player"
+                className="w-full flex flex-col gap-6 max-w-xl mx-auto pt-4"
+              >
+
               {/* Quiz Header Info */}
               <div className="flex items-center justify-between gap-3">
                 <button
@@ -1687,7 +1934,7 @@ export default function QuizArena() {
                   {activeLevel.title}
                 </span>
                 <span className="px-3 py-1 bg-amber-400 text-indigo-950 rounded-full font-black text-xs font-sans shrink-0">
-                  {currentQuestionIndex + 1} / {activeLevel.questions.length}
+                  {currentQuestionIndex + 1} / {Math.min(quizQuestions.length, 5)}
                 </span>
               </div>
 
@@ -1695,13 +1942,14 @@ export default function QuizArena() {
               <div className="w-full h-3 bg-white/50 rounded-full overflow-hidden shadow-inner">
                 <div 
                   className="h-full bg-gradient-to-r from-emerald-450 to-teal-555 rounded-full transition-all duration-300"
-                  style={{ width: `${((currentQuestionIndex) / activeLevel.questions.length) * 100}%` }}
+                  style={{ width: `${((currentQuestionIndex) / Math.min(quizQuestions.length, 5)) * 100}%` }}
                 />
               </div>
 
               {/* Current Question Frame */}
               {(() => {
-                const question = activeLevel.questions[currentQuestionIndex];
+                const question = quizQuestions[currentQuestionIndex];
+
                 return (
                   <div className="w-full bg-[#fffdf9] border-4 border-[#b45309] rounded-[3rem] p-6 sm:p-8 shadow-xl flex flex-col items-center gap-6 relative">
                     
@@ -1738,8 +1986,59 @@ export default function QuizArena() {
                       />
                     )}
 
-                    {/* Math Compare: Size, weight, quantity choices side-by-side */}
+                    {/* Grade 1 Custom Interactive components */}
+                    {question.type === 'connect_pairs' && (
+                      <Grade1ConnectPairs question={question} onAnswer={handleAnswer} isMath={activeSubject === 'math'} />
+                    )}
+                    {question.type === 'grid_search' && (
+                      <Grade1GridSearch question={question} onAnswer={handleAnswer} />
+                    )}
+                    {question.type === 'drag_hunt' && (
+                      <Grade1WordHunt question={question} onAnswer={handleAnswer} />
+                    )}
+                    {question.type === 'garden_repair' && (
+                      <Grade1GardenRepair question={question} onAnswer={handleAnswer} isMath={activeSubject === 'math'} />
+                    )}
+                    {question.type === 'sentence_train' && (
+                      <Grade1SentenceTrain question={question} onAnswer={handleAnswer} isMath={activeSubject === 'math'} />
+                    )}
+                    {question.type === 'story_cave' && (
+                      <Grade1StoryCave question={question} onAnswer={handleAnswer} />
+                    )}
+                    {question.type === 'detective_highlight' && (
+                      <Grade1DetectiveZone question={question} onAnswer={handleAnswer} />
+                    )}
+                    {question.type === 'writing_lab' && (
+                      <Grade1WritingLab question={question} onAnswer={handleAnswer} />
+                    )}
+                    {question.type === 'learn_card' && (
+                      <Grade1LearnCard question={question} onAnswer={handleAnswer} isMath={activeSubject === 'math'} />
+                    )}
+
+                    {/* Letter Board (Hindi/Tamil Swar/Vyanjan revision) */}
+                    {question.type === 'letter_board' && (
+                      <div className="flex flex-col items-center gap-6 w-full mt-2 text-center font-sans">
+                        <h3 className="text-xl font-bold text-[#b45309]">{question.boardTitle || 'Board'}</h3>
+                        <p className="text-sm font-semibold text-slate-650">{question.boardSubtitle || ''}</p>
+                        <div className="flex flex-wrap gap-3 justify-center max-w-md bg-white p-6 rounded-3xl border-2 border-slate-100 shadow-inner">
+                          {question.letters?.map((letter: string, i: number) => (
+                            <span key={i} className="text-2xl font-black bg-indigo-50 border-2 border-indigo-100 text-indigo-800 px-4 py-2 rounded-2xl shadow-sm">
+                              {letter}
+                            </span>
+                          ))}
+                        </div>
+                        <button
+                          onClick={() => handleAnswer({ text: 'Next', correct: true })}
+                          className="mt-4 px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-2xl shadow-lg active:scale-95 transition-all uppercase tracking-widest text-sm"
+                        >
+                          GO NEXT! 🚀
+                        </button>
+                      </div>
+                    )}
+
+
                     {question.type === 'math_compare' && (
+
                       <div className="flex flex-col sm:flex-row gap-6 w-full max-w-lg justify-center items-stretch mt-4">
                         {shuffledOptions.map((opt, i) => {
                           const isSelected = selectedOptionText === opt.text;
@@ -1790,9 +2089,10 @@ export default function QuizArena() {
                     {question.type === 'math_count' && question.sequence && (
                       <div className="flex flex-col items-center gap-8 w-full mt-2">
                         <div className="bg-white/80 border-2 border-dashed border-amber-300 rounded-[2rem] p-6 w-full max-w-md flex flex-wrap gap-4 justify-center items-center shadow-inner">
-                          {question.sequence.map((emoji, idx) => (
+                          {question.sequence.map((emoji: any, idx: number) => (
                             <CountBubble key={idx} emoji={emoji} />
                           ))}
+
                         </div>
 
                         <p className="text-xs font-black text-indigo-900/50 uppercase tracking-widest leading-none text-center">
@@ -1829,7 +2129,8 @@ export default function QuizArena() {
                           <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-2 bg-amber-200/50 pointer-events-none" />
                           
                           <div className="flex items-center gap-3 relative z-10">
-                            {question.sequence.map((item, idx) => {
+                            {question.sequence.map((item: any, idx: number) => {
+
                               const isTarget = item === '?';
                               return (
                                 <div key={idx} className="flex items-center gap-2">
@@ -1883,7 +2184,8 @@ export default function QuizArena() {
                       <div className="flex flex-col items-center gap-6 w-full">
                         {/* Horizontal Flow for Sequence */}
                         <div className="flex flex-wrap gap-2.5 sm:gap-4 justify-center items-center w-full">
-                          {question.sequence.map((item, idx) => {
+                           {question.sequence.map((item: any, idx: number) => {
+
                             const isPlaceholder = item === '_';
                             return (
                               <div 
@@ -2015,7 +2317,8 @@ export default function QuizArena() {
                       <div className="flex flex-col items-center gap-6 w-full font-sans">
                         {/* Word spelling display */}
                         <div className="flex gap-2 justify-center items-center py-4">
-                          {question.letter?.split('').map((char, charIdx) => {
+                          {question.letter?.split('').map((char: any, charIdx: number) => {
+
                             const isBlank = char === '_';
                             return (
                               <div
@@ -2095,7 +2398,7 @@ export default function QuizArena() {
                       <div className="flex flex-col gap-4 w-full font-sans">
                         {shuffledOptions.map((opt, i) => {
                           const isSelected = selectedOptionText === opt.text;
-                          const steps = opt.text.split('➔').map(s => s.trim());
+                          const steps = opt.text.split('➔').map((s: any) => s.trim());
                           return (
                             <button
                               key={i}
@@ -2107,7 +2410,7 @@ export default function QuizArena() {
                                   : 'bg-white border-slate-150 text-slate-800 hover:bg-emerald-50'}`}
                             >
                               <div className="flex flex-wrap items-center justify-center gap-2">
-                                {steps.map((step, idx) => (
+                                {steps.map((step: any, idx: number) => (
                                   <React.Fragment key={idx}>
                                     {idx > 0 && <span className={`text-lg font-black ${isSelected ? 'text-white' : 'text-amber-500'}`}>➔</span>}
                                     <span className={`px-3 py-1.5 rounded-full text-xs font-black shadow-inner
@@ -2127,7 +2430,11 @@ export default function QuizArena() {
                 );
               })()}
             </div>
-          )}
+          )
+        )}
+
+
+
 
           {/* 4. SCORE CARD VIEW */}
           {view === 'score_card' && activeLevel && (
@@ -2176,9 +2483,10 @@ export default function QuizArena() {
 
                 <div className="px-6 py-2 bg-emerald-50 border border-emerald-100 rounded-xl font-sans">
                   <span className="text-xl font-black text-emerald-800">
-                    {scores.filter(Boolean).length} / {activeLevel.questions.length} சரி
+                    {scores.filter(Boolean).length} / {Math.min(quizQuestions.length, 5)} சரி
                   </span>
                 </div>
+
 
                 <button
                   
@@ -2218,3 +2526,586 @@ export default function QuizArena() {
     </div>
   );
 }
+
+// ─── GRADE 1 PROFESSIONAL EXAM PLAYER ───
+
+import { Clock, Check, RefreshCw } from 'lucide-react';
+
+export function Grade1ProfessionalExamPlayer({
+  activeLevel,
+  quizQuestions,
+  currentQuestionIndex,
+  setCurrentQuestionIndex,
+  scores,
+  setScores,
+  selectedOptionText,
+  setSelectedOptionText,
+  setView,
+  activeSubject,
+  levelScores,
+  setLevelScores,
+  queryClient,
+  studentKeys,
+  studentApi
+}: any) {
+  // Timer state
+  const [seconds, setSeconds] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSeconds(s => s + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTime = (sec: number) => {
+    const mins = Math.floor(sec / 60);
+    const secs = sec % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const question = quizQuestions[currentQuestionIndex];
+
+  // Specific question state wrappers
+  const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
+  const [pairsMatched, setPairsMatched] = useState<Record<string, string>>({});
+  const [selectedGridItem, setSelectedGridItem] = useState<string | null>(null);
+  const [gridSelections, setGridSelections] = useState<string[]>([]);
+  const [trainWords, setTrainWords] = useState<string[]>([]);
+  const [typedAnswer, setTypedAnswer] = useState('');
+
+  // Independently shuffle matching items so options are strictly not placed parallel/straight next to each other
+  const shuffledLeft = useMemo(() => {
+    if (!question.pairs) return [];
+    return [...question.pairs].map(p => p.left).sort(() => Math.random() - 0.5);
+  }, [question.pairs]);
+
+  const shuffledRight = useMemo(() => {
+    if (!question.pairs) return [];
+    // Shuffle and verify that they aren't parallel; simple random shuffle is excellent here
+    return [...question.pairs].map(p => p.right).sort(() => Math.random() - 0.5);
+  }, [question.pairs]);
+
+  const wordList = useMemo(() => {
+    if (!question) return [];
+    let list: any[] = [];
+    if (question.words) {
+      list = question.words.map((w: string) => ({ text: w }));
+    } else if (question.options) {
+      list = question.options.map((o: any) => ({ text: o.text || o }));
+    }
+    return [...list].sort(() => Math.random() - 0.5);
+  }, [question]);
+
+  // Reset local states on question change
+  useEffect(() => {
+    setSelectedLeft(null);
+    setPairsMatched({});
+    setSelectedGridItem(null);
+    setGridSelections([]);
+    setTrainWords([]);
+    setTypedAnswer('');
+
+    setSelectedOptionText(null);
+  }, [currentQuestionIndex]);
+
+  if (!question) return null;
+
+
+  const handleNextSubmit = (isCorrect: boolean, answerText: string) => {
+    if (selectedOptionText !== null) return;
+    setSelectedOptionText(answerText);
+    setScores((prev: any) => [...prev, isCorrect ? 1 : 0]);
+
+    setTimeout(() => {
+      setSelectedOptionText(null);
+      const maxQCount = Math.min(quizQuestions.length, 5);
+      if (currentQuestionIndex < maxQCount - 1) {
+        setCurrentQuestionIndex((idx: number) => idx + 1);
+      } else {
+        setView('score_card');
+        const finalScore = scores.reduce((a: number, b: number) => a + b, 0) + (isCorrect ? 1 : 0);
+        
+        // Save score to DB
+        const currentBest = levelScores[activeLevel.id] || 0;
+        if (finalScore > currentBest) {
+          setLevelScores((prev: any) => ({
+            ...prev,
+            [activeLevel.id]: finalScore
+          }));
+        }
+
+        const lessonId = GRADE1_MAPPINGS[activeSubject]?.[activeLevel.id];
+        if (lessonId) {
+          studentApi.updateProgress(lessonId, {
+            status: 'completed',
+            completion_percentage: 100,
+            quiz_completed: true,
+            quiz_score: finalScore,
+            quiz_max_score: 5
+          }).then(() => {
+            queryClient.invalidateQueries({ queryKey: studentKeys.lessons });
+            queryClient.invalidateQueries({ queryKey: studentKeys.dashboard });
+            queryClient.invalidateQueries({ queryKey: studentKeys.me });
+          });
+
+          const quizId = lessonId.slice(0, -12) + '000000000000';
+          studentApi.submitQuizScore(lessonId, quizId, {
+            score: finalScore,
+            max_score: 5,
+          }).then(() => {
+            queryClient.invalidateQueries({ queryKey: studentKeys.lessons });
+            queryClient.invalidateQueries({ queryKey: studentKeys.dashboard });
+            queryClient.invalidateQueries({ queryKey: studentKeys.me });
+            queryClient.invalidateQueries({ queryKey: ['parent'] });
+          });
+        }
+      }
+    }, 1000);
+  };
+
+  // Helper arrays for options
+  const optionList = question.options || [];
+  const shuffledOptions = useMemo(() => {
+    if (!question || !question.options) return [];
+    return [...question.options].sort(() => Math.random() - 0.5);
+  }, [question]);
+
+
+  return (
+    <div className="w-full max-w-2xl mx-auto pt-6 px-4 font-sans text-slate-800">
+      {/* Sleek Exam Panel Header */}
+      <div className="bg-slate-900 text-white rounded-t-3xl p-5 border-b border-slate-800 shadow-md flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
+          <div>
+            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">EVALUATION BOARD</h2>
+            <span className="text-sm font-bold text-slate-200">{activeLevel.title}</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-xl border border-slate-700 text-xs font-mono">
+            <Clock size={13} className="text-slate-400" />
+            <span>{formatTime(seconds)}</span>
+          </div>
+          <span className="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-xl border border-slate-700 font-mono font-bold text-xs">
+            Q: {currentQuestionIndex + 1}/{Math.min(quizQuestions.length, 5)}
+          </span>
+          <button
+            onClick={() => setView('levels')}
+            className="p-1.5 hover:bg-slate-800 rounded-xl transition-colors text-slate-400 hover:text-white border border-slate-700 shadow-sm"
+            title="Exit Exam"
+          >
+            <X size={14} />
+          </button>
+        </div>
+
+      </div>
+
+      {/* Progress Line */}
+      <div className="w-full bg-slate-950 h-1">
+        <div 
+          className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-300"
+          style={{ width: `${((currentQuestionIndex + 1) / Math.min(quizQuestions.length, 5)) * 100}%` }}
+        />
+      </div>
+
+      {/* Sleek White Exam Card */}
+      <div className="bg-white rounded-b-3xl border-x border-b border-slate-200 shadow-xl p-6 sm:p-8 flex flex-col items-center gap-6 min-h-[380px]">
+        {/* Question Header Instruction */}
+        <div className="w-full border-b border-slate-100 pb-4 mb-2">
+          <span className="text-[10px] font-black uppercase tracking-[0.15em] text-indigo-650">
+            {question.type === 'connect_pairs' ? 'RELATIONAL MATCHING' : 'OBJECTIVE EVALUATION'}
+          </span>
+          <h1 className="text-lg sm:text-xl font-bold text-slate-900 mt-1 leading-snug">
+            {activeSubject === 'tamil' && question.instructionTa ? question.instructionTa : question.instruction}
+          </h1>
+
+        </div>
+
+        {/* --- RENDERERS FOR EACH TYPE --- */}
+
+        {/* 1. Sleek Choice / Multiple Choice */}
+        {question.type === 'choice' && (
+          <div className="flex flex-col gap-3 w-full max-w-md">
+            {shuffledOptions.map((opt: any, idx: number) => {
+              const isSelected = selectedOptionText === opt.text;
+              return (
+                <button
+                  key={idx}
+                  onClick={() => handleNextSubmit(opt.correct, opt.text)}
+                  disabled={selectedOptionText !== null}
+                  className={`w-full p-4 rounded-xl border-2 transition-all flex items-center justify-between text-left font-semibold text-sm sm:text-base
+                    ${isSelected 
+                      ? opt.correct ? 'bg-emerald-50 border-emerald-500 text-emerald-900' : 'bg-rose-50 border-rose-500 text-rose-900'
+                      : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300'}`}
+                >
+                  <span>{opt.text}</span>
+                  {isSelected && (
+                    <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white
+                      ${opt.correct ? 'bg-emerald-500' : 'bg-rose-500'}`}>
+                      {opt.correct ? '✓' : '✗'}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {/* 2. Tracing Canvas (Sleek Slate Draw pad) */}
+        {(question.type === 'trace' || (question.type === 'writing_lab' && question.subType === 'trace')) && question.letter && (
+
+          <div className="w-full flex flex-col items-center gap-4">
+            <SimpleTraceCanvas
+              letter={question.letter}
+              onComplete={() => handleNextSubmit(true, 'trace')}
+            />
+          </div>
+        )}
+
+        {/* 3. Connect Pairs Matching */}
+        {question.type === 'connect_pairs' && question.pairs && (
+          <div className="w-full flex flex-col gap-4">
+            <div className="grid grid-cols-2 gap-6 items-start">
+              {/* Left Column */}
+              <div className="flex flex-col gap-3">
+                {shuffledLeft.map((leftVal: string, idx: number) => {
+                  const isMatched = !!pairsMatched[leftVal];
+                  const isActive = selectedLeft === leftVal;
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => !isMatched && setSelectedLeft(leftVal)}
+                      disabled={isMatched || selectedOptionText !== null}
+                      className={`p-3 rounded-xl border-2 text-center text-sm font-bold transition-all
+                        ${isMatched 
+                          ? 'bg-slate-100 border-slate-200 text-slate-400 line-through' 
+                          : isActive 
+                            ? 'bg-indigo-50 border-indigo-500 text-indigo-700' 
+                            : 'bg-white border-slate-200 hover:bg-slate-50'}`}
+                    >
+                      {leftVal}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Right Column */}
+              <div className="flex flex-col gap-3">
+                {shuffledRight.map((rightVal: string, idx: number) => {
+                  const isMatched = Object.values(pairsMatched).includes(rightVal);
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => {
+                        if (selectedLeft) {
+                          const correctRight = question.pairs.find((pr: any) => pr.left === selectedLeft)?.right;
+                          const isCorrect = rightVal === correctRight;
+                          setPairsMatched(prev => ({ ...prev, [selectedLeft]: rightVal }));
+                          setSelectedLeft(null);
+
+                          // Check if all matched
+                          const nextMatches = { ...pairsMatched, [selectedLeft]: rightVal };
+                          if (Object.keys(nextMatches).length === question.pairs.length) {
+                            // Verify correctness of all pairs
+                            const allCorrect = question.pairs.every((pr: any) => nextMatches[pr.left] === pr.right);
+                            handleNextSubmit(allCorrect, 'all_matched');
+                          }
+                        }
+                      }}
+                      disabled={!selectedLeft || isMatched || selectedOptionText !== null}
+                      className={`p-3 rounded-xl border-2 text-center text-sm font-bold transition-all
+                        ${isMatched 
+                          ? 'bg-slate-100 border-slate-200 text-slate-400' 
+                          : selectedLeft 
+                            ? 'bg-white border-indigo-200 hover:bg-indigo-50/50 text-slate-700' 
+                            : 'bg-white border-slate-100 text-slate-350 cursor-not-allowed'}`}
+                    >
+                      {rightVal}
+                    </button>
+                  );
+                })}
+              </div>
+
+            </div>
+
+            {/* List of matched items */}
+            {Object.keys(pairsMatched).length > 0 && (
+              <div className="w-full mt-4 bg-slate-50 p-3 rounded-xl border border-slate-200 text-left">
+                <span className="text-[10px] font-black uppercase text-slate-500">Established Matches</span>
+                <div className="flex flex-wrap gap-2 mt-1.5">
+                  {Object.entries(pairsMatched).map(([l, r], idx) => (
+                    <div key={idx} className="bg-indigo-50 border border-indigo-150 text-indigo-900 px-3 py-1 rounded-lg text-xs font-bold">
+                      {l} ➜ {r}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* 4. Grid Selector */}
+        {question.type === 'grid_search' && (question.gridItems || question.options) && (
+          <div className="w-full flex flex-col items-center gap-5 w-full max-w-sm">
+            <div className="grid grid-cols-3 gap-3 w-full justify-center">
+              {(question.gridItems || question.options || []).map((opt: any, idx: number) => {
+                const isSelected = gridSelections.includes(opt.text);
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      if (selectedOptionText !== null) return;
+                      if (isSelected) {
+                        setGridSelections(gridSelections.filter(x => x !== opt.text));
+                      } else {
+                        setGridSelections([...gridSelections, opt.text]);
+                      }
+                    }}
+                    disabled={selectedOptionText !== null}
+                    className={`py-4 rounded-xl text-base font-bold shadow-sm border-2 transition-all flex flex-col items-center justify-center gap-1 active:scale-95
+                      ${selectedOptionText !== null
+                        ? (opt.correct 
+                            ? 'bg-emerald-50 border-emerald-500 text-emerald-700' 
+                            : (isSelected ? 'bg-rose-50 border-rose-500 text-rose-700' : 'bg-slate-50 border-slate-200 text-slate-400'))
+                        : (isSelected 
+                            ? 'bg-indigo-50 border-indigo-500 text-indigo-700 ring-2 ring-indigo-200' 
+                            : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50')}`}
+                  >
+                    {opt.emoji && <span className="text-2xl">{opt.emoji}</span>}
+                    <span className="font-extrabold text-xs">{opt.text}</span>
+                  </button>
+                );
+              })}
+            </div>
+            
+            <button
+              onClick={() => {
+                const correctItems = (question.gridItems || question.options || []).filter((o: any) => o.correct).map((o: any) => o.text);
+                const isCorrect = correctItems.length === gridSelections.length && correctItems.every((item: string) => gridSelections.includes(item));
+                handleNextSubmit(isCorrect, gridSelections.join(', '));
+              }}
+              disabled={gridSelections.length === 0 || selectedOptionText !== null}
+              className={`w-full py-3.5 rounded-xl font-black text-sm uppercase tracking-wider transition-all active:scale-95 shadow-md
+                ${gridSelections.length > 0 && selectedOptionText === null
+                  ? 'bg-slate-900 hover:bg-slate-800 text-white' 
+                  : 'bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed'}`}
+            >
+              Confirm Selections
+            </button>
+          </div>
+        )}
+
+
+
+        {/* 5. Garden Repair (Blank Completion) */}
+        {question.type === 'garden_repair' && (
+          <div className="w-full flex flex-col items-center gap-6">
+            <div className="w-full max-w-md p-4 bg-slate-900 text-white rounded-xl text-center text-xl font-mono border border-slate-800">
+              {question.sentence}
+            </div>
+            <div className="grid grid-cols-2 gap-3 w-full max-w-md mt-2">
+              {shuffledOptions.map((opt: any, idx: number) => {
+                const isSelected = selectedOptionText === opt.text;
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => handleNextSubmit(opt.correct, opt.text)}
+                    disabled={selectedOptionText !== null}
+                    className={`p-3 rounded-xl border-2 font-bold text-sm sm:text-base text-center transition-all
+                      ${isSelected 
+                        ? opt.correct ? 'bg-emerald-500 border-emerald-500 text-white' : 'bg-rose-500 border-rose-500 text-white'
+                        : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}
+                  >
+                    {opt.text}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* 6. Sentence Train (Ordering words) */}
+        {question.type === 'sentence_train' && (
+          <div className="w-full flex flex-col gap-4">
+            <div className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl min-h-[60px] flex flex-wrap gap-2 items-center justify-center">
+              {trainWords.length === 0 ? (
+                <span className="text-slate-400 text-xs italic">Tap words below in correct order...</span>
+              ) : (
+                trainWords.map((w, idx) => (
+                  <span key={idx} className="bg-indigo-50 border border-indigo-200 text-indigo-900 px-3 py-1.5 rounded-lg text-sm font-bold">
+                    {w}
+                  </span>
+                ))
+              )}
+            </div>
+
+            {/* Word Bank */}
+            <div className="flex flex-wrap gap-2 justify-center mt-2">
+              {wordList.map((opt: any, idx: number) => {
+                const isUsed = trainWords.includes(opt.text);
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      if (!isUsed) {
+                        const nextWords = [...trainWords, opt.text];
+                        setTrainWords(nextWords);
+
+                        const totalWordsNeeded = wordList.length;
+                        if (nextWords.length === totalWordsNeeded) {
+                          const combined = nextWords.join(' ');
+                          const isCorrect = question.correctSentence
+                            ? combined.trim().toLowerCase() === question.correctSentence.trim().toLowerCase()
+                            : opt.correct;
+                          handleNextSubmit(isCorrect, combined);
+                        }
+                      }
+                    }}
+                    disabled={isUsed || selectedOptionText !== null}
+                    className={`px-4 py-2 rounded-lg border text-sm font-bold transition-all
+                      ${isUsed 
+                        ? 'bg-slate-100 border-slate-200 text-slate-300' 
+                        : 'bg-white border-slate-250 hover:bg-slate-50 text-slate-700'}`}
+                  >
+                    {opt.text}
+                  </button>
+                );
+              })}
+            </div>
+
+            {trainWords.length > 0 && (
+              <button
+                onClick={() => setTrainWords([])}
+                disabled={selectedOptionText !== null}
+                className="mt-4 mx-auto text-xs font-bold text-slate-400 hover:text-slate-650 flex items-center gap-1.5"
+              >
+                <RefreshCw size={12} /> Reset Sentence
+              </button>
+            )}
+          </div>
+        )}
+
+
+        {/* 7. Story/Comprehension Option reading */}
+        {question.type === 'story_cave' && (
+          <div className="w-full flex flex-col gap-4 text-left">
+            <div className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-sm leading-relaxed text-slate-700 max-h-[160px] overflow-y-auto magic-scroll italic">
+              {question.storyText}
+            </div>
+            <div className="flex flex-col gap-2.5 w-full mt-2">
+              {shuffledOptions.map((opt: any, idx: number) => {
+                const isSelected = selectedOptionText === opt.text;
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => handleNextSubmit(opt.correct, opt.text)}
+                    disabled={selectedOptionText !== null}
+                    className={`w-full p-3.5 rounded-xl border-2 transition-all flex items-center justify-between text-left font-semibold text-xs sm:text-sm
+                      ${isSelected 
+                        ? opt.correct ? 'bg-emerald-50 border-emerald-500 text-emerald-900' : 'bg-rose-50 border-rose-500 text-rose-900'
+                        : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'}`}
+                  >
+                    <span>{opt.text}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* 8. Detective highlighting words */}
+        {question.type === 'detective_highlight' && (
+          <div className="w-full flex flex-col items-center gap-4">
+            <div className="flex flex-wrap gap-2 justify-center leading-relaxed py-4 px-2 bg-slate-50 rounded-xl border border-slate-100 w-full">
+              {question.sentence?.split(' ').map((word: string, idx: number) => {
+                const isSelected = typedAnswer === word;
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      setTypedAnswer(word);
+                      const isCorrect = optionList.find((o: any) => o.text === word)?.correct || false;
+                      handleNextSubmit(isCorrect, word);
+                    }}
+                    disabled={selectedOptionText !== null}
+                    className={`px-3 py-1.5 rounded-lg border-2 text-sm font-bold transition-all
+                      ${isSelected 
+                        ? 'bg-indigo-500 border-indigo-650 text-white shadow-md' 
+                        : 'bg-white border-slate-200 text-slate-700 hover:bg-indigo-50/35 hover:border-indigo-200'}`}
+                  >
+                    {word}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* 9. Writing Lab text box input */}
+        {question.type === 'writing_lab' && question.subType !== 'trace' && (
+          <div className="w-full flex flex-col gap-4">
+
+            <input
+              type="text"
+              placeholder="Type your answer here..."
+              value={typedAnswer}
+              onChange={(e) => setTypedAnswer(e.target.value)}
+              disabled={selectedOptionText !== null}
+              className="w-full p-4 border-2 border-slate-200 rounded-xl focus:border-indigo-505 focus:ring-0 outline-none font-bold text-center text-lg placeholder-slate-300"
+            />
+            <button
+              onClick={() => {
+                if (typedAnswer.trim()) {
+                  const correctOpt = optionList.find((o: any) => o.correct);
+                  const isCorrect = correctOpt ? typedAnswer.trim().toLowerCase() === correctOpt.text.toLowerCase() : true;
+                  handleNextSubmit(isCorrect, typedAnswer);
+                }
+              }}
+              disabled={!typedAnswer.trim() || selectedOptionText !== null}
+              className="w-full py-4 mt-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl shadow transition-all active:scale-95 text-sm uppercase tracking-wider"
+            >
+              SUBMIT ANSWER
+            </button>
+          </div>
+        )}
+
+        {/* 10. Order Sequence Game */}
+        {question.type === 'order' && (
+          <div className="flex flex-col gap-4 w-full max-w-md font-sans">
+            {shuffledOptions.map((opt: any, i: number) => {
+              const isSelected = selectedOptionText === opt.text;
+              const steps = opt.text.split('➔').map((s: any) => s.trim());
+              return (
+                <button
+                  key={i}
+                  onClick={() => handleNextSubmit(opt.correct, opt.text)}
+                  disabled={selectedOptionText !== null}
+                  className={`w-full p-4 rounded-2xl border-2 transition-all flex flex-col gap-2 items-center text-center active:scale-95 shadow-sm
+                    ${isSelected 
+                      ? opt.correct ? 'bg-emerald-50 border-emerald-500 text-emerald-900 font-bold' : 'bg-rose-50 border-rose-500 text-rose-900 font-bold'
+                      : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300'}`}
+                >
+                  <div className="flex flex-wrap items-center justify-center gap-2">
+                    {steps.map((step: any, idx: number) => (
+                      <React.Fragment key={idx}>
+                        {idx > 0 && <span className={`text-base font-black ${isSelected ? 'text-emerald-700' : 'text-slate-400'}`}>➔</span>}
+                        <span className={`px-2.5 py-1 rounded-lg text-xs font-bold border
+                          ${isSelected 
+                            ? 'bg-white/50 border-emerald-250 text-emerald-950' 
+                            : 'bg-white border-slate-200 text-slate-700'}`}>
+                          {step}
+                        </span>
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+

@@ -2,805 +2,333 @@ import { type Level } from './quizData';
 
 // Generate 48 scalable levels for Grade 1 English corresponding to the 9 Chapters.
 export const GRADE1_ENGLISH_LEVELS: Level[] = [
-  // --- CHAPTER 1: ALPHABET & PHONICS (Levels 1 - 6) ---
   {
     id: 1,
-    title: 'Alphabet Revision A-Z 🌈',
-    titleEn: 'Alphabet Revision A-Z',
+    title: 'Phonics + Word Formation 🌈',
+    titleEn: 'Phonics + Word Formation',
     mascot: '🌈',
     color: 'from-sky-400 to-blue-500',
     borderColor: 'border-sky-300',
     questions: [
-      { type: 'trace' as any, instruction: 'Trace the letter: A ✍️', instructionTa: 'எழுத்தை எழுதுக: A ✍️', letter: 'A', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: B ✍️', instructionTa: 'எழுத்தை எழுதுக: B ✍️', letter: 'B', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: C ✍️', instructionTa: 'எழுத்தை எழுதுக: C ✍️', letter: 'C', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: D ✍️', instructionTa: 'எழுத்தை எழுதுக: D ✍️', letter: 'D', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: E ✍️', instructionTa: 'எழுத்தை எழுதுக: E ✍️', letter: 'E', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: F ✍️', instructionTa: 'எழுத்தை எழுதுக: F ✍️', letter: 'F', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: G ✍️', instructionTa: 'எழுத்தை எழுதுக: G ✍️', letter: 'G', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: H ✍️', instructionTa: 'எழுத்தை எழுதுக: H ✍️', letter: 'H', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: I ✍️', instructionTa: 'எழுத்தை எழுதுக: I ✍️', letter: 'I', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: J ✍️', instructionTa: 'எழுத்தை எழுதுக: J ✍️', letter: 'J', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: K ✍️', instructionTa: 'எழுத்தை எழுதுக: K ✍️', letter: 'K', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: L ✍️', instructionTa: 'எழுத்தை எழுதுக: L ✍️', letter: 'L', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: M ✍️', instructionTa: 'எழுத்தை எழுதுக: M ✍️', letter: 'M', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: N ✍️', instructionTa: 'எழுத்தை எழுதுக: N ✍️', letter: 'N', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: O ✍️', instructionTa: 'எழுத்தை எழுதுக: O ✍️', letter: 'O', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: P ✍️', instructionTa: 'எழுத்தை எழுதுக: P ✍️', letter: 'P', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: Q ✍️', instructionTa: 'எழுத்தை எழுதுக: Q ✍️', letter: 'Q', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: R ✍️', instructionTa: 'எழுத்தை எழுதுக: R ✍️', letter: 'R', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: S ✍️', instructionTa: 'எழுத்தை எழுதுக: S ✍️', letter: 'S', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: T ✍️', instructionTa: 'எழுத்தை எழுதுக: T ✍️', letter: 'T', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: U ✍️', instructionTa: 'எழுத்தை எழுதுக: U ✍️', letter: 'U', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: V ✍️', instructionTa: 'எழுத்தை எழுதுக: V ✍️', letter: 'V', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: W ✍️', instructionTa: 'எழுத்தை எழுதுக: W ✍️', letter: 'W', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: X ✍️', instructionTa: 'எழுத்தை எழுதுக: X ✍️', letter: 'X', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: Y ✍️', instructionTa: 'எழுத்தை எழுதுக: Y ✍️', letter: 'Y', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: Z ✍️', instructionTa: 'எழுத்தை எழுதுக: Z ✍️', letter: 'Z', options: [] }
+      {
+        type: 'sentence_train' as any,
+        instruction: 'Word Builder: Arrange the letters to build: plant 🌾',
+        words: ['p', 'l', 'a', 'n', 't'],
+        correctSentence: 'plant',
+        options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Missing Letter Challenge: Choose the missing letters for br__d 🍞',
+        options: [
+          { text: 'ea', correct: true },
+          { text: 'oa', correct: false },
+          { text: 'ee', correct: false }
+        ]
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Word Family Match: Connect rhyming word partners! 🤝',
+        pairs: [
+          { left: 'cake', right: 'make' },
+          { left: 'ball', right: 'tall' },
+          { left: 'day', right: 'play' }
+        ],
+        options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Syllable Break: Choose the correct syllable split for rabbit 🐰',
+        options: [
+          { text: 'rab + bit', correct: true },
+          { text: 'rabb + it', correct: false },
+          { text: 'ra + bbit', correct: false }
+        ]
+      },
+      {
+        type: 'order' as any,
+        instruction: 'Alphabetical Order: Sort the words from A to Z! 🔤',
+        options: [
+          { text: 'apple ➔ cat ➔ dog', correct: true },
+          { text: 'dog ➔ cat ➔ apple', correct: false },
+          { text: 'cat ➔ apple ➔ dog', correct: false }
+        ]
+      }
     ]
   },
   {
     id: 2,
-    title: 'Capital & Small Letters 🔤',
-    titleEn: 'Capital & Small Letters',
-    mascot: '🔤',
-    color: 'from-sky-400 to-blue-500',
-    borderColor: 'border-sky-300',
+    title: 'Vocabulary World 📚',
+    titleEn: 'Vocabulary World',
+    mascot: '📚',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
     questions: [
-      { type: 'connect_pairs' as any, instruction: 'Connect Capital and Small letters 🤝', instructionTa: 'பெரிய & சிறிய எழுத்துக்களை இணைக்கவும் 🤝', pairs: [{ left: 'A', right: 'a' }, { left: 'B', right: 'b' }, { left: 'G', right: 'g' }], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Connect Capital and Small letters 🤝', instructionTa: 'பெரிய & சிறிய எழுத்துக்களை இணைக்கவும் 🤝', pairs: [{ left: 'R', right: 'r' }, { left: 'T', right: 't' }, { left: 'E', right: 'e' }], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Connect Capital and Small letters 🤝', instructionTa: 'பெரிய & சிறிய எழுத்துக்களை இணைக்கவும் 🤝', pairs: [{ left: 'M', right: 'm' }, { left: 'N', right: 'n' }, { left: 'P', right: 'p' }], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Connect Capital and Small letters 🤝', instructionTa: 'பெரிய & சிறிய எழுத்துக்களை இணைக்கவும் 🤝', pairs: [{ left: 'D', right: 'd' }, { left: 'Q', right: 'q' }, { left: 'Y', right: 'y' }], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Connect Capital and Small letters 🤝', instructionTa: 'பெரிய & சிறிய எழுத்துக்களை இணைக்கவும் 🤝', pairs: [{ left: 'H', right: 'h' }, { left: 'F', right: 'f' }, { left: 'L', right: 'l' }], options: [] }
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Category Sort: Connect the word to its category! 🦁',
+        pairs: [
+          { left: 'lion', right: 'Animal' },
+          { left: 'rose', right: 'Flower' },
+          { left: 'mango', right: 'Fruit' }
+        ],
+        options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Compound Word Builder: What word do you get by joining rain + bow? 🌧️🌈',
+        options: [
+          { text: 'rainbow', correct: true },
+          { text: 'rainy', correct: false },
+          { text: 'bowrain', correct: false }
+        ]
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Opposite Explorer: Match opposite words! ↔️',
+        pairs: [
+          { left: 'early', right: 'late' },
+          { left: 'open', right: 'close' },
+          { left: 'hot', right: 'cold' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Singular Plural Match: Connect singular to its irregular plural! 🐭',
+        pairs: [
+          { left: 'child', right: 'children' },
+          { left: 'mouse', right: 'mice' },
+          { left: 'tooth', right: 'teeth' }
+        ],
+        options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Adjective Finder: Choose the best describing word for a tiger! 🐯',
+        options: [
+          { text: 'wild', correct: true },
+          { text: 'soft', correct: false },
+          { text: 'slow', correct: false }
+        ]
+      }
     ]
   },
   {
     id: 3,
-    title: 'Letter Sounds A-M 🗣️',
-    titleEn: 'Letter Sounds A-M',
-    mascot: '🗣️',
-    color: 'from-sky-400 to-blue-500',
-    borderColor: 'border-sky-300',
+    title: 'Grammar Garden 🌱',
+    titleEn: 'Grammar Garden',
+    mascot: '🌱',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
     questions: [
-      { type: 'grid_search' as any, instruction: 'Select all pictures making the /æ/ sound 🍎', instructionTa: '/æ/ ஒலி தரும் படங்களைத் தேர்ந்தெடு 🍎', gridItems: [{ text: 'Apple', correct: true, emoji: '🍎' }, { text: 'Ant', correct: true, emoji: '🐜' }, { text: 'Axe', correct: true, emoji: '🪓' }, { text: 'Dog', correct: false, emoji: '🐶' }, { text: 'Cat', correct: false, emoji: '🐱' }, { text: 'Sun', correct: false, emoji: '☀️' }], options: [] },
-      { type: 'grid_search' as any, instruction: 'Select all pictures making the /b/ sound ⚽', instructionTa: '/b/ ஒலி தரும் படங்களைத் தேர்ந்தெடு ⚽', gridItems: [{ text: 'Ball', correct: true, emoji: '⚽' }, { text: 'Bat', correct: true, emoji: '🏏' }, { text: 'Boy', correct: true, emoji: '👦' }, { text: 'Apple', correct: false, emoji: '🍎' }, { text: 'Pin', correct: false, emoji: '📌' }, { text: 'Red', correct: false, emoji: '🔴' }], options: [] },
-      { type: 'grid_search' as any, instruction: 'Select all pictures making the /f/ sound 🐟', instructionTa: '/f/ ஒலி தரும் படங்களைத் தேர்ந்தெடு 🐟', gridItems: [{ text: 'Fish', correct: true, emoji: '🐟' }, { text: 'Fan', correct: true, emoji: '💨' }, { text: 'Fox', correct: true, emoji: '🦊' }, { text: 'Dog', correct: false, emoji: '🐶' }, { text: 'Hen', correct: false, emoji: '🐔' }, { text: 'Mug', correct: false, emoji: '☕' }], options: [] },
-      { type: 'grid_search' as any, instruction: 'Select all pictures making the /h/ sound 🎩', instructionTa: '/h/ ஒலி தரும் படங்களைத் தேர்ந்தெடு 🎩', gridItems: [{ text: 'Hat', correct: true, emoji: '🎩' }, { text: 'Hen', correct: true, emoji: '🐔' }, { text: 'House', correct: true, emoji: '🏠' }, { text: 'Apple', correct: false, emoji: '🍎' }, { text: 'Sit', correct: false, emoji: '🧎' }, { text: 'Bin', correct: false, emoji: '🗑️' }], options: [] },
-      { type: 'grid_search' as any, instruction: 'Select all pictures making the /m/ sound 🐒', instructionTa: '/m/ ஒலி தரும் படங்களைத் தேர்ந்தெடு 🐒', gridItems: [{ text: 'Monkey', correct: true, emoji: '🐒' }, { text: 'Map', correct: true, emoji: '🗺️' }, { text: 'Mug', correct: true, emoji: '☕' }, { text: 'Red', correct: false, emoji: '🔴' }, { text: 'Pen', correct: false, emoji: '🖊️' }, { text: 'Sun', correct: false, emoji: '☀️' }], options: [] }
+      {
+        type: 'choice' as any,
+        instruction: 'Sentence Repair: Choose the correct sentence! 🔧',
+        options: [
+          { text: 'She is playing.', correct: true },
+          { text: 'She are playing.', correct: false },
+          { text: 'She am playing.', correct: false }
+        ]
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Pronoun Match: Connect noun to the correct pronoun! 👤',
+        pairs: [
+          { left: 'Riya', right: 'she' },
+          { left: 'Rohan', right: 'he' },
+          { left: 'The dog', right: 'it' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Grammar Sort: Connect each word to its part of speech! 🏷️',
+        pairs: [
+          { left: 'school', right: 'Noun' },
+          { left: 'run', right: 'Verb' },
+          { left: 'blue', right: 'Adjective' }
+        ],
+        options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Punctuation Repair: What is the correct punctuation for: Where are you going ___ ❓',
+        options: [
+          { text: 'Question Mark (?)', correct: true },
+          { text: 'Full Stop (.)', correct: false },
+          { text: 'Exclamation Mark (!)', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Fill the blank: ___ is my bag (pointing to a bag far away). 🎒',
+        options: [
+          { text: 'That', correct: true },
+          { text: 'These', correct: false },
+          { text: 'This', correct: false }
+        ]
+      }
     ]
   },
   {
     id: 4,
-    title: 'Letter Sounds N-Z 🔊',
-    titleEn: 'Letter Sounds N-Z',
-    mascot: '🔊',
-    color: 'from-sky-400 to-blue-500',
-    borderColor: 'border-sky-300',
+    title: 'Sentence & Reading 🚂',
+    titleEn: 'Sentence & Reading',
+    mascot: '🚂',
+    color: 'from-violet-400 to-indigo-500',
+    borderColor: 'border-violet-300',
     questions: [
-      { type: 'grid_search' as any, instruction: 'Select all pictures making the /p/ sound 🖊️', instructionTa: '/p/ ஒலி தரும் படங்களைத் தேர்ந்தெடு 🖊️', gridItems: [{ text: 'Pen', correct: true, emoji: '🖊️' }, { text: 'Pin', correct: true, emoji: '📌' }, { text: 'Pot', correct: true, emoji: '🏺' }, { text: 'Dog', correct: false, emoji: '🐶' }, { text: 'Hen', correct: false, emoji: '🐔' }, { text: 'Bed', correct: false, emoji: '🛏️' }], options: [] },
-      { type: 'grid_search' as any, instruction: 'Select all pictures making the /s/ sound ☀️', instructionTa: '/s/ ஒலி தரும் படங்களைத் தேர்ந்தெடு ☀️', gridItems: [{ text: 'Sun', correct: true, emoji: '☀️' }, { text: 'Star', correct: true, emoji: '⭐️' }, { text: 'Socks', correct: true, emoji: '🧦' }, { text: 'Apple', correct: false, emoji: '🍎' }, { text: 'Pen', correct: false, emoji: '🖊️' }, { text: 'Ball', correct: false, emoji: '⚽' }], options: [] },
-      { type: 'grid_search' as any, instruction: 'Select all pictures making the /t/ sound 🐯', instructionTa: '/t/ ஒலி தரும் படங்களைத் தேர்ந்தெடு 🐯', gridItems: [{ text: 'Tiger', correct: true, emoji: '🐯' }, { text: 'Tub', correct: true, emoji: '🛁' }, { text: 'Toy', correct: true, emoji: '🧸' }, { text: 'Hen', correct: false, emoji: '🐔' }, { text: 'Dog', correct: false, emoji: '🐶' }, { text: 'Pin', correct: false, emoji: '📌' }], options: [] },
-      { type: 'grid_search' as any, instruction: 'Select all pictures making the /v/ sound 🚐', instructionTa: '/v/ ஒலி தரும் படங்களைத் தேர்ந்தெடு 🚐', gridItems: [{ text: 'Van', correct: true, emoji: '🚐' }, { text: 'Vase', correct: true, emoji: '🏺' }, { text: 'Violin', correct: true, emoji: '🎻' }, { text: 'Sun', correct: false, emoji: '☀️' }, { text: 'Red', correct: false, emoji: '🔴' }, { text: 'Mop', correct: false, emoji: '🧹' }], options: [] },
-      { type: 'grid_search' as any, instruction: 'Select all pictures making the /z/ sound 🦓', instructionTa: '/z/ ஒலி தரும் படங்களைத் தேர்ந்தெடு 🦓', gridItems: [{ text: 'Zebra', correct: true, emoji: '🦓' }, { text: 'Zip', correct: true, emoji: '🤐' }, { text: 'Zero', correct: true, emoji: '0️⃣' }, { text: 'Fox', correct: false, emoji: '🦊' }, { text: 'Apple', correct: false, emoji: '🍎' }, { text: 'Red', correct: false, emoji: '🔴' }], options: [] }
+      {
+        type: 'sentence_train' as any,
+        instruction: 'Sentence Train: Arrange the words to form a correct sentence! 🚂',
+        words: ['Rahul', 'likes', 'mangoes'],
+        correctSentence: 'Rahul likes mangoes',
+        options: []
+      },
+      {
+        type: 'order' as any,
+        instruction: 'Paragraph Order: Order the daily routine stages correctly! ⏰',
+        options: [
+          { text: 'Wake up ➔ Brush teeth ➔ Go to school', correct: true },
+          { text: 'Go to school ➔ Wake up ➔ Brush teeth', correct: false },
+          { text: 'Brush teeth ➔ Go to school ➔ Wake up', correct: false }
+        ]
+      },
+      {
+        type: 'story_cave' as any,
+        instruction: 'Read the story and answer: Who is happy? 📖',
+        storyText: 'Sam has a small dog. The dog is brown. Sam plays with his dog in the garden. Sam is happy.',
+        options: [
+          { text: 'Sam', correct: true },
+          { text: 'The cat', correct: false },
+          { text: 'Father', correct: false }
+        ]
+      },
+      {
+        type: 'story_cave' as any,
+        instruction: 'Story Completion: Choose the best sentence to fill the gap. 📖\n"It was a sunny day. ___ They built a big sandcastle."',
+        storyText: 'It was a sunny day. ___ They built a big sandcastle.',
+        options: [
+          { text: 'Rahul and Reema went to the beach.', correct: true },
+          { text: 'They slept in their beds.', correct: false },
+          { text: 'It started to rain heavily.', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'True or False: Cows can fly in the sky. 🐄',
+        options: [
+          { text: 'False / Not True', correct: true },
+          { text: 'True', correct: false }
+        ]
+      }
     ]
   },
-
-
-  // --- CHAPTER 2: VOWELS ADVENTURE (Levels 7 - 11) ---
   {
     id: 5,
-    title: 'Short Vowel a 🔤',
-    titleEn: 'Short Vowel a',
-    mascot: '🔤',
-    color: 'from-teal-400 to-emerald-500',
-    borderColor: 'border-teal-300',
+    title: 'Writing Skills ✏️',
+    titleEn: 'Writing Skills',
+    mascot: '✏️',
+    color: 'from-pink-400 to-rose-500',
+    borderColor: 'border-pink-300',
     questions: [
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Cat 🐱', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🐱', sentence: 'c_t', options: [{ text: 'a', correct: true }, { text: 'o', correct: false }, { text: 'u', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Bag 🎒', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🎒', sentence: 'b_g', options: [{ text: 'a', correct: true }, { text: 'e', correct: false }, { text: 'i', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Hat 👒', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 👒', sentence: 'h_t', options: [{ text: 'a', correct: true }, { text: 'o', correct: false }, { text: 'e', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Fan 💨', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 💨', sentence: 'f_n', options: [{ text: 'a', correct: true }, { text: 'u', correct: false }, { text: 'i', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Map 🗺️', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🗺️', sentence: 'm_p', options: [{ text: 'a', correct: true }, { text: 'e', correct: false }, { text: 'o', correct: false }] }
+      {
+        type: 'garden_repair' as any,
+        instruction: 'Sentence Completion: Complete the sentence! ☀️',
+        sentence: 'The sun is ____ and bright.',
+        options: [
+          { text: 'hot', correct: true },
+          { text: 'cold', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Picture Match: Choose the sentence that describes a bird in the nest! 🪹🐦',
+        options: [
+          { text: 'The bird is in its nest.', correct: true },
+          { text: 'The fish is in the pond.', correct: false },
+          { text: 'The bird is flying high.', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Spelling Fix: Correct the misspelled word: skool 🏫',
+        options: [
+          { text: 'school', correct: true },
+          { text: 'shool', correct: false },
+          { text: 'scool', correct: false }
+        ]
+      },
+      {
+        type: 'trace' as any,
+        instruction: 'Handwriting Mission: Trace the letter: S ✍️',
+        letter: 'S',
+        options: []
+      },
+      {
+        type: 'sentence_train' as any,
+        instruction: 'Sentence Builder: Arrange the words to make a sentence! 📖',
+        words: ['The', 'girl', 'reads', 'a', 'book'],
+        correctSentence: 'The girl reads a book',
+        options: []
+      }
     ]
   },
   {
     id: 6,
-    title: 'Short Vowel e 🟢',
-    titleEn: 'Short Vowel e',
-    mascot: '🟢',
-    color: 'from-teal-400 to-emerald-500',
-    borderColor: 'border-teal-300',
-    questions: [
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Pen 🖊️', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🖊️', sentence: 'p_n', options: [{ text: 'e', correct: true }, { text: 'a', correct: false }, { text: 'i', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Red 🔴', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🔴', sentence: 'r_d', options: [{ text: 'e', correct: true }, { text: 'o', correct: false }, { text: 'u', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Bed 🛏️', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🛏️', sentence: 'b_d', options: [{ text: 'e', correct: true }, { text: 'a', correct: false }, { text: 'i', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Hen 🐔', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🐔', sentence: 'h_n', options: [{ text: 'e', correct: true }, { text: 'u', correct: false }, { text: 'o', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Net 🕸️', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🕸️', sentence: 'n_t', options: [{ text: 'e', correct: true }, { text: 'a', correct: false }, { text: 'i', correct: false }] }
-    ]
-  },
-  {
-    id: 7,
-    title: 'Short Vowel i 🔵',
-    titleEn: 'Short Vowel i',
-    mascot: '🔵',
-    color: 'from-teal-400 to-emerald-500',
-    borderColor: 'border-teal-300',
-    questions: [
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Pin 📌', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 📌', sentence: 'p_n', options: [{ text: 'i', correct: true }, { text: 'e', correct: false }, { text: 'a', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Lip 👄', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 👄', sentence: 'l_p', options: [{ text: 'i', correct: true }, { text: 'o', correct: false }, { text: 'u', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Bin 🗑️', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🗑️', sentence: 'b_n', options: [{ text: 'i', correct: true }, { text: 'e', correct: false }, { text: 'a', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Sit 🧎', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🧎', sentence: 's_t', options: [{ text: 'i', correct: true }, { text: 'u', correct: false }, { text: 'o', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Pig 🐷', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🐷', sentence: 'p_g', options: [{ text: 'i', correct: true }, { text: 'e', correct: false }, { text: 'a', correct: false }] }
-    ]
-  },
-  {
-    id: 8,
-    title: 'Short Vowel o 🟠',
-    titleEn: 'Short Vowel o',
-    mascot: '🟠',
-    color: 'from-teal-400 to-emerald-500',
-    borderColor: 'border-teal-300',
-    questions: [
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Hot 🥵', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🥵', sentence: 'h_t', options: [{ text: 'o', correct: true }, { text: 'a', correct: false }, { text: 'e', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Dog 🐶', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🐶', sentence: 'd_g', options: [{ text: 'o', correct: true }, { text: 'u', correct: false }, { text: 'i', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Pot 🏺', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🏺', sentence: 'p_t', options: [{ text: 'o', correct: true }, { text: 'e', correct: false }, { text: 'a', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Fox 🦊', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🦊', sentence: 'f_x', options: [{ text: 'o', correct: true }, { text: 'u', correct: false }, { text: 'i', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Cot 🛏️', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🛏️', sentence: 'c_t', options: [{ text: 'o', correct: true }, { text: 'e', correct: false }, { text: 'a', correct: false }] }
-    ]
-  },
-  {
-    id: 9,
-    title: 'Short Vowel u 🟣',
-    titleEn: 'Short Vowel u',
-    mascot: '🟣',
-    color: 'from-teal-400 to-emerald-500',
-    borderColor: 'border-teal-300',
-    questions: [
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Sun ☀️', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக ☀️', sentence: 's_n', options: [{ text: 'u', correct: true }, { text: 'a', correct: false }, { text: 'o', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Bug 🐞', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🐞', sentence: 'b_g', options: [{ text: 'u', correct: true }, { text: 'e', correct: false }, { text: 'i', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Tub 🛁', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🛁', sentence: 't_b', options: [{ text: 'u', correct: true }, { text: 'o', correct: false }, { text: 'e', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Cup 🥛', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக 🥛', sentence: 'c_p', options: [{ text: 'u', correct: true }, { text: 'a', correct: false }, { text: 'i', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill the missing vowel for Mug ☕', instructionTa: 'விடுபட்ட உயிரெழுத்தை நிரப்புக ☕', sentence: 'm_g', options: [{ text: 'u', correct: true }, { text: 'o', correct: false }, { text: 'e', correct: false }] }
-    ]
-  },
-
-  // --- CHAPTER 3: WORD BUILDER FOREST (Levels 10 - 15) ---
-  {
-    id: 10,
-    title: 'CVC words - at family 🌲',
-    titleEn: 'CVC words - at family',
-    mascot: '🌲',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      // Q1: Connect beginning letter → full word (word builder feel)
-      { type: 'connect_pairs' as any, instruction: 'Connect the letter to build -at words! 🔗', instructionTa: '-at வார்த்தைகளை இணைக்கவும்! 🔗', pairs: [{ left: 'c', right: 'cat 🐱' }, { left: 'b', right: 'bat 🏏' }, { left: 'r', right: 'rat 🐭' }], options: [] },
-      // Q2: Find all -at family words in a grid
-      { type: 'grid_search' as any, instruction: 'Find ALL -at family words! 🔍', instructionTa: '-at குடும்ப வார்த்தைகளை கண்டுபிடி! 🔍', gridItems: [{ text: 'cat', correct: true, emoji: '🐱' }, { text: 'hat', correct: true, emoji: '🎩' }, { text: 'mat', correct: true, emoji: '🧘' }, { text: 'dog', correct: false, emoji: '🐶' }, { text: 'pen', correct: false, emoji: '🖊️' }, { text: 'sun', correct: false, emoji: '☀️' }], options: [] },
-      // Q3: Another connect_pairs round
-      { type: 'connect_pairs' as any, instruction: 'Build more -at words! 🌲', instructionTa: 'மேலும் -at வார்த்தைகள் உருவாக்குங்க! 🌲', pairs: [{ left: 'h', right: 'hat 🎩' }, { left: 'm', right: 'mat 🧘' }, { left: 's', right: 'sat 🪑' }], options: [] },
-      // Q4: Build word letter by letter (sentence_train style)
-      { type: 'sentence_train' as any, instruction: 'Tap letters in order to build: CAT 🐱', instructionTa: 'C-A-T வரிசையில் தட்டுங்க! 🐱', words: ['c', 'a', 't'], correctSentence: 'c a t', options: [] },
-      // Q5: Sentence context
-      { type: 'garden_repair' as any, instruction: 'Fix the sentence! 🌱', instructionTa: 'வாக்கியத்தை சரிசெய்யுங்க! 🌱', sentence: 'The ___ sits on the mat.', options: [{ text: 'cat 🐱', correct: true }, { text: 'dog 🐶', correct: false }, { text: 'bus 🚌', correct: false }] }
-    ]
-  },
-  {
-    id: 11,
-    title: 'CVC words - an family 🧺',
-    titleEn: 'CVC words - an family',
-    mascot: '🧺',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      { type: 'connect_pairs' as any, instruction: 'Connect the letter to build -an words! 🔗', instructionTa: '-an வார்த்தைகளை இணைக்கவும்! 🔗', pairs: [{ left: 'c', right: 'can 🥫' }, { left: 'f', right: 'fan 💨' }, { left: 'v', right: 'van 🚐' }], options: [] },
-      { type: 'grid_search' as any, instruction: 'Find ALL -an family words! 🔍', instructionTa: '-an குடும்ப வார்த்தைகளை கண்டுபிடி! 🔍', gridItems: [{ text: 'can', correct: true, emoji: '🥫' }, { text: 'fan', correct: true, emoji: '💨' }, { text: 'man', correct: true, emoji: '👨' }, { text: 'cat', correct: false, emoji: '🐱' }, { text: 'hot', correct: false, emoji: '🥵' }, { text: 'bug', correct: false, emoji: '🐞' }], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Build more -an words! 🧺', instructionTa: 'மேலும் -an வார்த்தைகள்! 🧺', pairs: [{ left: 'm', right: 'man 👨' }, { left: 'p', right: 'pan 🍳' }, { left: 'r', right: 'ran 🏃' }], options: [] },
-      { type: 'sentence_train' as any, instruction: 'Tap letters in order to build: FAN 💨', instructionTa: 'F-A-N வரிசையில் தட்டுங்க! 💨', words: ['f', 'a', 'n'], correctSentence: 'f a n', options: [] },
-      { type: 'garden_repair' as any, instruction: 'Fix the sentence! 🌱', instructionTa: 'வாக்கியத்தை சரிசெய்யுங்க! 🌱', sentence: 'She has a ___ in her hand.', options: [{ text: 'fan 💨', correct: true }, { text: 'hat 🎩', correct: false }, { text: 'mug ☕', correct: false }] }
-    ]
-  },
-  {
-    id: 12,
-    title: 'CVC words - in family 🐟',
-    titleEn: 'CVC words - in family',
-    mascot: '🐟',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      { type: 'connect_pairs' as any, instruction: 'Connect the letter to build -in words! 🔗', instructionTa: '-in வார்த்தைகளை இணைக்கவும்! 🔗', pairs: [{ left: 'p', right: 'pin 📌' }, { left: 'b', right: 'bin 🗑️' }, { left: 'f', right: 'fin 🐟' }], options: [] },
-      { type: 'grid_search' as any, instruction: 'Find ALL -in family words! 🔍', instructionTa: '-in குடும்ப வார்த்தைகளை கண்டுபிடி! 🔍', gridItems: [{ text: 'pin', correct: true, emoji: '📌' }, { text: 'tin', correct: true, emoji: '🥫' }, { text: 'win', correct: true, emoji: '🏆' }, { text: 'mat', correct: false, emoji: '🧘' }, { text: 'dog', correct: false, emoji: '🐶' }, { text: 'mug', correct: false, emoji: '☕' }], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Build more -in words! 🐟', instructionTa: 'மேலும் -in வார்த்தைகள்! 🐟', pairs: [{ left: 't', right: 'tin 🥫' }, { left: 'w', right: 'win 🏆' }, { left: 'k', right: 'kin 👨‍👩‍👧' }], options: [] },
-      { type: 'sentence_train' as any, instruction: 'Tap letters in order to build: PIN 📌', instructionTa: 'P-I-N வரிசையில் தட்டுங்க! 📌', words: ['p', 'i', 'n'], correctSentence: 'p i n', options: [] },
-      { type: 'garden_repair' as any, instruction: 'Fix the sentence! 🌱', instructionTa: 'வாக்கியத்தை சரிசெய்யுங்க! 🌱', sentence: 'He used a ___ to fix it.', options: [{ text: 'pin 📌', correct: true }, { text: 'can 🥫', correct: false }, { text: 'hat 🎩', correct: false }] }
-    ]
-  },
-  {
-    id: 13,
-    title: 'CVC words - ot family 🏺',
-    titleEn: 'CVC words - ot family',
-    mascot: '🏺',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      { type: 'connect_pairs' as any, instruction: 'Connect the letter to build -ot words! 🔗', instructionTa: '-ot வார்த்தைகளை இணைக்கவும்! 🔗', pairs: [{ left: 'p', right: 'pot 🏺' }, { left: 'h', right: 'hot 🥵' }, { left: 'd', right: 'dot 🔴' }], options: [] },
-      { type: 'grid_search' as any, instruction: 'Find ALL -ot family words! 🔍', instructionTa: '-ot குடும்ப வார்த்தைகளை கண்டுபிடி! 🔍', gridItems: [{ text: 'hot', correct: true, emoji: '🥵' }, { text: 'pot', correct: true, emoji: '🏺' }, { text: 'cot', correct: true, emoji: '🛏️' }, { text: 'fan', correct: false, emoji: '💨' }, { text: 'pin', correct: false, emoji: '📌' }, { text: 'cat', correct: false, emoji: '🐱' }], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Build more -ot words! 🏺', instructionTa: 'மேலும் -ot வார்த்தைகள்! 🏺', pairs: [{ left: 'c', right: 'cot 🛏️' }, { left: 'n', right: 'not 🙅' }, { left: 'g', right: 'got 👍' }], options: [] },
-      { type: 'sentence_train' as any, instruction: 'Tap letters in order to build: POT 🏺', instructionTa: 'P-O-T வரிசையில் தட்டுங்க! 🏺', words: ['p', 'o', 't'], correctSentence: 'p o t', options: [] },
-      { type: 'garden_repair' as any, instruction: 'Fix the sentence! 🌱', instructionTa: 'வாக்கியத்தை சரிசெய்யுங்க! 🌱', sentence: 'The soup is very ___.', options: [{ text: 'hot 🥵', correct: true }, { text: 'wet 💧', correct: false }, { text: 'big 📦', correct: false }] }
-    ]
-  },
-  {
-    id: 14,
-    title: 'CVC words - ug family 🐞',
-    titleEn: 'CVC words - ug family',
-    mascot: '🐞',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      { type: 'connect_pairs' as any, instruction: 'Connect the letter to build -ug words! 🔗', instructionTa: '-ug வார்த்தைகளை இணைக்கவும்! 🔗', pairs: [{ left: 'b', right: 'bug 🐞' }, { left: 'm', right: 'mug ☕' }, { left: 'r', right: 'rug 🧹' }], options: [] },
-      { type: 'grid_search' as any, instruction: 'Find ALL -ug family words! 🔍', instructionTa: '-ug குடும்ப வார்த்தைகளை கண்டுபிடி! 🔍', gridItems: [{ text: 'bug', correct: true, emoji: '🐞' }, { text: 'mug', correct: true, emoji: '☕' }, { text: 'jug', correct: true, emoji: '🥛' }, { text: 'cat', correct: false, emoji: '🐱' }, { text: 'hot', correct: false, emoji: '🥵' }, { text: 'pin', correct: false, emoji: '📌' }], options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Build more -ug words! 🐞', instructionTa: 'மேலும் -ug வார்த்தைகள்! 🐞', pairs: [{ left: 'j', right: 'jug 🥛' }, { left: 'h', right: 'hug 🤗' }, { left: 't', right: 'tug 💪' }], options: [] },
-      { type: 'sentence_train' as any, instruction: 'Tap letters in order to build: MUG ☕', instructionTa: 'M-U-G வரிசையில் தட்டுங்க! ☕', words: ['m', 'u', 'g'], correctSentence: 'm u g', options: [] },
-      { type: 'garden_repair' as any, instruction: 'Fix the sentence! 🌱', instructionTa: 'வாக்கியத்தை சரிசெய்யுங்க! 🌱', sentence: 'Mia drank from her ___.', options: [{ text: 'mug ☕', correct: true }, { text: 'mat 🧘', correct: false }, { text: 'hat 🎩', correct: false }] }
-    ]
-  },
-  {
-    id: 15,
-    title: 'Build new words 🧱',
-    titleEn: 'Build new words',
-    mascot: '🧱',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      // Mix all families — connect beginning to ANY CVC word
-      { type: 'connect_pairs' as any, instruction: 'Match each letter to its word! 🧱', instructionTa: 'ஒவ்வொரு எழுத்தையும் அதன் வார்த்தையுடன் இணைக்கவும்! 🧱', pairs: [{ left: 'c', right: 'cup 🥛' }, { left: 'z', right: 'zip 🤐' }, { left: 'j', right: 'jet ✈️' }], options: [] },
-      { type: 'sentence_train' as any, instruction: 'Build the word: RUN 🏃', instructionTa: 'R-U-N வரிசையில் தட்டுங்க! 🏃', words: ['r', 'u', 'n'], correctSentence: 'r u n', options: [] },
-      { type: 'connect_pairs' as any, instruction: 'Build more new words! 🏗️', instructionTa: 'மேலும் புதிய வார்த்தைகள்! 🏗️', pairs: [{ left: 'm', right: 'mop 🧹' }, { left: 'p', right: 'peg 📎' }, { left: 'n', right: 'net 🕸️' }], options: [] },
-      { type: 'sentence_train' as any, instruction: 'Build the word: HOP 🐸', instructionTa: 'H-O-P வரிசையில் தட்டுங்க! 🐸', words: ['h', 'o', 'p'], correctSentence: 'h o p', options: [] },
-      { type: 'grid_search' as any, instruction: 'Find the real CVC words! 🔍', instructionTa: 'உண்மையான CVC வார்த்தைகளை கண்டுபிடி! 🔍', gridItems: [{ text: 'run', correct: true, emoji: '🏃' }, { text: 'zip', correct: true, emoji: '🤐' }, { text: 'hop', correct: true, emoji: '🐸' }, { text: 'str', correct: false, emoji: '❌' }, { text: 'xpt', correct: false, emoji: '❌' }, { text: 'blf', correct: false, emoji: '❌' }], options: [] }
-    ]
-  },
-
-  // --- CHAPTER 4: SIGHT WORDS (Levels 16 - 20) ---
-  {
-    id: 16,
-    title: 'I, am, is, are 🏙️',
-    titleEn: 'I, am, is, are',
-    mascot: '🏙️',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      // Q1: Connect Subject to Verb
-      { type: 'connect_pairs' as any, instruction: 'Connect the matching parts! 🔗', instructionTa: 'பொருந்தும் பகுதிகளை இணைக்கவும்! 🔗', pairs: [{ left: 'I', right: 'am 🙋' }, { left: 'He', right: 'is 👦' }, { left: 'They', right: 'are 👥' }], options: [] },
-      // Q2: Grid search for all instances of "is" or "are"
-      { type: 'grid_search' as any, instruction: 'Find the helper word: IS 🔍', instructionTa: 'IS வார்த்தையைத் தேர்ந்தெடு! 🔍', gridItems: [{ text: 'is', correct: true, emoji: '✨' }, { text: 'is', correct: true, emoji: '🌟' }, { text: 'is', correct: true, emoji: '💫' }, { text: 'am', correct: false, emoji: '❌' }, { text: 'are', correct: false, emoji: '❌' }, { text: 'the', correct: false, emoji: '❌' }], options: [] },
-      // Q3: Sentence Train
-      { type: 'sentence_train' as any, instruction: 'Assemble: He is happy 🚂', instructionTa: 'வாக்கியத்தை வரிசைப்படுத்துக: He is happy 🚂', words: ['happy', 'is', 'He'], correctSentence: 'He is happy', options: [] },
-      // Q4: Garden Repair
-      { type: 'garden_repair' as any, instruction: 'Fix the sentence! 🌱', instructionTa: 'வாக்கியத்தை சரிசெய்யுங்க! 🌱', sentence: 'We ___ playing in the park.', options: [{ text: 'are', correct: true }, { text: 'am', correct: false }, { text: 'is', correct: false }] },
-      // Q5: Sentence Train
-      { type: 'sentence_train' as any, instruction: 'Assemble: I am a boy 🚂', instructionTa: 'வாக்கியத்தை வரிசைப்படுத்துக: I am a boy 🚂', words: ['a', 'am', 'boy', 'I'], correctSentence: 'I am a boy', options: [] }
-    ]
-  },
-  {
-    id: 17,
-    title: 'the, a, an 🎯',
-    titleEn: 'the, a, an',
-    mascot: '🎯',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      // Q1: Connect noun with correct article
-      { type: 'connect_pairs' as any, instruction: 'Match the word with its article! 🔗', instructionTa: 'சரியான article உடன் இணைக்கவும்! 🔗', pairs: [{ left: 'apple 🍎', right: 'an' }, { left: 'car 🚗', right: 'a' }, { left: 'Sun ☀️', right: 'the' }], options: [] },
-      // Q2: Grid Search
-      { type: 'grid_search' as any, instruction: 'Find all correct articles (a, an, the)! 🔍', instructionTa: 'சரியான articles கண்டுபிடி! 🔍', gridItems: [{ text: 'a', correct: true, emoji: '🅰️' }, { text: 'an', correct: true, emoji: '🔤' }, { text: 'the', correct: true, emoji: '🌐' }, { text: 'and', correct: false, emoji: '❌' }, { text: 'boy', correct: false, emoji: '❌' }, { text: 'cat', correct: false, emoji: '❌' }], options: [] },
-      // Q3: Garden Repair
-      { type: 'garden_repair' as any, instruction: 'Complete the sentence! ✏️', instructionTa: 'வாக்கியத்தை நிறைவு செய்! ✏️', sentence: 'I saw ___ big elephant.', options: [{ text: 'a', correct: true }, { text: 'an', correct: false }, { text: 'the', correct: false }] },
-      // Q4: Garden Repair
-      { type: 'garden_repair' as any, instruction: 'Complete the sentence! ✏️', instructionTa: 'வாக்கியத்தை நிறைவு செய்! ✏️', sentence: 'She wants to eat ___ orange.', options: [{ text: 'an', correct: true }, { text: 'a', correct: false }, { text: 'the', correct: false }] },
-      // Q5: Sentence Train
-      { type: 'sentence_train' as any, instruction: 'Assemble the sentence! 🚂', instructionTa: 'வாக்கியத்தை அடுக்குங்க! 🚂', words: ['Sun', 'shines', 'The'], correctSentence: 'The Sun shines', options: [] }
-    ]
-  },
-  {
-    id: 18,
-    title: 'this, that 👉',
-    titleEn: 'this, that',
-    mascot: '👉',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      // Q1: Connect Near / Far
-      { type: 'connect_pairs' as any, instruction: 'Match near and far! 🔗', instructionTa: 'பொருத்துக! 🔗', pairs: [{ left: 'this 📍', right: 'near here' }, { left: 'that 🔭', right: 'far away' }, { left: 'these 📦', right: 'near plural' }], options: [] },
-      // Q2: Garden Repair (near)
-      { type: 'garden_repair' as any, instruction: 'Complete the sentence! 👉', instructionTa: 'வாக்கியத்தை நிறைவு செய்! 👉', sentence: '___ book in my hand is blue.', options: [{ text: 'This', correct: true }, { text: 'That', correct: false }] },
-      // Q3: Garden Repair (far)
-      { type: 'garden_repair' as any, instruction: 'Complete the sentence! 👉', instructionTa: 'வாக்கியத்தை நிறைவு செய்! 👉', sentence: '___ star in the sky is bright.', options: [{ text: 'That', correct: true }, { text: 'This', correct: false }] },
-      // Q4: Sentence Train
-      { type: 'sentence_train' as any, instruction: 'Assemble the sentence! 🚂', instructionTa: 'வாக்கியத்தை அடுக்குங்க! 🚂', words: ['is', 'my', 'toy', 'This'], correctSentence: 'This is my toy', options: [] },
-      // Q5: Sentence Train
-      { type: 'sentence_train' as any, instruction: 'Assemble the sentence! 🚂', instructionTa: 'வாக்கியத்தை அடுக்குங்க! 🚂', words: ['bird', 'fly', 'That', 'can'], correctSentence: 'That bird can fly', options: [] }
-    ]
-  },
-  {
-    id: 19,
-    title: 'here, there 📍',
-    titleEn: 'here, there',
-    mascot: '📍',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      // Q1: Connect matching sight words
-      { type: 'connect_pairs' as any, instruction: 'Match the opposites! 🔗', instructionTa: 'எதிர்ச்சொற்களைப் பொருத்துக! 🔗', pairs: [{ left: 'here 📍', right: 'close to me' }, { left: 'there 🔭', right: 'away from me' }, { left: 'come 🚶', right: 'go 🏃' }], options: [] },
-      // Q2: Garden Repair
-      { type: 'garden_repair' as any, instruction: 'Choose: here or there!', instructionTa: 'சரியானதைத் தேர்ந்தெடு!', sentence: 'Come ___ and sit next to me.', options: [{ text: 'here', correct: true }, { text: 'there', correct: false }] },
-      // Q3: Garden Repair
-      { type: 'garden_repair' as any, instruction: 'Choose: here or there!', instructionTa: 'சரியானதைத் தேர்ந்தெடு!', sentence: 'The birds are flying over ___ in the sky.', options: [{ text: 'there', correct: true }, { text: 'here', correct: false }] },
-      // Q4: Grid Search
-      { type: 'grid_search' as any, instruction: 'Find the word: THERE! 🔍', instructionTa: 'THERE வார்த்தையைத் தேர்ந்தெடு! 🔍', gridItems: [{ text: 'there', correct: true, emoji: '👉' }, { text: 'there', correct: true, emoji: '📍' }, { text: 'here', correct: false, emoji: '❌' }, { text: 'this', correct: false, emoji: '❌' }, { text: 'that', correct: false, emoji: '❌' }], options: [] },
-      // Q5: Sentence Train
-      { type: 'sentence_train' as any, instruction: 'Assemble the sentence! 🚂', instructionTa: 'வாக்கியத்தை அடுக்குங்க! 🚂', words: ['is', 'cat', 'My', 'here'], correctSentence: 'My cat is here', options: [] }
-    ]
-  },
-  {
-    id: 20,
-    title: 'my, your 🤝',
-    titleEn: 'my, your',
-    mascot: '🤝',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      // Q1: Connect
-      { type: 'connect_pairs' as any, instruction: 'Match the pronouns! 🔗', instructionTa: 'பிரதிப்பெயர்ச்சொற்களைப் பொருத்துக! 🔗', pairs: [{ left: 'my 🙋', right: 'belongs to me' }, { left: 'your 🫵', right: 'belongs to you' }, { left: 'our 👥', right: 'belongs to us' }], options: [] },
-      // Q2: Garden Repair
-      { type: 'garden_repair' as any, instruction: 'Fill the blank! 🤝', instructionTa: 'நிரப்புக! 🤝', sentence: 'I am playing with ___ dog. (belongs to me)', options: [{ text: 'my', correct: true }, { text: 'your', correct: false }] },
-      // Q3: Garden Repair
-      { type: 'garden_repair' as any, instruction: 'Fill the blank! 🤝', instructionTa: 'நிரப்புக! 🤝', sentence: 'Is this ___ school bag? (belongs to you)', options: [{ text: 'your', correct: true }, { text: 'my', correct: false }] },
-      // Q4: Sentence Train
-      { type: 'sentence_train' as any, instruction: 'Assemble the sentence! 🚂', instructionTa: 'வாக்கியத்தை அடுக்குங்க! 🚂', words: ['is', 'your', 'This', 'pen'], correctSentence: 'This is your pen', options: [] },
-      // Q5: Sentence Train
-      { type: 'sentence_train' as any, instruction: 'Assemble the sentence! 🚂', instructionTa: 'வாக்கியத்தை அடுக்குங்க! 🚂', words: ['love', 'I', 'school', 'my'], correctSentence: 'I love my school', options: [] }
-    ]
-  },
-
-
-  // --- CHAPTER 5: NAMING WORDS WORLD (Levels 21 - 25) ---
-  {
-    id: 21,
-    title: 'People names 👤',
-    titleEn: 'People names',
-    mascot: '👤',
-    color: 'from-violet-400 to-purple-500',
-    borderColor: 'border-violet-300',
-    questions: [
-      // Q1: Categorize names
-      { type: 'connect_pairs' as any, instruction: 'Match the name with their job/role! 🔗', instructionTa: 'பெயர்களைப் பொருந்தும் பாத்திரத்துடன் இணைக்கவும்! 🔗', pairs: [{ left: 'Rahul 👦', right: 'boy' }, { left: 'Sita 👧', right: 'girl' }, { left: 'Teacher 👩‍🏫', right: 'job' }], options: [] },
-      // Q2: Grid Search for people names
-      { type: 'grid_search' as any, instruction: 'Find all people names! 🔍', instructionTa: 'நபர்களின் பெயர்களைக் கண்டுபிடி! 🔍', gridItems: [{ text: 'Mia', correct: true, emoji: '👧' }, { text: 'Rahul', correct: true, emoji: '👦' }, { text: 'Riya', correct: true, emoji: '👩' }, { text: 'lion', correct: false, emoji: '🦁' }, { text: 'school', correct: false, emoji: '🏫' }, { text: 'book', correct: false, emoji: '📚' }], options: [] },
-      // Q3: Highlight name in a sentence
-      { type: 'detective_highlight' as any, category: 'Person Name', instruction: 'Find the person name in the sentence!', instructionTa: 'நபர் பெயர்ச்சொல்லைக் கண்டுபிடி!', sentence: 'Mia runs very fast.', targetWord: 'Mia', options: [] },
-      // Q4: Garden Repair context
-      { type: 'garden_repair' as any, instruction: 'Complete the sentence! 👤', instructionTa: 'வாக்கியத்தை சரிசெய்யுங்க! 👤', sentence: '___ is writing on the board.', options: [{ text: 'The teacher 👩‍🏫', correct: true }, { text: 'The dog 🐶', correct: false }, { text: 'The book 📖', correct: false }] }
-    ]
-  },
-  {
-    id: 22,
-    title: 'Animal names 🦁',
-    titleEn: 'Animal names',
-    mascot: '🦁',
-    color: 'from-violet-400 to-purple-500',
-    borderColor: 'border-violet-300',
-    questions: [
-      // Q1: Match animal to sound/action
-      { type: 'connect_pairs' as any, instruction: 'Connect animal to their home/food! 🔗', instructionTa: 'விலங்குகளை இணைக்கவும்! 🔗', pairs: [{ left: 'cow 🐄', right: 'grass 🌿' }, { left: 'dog 🐕', right: 'kennel 🏠' }, { left: 'bird 🐦', right: 'nest 🪹' }], options: [] },
-      // Q2: Grid Search
-      { type: 'grid_search' as any, instruction: 'Find all animal names! 🔍', instructionTa: 'விலங்குகளின் பெயர்களைக் கண்டுபிடி! 🔍', gridItems: [{ text: 'lion', correct: true, emoji: '🦁' }, { text: 'cat', correct: true, emoji: '🐱' }, { text: 'cow', correct: true, emoji: '🐄' }, { text: 'Mia', correct: false, emoji: '👧' }, { text: 'pen', correct: false, emoji: '🖊️' }, { text: 'park', correct: false, emoji: '🏞️' }], options: [] },
-      // Q3: Highlight animal name
-      { type: 'detective_highlight' as any, category: 'Animal Name', instruction: 'Find the animal name in the sentence!', instructionTa: 'விலங்குப் பெயர்ச்சொல்லைக் கண்டுபிடி!', sentence: 'A green frog hops.', targetWord: 'frog', options: [] },
-      // Q4: Garden Repair
-      { type: 'garden_repair' as any, instruction: 'Fix the sentence! 🌱', instructionTa: 'வாக்கியத்தை சரிசெய்யுங்க! 🌱', sentence: 'The ___ barked at the mailman.', options: [{ text: 'dog 🐶', correct: true }, { text: 'cat 🐱', correct: false }, { text: 'bird 🐦', correct: false }] }
-    ]
-  },
-  {
-    id: 23,
-    title: 'Things around us 🎒',
-    titleEn: 'Things around us',
-    mascot: '🎒',
-    color: 'from-violet-400 to-purple-500',
-    borderColor: 'border-violet-300',
-    questions: [
-      // Q1: Match tool to action
-      { type: 'connect_pairs' as any, instruction: 'Match the thing with its use! 🔗', instructionTa: 'பொருட்களைப் பயன்பாட்டுடன் இணைக்கவும்! 🔗', pairs: [{ left: 'pencil ✏️', right: 'writing 📝' }, { left: 'ball ⚽', right: 'playing 🏃' }, { left: 'cup 🥛', right: 'drinking 🥛' }], options: [] },
-      // Q2: Grid search
-      { type: 'grid_search' as any, instruction: 'Find all names of things! 🔍', instructionTa: 'பொருட்களின் பெயர்களைக் கண்டுபிடி! 🔍', gridItems: [{ text: 'bag', correct: true, emoji: '🎒' }, { text: 'pen', correct: true, emoji: '🖊️' }, { text: 'book', correct: true, emoji: '📖' }, { text: 'Rahul', correct: false, emoji: '👦' }, { text: 'tiger', correct: false, emoji: '🐅' }, { text: 'Chennai', correct: false, emoji: '🌆' }], options: [] },
-      // Q3: Garden Repair
-      { type: 'garden_repair' as any, instruction: 'Complete the sentence! 🎒', instructionTa: 'வாக்கியத்தை சரிசெய்யுங்க! 🎒', sentence: 'Put your books inside your ___.', options: [{ text: 'bag 🎒', correct: true }, { text: 'dog 🐶', correct: false }, { text: 'star 🌟', correct: false }] },
-      // Q4: Highlight
-      { type: 'detective_highlight' as any, category: 'Thing Name', instruction: 'Find the thing name!', instructionTa: 'பொருளின் பெயர்ச்சொல்லைக் கண்டுபிடி!', sentence: 'Keep the clean cup on table.', targetWord: 'cup', options: [] }
-    ]
-  },
-  {
-    id: 24,
-    title: 'Places 🏫',
-    titleEn: 'Places',
-    mascot: '🏫',
-    color: 'from-violet-400 to-purple-500',
-    borderColor: 'border-violet-300',
-    questions: [
-      // Q1: Match place to activity
-      { type: 'connect_pairs' as any, instruction: 'Match place with activity! 🔗', instructionTa: 'இடங்களைச் செயல்களுடன் இணைக்கவும்! 🔗', pairs: [{ left: 'school 🏫', right: 'learning 📖' }, { left: 'park 🏞️', right: 'playing 🎡' }, { left: 'hospital 🏥', right: 'healing 🩺' }], options: [] },
-      // Q2: Grid search
-      { type: 'grid_search' as any, instruction: 'Find all place names! 🔍', instructionTa: 'இடங்களின் பெயர்களைக் கண்டுபிடி! 🔍', gridItems: [{ text: 'school', correct: true, emoji: '🏫' }, { text: 'park', correct: true, emoji: '🏞️' }, { text: 'zoo', correct: true, emoji: '🦁' }, { text: 'pencil', correct: false, emoji: '✏️' }, { text: 'rabbit', correct: false, emoji: '🐰' }, { text: 'Riya', correct: false, emoji: '👧' }], options: [] },
-      // Q3: Garden Repair
-      { type: 'garden_repair' as any, instruction: 'Complete the sentence! 🏫', instructionTa: 'வாக்கியத்தை சரிசெய்யுங்க! 🏫', sentence: 'We saw monkeys and tigers at the ___.', options: [{ text: 'zoo 🦁', correct: true }, { text: 'school 🏫', correct: false }, { text: 'house 🏠', correct: false }] },
-      // Q4: Highlight
-      { type: 'detective_highlight' as any, category: 'Place Name', instruction: 'Find the place name!', instructionTa: 'இடத்தின் பெயர்ச்சொல்லைக் கண்டுபிடி!', sentence: 'He swam in the beach.', targetWord: 'beach', options: [] }
-    ]
-  },
-  {
-    id: 25,
-    title: 'One & Many 🔢',
-    titleEn: 'One & Many',
-    mascot: '🔢',
-    color: 'from-violet-400 to-purple-500',
-    borderColor: 'border-violet-300',
-    questions: [
-      // Q1: Connect singular to plural
-      { type: 'connect_pairs' as any, instruction: 'Match Singular (One) to Plural (Many)! 🔗', instructionTa: 'ஒருமை - பன்மையை இணைக்கவும்! 🔗', pairs: [{ left: 'cat 🐱', right: 'cats 🐱🐱' }, { left: 'ball ⚽', right: 'balls ⚽⚽' }, { left: 'tree 🌲', right: 'trees 🌲🌲' }], options: [] },
-      // Q2: Garden Repair (Singular context)
-      { type: 'garden_repair' as any, instruction: 'Complete the sentence! 🔢', instructionTa: 'வாக்கியத்தை சரிசெய்யுங்க! 🔢', sentence: 'There is only one ___ on the plate.', options: [{ text: 'apple 🍎', correct: true }, { text: 'apples 🍎🍎', correct: false }] },
-      // Q3: Garden Repair (Plural context)
-      { type: 'garden_repair' as any, instruction: 'Complete the sentence! 🔢', instructionTa: 'வாக்கியத்தை சரிசெய்யுங்க! 🔢', sentence: 'I can see many ___ flying in the sky.', options: [{ text: 'birds 🦅', correct: true }, { text: 'bird 🦅', correct: false }] },
-      // Q4: Grid Search for plurals
-      { type: 'grid_search' as any, instruction: 'Find all plural words (ending in -s)! 🔍', instructionTa: 'பன்மைச் சொற்களைக் கண்டுபிடி! 🔍', gridItems: [{ text: 'dogs', correct: true, emoji: '🐶' }, { text: 'pens', correct: true, emoji: '🖊️' }, { text: 'toys', correct: true, emoji: '🧸' }, { text: 'cat', correct: false, emoji: '❌' }, { text: 'house', correct: false, emoji: '❌' }, { text: 'star', correct: false, emoji: '❌' }], options: [] }
-    ]
-  },
-
-
-  // --- CHAPTER 6: GRAMMAR GARDEN (Levels 26 - 31) ---
-  {
-     id: 26,
-     title: 'Nouns 👥',
-     titleEn: 'Nouns',
-     mascot: '👥',
-     color: 'from-indigo-400 to-blue-500',
-     borderColor: 'border-indigo-300',
-     questions: [
-       // Q1: Concept Learn Card
-       { type: 'learn_card' as any, conceptTitle: 'What is a Noun? 👥', mascot: '👥', explanation: 'A Noun is a naming word! It is the name of a person (boy 👦), place (school 🏫), animal (cat 🐱), or thing (book 📖).', explanationTa: 'பெயர்ச்சொல் என்பது ஒரு நபர், இடம், விலங்கு அல்லது பொருளின் பெயர்! 👥', examples: ['Rahul 👦', 'Chennai 🏫', 'Dog 🐶', 'Pen 🖊️'], options: [] },
-       // Q2: Match Category
-       { type: 'connect_pairs' as any, instruction: 'Match noun with its category! 🔗', instructionTa: 'பெயர்ச்சொல்லை வகையுடன் இணைக்கவும்! 🔗', pairs: [{ left: 'Sita 👧', right: 'Person' }, { left: 'Lion 🦁', right: 'Animal' }, { left: 'Park 🏞️', right: 'Place' }], options: [] },
-       // Q3: Grid Search
-       { type: 'grid_search' as any, instruction: 'Find all naming words (Nouns)! 🔍', instructionTa: 'பெயர்ச்சொற்களைக் கண்டுபிடி! 🔍', gridItems: [{ text: 'Mia', correct: true, emoji: '👧' }, { text: 'book', correct: true, emoji: '📖' }, { text: 'cat', correct: true, emoji: '🐱' }, { text: 'run', correct: false, emoji: '❌' }, { text: 'happy', correct: false, emoji: '❌' }, { text: 'he', correct: false, emoji: '❌' }], options: [] },
-       // Q4: Detective Zone
-       { type: 'detective_highlight' as any, category: 'Noun', instruction: 'Find the Noun (Naming Word) in the sentence!', instructionTa: 'பெயர்ச்சொல்லைக் கண்டுபிடி!', sentence: 'The dog runs fast.', targetWord: 'dog', options: [] },
-       // Q5: Garden Repair
-       { type: 'garden_repair' as any, instruction: 'Complete the sentence with a Noun! ✏️', instructionTa: 'பெயர்ச்சொல்லால் வாக்கியத்தை நிரப்புக! ✏️', sentence: 'We go to ___ to learn.', options: [{ text: 'school 🏫', correct: true }, { text: 'run 🏃', correct: false }, { text: 'big 📦', correct: false }] }
-     ]
-  },
-  {
-    id: 27,
-    title: 'Pronouns 🗣️',
-    titleEn: 'Pronouns',
-    mascot: '🗣️',
-    color: 'from-indigo-400 to-blue-500',
-    borderColor: 'border-indigo-300',
-    questions: [
-      // Q1: Concept Learn Card
-      { type: 'learn_card' as any, conceptTitle: 'What is a Pronoun? 🗣️', mascot: '🗣️', explanation: 'Pronouns are words we use instead of Nouns! We use HE for boys 👦, SHE for girls 👧, and IT for animals or objects 🐶.', explanationTa: 'பெயர்ச்சொல்லுக்குப் பதிலாகப் பயன்படுத்தப்படும் சொற்கள் பிரதிப்பெயர்ச்சொற்கள் (Pronouns) ஆகும்! 🗣️', examples: ['He (Rahul) 👦', 'She (Mia) 👧', 'It (Cat) 🐱', 'It (Pen) 🖊️'], options: [] },
-      // Q2: Match pronoun
-      { type: 'connect_pairs' as any, instruction: 'Match the naming word to its pronoun! 🔗', instructionTa: 'பெயர்ச்சொல்லை பிரதிபெயர்ச்சொல்லுடன் இணைக்கவும்! 🔗', pairs: [{ left: 'Rohan 👦', right: 'He' }, { left: 'Sara 👧', right: 'She' }, { left: 'Cup 🥛', right: 'It' }], options: [] },
-      // Q3: Garden Repair (He)
-      { type: 'garden_repair' as any, instruction: 'Choose the correct pronoun! 🗣️', instructionTa: 'சரியானதை நிரப்பவும்! 🗣️', sentence: 'This is Tom. ___ is a happy boy.', options: [{ text: 'He', correct: true }, { text: 'She', correct: false }, { text: 'It', correct: false }] },
-      // Q4: Garden Repair (She)
-      { type: 'garden_repair' as any, instruction: 'Choose the correct pronoun! 🗣️', instructionTa: 'சரியானதை நிரப்பவும்! 🗣️', sentence: 'This is Riya. ___ loves to dance.', options: [{ text: 'She', correct: true }, { text: 'He', correct: false }, { text: 'It', correct: false }] },
-      // Q5: Garden Repair (It)
-      { type: 'garden_repair' as any, instruction: 'Choose the correct pronoun! 🗣️', instructionTa: 'சரியானதை நிரப்பவும்! 🗣️', sentence: 'I have a cat. ___ is very cute.', options: [{ text: 'It', correct: true }, { text: 'He', correct: false }, { text: 'She', correct: false }] }
-    ]
-  },
-  {
-    id: 28,
-    title: 'Action words 🏃',
-    titleEn: 'Action words',
-    mascot: '🏃',
-    color: 'from-indigo-400 to-blue-500',
-    borderColor: 'border-indigo-300',
-    questions: [
-      // Q1: Concept Learn Card
-      { type: 'learn_card' as any, conceptTitle: 'What are Action Words? 🏃', mascot: '🏃', explanation: 'Action words (Verbs) show what someone or something is doing! They are words like run 🏃, fly 🦅, eat 🍎, and swim 🏊.', explanationTa: 'செயல் வார்த்தைகள் (Verbs) ஒரு நபர் அல்லது விலங்கு செய்யும் செயலைக் குறிக்கும்! 🏃', examples: ['run 🏃', 'fly 🦅', 'eat 🍎', 'swim 🏊'], options: [] },
-      // Q2: Match action word
-      { type: 'connect_pairs' as any, instruction: 'Connect animal to their action! 🔗', instructionTa: 'பொருந்தும் செயலை இணைக்கவும்! 🔗', pairs: [{ left: 'birds 🦅', right: 'fly ☁️' }, { left: 'fish 🐟', right: 'swim 🌊' }, { left: 'frogs 🐸', right: 'hop 🪷' }], options: [] },
-      // Q3: Grid Search
-      { type: 'grid_search' as any, instruction: 'Find all Action Words! 🔍', instructionTa: 'செயல் வார்த்தைகளைக் கண்டுபிடி! 🔍', gridItems: [{ text: 'run', correct: true, emoji: '🏃' }, { text: 'eat', correct: true, emoji: '🍎' }, { text: 'sleep', correct: true, emoji: '😴' }, { text: 'book', correct: false, emoji: '📖' }, { text: 'pen', correct: false, emoji: '🖊️' }, { text: 'school', correct: false, emoji: '🏫' }], options: [] },
-      // Q4: Highlight
-      { type: 'detective_highlight' as any, category: 'Action Word (Verb)', instruction: 'Find the action word in the sentence!', instructionTa: 'வினைச்சொல்லைக் கண்டுபிடி!', sentence: 'The children play in the garden.', targetWord: 'play', options: [] },
-      // Q5: Garden Repair
-      { type: 'garden_repair' as any, instruction: 'Complete the sentence with an Action Word! 🏃', instructionTa: 'செயல் சொல்லால் நிரப்புக! 🏃', sentence: 'Sita eats food and ___ water.', options: [{ text: 'drinks 🥛', correct: true }, { text: 'runs 🏃', correct: false }, { text: 'red 🔴', correct: false }] }
-    ]
-  },
-  {
-    id: 29,
-    title: 'Describing words 🎨',
-    titleEn: 'Describing words',
-    mascot: '🎨',
-    color: 'from-indigo-400 to-blue-500',
-    borderColor: 'border-indigo-300',
-    questions: [
-      // Q1: Concept Learn Card
-      { type: 'learn_card' as any, conceptTitle: 'What are Describing Words? 🎨', mascot: '🎨', explanation: 'Describing words (Adjectives) tell us more about a naming word! Like a RED bag 🎒, a BIG elephant 🐘, or a HAPPY boy 👦.', explanationTa: 'விவரிக்கும் சொற்கள் (Adjectives) ஒரு பெயர்ச்சொல்லைப் பற்றி மேலும் விளக்குகின்றன! 🎨', examples: ['red bag 🎒', 'big dog 🐕', 'hot sun ☀️', 'sweet apple 🍎'], options: [] },
-      // Q2: Connect noun to descriptor
-      { type: 'connect_pairs' as any, instruction: 'Match the naming word to its descriptor! 🔗', instructionTa: 'பெயர்ச்சொல்லை விவரிக்கும் சொல்லுடன் பொருத்துக! 🔗', pairs: [{ left: 'Lemon 🍋', right: 'sour 😖' }, { left: 'Ice ❄️', right: 'cold ❄️' }, { left: 'Giraffe 🦒', right: 'tall 🦒' }], options: [] },
-      // Q3: Highlight
-      { type: 'detective_highlight' as any, category: 'Describing Word (Adjective)', instruction: 'Find the describing word in the sentence!', sentence: 'Mia has a sweet red apple.', targetWord: 'red', options: [] },
-      // Q4: Garden Repair
-      { type: 'garden_repair' as any, instruction: 'Complete the sentence with a describing word! 🎨', instructionTa: 'வாக்கியத்தை சரிசெய்யுங்க! 🎨', sentence: 'Look at the ___ stars in the sky.', options: [{ text: 'bright 🌟', correct: true }, { text: 'run 🏃', correct: false }, { text: 'he 👦', correct: false }] }
-    ]
-  },
-  {
-    id: 30,
-    title: 'Opposites ⚖️',
-    titleEn: 'Opposites',
-    mascot: '⚖️',
-    color: 'from-indigo-400 to-blue-500',
-    borderColor: 'border-indigo-300',
-    questions: [
-      // Q1: Concept Learn Card
-      { type: 'learn_card' as any, conceptTitle: 'What are Opposites? ⚖️', mascot: '⚖️', explanation: 'Opposites are word pairs that are completely different! Like hot ☀️ and cold ❄️, big 🐘 and small 🐭, or up ⬆️ and down ⬇️.', explanationTa: 'எதிர்ச்சொற்கள் என்பவை முற்றிலும் மாறுபட்ட அர்த்தம் கொண்ட சொற்கள்! ⚖️', examples: ['hot / cold ☀️❄️', 'big / small 🐘🐭', 'up / down ⬆️⬇️', 'happy / sad 😃😢'], options: [] },
-      // Q2: Connect Opposites
-      { type: 'connect_pairs' as any, instruction: 'Match the opposite words! 🔗', instructionTa: 'எதிர்ச்சொற்களைப் பொருத்துக! 🔗', pairs: [{ left: 'happy 😃', right: 'sad 😢' }, { left: 'hot ☀️', right: 'cold ❄️' }, { left: 'big 🐘', right: 'small 🐭' }], options: [] },
-      // Q3: Garden Repair
-      { type: 'garden_repair' as any, instruction: 'Complete the sentence with an opposite! ⚖️', instructionTa: 'வாக்கியத்தை சரிசெய்யுங்க! ⚖️', sentence: 'The sun is hot, but ice is ___.', options: [{ text: 'cold ❄️', correct: true }, { text: 'big 🐘', correct: false }, { text: 'happy 😃', correct: false }] },
-      // Q4: Grid Search for opposites
-      { type: 'grid_search' as any, instruction: 'Find opposites of "UP"! 🔍', instructionTa: '"UP" இன் எதிர்ச்சொல்லைத் தேர்ந்தெடு! 🔍', gridItems: [{ text: 'down', correct: true, emoji: '⬇️' }, { text: 'down', correct: true, emoji: '👇' }, { text: 'down', correct: true, emoji: '⏬' }, { text: 'hot', correct: false, emoji: '❌' }, { text: 'big', correct: false, emoji: '❌' }, { text: 'happy', correct: false, emoji: '❌' }], options: [] }
-    ]
-  },
-  {
-    id: 31,
-    title: 'Position words 📦',
-    titleEn: 'Position words',
-    mascot: '📦',
-    color: 'from-indigo-400 to-blue-500',
-    borderColor: 'border-indigo-300',
-    questions: [
-      // Q1: Concept Learn Card
-      { type: 'learn_card' as any, conceptTitle: 'What are Position Words? 📦', mascot: '📦', explanation: 'Position words (Prepositions) tell us where something is! Like ON the table 📚, IN the basket 🧺, or UNDER the bed 🛌.', explanationTa: 'இடத்தைக் குறிக்கும் சொற்கள் (Prepositions) ஒரு பொருள் எங்குள்ளது என்பதைத் தெரிவிக்கின்றன! 📦', examples: ['on table 📚', 'in basket 🧺', 'under bed 🛌', 'in box 📦'], options: [] },
-      // Q2: Connect
-      { type: 'connect_pairs' as any, instruction: 'Match position word to picture! 🔗', instructionTa: 'இட சொற்களைப் பொருத்துக! 🔗', pairs: [{ left: 'on 📚', right: 'top of table' }, { left: 'in 🧺', right: 'inside basket' }, { left: 'under 🛌', right: 'below bed' }], options: [] },
-      // Q3: Garden Repair
-      { type: 'garden_repair' as any, instruction: 'Choose the correct position word! 📦', instructionTa: 'சரியான இடச்சொல்லைத் தேர்ந்தெடு! 📦', sentence: 'The fish swims ___ the water.', options: [{ text: 'in', correct: true }, { text: 'on', correct: false }, { text: 'under', correct: false }] },
-      // Q4: Garden Repair
-      { type: 'garden_repair' as any, instruction: 'Choose the correct position word! 📦', instructionTa: 'சரியான இடச்சொல்லைத் தேர்ந்தெடு! 📦', sentence: 'A cute cat is sleeping ___ the chair.', options: [{ text: 'under', correct: true }, { text: 'on', correct: false }, { text: 'in', correct: false }] }
-    ]
-  },
-
-  // --- CHAPTER 7: SENTENCE TRAIN (Levels 34 - 38) ---
-  {
-    id: 32,
-    title: 'Two word sentences 🚂',
-    titleEn: 'Two word sentences',
-    mascot: '🚂',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'sentence_train' as any, instruction: 'Assemble the sentence coaches!', words: ['runs', 'He'], correctSentence: 'He runs', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Assemble the sentence coaches!', words: ['sleeps', 'She'], correctSentence: 'She sleeps', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Assemble the sentence coaches!', words: ['fly', 'Birds'], correctSentence: 'Birds fly', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Assemble the sentence coaches!', words: ['shines', 'Sun'], correctSentence: 'Sun shines', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Assemble the sentence coaches!', words: ['play', 'They'], correctSentence: 'They play', options: [] }
-    ]
-  },
-  {
-    id: 33,
-    title: 'Three word sentences 🚃',
-    titleEn: 'Three word sentences',
-    mascot: '🚃',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'sentence_train' as any, instruction: 'Assemble the sentence train!', words: ['happy', 'is', 'Mia'], correctSentence: 'Mia is happy', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Assemble the sentence train!', words: ['like', 'I', 'apples'], correctSentence: 'I like apples', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Assemble the sentence train!', words: ['cat', 'The', 'sleeps'], correctSentence: 'The cat sleeps', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Assemble the sentence train!', words: ['has', 'Rahul', 'ball'], correctSentence: 'Rahul has ball', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Assemble the sentence train!', words: ['tall', 'is', 'He'], correctSentence: 'He is tall', options: [] }
-    ]
-  },
-  {
-    id: 34,
-    title: 'Make simple sentences 🏁',
-    titleEn: 'Make simple sentences',
-    mascot: '🏁',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'sentence_train' as any, instruction: 'Make a simple sentence!', words: ['red', 'bag', 'Riya', 'has'], correctSentence: 'Riya has red bag', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Make a simple sentence!', words: ['park', 'We', 'play', 'in'], correctSentence: 'We play in park', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Make a simple sentence!', words: ['big', 'The', 'is', 'elephant'], correctSentence: 'The elephant is big', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Make a simple sentence!', words: ['like', 'I', 'read', 'to'], correctSentence: 'I like to read', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Make a simple sentence!', words: ['plays', 'with', 'Rahul', 'toy'], correctSentence: 'Rahul plays with toy', options: [] }
-    ]
-  },
-  {
-    id: 35,
-    title: 'Question sentences ❓',
-    titleEn: 'Question sentences',
-    mascot: '❓',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'sentence_train' as any, instruction: 'Hook up the question train!', words: ['you', 'Who', 'are'], correctSentence: 'Who are you', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Hook up the question train!', words: ['is', 'What', 'this'], correctSentence: 'What is this', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Hook up the question train!', words: ['my', 'Where', 'is', 'ball'], correctSentence: 'Where is my ball', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Hook up the question train!', words: ['he', 'Is', 'happy'], correctSentence: 'Is he happy', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Hook up the question train!', words: ['can', 'you', 'run'], correctSentence: 'can you run', options: [] }
-    ]
-  },
-  {
-    id: 36,
-    title: 'Arrange sentence 🚂',
-    titleEn: 'Arrange sentence',
-    mascot: '🚂',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'sentence_train' as any, instruction: 'Complete the train!', words: ['school', 'go', 'We', 'to'], correctSentence: 'We go to school', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Complete the train!', words: ['shines', 'sun', 'The', 'bright'], correctSentence: 'The sun shines bright', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Complete the train!', words: ['ball', 'plays', 'He', 'with'], correctSentence: 'He plays with ball', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Complete the train!', words: ['loves', 'dog', 'She', 'her'], correctSentence: 'She loves her dog', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Complete the train!', words: ['beautiful', 'is', 'flower', 'This'], correctSentence: 'This flower is beautiful', options: [] }
-    ]
-  },
-
-  // --- CHAPTER 8: READING CAVE (Levels 39 - 43) ---
-  {
-    id: 37,
-    title: 'Picture reading 📖',
-    titleEn: 'Picture reading',
-    mascot: '📖',
-    color: 'from-purple-500 to-fuchsia-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      { type: 'story_cave' as any, instruction: 'Read the story and answer!', storyText: 'Mia has a red ball. She plays in the park.', questionText: 'What color is Mia\'s ball?', options: [{ text: 'red 🔴', correct: true }, { text: 'blue 🔵', correct: false }] },
-      { type: 'story_cave' as any, instruction: 'Read the story and answer!', storyText: 'Mia has a red ball. She plays in the park.', questionText: 'Where does she play?', options: [{ text: 'park 🏞️', correct: true }, { text: 'school 🏫', correct: false }] },
-      { type: 'story_cave' as any, instruction: 'Read the story and answer!', storyText: 'Leo is a little lion. He likes to eat meat.', questionText: 'Who is Leo?', options: [{ text: 'lion 🦁', correct: true }, { text: 'bear 🐻', correct: false }] },
-      { type: 'story_cave' as any, instruction: 'Read the story and answer!', storyText: 'Leo is a little lion. He likes to eat meat.', questionText: 'What does Leo like to eat?', options: [{ text: 'meat 🥩', correct: true }, { text: 'grass 🌿', correct: false }] },
-      { type: 'story_cave' as any, instruction: 'Read the story and answer!', storyText: 'Riya has a green parrot. It can talk.', questionText: 'What pet does Riya have?', options: [{ text: 'parrot 🦜', correct: true }, { text: 'cat 🐱', correct: false }] }
-    ]
-  },
-  {
-    id: 38,
-    title: 'Small passages 🏞️',
-    titleEn: 'Small passages',
-    mascot: '🏞️',
-    color: 'from-purple-500 to-fuchsia-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      { type: 'story_cave' as any, instruction: 'Read the passage and answer!', storyText: 'Sam has a toy train. The train goes choo-choo on the track.', questionText: 'What toy does Sam have?', options: [{ text: 'train 🚂', correct: true }, { text: 'car 🚗', correct: false }] },
-      { type: 'story_cave' as any, instruction: 'Read the passage and answer!', storyText: 'Sam has a toy train. The train goes choo-choo on the track.', questionText: 'What sound does the train make?', options: [{ text: 'choo-choo 🚂', correct: true }, { text: 'beep-beep 🚗', correct: false }] },
-      { type: 'story_cave' as any, instruction: 'Read the passage and answer!', storyText: 'A blue bird is on the tree. It sings a happy song.', questionText: 'What color is the bird?', options: [{ text: 'blue 🔵', correct: true }, { text: 'red 🔴', correct: false }] },
-      { type: 'story_cave' as any, instruction: 'Read the passage and answer!', storyText: 'A blue bird is on the tree. It sings a happy song.', questionText: 'Where is the bird?', options: [{ text: 'on the tree 🌳', correct: true }, { text: 'on the roof 🏠', correct: false }] },
-      { type: 'story_cave' as any, instruction: 'Read the passage and answer!', storyText: 'We went to the beach. We made a big sandcastle.', questionText: 'Where did we go?', options: [{ text: 'beach 🏖️', correct: true }, { text: 'park 🏞️', correct: false }] }
-    ]
-  },
-  {
-    id: 39,
-    title: 'Answer finding 🔍',
-    titleEn: 'Answer finding',
-    mascot: '🔍',
-    color: 'from-purple-500 to-fuchsia-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      { type: 'story_cave' as any, instruction: 'Find the answer!', storyText: 'Tim has a fat cat. The cat likes to sleep on the rug.', questionText: 'What is Tim\'s cat like?', options: [{ text: 'fat 🐱', correct: true }, { text: 'thin 🐱', correct: false }] },
-      { type: 'story_cave' as any, instruction: 'Find the answer!', storyText: 'Tim has a fat cat. The cat likes to sleep on the rug.', questionText: 'Where does the cat sleep?', options: [{ text: 'rug 🧹', correct: true }, { text: 'box 📦', correct: false }] },
-      { type: 'story_cave' as any, instruction: 'Find the answer!', storyText: 'Ben has a red bicycle. He rides it to school.', questionText: 'What color is Ben\'s bicycle?', options: [{ text: 'red 🔴', correct: true }, { text: 'green 🟢', correct: false }] },
-      { type: 'story_cave' as any, instruction: 'Find the answer!', storyText: 'Ben has a red bicycle. He rides it to school.', questionText: 'Where does Ben ride?', options: [{ text: 'school 🏫', correct: true }, { text: 'park 🏞️', correct: false }] },
-      { type: 'story_cave' as any, instruction: 'Find the answer!', storyText: 'It is raining. Mia wears a yellow raincoat.', questionText: 'What does Mia wear?', options: [{ text: 'raincoat 🧥', correct: true }, { text: 'hat 👒', correct: false }] }
-    ]
-  },
-  {
-    id: 40,
-    title: 'Story sequence ⛓️',
-    titleEn: 'Story sequence',
-    mascot: '⛓️',
-    color: 'from-purple-500 to-fuchsia-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      { type: 'story_cave' as any, isSequence: true, instruction: 'Sequence the events!', storyText: 'First, Mia wakes up. Next, she eats breakfast.', sequenceSteps: ['First, Mia wakes up', 'Next, she eats breakfast'], options: [] },
-      { type: 'story_cave' as any, isSequence: true, instruction: 'Sequence the events!', storyText: 'First, the egg hatches. Then, a chick comes out.', sequenceSteps: ['First, the egg hatches', 'Then, a chick comes out'], options: [] },
-      { type: 'story_cave' as any, isSequence: true, instruction: 'Sequence the events!', storyText: 'First, it rains. Then, a rainbow appears.', sequenceSteps: ['First, it rains', 'Then, a rainbow appears'], options: [] },
-      { type: 'story_cave' as any, isSequence: true, instruction: 'Sequence the events!', storyText: 'First, plant a seed. Next, water it daily.', sequenceSteps: ['First, plant a seed', 'Next, water it daily'], options: [] },
-      { type: 'story_cave' as any, isSequence: true, instruction: 'Sequence the events!', storyText: 'First, blow the balloon. Then, tie a knot.', sequenceSteps: ['First, blow the balloon', 'Then, tie a knot'], options: [] }
-    ]
-  },
-  {
-    id: 41,
-    title: 'Story understanding 🧠',
-    titleEn: 'Story understanding',
+    title: 'Language Challenge 🧠',
+    titleEn: 'Language Challenge',
     mascot: '🧠',
-    color: 'from-purple-500 to-fuchsia-500',
+    color: 'from-purple-400 to-indigo-500',
     borderColor: 'border-purple-300',
     questions: [
-      { type: 'story_cave' as any, instruction: 'Understand the card!', storyText: 'Sita has two apples. She gives one to her brother.', questionText: 'How many apples does Sita have first?', options: [{ text: 'two 🍎🍎', correct: true }, { text: 'one 🍎', correct: false }] },
-      { type: 'story_cave' as any, instruction: 'Understand the card!', storyText: 'Sita has two apples. She gives one to her brother.', questionText: 'Who does she give the apple to?', options: [{ text: 'brother 👦', correct: true }, { text: 'sister 👧', correct: false }] },
-      { type: 'story_cave' as any, instruction: 'Understand the card!', storyText: 'The frog jumps into the pond. It swims with the fish.', questionText: 'Where does the frog jump?', options: [{ text: 'pond 🏞️', correct: true }, { text: 'well 🕳️', correct: false }] },
-      { type: 'story_cave' as any, instruction: 'Understand the card!', storyText: 'The frog jumps into the pond. It swims with the fish.', questionText: 'Who does it swim with?', options: [{ text: 'fish 🐟', correct: true }, { text: 'ducks 🦆', correct: false }] },
-      { type: 'story_cave' as any, instruction: 'Understand the card!', storyText: 'We fly a red kite. The wind carries it up.', questionText: 'What color is the kite?', options: [{ text: 'red 🔴', correct: true }, { text: 'blue 🔵', correct: false }] }
-    ]
-  },
-
-  // --- CHAPTER 9: WRITING ZONE (Levels 44 - 48) ---
-  {
-    id: 42,
-    title: 'Letter writing ✍️',
-    titleEn: 'Letter writing',
-    mascot: '✍️',
-    color: 'from-purple-400 to-fuchsia-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      { type: 'writing_lab' as any, subType: 'trace', instruction: 'Trace the letter A neat and clean!', letter: 'A', options: [] },
-      { type: 'writing_lab' as any, subType: 'trace', instruction: 'Trace the letter B neat and clean!', letter: 'B', options: [] },
-      { type: 'writing_lab' as any, subType: 'trace', instruction: 'Trace the letter C neat and clean!', letter: 'C', options: [] },
-      { type: 'writing_lab' as any, subType: 'trace', instruction: 'Trace the letter D neat and clean!', letter: 'D', options: [] },
-      { type: 'writing_lab' as any, subType: 'trace', instruction: 'Trace the letter E neat and clean!', letter: 'E', options: [] }
-    ]
-  },
-  {
-    id: 43,
-    title: 'Word writing 📝',
-    titleEn: 'Word writing',
-    mascot: '📝',
-    color: 'from-purple-400 to-fuchsia-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      { type: 'writing_lab' as any, subType: 'trace', instruction: 'Trace the word: Cat 🐱', letter: 'Cat', options: [] },
-      { type: 'writing_lab' as any, subType: 'trace', instruction: 'Trace the word: Dog 🐶', letter: 'Dog', options: [] },
-      { type: 'writing_lab' as any, subType: 'trace', instruction: 'Trace the word: Boy 👦', letter: 'Boy', options: [] },
-      { type: 'writing_lab' as any, subType: 'trace', instruction: 'Trace the word: Girl 👧', letter: 'Girl', options: [] },
-      { type: 'writing_lab' as any, subType: 'trace', instruction: 'Trace the word: Sun ☀️', letter: 'Sun', options: [] }
-    ]
-  },
-  {
-    id: 44,
-    title: 'Copy sentence 📰',
-    titleEn: 'Copy sentence',
-    mascot: '📰',
-    color: 'from-purple-400 to-fuchsia-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      { type: 'writing_lab' as any, subType: 'trace', instruction: 'Trace the word: This ✍️', letter: 'This', options: [] },
-      { type: 'writing_lab' as any, subType: 'trace', instruction: 'Trace the word: That ✍️', letter: 'That', options: [] },
-      { type: 'writing_lab' as any, subType: 'trace', instruction: 'Trace the word: Here ✍️', letter: 'Here', options: [] },
-      { type: 'writing_lab' as any, subType: 'trace', instruction: 'Trace the word: They ✍️', letter: 'They', options: [] },
-      { type: 'writing_lab' as any, subType: 'trace', instruction: 'Trace the word: With ✍️', letter: 'With', options: [] }
-    ]
-  },
-  {
-    id: 45,
-    title: 'Complete sentence 📝',
-    titleEn: 'Complete sentence',
-    mascot: '📝',
-    color: 'from-purple-400 to-fuchsia-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      { type: 'writing_lab' as any, subType: 'complete', instruction: 'Complete the writing board!', sentence: 'I like ___', options: [{ text: 'apples 🍎', correct: true }, { text: 'running 🏃', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'complete', instruction: 'Complete the writing board!', sentence: 'This is my ___', options: [{ text: 'school 🏫', correct: true }, { text: 'flying 🦅', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'complete', instruction: 'Complete the writing board!', sentence: 'The dog is ___', options: [{ text: 'barking 🐶', correct: true }, { text: 'jumping 🦘', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'complete', instruction: 'Complete the writing board!', sentence: 'We see the ___', options: [{ text: 'stars ✨', correct: true }, { text: 'eating 🍽️', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'complete', instruction: 'Complete the writing board!', sentence: 'She has a ___', options: [{ text: 'toy 🧸', correct: true }, { text: 'playing 🎮', correct: false }] }
-    ]
-  },
-  {
-    id: 46,
-    title: 'Create sentence 🧱',
-    titleEn: 'Create sentence',
-    mascot: '🧱',
-    color: 'from-purple-400 to-fuchsia-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      { type: 'writing_lab' as any, subType: 'complete', instruction: 'Complete: Rahul plays ___', sentence: 'Rahul plays ___', options: [{ text: 'football ⚽', correct: true }, { text: 'happy 😄', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'complete', instruction: 'Complete: Birds can ___', sentence: 'Birds can ___', options: [{ text: 'fly 🦅', correct: true }, { text: 'sing 🎤', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'complete', instruction: 'Complete: Mother eats ___', sentence: 'Mother eats ___', options: [{ text: 'cake 🍰', correct: true }, { text: 'sleeping 😴', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'complete', instruction: 'Complete: The train is ___', sentence: 'The train is ___', options: [{ text: 'moving 🚂', correct: true }, { text: 'happy 😊', correct: false }] },
-      { type: 'writing_lab' as any, subType: 'complete', instruction: 'Complete: We have many ___', sentence: 'We have many ___', options: [{ text: 'books 📚', correct: true }, { text: 'eating 🍽️', correct: false }] }
+      {
+        type: 'choice' as any,
+        instruction: 'Word Maze: Select the list containing only correctly spelled words! 🏆',
+        options: [
+          { text: 'apple, banana, orange', correct: true },
+          { text: 'aple, banan, orng', correct: false },
+          { text: 'apple, benana, orenge', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Odd One Out: Find the word that is NOT an animal! 🚫',
+        options: [
+          { text: 'run (verb)', correct: true },
+          { text: 'cat', correct: false },
+          { text: 'dog', correct: false },
+          { text: 'cow', correct: false }
+        ]
+      },
+      {
+        type: 'order' as any,
+        instruction: 'Dictionary Order: Sort these words alphabetically! 📖',
+        options: [
+          { text: 'ball ➔ boy ➔ bus', correct: true },
+          { text: 'bus ➔ boy ➔ ball', correct: false },
+          { text: 'boy ➔ ball ➔ bus', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Grammar Puzzle: Identify the verb in this sentence: "The baby sleeps peacefully." 👶💤',
+        options: [
+          { text: 'sleeps', correct: true },
+          { text: 'baby', correct: false },
+          { text: 'peacefully', correct: false }
+        ]
+      },
+      {
+        type: 'order' as any,
+        instruction: 'Story Sequencer: Sort the steps of plant growth in correct order! 🌱',
+        options: [
+          { text: 'Sow seed ➔ Water plant ➔ Flower blooms', correct: true },
+          { text: 'Flower blooms ➔ Water plant ➔ Sow seed', correct: false },
+          { text: 'Water plant ➔ Flower blooms ➔ Sow seed', correct: false }
+        ]
+      }
     ]
   }
 ];
@@ -1415,6 +943,7 @@ export const GRADE1_MATH_LEVELS: Level[] = [
     ]
   }
 ];
+
 
 export const GRADE1_EVS_LEVELS: Level[] = [
   // --- CHAPTER 1: Myself & My Body 🧒 (Levels 1 - 5) ---
@@ -2365,875 +1894,356 @@ export const GRADE1_EVS_LEVELS: Level[] = [
 ];
 
 export const GRADE1_TAMIL_LEVELS: Level[] = [
-  // --- CHAPTER 1: எழுத்து உலகம் 🌈 (Levels 1 - 5) ---
   {
     id: 1,
-    title: 'உயிர் எழுத்து மீள்பார்வை 🌈',
-    titleEn: 'Vowels Revision',
+    title: 'எழுத்து உலகம் 🌈',
+    titleEn: 'Phonics + Letters',
     mascot: '🌈',
     color: 'from-cyan-400 to-blue-500',
     borderColor: 'border-cyan-300',
     questions: [
-      { type: 'letter_board' as any, instruction: 'உயிர் எழுத்துக்கள் - Tamil Vowels 🌈', instructionTa: 'எல்லா உயிர் எழுத்துக்களையும் பார்க்கவும்!', boardTitle: 'உயிர் எழுத்துக்கள்', boardSubtitle: 'Tamil Vowels (12+1)', letters: ['அ','ஆ','இ','ஈ','உ','ஊ','எ','ஏ','ஐ','ஒ','ஓ','ஔ','ஃ'], color: 'from-cyan-400 to-blue-500', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: அ ✍️', instructionTa: 'எழுத்தை எழுதுக: அ', letter: 'அ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ஆ ✍️', instructionTa: 'எழுத்தை எழுதுக: ஆ', letter: 'ஆ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: இ ✍️', instructionTa: 'எழுத்தை எழுதுக: இ', letter: 'இ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ஈ ✍️', instructionTa: 'எழுத்தை எழுதுக: ஈ', letter: 'ஈ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: உ ✍️', instructionTa: 'எழுத்தை எழுதுக: உ', letter: 'உ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ஊ ✍️', instructionTa: 'எழுத்தை எழுதுக: ஊ', letter: 'ஊ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: எ ✍️', instructionTa: 'எழுத்தை எழுதுக: எ', letter: 'எ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ஏ ✍️', instructionTa: 'எழுத்தை எழுதுக: ஏ', letter: 'ஏ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ஐ ✍️', instructionTa: 'எழுத்தை எழுதுக: ஐ', letter: 'ஐ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ஒ ✍️', instructionTa: 'எழுத்தை எழுதுக: ஒ', letter: 'ஒ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ஓ ✍️', instructionTa: 'எழுத்தை எழுதுக: ஓ', letter: 'ஓ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ஔ ✍️', instructionTa: 'எழுத்தை எழுதுக: ஔ', letter: 'ஔ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ஃ ✍️', instructionTa: 'எழுத்தை எழுதுக: ஃ', letter: 'ஃ', options: [] }
+      {
+        type: 'choice' as any,
+        instruction: 'உயிர்மெய் உருவாக்கம்: க + அ இணைத்தால் கிடைக்கும் எழுத்து எது? 🤝',
+        instructionTa: 'உயிர்மெய் உருவாக்கம்: க + அ இணைத்தால் கிடைக்கும் எழுத்து எது? 🤝',
+        options: [
+          { text: 'க', correct: true },
+          { text: 'கா', correct: false },
+          { text: 'கி', correct: false }
+        ]
+      },
+      {
+        type: 'order' as any,
+        instruction: 'Alphabetical Order: Sort these letters correctly! 🔤',
+        instructionTa: 'எழுத்து வரிசை: எழுத்துக்களை அகரவரிசையில் வரிசைப்படுத்துக! 🔤',
+        options: [
+          { text: 'அ ➔ ஆ ➔ இ ➔ ஈ', correct: true },
+          { text: 'ஈ ➔ இ ➔ ஆ ➔ அ', correct: false },
+          { text: 'ஆ ➔ அ ➔ ஈ ➔ இ', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Missing Letter: Find the correct letter for க _ க 🦆',
+        instructionTa: 'விடுபட்ட எழுத்து: க _ க என்பதற்கான சரியான எழுத்தைக் கண்டறி 🦆',
+        options: [
+          { text: 'ங்', correct: true },
+          { text: 'க்', correct: false },
+          { text: 'ச்', correct: false }
+        ]
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Sort Vowels & Consonants! 🏷️',
+        instructionTa: 'உயிர் / மெய் வகைப்படுத்துக! 🏷️',
+        pairs: [
+          { left: 'அ', right: 'அ ➔ உயிர் எழுத்து' },
+          { left: 'க்', right: 'க் ➔ மெய் எழுத்து' },
+          { left: 'இ', right: 'இ ➔ உயிர் எழுத்து' }
+        ],
+        options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Similar Letter: Find the letter that is different from others! 🔎',
+        instructionTa: 'ஒரே மாதிரியான எழுத்து: மற்றவற்றிலிருந்து வேறுபட்ட எழுத்தைக் கண்டறி! 🔎',
+        options: [
+          { text: 'ங (different)', correct: true },
+          { text: 'க (same)', correct: false }
+        ]
+      }
     ]
   },
   {
     id: 2,
-    title: 'மெய் எழுத்து மீள்பார்வை 🦁',
-    titleEn: 'Consonants Revision',
-    mascot: '🦁',
-    color: 'from-cyan-400 to-blue-500',
-    borderColor: 'border-cyan-300',
+    title: 'சொல் கட்டிடம் 🧱',
+    titleEn: 'Word Builder',
+    mascot: '🧱',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
     questions: [
-      { type: 'letter_board' as any, instruction: 'மெய் எழுத்துக்கள் - Tamil Consonants 🦁', instructionTa: 'எல்லா மெய் எழுத்துக்களையும் பார்க்கவும்!', boardTitle: 'மெய் எழுத்துக்கள்', boardSubtitle: 'Tamil Consonants (18)', letters: ['க்','ங்','ச்','ஞ்','ட்','ண்','த்','ந்','ப்','ம்','ய்','ர்','ல்','வ்','ழ்','ள்','ற்','ன்'], color: 'from-purple-400 to-pink-500', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: க் ✍️', instructionTa: 'எழுத்தை எழுதுக: க்', letter: 'க்', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ங் ✍️', instructionTa: 'எழுத்தை எழுதுக: ங்', letter: 'ங்', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ச் ✍️', instructionTa: 'எழுத்தை எழுதுக: ச்', letter: 'ச்', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ஞ் ✍️', instructionTa: 'எழுத்தை எழுதுக: ஞ்', letter: 'ஞ்', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ட் ✍️', instructionTa: 'எழுத்தை எழுதுக: ட்', letter: 'ட்', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ண் ✍️', instructionTa: 'எழுத்தை எழுதுக: ண்', letter: 'ண்', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: த் ✍️', instructionTa: 'எழுத்தை எழுதுக: த்', letter: 'த்', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ந் ✍️', instructionTa: 'எழுத்தை எழுதுக: ந்', letter: 'ந்', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ப் ✍️', instructionTa: 'எழுத்தை எழுதுக: ப்', letter: 'ப்', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ம் ✍️', instructionTa: 'எழுத்தை எழுதுக: ம்', letter: 'ம்', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ய் ✍️', instructionTa: 'எழுத்தை எழுதுக: ய்', letter: 'ய்', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ர் ✍️', instructionTa: 'எழுத்தை எழுதுக: ர்', letter: 'ர்', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ல் ✍️', instructionTa: 'எழுத்தை எழுதுக: ல்', letter: 'ல்', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: வ் ✍️', instructionTa: 'எழுத்தை எழுதுக: வ்', letter: 'வ்', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ழ் ✍️', instructionTa: 'எழுத்தை எழுதுக: ழ்', letter: 'ழ்', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ள் ✍️', instructionTa: 'எழுத்தை எழுதுக: ள்', letter: 'ள்', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ற் ✍️', instructionTa: 'எழுத்தை எழுதுக: ற்', letter: 'ற்', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ன் ✍️', instructionTa: 'எழுத்தை எழுதுக: ன்', letter: 'ன்', options: [] }
+      {
+        type: 'sentence_train' as any,
+        instruction: 'Word Builder: Arrange the letters to build: மரம் 🌳',
+        instructionTa: 'சொல் உருவாக்கம்: எழுத்துக்களை இணைத்து சொல் உருவாக்கு: மரம் 🌳',
+        words: ['ம', 'ர', 'ம்'],
+        correctSentence: 'மரம்',
+        options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Missing Vowel: Choose the correct letter for ப _ ம் 🍊',
+        instructionTa: 'விடுபட்ட எழுத்து: ப _ ம் என்பதற்கான சரியான எழுத்தைத் தேர்வு செய் 🍊',
+        options: [
+          { text: 'ழ (பழம்)', correct: true },
+          { text: 'ட (படம்)', correct: false },
+          { text: 'ம (பமம்)', correct: false }
+        ]
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Picture Word Match: Connect the word to its picture! 🖼️',
+        instructionTa: 'படம் சொல் பொருத்துக: சொல்லையும் படத்தையும் இணைக்கவும்! 🖼️',
+        pairs: [
+          { left: 'மரம்', right: '🌳 மரம்' },
+          { left: 'சிங்கம்', right: '🦁 சிங்கம்' },
+          { left: 'மீன்', right: '🐟 மீன்' }
+        ],
+        options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Word Split: Choose the correct split for மரம் 🪓',
+        instructionTa: 'சொல் பிரித்தல்: மரம் என்பதன் சரியான பிரிப்பைத் தேர்ந்தெடு 🪓',
+        options: [
+          { text: 'ம + ர + ம்', correct: true },
+          { text: 'மர + ம்', correct: false },
+          { text: 'ம + ரம்', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Correct Spelling: Choose the word with correct spelling! 🌸',
+        instructionTa: 'சரியான எழுத்துக்கூட்டல்: சரியான எழுத்துக்கூட்டல் கொண்ட சொல்லைத் தேர்ந்தெடு! 🌸',
+        options: [
+          { text: 'மலர்', correct: true },
+          { text: 'மளர்', correct: false }
+        ]
+      }
     ]
   },
   {
     id: 3,
-    title: 'உயிர்மெய் அறிமுகம் 🔤',
-    titleEn: 'Introduction to Uyirmei',
-    mascot: '🔤',
-    color: 'from-cyan-400 to-blue-500',
-    borderColor: 'border-cyan-300',
+    title: 'சொல் வளம் + இலக்கணம் 🌱',
+    titleEn: 'Vocabulary + Grammar',
+    mascot: '🌱',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
     questions: [
       {
-        type: 'combo_chart' as any,
-        instruction: 'மெய் + உயிர் = உயிர்மெய் ✎️',
-        instructionTa: 'எல்லா உயிர்மெய் சேர்க்கைகளையும் பார்க்கவும்!',
-        boardTitle: 'உயிர்மெய் சேர்க்கை அறிமுகம்',
-        boardSubtitle: 'Consonant + Vowel = Uyirmei',
-        combos: [
-          { consonant: 'க்', vowel: 'அ', result: 'க' },
-          { consonant: 'ச்', vowel: 'அ', result: 'ச' },
-          { consonant: 'த்', vowel: 'அ', result: 'த' },
-          { consonant: 'ப்', vowel: 'அ', result: 'ப' },
-          { consonant: 'ம்', vowel: 'அ', result: 'ம' },
-          { consonant: 'ல்', vowel: 'அ', result: 'ல' },
-          { consonant: 'க்', vowel: 'ஆ', result: 'கா' },
-          { consonant: 'ச்', vowel: 'ஆ', result: 'சா' },
-          { consonant: 'த்', vowel: 'ஆ', result: 'தா' },
-          { consonant: 'ப்', vowel: 'ஆ', result: 'பா' },
-          { consonant: 'ம்', vowel: 'ஆ', result: 'மா' },
-          { consonant: 'ல்', vowel: 'ஆ', result: 'லா' },
+        type: 'choice' as any,
+        instruction: 'Noun Finder: Choose the Noun (பெயர்ச்சொல்) in: "ரவி ஓடினான்" 🏃‍♂️',
+        instructionTa: 'பெயர்ச்சொல் அறிவோம்: "ரவி ஓடினான்" என்பதில் பெயர்ச்சொல் எது? 🏃‍♂️',
+        options: [
+          { text: 'ரவி', correct: true },
+          { text: 'ஓடினான்', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Action Word: Choose the Verb (வினைச்சொல்) in: "ஆடு புல் மேய்ந்தது" 🐐',
+        instructionTa: 'வினைச்சொல் அறிவோம்: "ஆடு புல் மேய்ந்தது" என்பதில் வினைச்சொல் எது? 🐐',
+        options: [
+          { text: 'மேய்ந்தது', correct: true },
+          { text: 'ஆடு', correct: false },
+          { text: 'புல்', correct: false }
+        ]
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Singular Plural Match: Connect singular to its plural! 👥',
+        instructionTa: 'ஒருமை பன்மை பொருத்துக: ஒருமையை அதன் பன்மையோடு இணைக்கவும்! 👥',
+        pairs: [
+          { left: 'மரம்', right: 'மரங்கள்' },
+          { left: 'பந்து', right: 'பந்துகள்' },
+          { left: 'பூ', right: 'பூக்கள்' }
         ],
         options: []
       },
-      { type: 'connect_pairs' as any, instruction: 'Join letters together! 🔗', instructionTa: 'எழுத்துக்களை இணைக்கவும்! 🔗', pairs: [{ left: 'க் + அ', right: 'க' }, { left: 'ச் + அ', right: 'ச' }, { left: 'த் + அ', right: 'த' }], options: [] }
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Opposite Match: Match the opposites! ↔️',
+        instructionTa: 'எதிர்ச்சொல் பொருத்துக: எதிர்ச்சொற்களை இணைக்கவும்! ↔️',
+        pairs: [
+          { left: 'பெரியது', right: 'சிறியது' },
+          { left: 'மேலே', right: 'கீழே' },
+          { left: 'வெப்பம்', right: 'குளிர்ச்சி' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Categorize Words! 🏷️',
+        instructionTa: 'வகைப்படுத்துக: சொற்களை அதன் வகையோடு இணைக்கவும்! 🏷️',
+        pairs: [
+          { left: 'சிங்கம்', right: 'விலங்கு' },
+          { left: 'சோறு', right: 'உணவு' },
+          { left: 'நாற்காலி', right: 'பொருள்' }
+        ],
+        options: []
+      }
     ]
   },
   {
     id: 4,
-    title: 'உயிர்மெய் சேர்க்கை பயிற்சி 🤝',
-    titleEn: 'Combination Practice',
-    mascot: '🤝',
-    color: 'from-cyan-400 to-blue-500',
-    borderColor: 'border-cyan-300',
+    title: 'வாசிப்பு திறன் 📖',
+    titleEn: 'Reading Comprehension',
+    mascot: '📖',
+    color: 'from-violet-400 to-indigo-500',
+    borderColor: 'border-violet-300',
     questions: [
       {
-        type: 'combo_chart' as any,
-        instruction: 'மெய் + உயிர் = உயிர்மெய் ✎️',
-        instructionTa: 'இந்த சேர்க்கைகளை மனன் செய்து பயிற்சி செய்திடுக!',
-        boardTitle: 'உயிர்மெய் சேர்க்கை பயிற்சி',
-        boardSubtitle: 'Combination Practice Chart',
-        combos: [
-          { consonant: 'ப்', vowel: 'அ', result: 'ப' },
-          { consonant: 'ம்', vowel: 'அ', result: 'ம' },
-          { consonant: 'ல்', vowel: 'அ', result: 'ல' },
-          { consonant: 'ப்', vowel: 'ஆ', result: 'பா' },
-          { consonant: 'ம்', vowel: 'ஆ', result: 'மா' },
-          { consonant: 'ல்', vowel: 'ஆ', result: 'லா' },
-          { consonant: 'ப்', vowel: 'இ', result: 'பி' },
-          { consonant: 'ம்', vowel: 'இ', result: 'மி' },
-          { consonant: 'ல்', vowel: 'இ', result: 'லி' },
-        ],
+        type: 'sentence_train' as any,
+        instruction: 'Sentence Builder: Arrange the words to form a correct Tamil sentence! 🚂',
+        instructionTa: 'வாக்கியம் அமைப்போம்: சொற்களை ஒழுங்குபடுத்தி சரியான வாக்கியத்தை அமைக்கவும்! 🚂',
+        words: ['ரவி', 'விளையாடுகிறான்'],
+        correctSentence: 'ரவி விளையாடுகிறான்',
         options: []
       },
-      { type: 'connect_pairs' as any, instruction: 'Join letters together! 🔗', instructionTa: 'எழுத்துக்களை இணைக்கவும்! 🔗', pairs: [{ left: 'ப் + அ', right: 'ப' }, { left: 'ம் + அ', right: 'ம' }, { left: 'ல் + அ', right: 'ல' }], options: [] }
+      {
+        type: 'order' as any,
+        instruction: 'Routine Order: Order the routine stages correctly! ⏰',
+        instructionTa: 'நாள் ஒழுங்கு: தினசரி செயல்பாடுகளைச் சரியான வரிசையில் ஒழுங்குபடுத்துக! ⏰',
+        options: [
+          { text: 'காலையில் எழுதல் ➔ பல் துலக்குதல் ➔ பள்ளிக்குச் செல்லுதல்', correct: true },
+          { text: 'பள்ளிக்குச் செல்லுதல் ➔ காலையில் எழுதல் ➔ பல் துலக்குதல்', correct: false },
+          { text: 'பல் துலக்குதல் ➔ பள்ளிக்குச் செல்லுதல் ➔ காலையில் எழுதல்', correct: false }
+        ]
+      },
+      {
+        type: 'story_cave' as any,
+        instruction: 'Read the story and answer: What is the color of the dog? 🐶',
+        instructionTa: 'கதையை வாசித்து விடையளி: நாயின் நிறம் என்ன? 🐶',
+        storyText: 'முகிலன் ஒரு நாய் வளர்க்கிறான். அதன் பெயர் மணி. அது வெள்ளை நிறம். முகிலன் அதனுடன் விளையாடுகிறான்.',
+        options: [
+          { text: 'வெள்ளை', correct: true },
+          { text: 'கருப்பு', correct: false },
+          { text: 'செம்மை', correct: false }
+        ]
+      },
+      {
+        type: 'story_cave' as any,
+        instruction: 'Story Completion: Choose the best sentence to fill the gap. 📖',
+        instructionTa: 'கதை நிறைவு: கதையில் விடுபட்ட பகுதியைச் சேர்க்கவும் 📖\n"ஒரு காட்டில் நரி ஒன்று இருந்தது. ___ அது திராட்சை தோட்டத்திற்குச் சென்றது."',
+        storyText: 'ஒரு காட்டில் நரி ஒன்று இருந்தது. ___ அது திராட்சை தோட்டத்திற்குச் சென்றது.',
+        options: [
+          { text: 'அதற்குப் பசி எடுத்தது.', correct: true },
+          { text: 'அது தூங்கிக் கொண்டிருந்தது.', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Picture Match: Choose the sentence that describes the picture of a swimming fish! 🐟',
+        instructionTa: 'படம் பொருத்துக: நீந்தும் மீனின் படத்தை விளக்கும் வாக்கியத்தைத் தேர்ந்தெடு! 🐟',
+        options: [
+          { text: 'மீன் நீரில் நீந்துகிறது.', correct: true },
+          { text: 'பறவை வானில் பறக்கிறது.', correct: false }
+        ]
+      }
     ]
   },
   {
     id: 5,
-    title: 'எழுத்து வரிசை அமைத்தல் 🚂',
-    titleEn: 'Ordering Letters',
-    mascot: '🚂',
-    color: 'from-cyan-400 to-blue-500',
-    borderColor: 'border-cyan-300',
+    title: 'எழுத்து பயிற்சி ✏️',
+    titleEn: 'Writing Mission',
+    mascot: '✏️',
+    color: 'from-pink-400 to-rose-500',
+    borderColor: 'border-pink-300',
     questions: [
-      { type: 'sentence_train' as any, instruction: 'Arrange vowels in correct order! 🚂', instructionTa: 'உயிர் எழுத்துக்களை வரிசைப்படுத்துக! 🚂', words: ['அ', 'ஆ', 'இ', 'ஈ'], correctSentence: 'அ ஆ இ ஈ', options: [] }
+      {
+        type: 'trace' as any,
+        instruction: 'Handwriting Mission: Trace the letter: க ✍️',
+        instructionTa: 'எழுத்துப் பயிற்சி: க என்ற எழுத்தை எழுதவும்! ✍️',
+        letter: 'க',
+        options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Word Writing: Choose the correct word for the Sun! ☀️',
+        instructionTa: 'சொல் அறிதல்: சூரியனின் படத்திற்கான சரியான சொல்லைத் தேர்வு செய்க! ☀️',
+        options: [
+          { text: 'சூரியன்', correct: true },
+          { text: 'சந்திரன்', correct: false }
+        ]
+      },
+      {
+        type: 'garden_repair' as any,
+        instruction: 'Complete the Word: Complete the name of the crow! 🐦',
+        instructionTa: 'சொல் நிறைவு: காகத்தின் பெயரை முழுமையாக்குங்கள்! 🐦',
+        sentence: 'கா ____ ம்',
+        options: [
+          { text: 'க', correct: true },
+          { text: 'ச', correct: false }
+        ]
+      },
+      {
+        type: 'sentence_train' as any,
+        instruction: 'Sentence Builder: Arrange the words to write a sentence! 🍽️',
+        instructionTa: 'வாக்கிய வடிவமைப்பு: சொற்களை ஒழுங்குபடுத்தி வாக்கியத்தை அமைக்கவும்! 🍽️',
+        words: ['அம்மா', 'உணவு', 'சமைத்தார்'],
+        correctSentence: 'அம்மா உணவு சமைத்தார்',
+        options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Picture Writing: Choose the correct sentence describing rain falling! 🌧️',
+        instructionTa: 'பட விவரிப்பு: மழை பொழிவதை விளக்கும் சரியான வாக்கியத்தைத் தேர்வு செய்! 🌧️',
+        options: [
+          { text: 'மழை பெய்கிறது.', correct: true },
+          { text: 'வெயில் அடிக்கிறது.', correct: false }
+        ]
+      }
     ]
   },
-
-  // --- CHAPTER 2: உயிர்மெய் பயணம் 🔤 (Levels 6 - 11) ---
   {
     id: 6,
-    title: 'க வரிசை பயணம் 🚂',
-    titleEn: 'Ka Series',
-    mascot: '🚂',
-    color: 'from-purple-400 to-pink-500',
+    title: 'மொழி சவால் 🧠',
+    titleEn: 'Tamil Language Challenge',
+    mascot: '🧠',
+    color: 'from-purple-400 to-indigo-500',
     borderColor: 'border-purple-300',
     questions: [
       {
-        type: 'combo_chart' as any,
-        boardTitle: 'க வரிசை அறிமுகம்',
-        boardSubtitle: 'Ka Series (All 12 Combinations)',
-        combos: [
-          { consonant: 'க்', vowel: 'அ', result: 'க' },
-          { consonant: 'க்', vowel: 'ஆ', result: 'கா' },
-          { consonant: 'க்', vowel: 'இ', result: 'கி' },
-          { consonant: 'க்', vowel: 'ஈ', result: 'கீ' },
-          { consonant: 'க்', vowel: 'உ', result: 'கு' },
-          { consonant: 'க்', vowel: 'ஊ', result: 'கூ' },
-          { consonant: 'க்', vowel: 'எ', result: 'கெ' },
-          { consonant: 'க்', vowel: 'ஏ', result: 'கே' },
-          { consonant: 'க்', vowel: 'ஐ', result: 'கை' },
-          { consonant: 'க்', vowel: 'ஒ', result: 'கொ' },
-          { consonant: 'க்', vowel: 'ஓ', result: 'கோ' },
-          { consonant: 'க்', vowel: 'ஔ', result: 'கௌ' }
-        ],
-        options: []
+        type: 'choice' as any,
+        instruction: 'Word Puzzle: Arrange letters "ப ள் ளி" to make a word! 🏫',
+        instructionTa: 'சொல் புதிர்: "ப ள் ளி" என்ற எழுத்துக்களை ஒழுங்குபடுத்திச் சொல் உருவாக்கு! 🏫',
+        options: [
+          { text: 'பள்ளி', correct: true },
+          { text: 'ளிபள்', correct: false }
+        ]
       },
-      { type: 'connect_pairs' as any, instruction: 'Match Ka series! 🔗', instructionTa: 'க வரிசையை இணைக்கவும்! 🔗', pairs: [{ left: 'க் + அ', right: 'க' }, { left: 'க் + ஆ', right: 'கா' }, { left: 'க் + இ', right: 'கி' }], options: [] }
-    ]
-  },
-  {
-    id: 7,
-    title: 'ச வரிசை பயணம் 🚂',
-    titleEn: 'Cha Series',
-    mascot: '🚂',
-    color: 'from-purple-400 to-pink-500',
-    borderColor: 'border-purple-300',
-    questions: [
       {
-        type: 'combo_chart' as any,
-        boardTitle: 'ச வரிசை அறிமுகம்',
-        boardSubtitle: 'Cha Series (All 12 Combinations)',
-        combos: [
-          { consonant: 'ச்', vowel: 'அ', result: 'ச' },
-          { consonant: 'ச்', vowel: 'ஆ', result: 'சா' },
-          { consonant: 'ச்', vowel: 'இ', result: 'சி' },
-          { consonant: 'ச்', vowel: 'ஈ', result: 'சீ' },
-          { consonant: 'ச்', vowel: 'உ', result: 'சு' },
-          { consonant: 'ச்', vowel: 'ஊ', result: 'சூ' },
-          { consonant: 'ச்', vowel: 'எ', result: 'செ' },
-          { consonant: 'ச்', vowel: 'ஏ', result: 'சே' },
-          { consonant: 'ச்', vowel: 'ஐ', result: 'சை' },
-          { consonant: 'ச்', vowel: 'ஒ', result: 'சொ' },
-          { consonant: 'ச்', vowel: 'ஓ', result: 'சோ' },
-          { consonant: 'ச்', vowel: 'ஔ', result: 'சௌ' }
-        ],
-        options: []
+        type: 'choice' as any,
+        instruction: 'Odd One Out: Find the word that is NOT an animal! 🚫',
+        instructionTa: 'வேறுபட்டதைக் கண்டுபிடி: விலங்கு அல்லாத சொல்லைக் கண்டறி! 🚫',
+        options: [
+          { text: 'மரம் (not an animal)', correct: true },
+          { text: 'மாடு', correct: false },
+          { text: 'பூனை', correct: false },
+          { text: 'நாய்', correct: false }
+        ]
       },
-      { type: 'connect_pairs' as any, instruction: 'Match Cha series! 🔗', instructionTa: 'ச வரிசையை இணைக்கவும்! 🔗', pairs: [{ left: 'ச் + அ', right: 'ச' }, { left: 'ச் + ஆ', right: 'சா' }, { left: 'ச் + இ', right: 'சி' }], options: [] }
-    ]
-  },
-  {
-    id: 8,
-    title: 'த வரிசை பயணம் 🚂',
-    titleEn: 'Tha Series',
-    mascot: '🚂',
-    color: 'from-purple-400 to-pink-500',
-    borderColor: 'border-purple-300',
-    questions: [
       {
-        type: 'combo_chart' as any,
-        boardTitle: 'த வரிசை அறிமுகம்',
-        boardSubtitle: 'Tha Series (All 12 Combinations)',
-        combos: [
-          { consonant: 'த்', vowel: 'அ', result: 'த' },
-          { consonant: 'த்', vowel: 'ஆ', result: 'தா' },
-          { consonant: 'த்', vowel: 'இ', result: 'தி' },
-          { consonant: 'த்', vowel: 'ஈ', result: 'தீ' },
-          { consonant: 'த்', vowel: 'உ', result: 'து' },
-          { consonant: 'த்', vowel: 'ஊ', result: 'தூ' },
-          { consonant: 'த்', vowel: 'எ', result: 'தெ' },
-          { consonant: 'த்', vowel: 'ஏ', result: 'தே' },
-          { consonant: 'த்', vowel: 'ஐ', result: 'தை' },
-          { consonant: 'த்', vowel: 'ஒ', result: 'தொ' },
-          { consonant: 'த்', vowel: 'ஓ', result: 'தோ' },
-          { consonant: 'த்', vowel: 'ஔ', result: 'தௌ' }
-        ],
-        options: []
-      },
-      { type: 'connect_pairs' as any, instruction: 'Match Tha series! 🔗', instructionTa: 'த வரிசையை இணைக்கவும்! 🔗', pairs: [{ left: 'த் + அ', right: 'த' }, { left: 'த் + ஆ', right: 'தா' }, { left: 'த் + இ', right: 'தி' }], options: [] }
-    ]
-  },
-  {
-    id: 9,
-    title: 'ப வரிசை பயணம் 🚂',
-    titleEn: 'Pa Series',
-    mascot: '🚂',
-    color: 'from-purple-400 to-pink-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      {
-        type: 'combo_chart' as any,
-        boardTitle: 'ப வரிசை அறிமுகம்',
-        boardSubtitle: 'Pa Series (All 12 Combinations)',
-        combos: [
-          { consonant: 'ப்', vowel: 'அ', result: 'ப' },
-          { consonant: 'ப்', vowel: 'ஆ', result: 'பா' },
-          { consonant: 'ப்', vowel: 'இ', result: 'பி' },
-          { consonant: 'ப்', vowel: 'ஈ', result: 'பீ' },
-          { consonant: 'ப்', vowel: 'உ', result: 'பு' },
-          { consonant: 'ப்', vowel: 'ஊ', result: 'பூ' },
-          { consonant: 'ப்', vowel: 'எ', result: 'பெ' },
-          { consonant: 'ப்', vowel: 'ஏ', result: 'பே' },
-          { consonant: 'ப்', vowel: 'ஐ', result: 'பை' },
-          { consonant: 'ப்', vowel: 'ஒ', result: 'பொ' },
-          { consonant: 'ப்', vowel: 'ஓ', result: 'போ' },
-          { consonant: 'ப்', vowel: 'ஔ', result: 'பௌ' }
-        ],
-        options: []
-      },
-      { type: 'connect_pairs' as any, instruction: 'Match Pa series! 🔗', instructionTa: 'ப வரிசையை இணைக்கவும்! 🔗', pairs: [{ left: 'ப் + அ', right: 'ப' }, { left: 'ப் + ஆ', right: 'பா' }, { left: 'ப் + இ', right: 'பி' }], options: [] }
-    ]
-  },
-  {
-    id: 10,
-    title: 'ம வரிசை பயணம் 🚂',
-    titleEn: 'Ma Series',
-    mascot: '🚂',
-    color: 'from-purple-400 to-pink-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      {
-        type: 'combo_chart' as any,
-        boardTitle: 'ம வரிசை அறிமுகம்',
-        boardSubtitle: 'Ma Series (All 12 Combinations)',
-        combos: [
-          { consonant: 'ம்', vowel: 'அ', result: 'ம' },
-          { consonant: 'ம்', vowel: 'ஆ', result: 'மா' },
-          { consonant: 'ம்', vowel: 'இ', result: 'மி' },
-          { consonant: 'ம்', vowel: 'ஈ', result: 'மீ' },
-          { consonant: 'ம்', vowel: 'உ', result: 'மு' },
-          { consonant: 'ம்', vowel: 'ஊ', result: 'மூ' },
-          { consonant: 'ம்', vowel: 'எ', result: 'மெ' },
-          { consonant: 'ம்', vowel: 'ஏ', result: 'மே' },
-          { consonant: 'ம்', vowel: 'ஐ', result: 'மை' },
-          { consonant: 'ம்', vowel: 'ஒ', result: 'மொ' },
-          { consonant: 'ம்', vowel: 'ஓ', result: 'மோ' },
-          { consonant: 'ம்', vowel: 'ஔ', result: 'மௌ' }
-        ],
-        options: []
-      },
-      { type: 'connect_pairs' as any, instruction: 'Match Ma series! 🔗', instructionTa: 'ம வரிசையை இணைக்கவும்! 🔗', pairs: [{ left: 'ம் + அ', right: 'ம' }, { left: 'ம் + ஆ', right: 'மா' }, { left: 'ம் + இ', right: 'மி' }], options: [] }
-    ]
-  },
-  {
-    id: 11,
-    title: 'முழு உயிர்மெய் பயிற்சி 🏆',
-    titleEn: 'Full practice',
-    mascot: '🏆',
-    color: 'from-purple-400 to-pink-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      { type: 'connect_pairs' as any, instruction: 'Join dynamic combinations! 🔗', instructionTa: 'உயிர்மெய் சேர்க்கையை இணைக்கவும்! 🔗', pairs: [{ left: 'வ் + அ', right: 'வ' }, { left: 'ய் + ஆ', right: 'யா' }, { left: 'ந் + எ', right: 'நெ' }], options: [] }
-    ]
-  },
-
-  // --- CHAPTER 3: சொல் கட்டிடம் 🧱 (Levels 12 - 17) ---
-  {
-    id: 12,
-    title: 'ஈரெழுத்து சொற்கள் 🧱',
-    titleEn: '2-Letter Words',
-    mascot: '🧱',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'sentence_train' as any, instruction: 'Make the word "பல்"! 🚂', instructionTa: '"பல்" என்ற சொல்லை உருவாக்குக! 🚂', words: ['ப', 'ல்'], correctSentence: 'ப ல்', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Make the word "கல்"! 🚂', instructionTa: '"கல்" என்ற சொல்லை உருவாக்குக! 🚂', words: ['க', 'ல்'], correctSentence: 'க ல்', options: [] }
-    ]
-  },
-  {
-    id: 13,
-    title: 'மூவெழுத்து சொற்கள் 🧱',
-    titleEn: '3-Letter Words',
-    mascot: '🧱',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'sentence_train' as any, instruction: 'Make the word "பலம்"! 🚂', instructionTa: '"பலம்" என்ற சொல்லை உருவாக்குக! 🚂', words: ['ப', 'ல', 'ம்'], correctSentence: 'ப ல ம்', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Make the word "மரம்"! 🚂', instructionTa: '"மரம்" என்ற சொல்லை உருவாக்குக! 🚂', words: ['ம', 'ர', 'ம்'], correctSentence: 'ம ர ம்', options: [] }
-    ]
-  },
-  {
-    id: 14,
-    title: 'எளிய சொற்கள் வாசித்தல் 📖',
-    titleEn: 'Reading Simple Words',
-    mascot: '📖',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'connect_pairs' as any, instruction: 'Match word to English meaning! 🔗', instructionTa: 'பொருத்தமான சொற்களை இணைக்கவும்! 🔗', pairs: [{ left: 'பல்', right: 'Tooth 🦷' }, { left: 'கல்', right: 'Stone 🪨' }, { left: 'மரம்', right: 'Tree 🌳' }], options: [] }
-    ]
-  },
-  {
-    id: 15,
-    title: 'படம் பார்த்து சொல் கண்டுபிடித்தல் 🔍',
-    titleEn: 'Find Word from Picture',
-    mascot: '🔍',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'drag_hunt' as any, instruction: 'Find word for Kite 🪁', instructionTa: 'பானையில் உள்ள பட்டத்தைக் கண்டுபிடி! 🪁', matchImage: '🪁', options: [{ text: 'பட்டம்', correct: true }, { text: 'பந்து', correct: false }, { text: 'பலம்', correct: false }] }
-    ]
-  },
-  {
-    id: 16,
-    title: 'சொல் பிரித்தல் ✂️',
-    titleEn: 'Word Splitting',
-    mascot: '✂️',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      {
-        type: 'learn_card' as any,
-        conceptTitle: 'சொல் பிரித்தல் ✂️ (Word Splitting)',
-        explanation: 'ஒரு சொல்லை அதன் தனித்தனி எழுத்துக்களாகப் பிரித்து எழுதுவதே சொல் பிரித்தல் ஆகும். இதைக் கற்றுக்கொள்வதன் மூலம் சொற்களின் கட்டமைப்பை எளிதாகப் புரிந்துகொள்ள முடியும்.',
-        explanationTa: 'Spitting a word means breaking it down into its individual letters. This helps you understand how words are built!',
-        mascot: '✂️',
-        examples: [
-          'படம் = ப + ட + ம்',
-          'பல் = ப + ல்',
-          'மரம் = ம + ர + ம்',
-          'வயல் = வ + ய + ல்'
-        ],
-        options: []
+        type: 'choice' as any,
+        instruction: 'Spelling Maze: Choose the list with correct spelling order! 🏆',
+        instructionTa: 'எழுத்துப்பாதை: சரியான எழுத்துக்கூட்டல் வரிசையைக் கொண்ட பட்டியலைத் தேர்ந்தெடு! 🏆',
+        options: [
+          { text: 'ப, ழ, ம்', correct: true },
+          { text: 'ப, ட, ம்', correct: false }
+        ]
       },
       {
         type: 'connect_pairs' as any,
-        instruction: 'Split words into letters! 🔗',
-        instructionTa: 'சொற்களை எழுத்துக்களாகப் பிரிக்கவும்! 🔗',
+        instruction: 'Grammar Match: Connect word to grammar category! 🏷️',
+        instructionTa: 'இலக்கணப் பொருத்தம்: சொற்களை அதன் இலக்கண வகையோடு இணைக்கவும்! 🏷️',
         pairs: [
-          { left: 'படம்', right: 'ப + ட + ம்' },
-          { left: 'கண்', right: 'க + ண்' },
-          { left: 'மரம்', right: 'ம + ர + ம்' },
-          { left: 'பல்', right: 'ப + ல்' },
-          { left: 'வயல்', right: 'w + ய + ல்' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 17,
-    title: 'சொல் சேர்த்தல் 🤝',
-    titleEn: 'Word Joining',
-    mascot: '🤝',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      {
-        type: 'learn_card' as any,
-        conceptTitle: 'சொல் சேர்த்தல் 🤝 (Word Joining)',
-        explanation: 'தனித்தனியாக உள்ள எழுத்துக்களை ஒன்றாகச் சேர்த்து ஒரு புதிய சொல்லை உருவாக்குவதே சொல் சேர்த்தல் ஆகும். இது எழுத்துக்களைக் கூட்டிப் படிப்பதற்கு உதவும்!',
-        explanationTa: 'Joining separate letters together to form a meaningful word. This helps you spell and read easily!',
-        mascot: '🤝',
-        examples: [
-          'வ + ய + ல் = வயல்',
-          'கு + டை = குடை',
-          'அ + ம் + மா = அம்மா',
-          'ப + ள் + ளி = பள்ளி'
+          { left: 'பசு', right: 'பெயர்ச்சொல்' },
+          { left: 'வந்தது', right: 'வினைச்சொல்' }
         ],
         options: []
       },
       {
-        type: 'connect_pairs' as any,
-        instruction: 'Join letters to make words! 🔗',
-        instructionTa: 'எழுத்துக்களைச் சேர்த்து சொல் உருவாக்குக! 🔗',
-        pairs: [
-          { left: 'வ + ய + ல்', right: 'வயல்' },
-          { left: 'கு + டை', right: 'குடை' },
-          { left: 'அ + ம் + மா', right: 'அம்மா' },
-          { left: 'ப + ள் + ளி', right: 'பள்ளி' },
-          { left: 'ப + ன் + து', right: 'பந்து' }
-        ],
-        options: []
+        type: 'order' as any,
+        instruction: 'Story Sequencer: Sort plant growth in correct order! 🌱',
+        instructionTa: 'கதை வரிசை: தாவர வளர்ச்சியின் படிகளைச் சரியான வரிசையில் ஒழுங்குபடுத்து! 🌱',
+        options: [
+          { text: 'விதை விதைத்தல் ➔ செடி வளர்தல் ➔ பூ பூத்தல்', correct: true },
+          { text: 'பூ பூத்தல் ➔ செடி வளர்தல் ➔ விதை விதைத்தல்', correct: false }
+        ]
       }
     ]
-  },
-
-  // --- CHAPTER 4: வாசிப்பு உலகம் 📖 (Levels 18 - 22) ---
-  {
-    id: 18,
-    title: 'சிறு வாக்கியம் வாசித்தல் 📖',
-    titleEn: 'Read Short Sentences',
-    mascot: '📖',
-    color: 'from-indigo-400 to-blue-500',
-    borderColor: 'border-indigo-300',
-    questions: [
-      { type: 'sentence_train' as any, instruction: 'Form sentence: "இது என் வீடு" 🚂', instructionTa: '"இது என் வீடு" வாக்கியத்தை அமைக்கவும்! 🚂', words: ['இது', 'என்', 'வீடு'], correctSentence: 'இது என் வீடு', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Form sentence: "அம்மா எனக்கு பிடிக்கும்" 🚂', instructionTa: '"அம்மா எனக்கு பிடிக்கும்" வாக்கியத்தை அமைக்கவும்! 🚂', words: ['அம்மா', 'எனக்கு', 'பிடிக்கும்'], correctSentence: 'அம்மா எனக்கு பிடிக்கும்', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Form sentence: "மரம் நிழல் தரும்" 🚂', instructionTa: '"மரம் நிழல் தரும்" வாக்கியத்தை அமைக்கவும்! 🚂', words: ['மரம்', 'நிழல்', 'தரும்'], correctSentence: 'மரம் நிழல் தரும்', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Form sentence: "பறவை வானில் பறக்கும்" 🚂', instructionTa: '"பறவை வானில் பறக்கும்" வாக்கியத்தை அமைக்கவும்! 🚂', words: ['பறவை', 'வானில்', 'பறக்கும்'], correctSentence: 'பறவை வானில் பறக்கும்', options: [] }
-    ]
-  },
-  {
-    id: 19,
-    title: 'சொல் - படம் இணைத்தல் 🎨',
-    titleEn: 'Word-Picture Matching',
-    mascot: '🎨',
-    color: 'from-indigo-400 to-blue-500',
-    borderColor: 'border-indigo-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match descriptions to items! 🔗',
-        instructionTa: 'சொற்றொடர்களைப் படங்களுடன் இணைக்கவும்! 🔗',
-        pairs: [
-          { left: 'அழகிய மலர்', right: 'Flower 🌸' },
-          { left: 'பறக்கும் பட்டம்', right: 'Kite 🪁' },
-          { left: 'ஓடும் முயல்', right: 'Rabbit 🐇' },
-          { left: 'பச்சை கிளி', right: 'Parrot 🦜' },
-          { left: 'சுவையான மாம்பழம்', right: 'Mango 🥭' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 20,
-    title: 'கேள்வி பதில் ❓',
-    titleEn: 'Simple Q&A',
-    mascot: '❓',
-    color: 'from-indigo-400 to-blue-500',
-    borderColor: 'border-indigo-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Where do fruits grow? 🌳', instructionTa: 'மரத்தில் இருப்பது எது? 🌳', sentence: 'மரத்தில் இருப்பது ___ ஆகும்.', options: [{ text: 'பழம்', correct: true }, { text: 'கல்', correct: false }] },
-      { type: 'garden_repair' as any, instruction: 'Who gives us milk? 🐄', instructionTa: 'பால் தரும் விலங்கு எது? 🐄', sentence: 'நமக்கு பால் தருவது ___ ஆகும்.', options: [{ text: 'பசு', correct: true }, { text: 'சிங்கம்', correct: false }] },
-      { type: 'garden_repair' as any, instruction: 'Which bird crows? 🐦', instructionTa: 'காக்கா என்று கத்துவது எது? 🐦', sentence: 'காக்கா என்று கத்துவது ___ ஆகும்.', options: [{ text: 'காகம்', correct: true }, { text: 'கிளி', correct: false }] },
-      { type: 'garden_repair' as any, instruction: 'What shines at night? 🌙', instructionTa: 'இரவில் வானில் ஒளிர்வது எது? 🌙', sentence: 'இரவில் வானில் ஒளிர்வது ___ ஆகும்.', options: [{ text: 'நிலா', correct: true }, { text: 'சூரியன்', correct: false }] }
-    ]
-  },
-  {
-    id: 21,
-    title: 'சிறு கதை புரிதல் 🦊',
-    titleEn: 'Story Comprehension',
-    mascot: '🦊',
-    color: 'from-indigo-400 to-blue-500',
-    borderColor: 'border-indigo-300',
-    questions: [
-      {
-        type: 'story_cave' as any,
-        storyText: 'ஆமையும் முயலும் பந்தயம் வைத்தன. முயல் வேகமாக ஓடி ஓய்வெடுத்தது. ஆமை மெதுவாகத் தொடர்ந்து ஓடி வென்றது.',
-        questionText: 'யார் பந்தயத்தில் வென்றது?',
-        options: [{ text: 'ஆமை 🐢', correct: true }, { text: 'முயல் 🐇', correct: false }]
-      },
-      {
-        type: 'story_cave' as any,
-        storyText: 'ஒரு காட்டில் சிங்கம் ஒன்று தூங்கிக் கொண்டிருந்தது. ஒரு சிறிய எலி அதன் மேல் விளையாடியது. சிங்கம் விழித்துக் கொண்டு எலியைப் பிடிக்க முயன்றது, ஆனால் எலி மன்னிப்புக் கேட்டதால் அதை விட்டுவிட்டது. பின்னர் ஒரு வேடன் வலையில் சிங்கம் சிக்கியபோது, எலி வலையைக் கடித்து சிங்கத்தைக் காப்பாற்றியது.',
-        questionText: 'சிங்கத்தைக் காப்பாற்றியது யார்?',
-        options: [{ text: 'எலி 🐭', correct: true }, { text: 'நரி 🦊', correct: false }]
-      },
-      {
-        type: 'story_cave' as any,
-        storyText: 'ஒரு குளத்தில் இரண்டு மீன்கள் இருந்தன. ஒரு நாள் கொக்கு ஒன்று வந்து மீன்களைப் பிடிக்க நினைத்தது. அறிவார்ந்த நண்டு ஒன்று கொக்கின் கழுத்தைக் கடித்து மீன்களைக் காப்பாற்றியது.',
-        questionText: 'கொக்கைக் கொன்றது எது?',
-        options: [{ text: 'நண்டு 🦀', correct: true }, { text: 'தவளை 🐸', correct: false }]
-      }
-    ]
-  },
-  {
-    id: 22,
-    title: 'நிகழ்வு வரிசை அமைத்தல் 📅',
-    titleEn: 'Arrange Story Sequence',
-    mascot: '📅',
-    color: 'from-indigo-400 to-blue-500',
-    borderColor: 'border-indigo-300',
-    questions: [
-      {
-        type: 'story_cave' as any,
-        isSequence: true,
-        storyText: 'தாகமுள்ள காகம் பானையில் கற்களைப் போட்டு தண்ணீர் குடித்த கதை.',
-        sequenceSteps: ['காகத்திற்கு தாகம் எடுத்தது', 'பானையில் நீர் குறைவாக இருந்தது', 'கற்களைப் போட்டு நீர் குடித்தது'],
-        options: []
-      },
-      {
-        type: 'story_cave' as any,
-        isSequence: true,
-        storyText: 'விதை முளைத்து செடியாக வளரும் படிநிலைகள்.',
-        sequenceSteps: ['விதை மண்ணில் விதைக்கப்பட்டது', 'வேர்கள் மண்ணில் பரவின', 'செடியில் இலைகள் முளைத்தன'],
-        options: []
-      },
-      {
-        type: 'story_cave' as any,
-        isSequence: true,
-        storyText: 'காலையில் பள்ளிக்குச் செல்லும் முன் செய்யும் காரியங்கள்.',
-        sequenceSteps: ['காலையில் படுக்கையிலிருந்து எழுந்தேன்', 'பற்களைத் துலக்கி குளித்தேன்', 'காலை உணவு சாப்பிட்டு பள்ளிக்குச் சென்றேன்'],
-        options: []
-      }
-    ]
-  },
-
-  // --- CHAPTER 5: இலக்கண தோட்டம் 🌱 (Levels 23 - 27) ---
-  {
-    id: 23,
-    title: 'பெயர்ச்சொல் அறிமுகம் 🏷️',
-    titleEn: 'Naming Words',
-    mascot: '🏷️',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      {
-        type: 'learn_card' as any,
-        conceptTitle: 'பெயர்ச்சொல் 🏷️ (பெயர் குறிக்கும் சொல்)',
-        explanation: 'ஒரு நபர், இடம், விலங்கு அல்லது பொருளின் பெயரைக் குறிக்கும் சொல் பெயர்ச்சொல் எனப்படும். (எ.கா: கண்ணன், மாடு, பள்ளி, புத்தகம்).',
-        explanationTa: 'பெயரைக் குறிக்கும் சொற்கள் பெயர்ச்சொற்கள் ஆகும். இது நபர், இடம், விலங்கு அல்லது பொருளைக் குறிக்கும்!',
-        mascot: '🏷️',
-        examples: [
-          'நபர் = கண்ணன் 👦',
-          'விலங்கு = பசு 🐄',
-          'இடம் = பள்ளி 🏫',
-          'பொருள் = புத்தகம் 📕'
-        ],
-        options: []
-      },
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match name categories! 🔗',
-        instructionTa: 'பெயர்ச்சொற்களை அதன் வகையோடு இணைக்கவும்! 🔗',
-        pairs: [
-          { left: 'கண்ணன்', right: 'நபர் 👦' },
-          { left: 'வகுப்பறை', right: 'இடம் 🏫' },
-          { left: 'பசு', right: 'விலங்கு 🐄' },
-          { left: 'பேனா', right: 'பொருள் 🖊' },
-          { left: 'சிங்கம்', right: 'விலங்கு 🦁' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 24,
-    title: 'செயல் சொல் 🏃',
-    titleEn: 'Action Words',
-    mascot: '🏃',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      {
-        type: 'learn_card' as any,
-        conceptTitle: 'செயல் சொல் 🏃 (செயலை குறிக்கும் சொல்)',
-        explanation: 'நாம் செய்யும் ஒரு செயலைக் குறிக்கும் சொல் வினைச்சொல் அல்லது செயல்சொல் எனப்படும். (எ.கா: ஓடுதல், பாடுதல், எழுதுதல்).',
-        explanationTa: 'நாம் செய்யும் செயல்களை (விளையாடுதல், ஓடுதல், படித்தல்) குறிக்கும் சொற்கள் செயல் சொற்கள் ஆகும்.',
-        mascot: '🏃',
-        examples: [
-          'ஓடுதல் = ஓடினான் 🏃',
-          'பாடுதல் = பாடினாள் 🎤',
-          'எழுதுதல் = எழுதினான் ✍️',
-          'படித்தல் = படித்தான் 📖'
-        ],
-        options: []
-      },
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match action words! 🔗',
-        instructionTa: 'செயல்களையும் சொற்களையும் இணைக்கவும்! 🔗',
-        pairs: [
-          { left: 'ஓடினான்', right: 'ஓடுதல் 🏃' },
-          { left: 'பாடினாள்', right: 'பாடுதல் 🎤' },
-          { left: 'எழுதினான்', right: 'எழுதுதல் ✍️' },
-          { left: 'விளையாடினான்', right: 'விளையாடுதல் ⚽' },
-          { left: 'படித்தான்', right: 'படித்தல் 📖' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 25,
-    title: 'ஒருமை / பன்மை 👥',
-    titleEn: 'Singular & Plural',
-    mascot: '👥',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      {
-        type: 'learn_card' as any,
-        conceptTitle: 'ஒருமை / பன்மை 👥 (Singular & Plural)',
-        explanation: 'ஒரே ஒரு பொருளை மட்டும் குறிப்பது ஒருமை எனப்படும். ஒன்றுக்கும் மேற்பட்ட பல பொருட்களைக் குறிப்பது பன்மை எனப்படும். (பொதுவாக பன்மை சொல்லின் இறுதியில் "கள்" சேரும்).',
-        explanationTa: 'Singular means one item, and Plural means more than one item (mostly adds -கள்).',
-        mascot: '👥',
-        examples: [
-          'பந்து ⚽ = பந்துகள் ⚽⚽',
-          'மரம் 🌳 = மரங்கள் 🌳🌳',
-          'பூ 🌸 = பூக்கள் 🌸🌸',
-          'மீன் 🐟 = மீன்கள் 🐟🐟'
-        ],
-        options: []
-      },
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match Singular to Plural! 🔗',
-        instructionTa: 'ஒருமை - பன்மை சொற்களை இணைக்கவும்! 🔗',
-        pairs: [
-          { left: 'பந்து', right: 'பந்துகள் ⚽' },
-          { left: 'மரம்', right: 'மரங்கள் 🌳' },
-          { left: 'பூ', right: 'பூக்கள் 🌸' },
-          { left: 'மீன்', right: 'மீன்கள் 🐟' },
-          { left: 'பறவை', right: 'பறவைகள் 🐦' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 26,
-    title: 'எதிர்ச்சொற்கள் 🔄',
-    titleEn: 'Opposite Words',
-    mascot: '🔄',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      {
-        type: 'learn_card' as any,
-        conceptTitle: 'எதிர்ச்சொற்கள் 🔄 (எதிர் பொருள்)',
-        explanation: 'ஒரு சொல்லின் நேர்மாறான பொருளைத் தரும் சொல் எதிர்ச்சொல் எனப்படும். (எ.கா: பெரியது - சிறியது).',
-        explanationTa: 'ஒரு சொல்லிற்கு நேர்மாறான எதிர் கருத்து அல்லது பொருளைத் தரும் சொற்கள் எதிர்ச்சொற்கள் ஆகும்.',
-        mascot: '🔄',
-        examples: [
-          'பெரியது 🐘 x சிறியது 🐭',
-          'மேலே 🎈 x கீழே ⚓',
-          'உள்ளே 🚪 x வெளியே 🌳',
-          'பகல் ☀️ x இரவு 🌙'
-        ],
-        options: []
-      },
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match Opposites! 🔗',
-        instructionTa: 'எதிர்ச்சொற்களை இணைக்கவும்! 🔗',
-        pairs: [
-          { left: 'பெரியது', right: 'சிறியது 🐭' },
-          { left: 'மேலே', right: 'கீழே ⚓' },
-          { left: 'உள்ளே', right: 'வெளியே 🌳' },
-          { left: 'பகல்', right: 'இரவு 🌙' },
-          { left: 'சூடு', right: 'குளிர் ❄️' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 27,
-    title: 'சொல் வகைப்படுத்தல் 📂',
-    titleEn: 'Word Categorization',
-    mascot: '📂',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      {
-        type: 'learn_card' as any,
-        conceptTitle: 'சொல் வகைப்படுத்தல் 📂 (சொற்களைப் பிரித்தல்)',
-        explanation: 'ஒரு சொல் எந்த வகையைச் சார்ந்தது (விலங்கு, இடம், பொருள், செயல்) என்று கண்டறிந்து சரியான பிரிவுடன் இணைக்கவும்.',
-        explanationTa: 'ஒவ்வொரு சொல்லையும் அதன் தகுந்த விவரங்களுடன் சரியாகப் பொருத்தி வகைப்படுத்த வேண்டும்.',
-        mascot: '📂',
-        examples: [
-          'நாய் = வீட்டு விலங்கு 🐶',
-          'வகுப்பறை = கல்வி கற்கும் இடம் 🏫',
-          'ஓடுதல் = உடற்பயிற்சி செயல் 🏃',
-          'படம் = காகிதப் பொருள் 🖼️'
-        ],
-        options: []
-      },
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Categorize words correctly! 🔗',
-        instructionTa: 'சொற்களை வகைப்படுத்தவும்! 🔗',
-        pairs: [
-          { left: 'நாய்', right: 'வீட்டு விலங்கு 🐶' },
-          { left: 'ஓடு', right: 'வேகமாகச் செல்வது 🏃' },
-          { left: 'வகுப்பறை', right: 'பள்ளிப் பகுதி 🏫' },
-          { left: 'பாடு', right: 'இசைப் பாட்டு 🎤' },
-          { left: 'படம்', right: 'காட்சி ஓவியம் 🖼️' }
-        ],
-        options: []
-      }
-    ]
-  },
-
-  // --- CHAPTER 6: எழுதும் பயிற்சி ✏️ (Levels 28 - 32) ---
-  {
-    id: 28,
-    title: 'எழுத்து எழுதுதல் ✏️',
-    titleEn: 'Write Letters',
-    mascot: '✏️',
-    color: 'from-purple-400 to-pink-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      { type: 'trace' as any, instruction: 'Trace: ஆ ✍️', instructionTa: 'பலகையில் எழுதுக: ஆ ✍️', letter: 'ஆ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ஈ ✍️', instructionTa: 'பலகையில் எழுதுக: ஈ ✍️', letter: 'ஈ', options: [] }
-    ]
-  },
-  {
-    id: 29,
-    title: 'சொல் எழுதுதல் ✏️',
-    titleEn: 'Write Words',
-    mascot: '✏️',
-    color: 'from-purple-400 to-pink-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      { type: 'trace' as any, instruction: 'Trace: அம்மா ✍️', instructionTa: 'பலகையில் எழுதுக: அம்மா ✍️', letter: 'அம்மா', options: [] }
-    ]
-  },
-  {
-    id: 30,
-    title: 'விடுபட்ட எழுத்து நிரப்புதல் 🧩',
-    titleEn: 'Fill Missing Letters',
-    mascot: '🧩',
-    color: 'from-purple-400 to-pink-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Fill missing character for Mother 👩', instructionTa: 'விடுபட்ட எழுத்தை நிரப்புக: அ_மா 👩', sentence: 'அ_மா', options: [{ text: 'ம்', correct: true }, { text: 'ப்', correct: false }] }
-    ]
-  },
-  {
-    id: 31,
-    title: 'வாக்கியம் எழுதுதல் ✏️',
-    titleEn: 'Write Sentences',
-    mascot: '✏️',
-    color: 'from-purple-400 to-pink-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      { type: 'trace' as any, instruction: 'Trace: தமிழ் இனிது ✍️', instructionTa: 'பலகையில் எழுதுக: தமிழ் இனிது ✍️', letter: 'தமிழ் இனிது', options: [] }
-    ]
-  },
-  {
-    id: 32,
-    title: 'படம் பார்த்து எழுதுதல் 🎨',
-    titleEn: 'Write Picture Label',
-    mascot: '🎨',
-    color: 'from-purple-400 to-pink-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      { type: 'trace' as any, instruction: 'Trace word for apple 🍎', instructionTa: 'பலகையில் எழுதுக: ஆப்பிள் 🍎', letter: 'ஆப்பிள்', options: [] }
-    ]
-  },
-
-  // --- CHAPTER 7: சொற்களஞ்சியம் 🌍 (Levels 33 - 37) ---
-  {
-    id: 33,
-    title: 'உடல் உறுப்புகள் 🦵',
-    titleEn: 'Body Parts',
-    mascot: '🦵',
-    color: 'from-blue-400 to-cyan-500',
-    borderColor: 'border-blue-300',
-    questions: [
-      { type: 'connect_pairs' as any, instruction: 'Match body parts! 🔗', instructionTa: 'உடல் உறுப்புகளை இணைக்கவும்! 🔗', pairs: [{ left: 'கண்', right: 'Eye 👁️' }, { left: 'காது', right: 'Ear 👂' }, { left: 'மூக்கு', right: 'Nose 👃' }], options: [] }
-    ]
-  },
-  {
-    id: 34,
-    title: 'விலங்குகள் 🦁',
-    titleEn: 'Animals World',
-    mascot: '🦁',
-    color: 'from-blue-400 to-cyan-500',
-    borderColor: 'border-blue-300',
-    questions: [
-      { type: 'connect_pairs' as any, instruction: 'Match animal names! 🔗', instructionTa: 'விலங்குகளின் பெயர்களை இணைக்கவும்! 🔗', pairs: [{ left: 'யானை', right: 'Elephant 🐘' }, { left: 'சிங்கம்', right: 'Lion 🦁' }, { left: 'நாய்', right: 'Dog 🐶' }], options: [] }
-    ]
-  },
-  {
-    id: 35,
-    title: 'பறவைகள் 🦜',
-    titleEn: 'Birds Sanctuary',
-    mascot: '🦜',
-    color: 'from-blue-400 to-cyan-500',
-    borderColor: 'border-blue-300',
-    questions: [
-      { type: 'connect_pairs' as any, instruction: 'Match bird names! 🔗', instructionTa: 'பறவைகளின் பெயர்களை இணைக்கவும்! 🔗', pairs: [{ left: 'மயில்', right: 'Peacock 🦚' }, { left: 'கிளி', right: 'Parrot 🦜' }, { left: 'காகம்', right: 'Crow 🐦' }], options: [] }
-    ]
-  },
-  {
-    id: 36,
-    title: 'உணவுகள் 🍲',
-    titleEn: 'Food Items',
-    mascot: '🍲',
-    color: 'from-blue-400 to-cyan-500',
-    borderColor: 'border-blue-300',
-    questions: [
-      { type: 'connect_pairs' as any, instruction: 'Match food items! 🔗', instructionTa: 'உணவு வகைகளை இணைக்கவும்! 🔗', pairs: [{ left: 'பால்', right: 'Milk 🥛' }, { left: 'பழங்கள்', right: 'Fruits 🍎' }, { left: 'நீர்', right: 'Water 💧' }], options: [] }
-    ]
-  },
-  {
-    id: 37,
-    title: 'சுற்றுப்புற பொருட்கள் 🏫',
-    titleEn: 'Surrounding Objects',
-    mascot: '🏫',
-    color: 'from-blue-400 to-cyan-500',
-    borderColor: 'border-blue-300',
-    questions: [
-      { type: 'connect_pairs' as any, instruction: 'Match objects! 🔗', instructionTa: 'சுற்றுப்புற பொருட்களை இணைக்கவும்! 🔗', pairs: [{ left: 'புத்தகம்', right: 'Book 📖' }, { left: 'நாற்காலி', right: 'Chair 🪑' }, { left: 'மேஜை', right: 'Table 🪵' }], options: [] }
-    ]
-  },
-
-  // --- CHAPTER 8: பாடல் & கதை 🎵 (Levels 38 - 41) ---
-  {
-    id: 38,
-    title: 'தமிழ் பாடல்கள் 🎵',
-    titleEn: 'Tamil Songs',
-    mascot: '🎵',
-    color: 'from-rose-400 to-red-500',
-    borderColor: 'border-rose-350',
-    questions: [
-      { type: 'sentence_train' as any, instruction: 'Arrange song line! 🚂', instructionTa: 'பாடல் வரியை அமைக்கவும்! 🚂', words: ['கைவீசம்மா', 'கைவீசு'], correctSentence: 'கைவீசம்மா கைவீசு', options: [] }
-    ]
-  },
-  {
-    id: 39,
-    title: 'எளிய கவிதைகள் 📜',
-    titleEn: 'Simple Poetry',
-    mascot: '📜',
-    color: 'from-rose-400 to-red-500',
-    borderColor: 'border-rose-350',
-    questions: [
-      { type: 'connect_pairs' as any, instruction: 'Match rhyme lines! 🔗', instructionTa: 'பாடல் வரிகளை இணைக்கவும்! 🔗', pairs: [{ left: 'நிலா நிலா', right: 'ஓடி வா' }, { left: 'வண்ண வண்ண', right: 'பூக்கள்' }], options: [] }
-    ]
-  },
-  {
-    id: 40,
-    title: 'சிறு கதைகள் 📖',
-    titleEn: 'Fables Storybook',
-    mascot: '📖',
-    color: 'from-rose-400 to-red-500',
-    borderColor: 'border-rose-350',
-    questions: [
-      { type: 'story_cave' as any, storyText: 'ஆமையும் முயலும் பந்தயம் வைத்த கதையை நினைவுகூரவும்.', questionText: 'யார் வேகமாக ஓடி தூங்கியது?', options: [{ text: 'முயல் 🐇', correct: true }, { text: 'ஆமை 🐢', correct: false }] }
-    ]
-  },
+  }
 ];
-
 export const GRADE1_GK_LEVELS: Level[] = [
   // --- CHAPTER 1: My Amazing World 🌍 (Levels 1 - 5) ---
   {
