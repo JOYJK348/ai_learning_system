@@ -92,20 +92,20 @@ const GRADE1_LEVEL_DESCRIPTIONS: Record<string, Record<number, { desc: string; f
     6: { desc: 'Season clothings, day/night activities, cultural festivals & environmental safety capstones.', focus: 'World Around Us 🧠' }
   },
   gk: {
-    1: { desc: 'General awareness, logic and reasoning test.', focus: 'Cognitive & logic test' },
-    2: { desc: 'Simple objects, colors & vocabulary assessment.', focus: 'Objects & colors' },
-    3: { desc: 'Animal habitats, sounds & simple nature quiz.', focus: 'Nature & animals' },
-    4: { desc: 'Daily habits, colors, fruits & general safety rules.', focus: 'Life skills & safety' },
-    5: { desc: 'National symbols, flags & simple calculations.', focus: 'National symbols' },
-    6: { desc: 'Logic puzzles, general science & final oral evaluation.', focus: 'Final reasoning challenge' }
+    1: { desc: 'Identity builder, body part functions, good/bad habits sorting, places & daily routine ordering.', focus: 'Myself & My World 🧒' },
+    2: { desc: 'National symbols, capital city, Independence/Republic Day match & famous places.', focus: 'India Explorer 🇮🇳' },
+    3: { desc: 'Wild/domestic animals, animal homes & foods, living/non-living & plant growth cycles.', focus: 'Animal & Nature World 🐾' },
+    4: { desc: 'Five senses organs, weather matchups, day/night routines, materials & light shadows.', focus: 'Science Around Us 🔬' },
+    5: { desc: 'Community helpers, land/water/air transport, road crossing rules & emergency stations.', focus: 'Community & Safety 🚦' },
+    6: { desc: 'Odd-one-out puzzles, pattern sequences, memory mission, classification & GK capstone.', focus: 'Brain Challenge 🧠' }
   },
   hindi: {
-    1: { desc: 'Hindi vowel (Swar) recognition and tracing test.', focus: 'Swar letters & writing' },
-    2: { desc: 'Hindi consonants (Vyanjan) recognition and tracing test.', focus: 'Vyanjan & tracing' },
-    3: { desc: 'Simple Hindi objects, shapes & spelling connection.', focus: 'Vocabulary matching' },
-    4: { desc: 'Three letter words spelling and sentence train practice.', focus: 'Three letter structures' },
-    5: { desc: 'Hindi numbers, colors and daily greetings evaluation.', focus: 'Numbers & greetings' },
-    6: { desc: 'Logic puzzles, word search & final Hindi comprehension.', focus: 'Final comprehensive exam' }
+    1: { desc: 'अक्षर क्रम, स्वर-व्यंजन भेद, सही मात्रा चयन, विடுபட்ட எழுத்துக்கள் & वर्ण चित्र मिलान।', focus: 'वर्ण & मात्राएँ Mission 🔤' },
+    2: { desc: 'कमल शब्द निर्माण, खाली स्थान फल अक्षर, घर चित्र शब्द, सही हिज्जे & शब्द समूह वर्गीकरण।', focus: 'शब्द निर्माण 🌱' },
+    3: { desc: 'विलोम शब्द, एकवचन-बहुवचन, लिंग मिलान, शब्द समूह वर्गीकरण & पर्यायवाची शब्द मिलान।', focus: 'शब्द भंडार 📖' },
+    4: { desc: 'संज्ञा पहचान, क्रिया पहचान, सहायक क्रिया पूरक, वाक्य सुधार & शब्द अनुक्रम रूप।', focus: 'Grammar Garden 🌿' },
+    5: { desc: 'कहानी समय-अनुक्रम, पात्र मिलान, बिल्ली कहानी वासी, खाली स्थान कहानी & मछली चित्र वाक्य।', focus: 'Reading Mission 📚' },
+    6: { desc: 'अक्षर ट्रेसिंग अभ्यास, कलम लेखन, वाक्य निर्माण, रिक्त स्थान नाम पूरक & अंतिम आम चुनौती।', focus: 'Writing + Language ✏️' }
   }
 };
 

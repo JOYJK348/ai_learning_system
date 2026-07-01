@@ -1356,1463 +1356,703 @@ export const GRADE1_TAMIL_LEVELS: Level[] = [
   }
 ];
 export const GRADE1_GK_LEVELS: Level[] = [
-  // --- CHAPTER 1: My Amazing World 🌍 (Levels 1 - 5) ---
   {
     id: 1,
-    title: 'Myself & My Surroundings 🧍',
-    titleEn: 'Myself & My Surroundings',
-    mascot: '🧍',
+    title: 'Myself & My World 🧒',
+    titleEn: 'Myself & My World',
+    mascot: '🧒',
     color: 'from-sky-400 to-blue-500',
     borderColor: 'border-sky-300',
     questions: [
       {
-        type: 'learn_card' as any,
-        conceptTitle: 'My Surroundings 🏡',
-        explanation: 'Everything around us forms our surroundings. This includes our house, family, school, parks, and neighbors. Keeping our surroundings clean is our duty!',
-        mascot: '🏡',
-        examples: [
-          'My Home 🏠 - Where I live with family',
-          'My School 🏫 - Where I learn and play',
-          'The Park 🌳 - Where I run and slide'
+        type: 'connect_pairs' as any,
+        instruction: 'Identity Match: Connect each ID detail to what it means! 🪪',
+        pairs: [
+          { left: 'Name', right: 'Name tells who you are 📛' },
+          { left: 'Age', right: 'Age tells how old you are 🎂' },
+          { left: 'School', right: 'School is where you study 🏫' }
         ],
         options: []
       },
       {
         type: 'connect_pairs' as any,
-        instruction: 'Match places to their descriptions! 🔗',
+        instruction: 'Body Awareness: Connect body part to its correct use! 💪',
         pairs: [
-          { left: 'Where I sleep 🛌', right: 'Bedroom 🛏️' },
-          { left: 'Where I study 🏫', right: 'School 🎒' },
-          { left: 'Where I play 🎠', right: 'Park 🌳' }
+          { left: 'Eyes', right: 'Eyes see 👁️' },
+          { left: 'Legs', right: 'Legs walk 🦵' },
+          { left: 'Hands', right: 'Hands touch 🤚' }
         ],
         options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Healthy Life Sort: Classify these habits correctly! 🪥',
+        pairs: [
+          { left: 'Brushing teeth', right: 'Brushing is Good habit 🪥' },
+          { left: 'Skipping breakfast', right: 'Skipping food is Bad habit 🚫' },
+          { left: 'Playing outside', right: 'Playing is Good habit 🏃' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'My Places: Match the activity to the correct place! 🏡',
+        pairs: [
+          { left: 'Sleep', right: 'Sleep happens at Home 🏡' },
+          { left: 'Study', right: 'Study happens at School 🏫' },
+          { left: 'Play swings', right: 'Play happens at Park 🛝' }
+        ],
+        options: []
+      },
+      {
+        type: 'order' as any,
+        instruction: 'Daily Routine: Sort your daily activities in correct order! ⏰',
+        options: [
+          { text: 'Wake up ➔ School ➔ Play ➔ Sleep', correct: true },
+          { text: 'Sleep ➔ Play ➔ School ➔ Wake up', correct: false },
+          { text: 'School ➔ Wake up ➔ Sleep ➔ Play', correct: false }
+        ]
       }
     ]
   },
   {
     id: 2,
-    title: 'My Country India 🇮🇳',
-    titleEn: 'My Country India',
+    title: 'India Explorer 🇮🇳',
+    titleEn: 'India Explorer',
     mascot: '🇮🇳',
     color: 'from-orange-400 to-amber-500',
     borderColor: 'border-orange-300',
     questions: [
       {
         type: 'connect_pairs' as any,
-        instruction: 'Match our great country facts! 🔗',
+        instruction: 'National Symbols: Match India\'s symbols to their names! 🏅',
         pairs: [
-          { left: 'Our Country 🗺️', right: 'India 🇮🇳' },
-          { left: 'National Anthem 🎵', right: 'Jana Gana Mana 🇮🇳' },
-          { left: 'Capital City 🏢', right: 'New Delhi 🏛️' }
+          { left: 'National Animal 🐅', right: 'Tiger is National Animal 🐅' },
+          { left: 'National Bird 🦚', right: 'Peacock is National Bird 🦚' },
+          { left: 'National Flower 🌸', right: 'Lotus is National Flower 🌸' }
         ],
         options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'India Map: What is the capital city of India? 🏛️',
+        options: [
+          { text: 'New Delhi 🏛️', correct: true },
+          { text: 'Mumbai 🌆', correct: false },
+          { text: 'Chennai 🏖️', correct: false }
+        ]
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'National Days: Match the date to the correct national day! 🗓️',
+        pairs: [
+          { left: '15th August', right: 'Independence Day 🇮🇳' },
+          { left: '26th January', right: 'Republic Day 🏛️' },
+          { left: '2nd October', right: 'Gandhi Jayanti 👓' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Festivals: Match the Indian festival to its symbol! 🎆',
+        pairs: [
+          { left: 'Diwali', right: 'Diwali has Diyas 🪔' },
+          { left: 'Holi', right: 'Holi has Colors 🎨' },
+          { left: 'Eid', right: 'Eid has Crescent Moon 🌙' }
+        ],
+        options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Famous Places: Where is the Taj Mahal located? 🕌',
+        options: [
+          { text: 'Agra, Uttar Pradesh 🕌', correct: true },
+          { text: 'Jaipur, Rajasthan 🏯', correct: false },
+          { text: 'Mumbai, Maharashtra 🌆', correct: false }
+        ]
       }
     ]
   },
   {
     id: 3,
-    title: 'States & Capitals (basic intro) 🗺️',
-    titleEn: 'States & Capitals',
-    mascot: '🗺️',
-    color: 'from-orange-400 to-amber-500',
-    borderColor: 'border-orange-300',
+    title: 'Animal & Nature World 🐾',
+    titleEn: 'Animal & Nature World',
+    mascot: '🐾',
+    color: 'from-lime-400 to-green-500',
+    borderColor: 'border-lime-300',
     questions: [
       {
         type: 'connect_pairs' as any,
-        instruction: 'Match States to their capital cities! 🏢',
+        instruction: 'Animal Types: Classify these animals correctly! 🦁',
         pairs: [
-          { left: 'Tamil Nadu 🗺️', right: 'Chennai 🌊' },
-          { left: 'Maharashtra 🗺️', right: 'Mumbai 🏙️' },
-          { left: 'Karnataka 🗺️', right: 'Bengaluru 💻' }
+          { left: 'Lion', right: 'Lion is Wild 🦁' },
+          { left: 'Cow', right: 'Cow is Domestic 🐄' },
+          { left: 'Parrot', right: 'Parrot is Domestic/Pet 🦜' }
         ],
         options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Animal Homes: Connect each animal to its home! 🪹',
+        pairs: [
+          { left: 'Bird', right: 'Bird lives in Nest 🪹' },
+          { left: 'Bee', right: 'Bee lives in Hive 🍯' },
+          { left: 'Fish', right: 'Fish lives in Water 🌊' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Animal Food: Connect animals to what they eat! 🥩',
+        pairs: [
+          { left: 'Cow', right: 'Cow eats Grass 🌿' },
+          { left: 'Cat', right: 'Cat eats Fish 🐟' },
+          { left: 'Lion', right: 'Lion eats Meat 🥩' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Living & Non-Living: Classify these things correctly! 🌳',
+        pairs: [
+          { left: 'Mango tree', right: 'Mango tree is Living 🌳' },
+          { left: 'Iron chair', right: 'Iron chair is Non-Living 🪑' },
+          { left: 'Butterfly', right: 'Butterfly is Living 🦋' }
+        ],
+        options: []
+      },
+      {
+        type: 'order' as any,
+        instruction: 'Plant Growth: Sort the growth stages in correct order! 🌱',
+        options: [
+          { text: 'Seed ➔ Plant ➔ Flower', correct: true },
+          { text: 'Flower ➔ Plant ➔ Seed', correct: false },
+          { text: 'Plant ➔ Flower ➔ Seed', correct: false }
+        ]
       }
     ]
   },
   {
     id: 4,
-    title: 'National Symbols 🦁',
-    titleEn: 'National Symbols',
-    mascot: '🦁',
-    color: 'from-orange-400 to-amber-500',
-    borderColor: 'border-orange-300',
+    title: 'Science Around Us 🔬',
+    titleEn: 'Science Around Us',
+    mascot: '🔬',
+    color: 'from-teal-400 to-cyan-500',
+    borderColor: 'border-teal-300',
     questions: [
       {
         type: 'connect_pairs' as any,
-        instruction: 'Match National Symbols! 🔗',
+        instruction: 'Five Senses: Connect the sense to the organ that helps! 👁️',
         pairs: [
-          { left: 'National Animal 🐯', right: 'Bengal Tiger 🐅' },
-          { left: 'National Bird 🦚', right: 'Peacock 🦚' },
-          { left: 'National Flower 🪷', right: 'Lotus 🪷' },
-          { left: 'National Fruit 🥭', right: 'Mango 🥭' }
+          { left: 'See', right: 'See with Eyes 👁️' },
+          { left: 'Hear', right: 'Hear with Ears 👂' },
+          { left: 'Smell', right: 'Smell with Nose 👃' }
         ],
         options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Weather Match: Connect weather clues to correct weather type! ☀️',
+        pairs: [
+          { left: 'Hot & bright ☀️', right: 'Sunny day ☀️' },
+          { left: 'Drops falling 🌧️', right: 'Rainy day 🌧️' },
+          { left: 'Dark clouds 🌩️', right: 'Cloudy day ⛅' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Day & Night: Connect activities to the correct time! 🌓',
+        pairs: [
+          { left: 'Going to school', right: 'School happens in Day ☀️' },
+          { left: 'Looking at stars', right: 'Stars seen at Night 🌙' },
+          { left: 'Eating dinner', right: 'Dinner is at Night 🌙' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Materials: Connect objects to the material they are made of! 🪵',
+        pairs: [
+          { left: 'Chair', right: 'Chair made of Wood 🪵' },
+          { left: 'Spoon', right: 'Spoon made of Metal 🥄' },
+          { left: 'Bottle cap', right: 'Cap made of Plastic 🍶' }
+        ],
+        options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Light & Shadow: Which condition creates a shadow behind you? 🌞',
+        options: [
+          { text: 'When sunlight is in front of you ☀️', correct: true },
+          { text: 'When it is dark at night 🌙', correct: false }
+        ]
       }
     ]
   },
   {
     id: 5,
-    title: 'Important Places in India 🏛️',
-    titleEn: 'Important Places in India',
-    mascot: '🏛️',
-    color: 'from-orange-400 to-amber-500',
-    borderColor: 'border-orange-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match Monuments to their locations! 🔗',
-        pairs: [
-          { left: 'Taj Mahal 🕌', right: 'Agra 🏛️' },
-          { left: 'Gateway of India 🗼', right: 'Mumbai 🏙️' },
-          { left: 'Red Fort 🏰', right: 'Delhi 🏛️' }
-        ],
-        options: []
-      }
-    ]
-  },
-
-  // --- CHAPTER 2: Animal Kingdom 🐾 (Levels 6 - 10) ---
-  {
-    id: 6,
-    title: 'Wild Animals 🦁',
-    titleEn: 'Wild Animals',
-    mascot: '🦁',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select all Wild Animals! 🦁',
-        gridItems: [
-          { text: 'Lion 🦁', correct: true },
-          { text: 'Tiger 🐯', correct: true },
-          { text: 'Elephant 🐘', correct: true },
-          { text: 'Cow 🐮', correct: false },
-          { text: 'Dog 🐶', correct: false }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 7,
-    title: 'Domestic Animals 🐮',
-    titleEn: 'Domestic Animals',
-    mascot: '🐮',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select all Domestic/Farm Animals! 🐮',
-        gridItems: [
-          { text: 'Cow 🐮', correct: true },
-          { text: 'Goat 🐐', correct: true },
-          { text: 'Sheep 🐑', correct: true },
-          { text: 'Lion 🦁', correct: false },
-          { text: 'Shark 🦈', correct: false }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 8,
-    title: 'Sea Animals 🦈',
-    titleEn: 'Sea Animals',
-    mascot: '🦈',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match sea creatures to their names! 🐙',
-        pairs: [
-          { left: 'Eight arms 🐙', right: 'Octopus 🐙' },
-          { left: 'Friendly swimmer 🐬', right: 'Dolphin 🐬' },
-          { left: 'Big teeth 🦈', right: 'Shark 🦈' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 9,
-    title: 'Baby Animals 🍼',
-    titleEn: 'Baby Animals',
-    mascot: '🍼',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match parents to babies! 🤝',
-        pairs: [
-          { left: 'Dog 🐶', right: 'Puppy 🐕' },
-          { left: 'Cat 🐱', right: 'Kitten 🐈' },
-          { left: 'Cow 🐮', right: 'Calf 🐂' },
-          { left: 'Lion 🦁', right: 'Cub 🦁' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 10,
-    title: 'Animal Homes 🏡',
-    titleEn: 'Animal Homes',
-    mascot: '🏡',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Who lives where? Match them! ⛺',
-        pairs: [
-          { left: 'Lion 🦁', right: 'Den 🪨' },
-          { left: 'Bird 🐦', right: 'Nest 🪹' },
-          { left: 'Dog 🐶', right: 'Kennel 🏠' },
-          { left: 'Cow 🐮', right: 'Shed 🛖' }
-        ],
-        options: []
-      }
-    ]
-  },
-
-  // --- CHAPTER 3: Bird & Insect World 🐦 (Levels 11 - 15) ---
-  {
-    id: 11,
-    title: 'Common Birds 🦜',
-    titleEn: 'Common Birds',
-    mascot: '🦜',
-    color: 'from-purple-400 to-pink-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select all Birds! 🦜',
-        gridItems: [
-          { text: 'Crow 🐦', correct: true },
-          { text: 'Parrot 🦜', correct: true },
-          { text: 'Eagle 🦅', correct: true },
-          { text: 'Ant 🐜', correct: false },
-          { text: 'Spider 🕷️', correct: false }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 12,
-    title: 'Bird Features 🪶',
-    titleEn: 'Bird Features',
-    mascot: '🪶',
-    color: 'from-purple-400 to-pink-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match features to their uses! 🪶',
-        pairs: [
-          { left: 'Wings 🪶', right: 'To Fly ☁️' },
-          { left: 'Beak 👄', right: 'To Eat 🍒' },
-          { left: 'Claws 👣', right: 'To Perch 🪵' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 13,
-    title: 'Flying & Non Flying Birds 🐧',
-    titleEn: 'Flying & Non Flying Birds',
-    mascot: '🐧',
-    color: 'from-purple-400 to-pink-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Classify flying and non-flying birds! 🔗',
-        pairs: [
-          { left: 'Peacock 🦚', right: 'Flies high ☁️' },
-          { left: 'Penguin 🐧', right: 'Swims in ice ❄️' },
-          { left: 'Ostrich 🦤', right: 'Runs very fast 🏃' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 14,
-    title: 'Insects Around Us 🐜',
-    titleEn: 'Insects Around Us',
-    mascot: '🐜',
-    color: 'from-purple-400 to-pink-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select all Insects! 🐜',
-        gridItems: [
-          { text: 'Ant 🐜', correct: true },
-          { text: 'Mosquito 🦟', correct: true },
-          { text: 'Housefly 🪰', correct: true },
-          { text: 'Parrot 🦜', correct: false },
-          { text: 'Shark 🦈', correct: false }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 15,
-    title: 'Useful Insects 🐝',
-    titleEn: 'Useful Insects',
-    mascot: '🐝',
-    color: 'from-purple-400 to-pink-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match useful insects to their products! 🔗',
-        pairs: [
-          { left: 'Honeybee 🐝', right: 'Honey 🍯' },
-          { left: 'Silkworm 🐛', right: 'Silk 🥻' },
-          { left: 'Earthworm 🪱', right: 'Soil Health 🌱' }
-        ],
-        options: []
-      }
-    ]
-  },
-
-  // --- CHAPTER 4: Plant World 🌱 (Levels 16 - 20) ---
-  {
-    id: 16,
-    title: 'Parts of Plant 🍃',
-    titleEn: 'Parts of Plant',
-    mascot: '🍃',
-    color: 'from-lime-400 to-green-500',
-    borderColor: 'border-lime-300',
-    questions: [
-      {
-        type: 'learn_card' as any,
-        conceptTitle: 'Parts of a Plant 🌳',
-        explanation: 'Just like us, plants have different parts that do different jobs. Roots take in water. Stem holds the plant up. Leaves make food. Flowers make seeds!',
-        mascot: '🌳',
-        examples: [
-          'Roots 🪵 - Stay under the soil',
-          'Leaves 🍃 - Green parts making food',
-          'Flower 🌸 - Beautiful part that smells nice'
-        ],
-        options: []
-      },
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match parts to their locations! 🔗',
-        pairs: [
-          { left: 'Under the soil 🪱', right: 'Roots 🪵' },
-          { left: 'Green color part 🍃', right: 'Leaf 🍂' },
-          { left: 'Holds plant straight 🎋', right: 'Stem 🪵' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 17,
-    title: 'Types of Plants 🌵',
-    titleEn: 'Types of Plants',
-    mascot: '🌵',
-    color: 'from-lime-400 to-green-500',
-    borderColor: 'border-lime-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match plant types to examples! 🌳',
-        pairs: [
-          { left: 'Big strong plant 🪵', right: 'Tree 🌳' },
-          { left: 'Small bushy plant 🌿', right: 'Shrub 🪴' },
-          { left: 'Needs support to climb 🧗', right: 'Climber 🍇' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 18,
-    title: 'Trees & Flowers 🌸',
-    titleEn: 'Trees & Flowers',
-    mascot: '🌸',
-    color: 'from-lime-400 to-green-500',
-    borderColor: 'border-lime-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match flowers and trees to their names! 🌳',
-        pairs: [
-          { left: 'National Tree 🌳', right: 'Banyan Tree 🦚' },
-          { left: 'Smells beautiful 🌹', right: 'Rose 🌹' },
-          { left: 'Yellow flower facing sun 🌻', right: 'Sunflower 🌻' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 19,
-    title: 'Fruits & Vegetables 🍎',
-    titleEn: 'Fruits & Vegetables',
-    mascot: '🍎',
-    color: 'from-lime-400 to-green-500',
-    borderColor: 'border-lime-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Classify Fruits and Vegetables! 🍇',
-        pairs: [
-          { left: 'Apple 🍎', right: 'Sweet Fruit 🍎' },
-          { left: 'Spinach 🥬', right: 'Leafy Green 🥬' },
-          { left: 'Potato 🥔', right: 'Root Vegetable 🥔' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 20,
-    title: 'Uses of Plants 🪵',
-    titleEn: 'Uses of Plants',
-    mascot: '🪵',
-    color: 'from-lime-400 to-green-500',
-    borderColor: 'border-lime-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match plant uses to items! 🔗',
-        pairs: [
-          { left: 'To write on 📄', right: 'Paper 📄' },
-          { left: 'To wear 👕', right: 'Cotton ☁️' },
-          { left: 'To build chairs 🪑', right: 'Wood 🪵' }
-        ],
-        options: []
-      }
-    ]
-  },
-
-  // --- CHAPTER 5: Science Around Us 🔬 (Levels 21 - 25) ---
-  {
-    id: 21,
-    title: 'Five Senses 👀',
-    titleEn: 'Five Senses',
-    mascot: '👀',
-    color: 'from-cyan-400 to-teal-500',
-    borderColor: 'border-cyan-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match sense organs to their actions! 👃',
-        pairs: [
-          { left: 'Eyes 👀', right: 'To See 🌈' },
-          { left: 'Nose 👃', right: 'To Smell 🌹' },
-          { left: 'Ears 👂', right: 'To Hear 🎵' },
-          { left: 'Tongue 👅', right: 'To Taste 🍦' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 22,
-    title: 'Living & Non Living Things 🪨',
-    titleEn: 'Living & Non Living Things',
-    mascot: '🪨',
-    color: 'from-cyan-400 to-teal-500',
-    borderColor: 'border-cyan-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select all Living Things (which grow and breathe)! 🌱',
-        gridItems: [
-          { text: 'Plant 🌱', correct: true },
-          { text: 'Puppy 🐶', correct: true },
-          { text: 'Bird 🐦', correct: true },
-          { text: 'Stone 🪨', correct: false },
-          { text: 'Toy Car 🚗', correct: false }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 23,
-    title: 'Day & Night 🌞',
-    titleEn: 'Day & Night',
-    mascot: '🌞',
-    color: 'from-cyan-400 to-teal-500',
-    borderColor: 'border-cyan-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match time to elements! 🌙',
-        pairs: [
-          { left: 'Bright Sun ☀️', right: 'Day Time 🌞' },
-          { left: 'Stars & Moon 🌙', right: 'Night Time 🌃' },
-          { left: 'Eating breakfast 🍳', right: 'Morning Time 🌅' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 24,
-    title: 'Weather Basics ☁️',
-    titleEn: 'Weather Basics',
-    mascot: '☁️',
-    color: 'from-cyan-400 to-teal-500',
-    borderColor: 'border-cyan-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match weather to items we use! ☔',
-        pairs: [
-          { left: 'Hot Sun ☀️', right: 'Sunglasses 🕶️' },
-          { left: 'Rainy Day 🌧️', right: 'Umbrella ☔' },
-          { left: 'Cold Day ❄️', right: 'Sweater 🧥' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 25,
-    title: 'Water & Air 💨',
-    titleEn: 'Water & Air',
-    mascot: '💨',
-    color: 'from-cyan-400 to-teal-500',
-    borderColor: 'border-cyan-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match uses of water and air! 🔗',
-        pairs: [
-          { left: 'Thirsty 🥤', right: 'Drink Water 💧' },
-          { left: 'Flying Kite 🪁', right: 'Moving Air 💨' },
-          { left: 'Washing hands 🧼', right: 'Clean Water 💧' }
-        ],
-        options: []
-      }
-    ]
-  },
-
-  // --- CHAPTER 6: People & Community 👥 (Levels 26 - 30) ---
-  {
-    id: 26,
-    title: 'Community Helpers 🧑‍🚒',
-    titleEn: 'Community Helpers',
-    mascot: '🧑‍🚒',
-    color: 'from-rose-400 to-pink-500',
-    borderColor: 'border-rose-300',
-    questions: [
-      {
-        type: 'learn_card' as any,
-        conceptTitle: 'Community Helpers 👥',
-        explanation: 'Many people help us every day in our community. Doctors keep us healthy. Firefighters put out fires. Teachers teach us reading and writing.',
-        mascot: '👥',
-        examples: [
-          'Doctor 🩺 - Helps when we are sick',
-          'Teacher 👩‍🏫 - Helps us learn new things',
-          'Firefighter 🧑‍🚒 - Keeps us safe from fire'
-        ],
-        options: []
-      },
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Who helps us? Match helper to task! 🔗',
-        pairs: [
-          { left: 'When sick 🩺', right: 'Doctor 👨‍⚕️' },
-          { left: 'To learn lessons 📚', right: 'Teacher 👩‍🏫' },
-          { left: 'Keeps us safe 👮', right: 'Police Officer 👮' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 27,
-    title: 'Doctor, Teacher, Police 🩺',
-    titleEn: 'Doctor, Teacher, Police',
-    mascot: '🩺',
-    color: 'from-rose-400 to-pink-500',
-    borderColor: 'border-rose-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match helper tools! 🛠️',
-        pairs: [
-          { left: 'Stethoscope 🩺', right: 'Doctor 👨‍⚕️' },
-          { left: 'Blackboard 🪵', right: 'Teacher 👩‍🏫' },
-          { left: 'Handcuffs ⛓️', right: 'Police Officer 👮' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 28,
-    title: 'Places Around Us 🏥',
-    titleEn: 'Places Around Us',
-    mascot: '🏥',
-    color: 'from-rose-400 to-pink-500',
-    borderColor: 'border-rose-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match descriptions to neighborhood places! 🏥',
-        pairs: [
-          { left: 'To buy stamps ✉️', right: 'Post Office 🏤' },
-          { left: 'To treat patients 🏥', right: 'Hospital 🏥' },
-          { left: 'To keep money safe 💰', right: 'Bank 🏦' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 29,
-    title: 'Good Habits 🧼',
-    titleEn: 'Good Habits',
-    mascot: '🧼',
-    color: 'from-rose-400 to-pink-500',
-    borderColor: 'border-rose-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select all Good Habits! 🧼',
-        gridItems: [
-          { text: 'Wash Hands 🧼', correct: true },
-          { text: 'Brush Teeth 🪥', correct: true },
-          { text: 'Throw trash in bin 🗑️', correct: true },
-          { text: 'Bite Nails 💅', correct: false },
-          { text: 'Shout loud 🗣️', correct: false }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 30,
-    title: 'Safety Rules ⚠️',
-    titleEn: 'Safety Rules',
-    mascot: '⚠️',
-    color: 'from-rose-400 to-pink-500',
-    borderColor: 'border-rose-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match Safety Rules! ⚠️',
-        pairs: [
-          { left: 'With matchsticks 🔥', right: 'Do NOT play ❌' },
-          { left: 'On the road 🛣️', right: 'Do NOT run ❌' },
-          { left: 'While crossing 🚶', right: 'Use Zebra crossing 🦓' }
-        ],
-        options: []
-      }
-    ]
-  },
-
-  // --- CHAPTER 7: Transport & Communication 🚗 (Levels 31 - 35) ---
-  {
-    id: 31,
-    title: 'Land Transport 🚗',
-    titleEn: 'Land Transport',
-    mascot: '🚗',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select all Land Vehicles! 🚗',
-        gridItems: [
-          { text: 'Car 🚗', correct: true },
-          { text: 'Bus 🚌', correct: true },
-          { text: 'Train 🚂', correct: true },
-          { text: 'Ship 🚢', correct: false },
-          { text: 'Aeroplane ✈️', correct: false }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 32,
-    title: 'Water Transport 🚢',
-    titleEn: 'Water Transport',
-    mascot: '🚢',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select all Water Vehicles! 🚢',
-        gridItems: [
-          { text: 'Ship 🚢', correct: true },
-          { text: 'Boat ⛵', correct: true },
-          { text: 'Submarine 🚢', correct: true },
-          { text: 'Bicycle 🚲', correct: false },
-          { text: 'Helicopter 🚁', correct: false }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 33,
-    title: 'Air Transport ✈️',
-    titleEn: 'Air Transport',
-    mascot: '✈️',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      {
-        type: 'grid_search' as any,
-        instruction: 'Select all Air Vehicles! ✈️',
-        gridItems: [
-          { text: 'Aeroplane ✈️', correct: true },
-          { text: 'Helicopter 🚁', correct: true },
-          { text: 'Hot Air Balloon 🎈', correct: true },
-          { text: 'Motorcycle 🏍️', correct: false },
-          { text: 'Metro Train 🚇', correct: false }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 34,
-    title: 'Communication Tools 📞',
-    titleEn: 'Communication Tools',
-    mascot: '📞',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match tools to their uses! 📞',
-        pairs: [
-          { left: 'Mobile Phone 📱', right: 'Calling 📞' },
-          { left: 'Letter ✉️', right: 'Post Box 📮' },
-          { left: 'Newspaper 📰', right: 'Reading news 🗞️' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 35,
-    title: 'Road Safety 🚦',
-    titleEn: 'Road Safety',
+    title: 'Community & Safety 🚦',
+    titleEn: 'Community & Safety',
     mascot: '🚦',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
+    color: 'from-rose-400 to-pink-500',
+    borderColor: 'border-rose-300',
     questions: [
       {
         type: 'connect_pairs' as any,
-        instruction: 'What do traffic lights mean? Match them! 🚦',
+        instruction: 'Community Helpers: Connect the helper to their work! 🩺',
         pairs: [
-          { left: 'Red light 🔴', right: 'Stop 🛑' },
-          { left: 'Yellow light 🟡', right: 'Get Ready ⏳' },
-          { left: 'Green light 🟢', right: 'Go ➡️' }
+          { left: 'Doctor', right: 'Doctor treats patients 🩺' },
+          { left: 'Police', right: 'Police keeps order 👮' },
+          { left: 'Farmer', right: 'Farmer grows food 🌾' }
         ],
         options: []
-      }
-    ]
-  },
-
-  // --- CHAPTER 8: Fun Knowledge Zone 🧠 (Levels 36 - 40) ---
-  {
-    id: 36,
-    title: 'Colours & Shapes Around Us 🎨',
-    titleEn: 'Colours & Shapes',
-    mascot: '🎨',
-    color: 'from-indigo-400 to-purple-500',
-    borderColor: 'border-indigo-300',
-    questions: [
+      },
       {
         type: 'connect_pairs' as any,
-        instruction: 'Match objects to their shapes! 📐',
+        instruction: 'Transport Routes: Connect each vehicle to its route! ✈️',
         pairs: [
-          { left: 'Carrom Board 🔲', right: 'Square ⬜' },
-          { left: 'Football ⚽', right: 'Circle ⚪' },
-          { left: 'Ice Cream Cone 🍦', right: 'Triangle 🔺' }
+          { left: 'Car', right: 'Car goes on Land 🚗' },
+          { left: 'Boat', right: 'Boat goes on Water ⛵' },
+          { left: 'Airplane', right: 'Airplane flies in Air ✈️' }
         ],
         options: []
-      }
-    ]
-  },
-  {
-    id: 37,
-    title: 'Festivals 🎉',
-    titleEn: 'Festivals',
-    mascot: '🎉',
-    color: 'from-indigo-400 to-purple-500',
-    borderColor: 'border-indigo-300',
-    questions: [
+      },
+      {
+        type: 'order' as any,
+        instruction: 'Road Safety: Sort road crossing steps in correct order! 🚦',
+        options: [
+          { text: 'Stop ➔ Look both sides ➔ Cross safely', correct: true },
+          { text: 'Cross directly ➔ Look both sides ➔ Stop', correct: false }
+        ]
+      },
       {
         type: 'connect_pairs' as any,
-        instruction: 'Match festivals to descriptions! 🏮',
+        instruction: 'Emergency Awareness: Match emergency to the correct station! 🚒',
         pairs: [
-          { left: 'Festival of lights 🪔', right: 'Diwali 🎆' },
-          { left: 'Festival of colors 🎨', right: 'Holi 🌈' },
-          { left: 'Santa Claus 🎅', right: 'Christmas 🎄' }
+          { left: 'Fire 🔥', right: 'Fire goes to Fire Station 🚒' },
+          { left: 'Sick person 🤒', right: 'Sick goes to Hospital 🏥' },
+          { left: 'Crime 🚨', right: 'Crime goes to Police Station 👮' }
         ],
         options: []
-      }
-    ]
-  },
-  {
-    id: 38,
-    title: 'Food Around World 🍕',
-    titleEn: 'Food Around World',
-    mascot: '🍕',
-    color: 'from-indigo-400 to-purple-500',
-    borderColor: 'border-indigo-300',
-    questions: [
+      },
       {
         type: 'connect_pairs' as any,
-        instruction: 'Match popular foods! 🍔',
+        instruction: 'Public Places: Connect each place to its purpose! 🏫',
         pairs: [
-          { left: 'Pizza 🍕', right: 'Italy 🇮🇹' },
-          { left: 'Burger 🍔', right: 'America 🇺🇸' },
-          { left: 'Idli 🍛', right: 'India 🇮🇳' }
+          { left: 'Library', right: 'Library is for Reading 📚' },
+          { left: 'Market', right: 'Market is for Shopping 🛒' },
+          { left: 'Hospital', right: 'Hospital is for Treatment 🏥' }
         ],
         options: []
       }
-    ]
-  },
-  {
-    id: 39,
-    title: 'Sports Basics ⚽',
-    titleEn: 'Sports Basics',
-    mascot: '⚽',
-    color: 'from-indigo-400 to-purple-500',
-    borderColor: 'border-indigo-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match sports to equipment! 🏸',
-        pairs: [
-          { left: 'Cricket 🏏', right: 'Bat & Ball ⚾' },
-          { left: 'Football ⚽', right: 'Goal Post 🥅' },
-          { left: 'Badminton 🏸', right: 'Racket & Shuttle 🏸' }
-        ],
-        options: []
-      }
-    ]
-  },
-  {
-    id: 40,
-    title: 'Space Intro (Sun, Moon, Stars) 🚀',
-    titleEn: 'Space Intro',
-    mascot: '🚀',
-    color: 'from-indigo-400 to-purple-500',
-    borderColor: 'border-indigo-300',
-    questions: [
-      {
-        type: 'connect_pairs' as any,
-        instruction: 'Match space elements! 🌠',
-        pairs: [
-          { left: 'Gives us heat ☀️', right: 'Sun ☀️' },
-          { left: 'Changes shape at night 🌙', right: 'Moon 🌙' },
-          { left: 'Twinkle in the sky 🌟', right: 'Stars ✨' }
-        ],
-        options: []
-      }
-    ]
-  }
-];
-
-export const GRADE1_HINDI_LEVELS: Level[] = [
-  // --- CHAPTER 1: वर्णमाला Revision ---
-  {
-    id: 1,
-    title: 'स्वर Revision 🇮🇳',
-    titleEn: 'Swar Revision',
-    mascot: '🇮🇳',
-    color: 'from-orange-400 to-red-500',
-    borderColor: 'border-orange-300',
-    questions: [
-      { type: 'letter_board' as any, instruction: 'स्वर (Vowels) 🗣️', instructionTa: 'सारे स्वर को देखें और याद रखें! (Look and remember all vowels!)', boardTitle: 'स्वर - Hindi Vowels', boardSubtitle: 'Hindi Vowels (11+2)', letters: ['अ', 'आ', 'इ', 'ई', 'उ', 'ऊ', 'ऋ', 'ए', 'ऐ', 'ओ', 'औ', 'अं', 'अः'], color: 'from-orange-400 to-red-500', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: अ ✍️', letter: 'अ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: आ ✍️', letter: 'आ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: इ ✍️', letter: 'इ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ई ✍️', letter: 'ई', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: उ ✍️', letter: 'उ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ऊ ✍️', letter: 'ऊ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ऋ ✍️', letter: 'ऋ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ए ✍️', letter: 'ए', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ऐ ✍️', letter: 'ऐ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ओ ✍️', letter: 'ओ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: औ ✍️', letter: 'औ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: अं ✍️', letter: 'अं', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: अः ✍️', letter: 'अः', options: [] },
-      { type: 'garden_repair' as any, instruction: 'Choose the Swar for: अनार 🍎', sentence: '___ - अनार', options: [{ text: 'अ', correct: true }, { text: 'क', correct: false }] }
-    ]
-  },
-  {
-    id: 2,
-    title: 'व्यंजन Revision 🇮🇳',
-    titleEn: 'Vyanjan Revision',
-    mascot: '🇮🇳',
-    color: 'from-orange-400 to-red-500',
-    borderColor: 'border-orange-300',
-    questions: [
-      { type: 'letter_board' as any, instruction: 'व्यंजन (Consonants) 🗣️', instructionTa: 'सारे व्यंजन को देखें और याद रखें! (Look and remember all consonants!)', boardTitle: 'व्यंजन - Hindi Consonants', boardSubtitle: 'Hindi Consonants (33+4)', letters: ['क', 'ख', 'ग', 'घ', 'ङ', 'च', 'छ', 'ज', 'झ', 'ञ', 'ट', 'ठ', 'ड', 'ढ', 'ण', 'त', 'थ', 'द', 'ध', 'न', 'प', 'फ', 'ब', 'भ', 'म', 'य', 'र', 'ल', 'व', 'श', 'ष', 'स', 'ह', 'क्ष', 'त्र', 'ज्ञ', 'श्र'], color: 'from-orange-400 to-red-500', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: क ✍️', letter: 'क', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ख ✍️', letter: 'ख', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ग ✍️', letter: 'ग', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: घ ✍️', letter: 'घ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ङ ✍️', letter: 'ङ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: च ✍️', letter: 'च', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: छ ✍️', letter: 'छ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ज ✍️', letter: 'ज', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: झ ✍️', letter: 'झ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ञ ✍️', letter: 'ञ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ट ✍️', letter: 'ट', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ठ ✍️', letter: 'ठ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ड ✍️', letter: 'ड', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ढ ✍️', letter: 'ढ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ण ✍️', letter: 'ण', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: त ✍️', letter: 'त', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: थ ✍️', letter: 'थ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: द ✍️', letter: 'द', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ध ✍️', letter: 'ध', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: न ✍️', letter: 'न', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: प ✍️', letter: 'प', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: फ ✍️', letter: 'फ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ब ✍️', letter: 'ब', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: भ ✍️', letter: 'भ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: म ✍️', letter: 'म', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: य ✍️', letter: 'य', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: र ✍️', letter: 'र', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ल ✍️', letter: 'ल', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: व ✍️', letter: 'व', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: श ✍️', letter: 'श', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ष ✍️', letter: 'ष', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: स ✍️', letter: 'स', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ह ✍️', letter: 'ह', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: क्ष ✍️', letter: 'क्ष', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: त्र ✍️', letter: 'त्र', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: ज्ञ ✍️', letter: 'ज्ञ', options: [] },
-      { type: 'trace' as any, instruction: 'Trace: श्र ✍️', letter: 'श्र', options: [] },
-      { type: 'garden_repair' as any, instruction: 'Choose the Vyanjan for: कबूतर 🐦', sentence: '___ - कबूतर', options: [{ text: 'क', correct: true }, { text: 'म', correct: false }] }
-    ]
-  },
-  {
-    id: 3,
-    title: 'वर्ण पहचान 🇮🇳',
-    titleEn: 'Letter Identification',
-    mascot: '🇮🇳',
-    color: 'from-orange-400 to-red-500',
-    borderColor: 'border-orange-300',
-    questions: [
-      { type: 'grid_search' as any, instruction: 'Select all Swar (Vowels)! 🔍', gridItems: [{ text: 'अ', correct: true }, { text: 'इ', correct: true }, { text: 'उ', correct: true }, { text: 'क', correct: false }, { text: 'च', correct: false }, { text: 'म', correct: false }], options: [] },
-      { type: 'grid_search' as any, instruction: 'Select all Vyanjan (Consonants)! 🔍', gridItems: [{ text: 'म', correct: true }, { text: 'प', correct: true }, { text: 'ल', correct: true }, { text: 'आ', correct: false }, { text: 'ई', correct: false }, { text: 'ऊ', correct: false }], options: [] }
-    ]
-  },
-  {
-    id: 4,
-    title: 'वर्ण क्रम 🇮🇳',
-    titleEn: 'Letter Order',
-    mascot: '🇮🇳',
-    color: 'from-orange-400 to-red-500',
-    borderColor: 'border-orange-300',
-    questions: [
-      { type: 'sentence_train' as any, instruction: 'Arrange Swar in correct order! 🚂', words: ['आ', 'अ', 'इ', 'ई'], correctSentence: 'अ आ इ ई', options: [] },
-      { type: 'sentence_train' as any, instruction: 'Arrange Vyanjan in correct order! 🚂', words: ['ख', 'क', 'ग', 'घ'], correctSentence: 'क ख ग घ', options: [] }
-    ]
-  },
-
-  // --- CHAPTER 2: मात्राएँ ---
-  {
-    id: 5,
-    title: 'आ की मात्रा ✏️',
-    titleEn: 'Aa Ki Matra',
-    mascot: '✏️',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'आ की मात्रा (ा) ✏️', explanation: 'Adding "ा" to a letter creates the "Aa" sound. E.g., क + ा = का, म + ा = मा.', mascot: 'ा', examples: ['का + न = कान 👂', 'हा + थ = हाथ ✋', 'ता + ला = ताला 🔒', 'मा + ला = माला 📿'], options: [] },
-      { type: 'garden_repair' as any, instruction: 'What does "कान" mean? 👂', sentence: 'कान means ___', options: [{ text: 'Ear 👂', correct: true }, { text: 'Hand ✋', correct: false }] },
-      { type: 'garden_repair' as any, instruction: 'Fill the blank to make AM (Mango)! 🥭', sentence: 'आ___', options: [{ text: 'म', correct: true }, { text: 'न', correct: false }, { text: 'ल', correct: false }] }
     ]
   },
   {
     id: 6,
-    title: 'इ की मात्रा ✏️',
-    titleEn: 'Short I Ki Matra',
-    mascot: '✏️',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'इ की मात्रा (ि) ✏️', explanation: 'The short "i" sound is placed before the letter. E.g. ि + क = कि.', mascot: 'ि', examples: ['कि + ता + ब = किताब 📖', 'दि + न = दिन ☀️', 'पि + न = पिन 📌', 'सि + ता + र = सितार 🎸'], options: [] },
-      { type: 'garden_repair' as any, instruction: 'What does "किताब" mean? 📖', sentence: 'किताब is a ___', options: [{ text: 'Book 📖', correct: true }, { text: 'Pin 📌', correct: false }] },
-      { type: 'garden_repair' as any, instruction: 'Complete the word: K-I-T-A-B 📖', sentence: 'कि___ब', options: [{ text: 'ता', correct: true }, { text: 'मा', correct: false }, { text: 'का', correct: false }] }
-    ]
-  },
-  {
-    id: 7,
-    title: 'ई की मात्रा ✏️',
-    titleEn: 'Long Ee Ki Matra',
-    mascot: '✏️',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'ई की मात्रा (ी) ✏️', explanation: 'The long "ee" sound is placed after the letter. E.g., क + ी = की, ह + ा + थ + ी = हाथी.', mascot: 'ी', examples: ['मछ + ल + ी = मछली 🐟', 'हा + थ + ी = हाथी 🐘', 'चा + ब + ी = चाबी 🔑', 'घ + ड़ + ी = घड़ी ⏰'], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Identify the word for Elephant 🐘', sentence: 'हाथी is ___', options: [{ text: 'Elephant 🐘', correct: true }, { text: 'Fish 🐟', correct: false }] }
-    ]
-  },
-  {
-    id: 8,
-    title: 'उ की मात्रा ✏️',
-    titleEn: 'Short U Ki Matra',
-    mascot: '✏️',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'उ की मात्रा (ु) ✏️', explanation: 'The short "u" sound is placed under the letter. E.g., क + ु = कु, ग + ु + ल + ा + ब = गुलाब.', mascot: 'ु', examples: ['गु + ला + ब = गुलाब 🌹', 'पु + ल = पुल 🌉', 'ध + नु + ष = धनुष 🏹', 'गु + डि + या = गुड़िया 🪆'], options: [] },
-      { type: 'garden_repair' as any, instruction: 'What does "गुलाब" mean? 🌹', sentence: 'गुलाब is a ___', options: [{ text: 'Rose 🌹', correct: true }, { text: 'Bridge 🌉', correct: false }] }
-    ]
-  },
-  {
-    id: 9,
-    title: 'ऊ की मात्रा ✏️',
-    titleEn: 'Long Uu Ki Matra',
-    mascot: '✏️',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'ऊ की मात्रा (ू) ✏️', explanation: 'The long "uu" sound is placed under the letter. E.g., फ + ू = फू, फ + ू + ल = फूल.', mascot: 'ू', examples: ['फू + ल = फूल 🌸', 'चू + हा = चूहा 🐭', 'दू + ध = दूध 🥛', 'सूरज = सूरज 🌞'], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Choose the word for Flower 🌸', sentence: 'फूल is ___', options: [{ text: 'Flower 🌸', correct: true }, { text: 'Milk 🥛', correct: false }] }
-    ]
-  },
-  {
-    id: 10,
-    title: 'ए, ऐ, ओ, औ की मात्राएँ ✏️',
-    titleEn: 'Combined Matras',
-    mascot: '✏️',
-    color: 'from-amber-400 to-orange-500',
-    borderColor: 'border-amber-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'ए, ऐ, ओ, औ की मात्राएँ ✏️', explanation: 'Let us learn upper and double matras: ए (े), ऐ (ै), ओ (ो), औ (ौ). E.g., सेब 🍎, बैल 🐂, मोर 🦚, पौधा 🌱.', mascot: 'े', examples: ['स + े + ब = सेब 🍎', 'म + ो + र = मोर 🦚', 'प + ौ + धा = पौधा 🌱', 'थ + ै + ला = थैला 🛍️'], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Identify: मोर 🦚', sentence: 'मोर is ___', options: [{ text: 'Peacock 🦚', correct: true }, { text: 'Apple 🍎', correct: false }] }
-    ]
-  },
-
-  // --- CHAPTER 3: शब्द निर्माण ---
-  {
-    id: 11,
-    title: 'दो अक्षर वाले शब्द 🧱',
-    titleEn: 'Two Letter Words',
-    mascot: '🧱',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Combine घ + र to make: 🏠', sentence: 'घ + र = ___', options: [{ text: 'घर 🏠', correct: true }, { text: 'फल 🍎', correct: false }] },
-      { type: 'sentence_train' as any, instruction: 'Build the word: GHAR (Home)! 🏠', words: ['र', 'घ'], correctSentence: 'घ र', options: [] }
-    ]
-  },
-  {
-    id: 12,
-    title: 'तीन अक्षर वाले शब्द 🧱',
-    titleEn: 'Three Letter Words',
-    mascot: '🧱',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Choose the word for Lotus 🪷', sentence: 'कमल is ___', options: [{ text: 'Lotus 🪷', correct: true }, { text: 'Crocodile 🐊', correct: false }] },
-      { type: 'sentence_train' as any, instruction: 'Build the word: KAMAL (Lotus)! 🪷', words: ['ल', 'क', 'म'], correctSentence: 'क म ल', options: [] }
-    ]
-  },
-  {
-    id: 13,
-    title: 'चार अक्षर वाले शब्द 🧱',
-    titleEn: 'Four Letter Words',
-    mascot: '🧱',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Choose the word for Flask 🍶', sentence: 'थरमस is ___', options: [{ text: 'Flask 🍶', correct: true }, { text: 'Banyan 🌳', correct: false }] },
-      { type: 'sentence_train' as any, instruction: 'Build the word: SHARBAT (Juice)! 🥤', words: ['त', 'ब', 'र', 'श'], correctSentence: 'श र ब त', options: [] }
-    ]
-  },
-  {
-    id: 14,
-    title: 'समान शब्द 🧱',
-    titleEn: 'Rhyming Words',
-    mascot: '🧱',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Which word rhymes with: घर?', sentence: 'घर rhymes with ___', options: [{ text: 'पर', correct: true }, { text: 'मन', correct: false }] }
-    ]
-  },
-  {
-    id: 15,
-    title: 'शब्द पहचान 🧱',
-    titleEn: 'Word Identification',
-    mascot: '🧱',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      { type: 'grid_search' as any, instruction: 'Select all two-letter words! 🔍', gridItems: [{ text: 'घर', correct: true }, { text: 'फल', correct: true }, { text: 'जल', correct: true }, { text: 'कमल', correct: false }, { text: 'अचकन', correct: false }], options: [] }
-    ]
-  },
-  {
-    id: 16,
-    title: 'शब्द निर्माण 🧱',
-    titleEn: 'Word Construction',
-    mascot: '🧱',
-    color: 'from-emerald-400 to-teal-500',
-    borderColor: 'border-emerald-300',
-    questions: [
-      { type: 'sentence_train' as any, instruction: 'Assemble the letters to build: MATAR 🫛', words: ['र', 'म', 'ट'], correctSentence: 'म ट र', options: [] }
-    ]
-  },
-
-  // --- CHAPTER 4: शब्द भंडार ---
-  {
-    id: 17,
-    title: 'परिवार के शब्द 🍎',
-    titleEn: 'Family Words',
-    mascot: '🍎',
-    color: 'from-rose-400 to-red-500',
-    borderColor: 'border-rose-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Identify: माता 👩', sentence: 'माता is ___', options: [{ text: 'Mother 👩', correct: true }, { text: 'Father 👨', correct: false }] }
-    ]
-  },
-  {
-    id: 18,
-    title: 'शरीर के अंग 🍎',
-    titleEn: 'Body Parts',
-    mascot: '🍎',
-    color: 'from-rose-400 to-red-500',
-    borderColor: 'border-rose-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Identify: आँख 👀', sentence: 'आँख is ___', options: [{ text: 'Eye 👀', correct: true }, { text: 'Nose 👃', correct: false }] }
-    ]
-  },
-  {
-    id: 19,
-    title: 'पशु-पक्षी 🍎',
-    titleEn: 'Animals & Birds',
-    mascot: '🍎',
-    color: 'from-rose-400 to-red-500',
-    borderColor: 'border-rose-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Identify: शेर 🦁', sentence: 'शेर is ___', options: [{ text: 'Lion 🦁', correct: true }, { text: 'Peacock 🦚', correct: false }] }
-    ]
-  },
-  {
-    id: 20,
-    title: 'फल-सब्जियाँ 🍎',
-    titleEn: 'Fruits & Veggies',
-    mascot: '🍎',
-    color: 'from-rose-400 to-red-500',
-    borderColor: 'border-rose-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Identify: आम 🥭', sentence: 'आम is ___', options: [{ text: 'Mango 🥭', correct: true }, { text: 'Potato 🥔', correct: false }] }
-    ]
-  },
-  {
-    id: 21,
-    title: 'रंग और वस्तुएँ 🍎',
-    titleEn: 'Colors & Objects',
-    mascot: '🍎',
-    color: 'from-rose-400 to-red-500',
-    borderColor: 'border-rose-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'What color is: लाल? 🔴', sentence: 'लाल means ___', options: [{ text: 'Red 🔴', correct: true }, { text: 'Blue 🔵', correct: false }] }
-    ]
-  },
-
-  // --- CHAPTER 5: व्याकरण ---
-  {
-    id: 22,
-    title: 'संज्ञा 🏫',
-    titleEn: 'Nouns',
-    mascot: '🏫',
-    color: 'from-violet-400 to-purple-500',
-    borderColor: 'border-violet-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'संज्ञा (Noun) 🏫', explanation: 'Noun is the name of a person, place, animal, or thing. E.g., राम (person), दिल्ली (place), शेर (animal), कलम (thing).', mascot: '🏫', examples: ['राम - Person', 'किताब - Thing', 'घर - Place', 'कुत्ता - Animal'], options: [] },
-      { type: 'grid_search' as any, instruction: 'Select all Nouns (संज्ञा)! 🔍', gridItems: [{ text: 'राम', correct: true }, { text: 'किताब', correct: true }, { text: 'घर', correct: true }, { text: 'दौड़ना', correct: false }, { text: 'खेलना', correct: false }], options: [] }
-    ]
-  },
-  {
-    id: 23,
-    title: 'क्रिया 🏫',
-    titleEn: 'Verbs',
-    mascot: '🏫',
-    color: 'from-violet-400 to-purple-500',
-    borderColor: 'border-violet-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'क्रिया (Verb) 🏃', explanation: 'Verb is an action word. E.g., लिखना (writing), पढ़ना (reading), खेलना (playing), दौड़ना (running).', mascot: '🏃', examples: ['लिखना - Writing', 'पढ़ना - Reading', 'खेलना - Playing'], options: [] },
-      { type: 'grid_search' as any, instruction: 'Select all Actions (क्रिया)! 🔍', gridItems: [{ text: 'पढ़ना', correct: true }, { text: 'खेलना', correct: true }, { text: 'दौड़ना', correct: true }, { text: 'पेड़', correct: false }, { text: 'सेब', correct: false }], options: [] }
-    ]
-  },
-  {
-    id: 24,
-    title: 'एकवचन और बहुवचन 🏫',
-    titleEn: 'Singular & Plural',
-    mascot: '🏫',
-    color: 'from-violet-400 to-purple-500',
-    borderColor: 'border-violet-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'What is the plural of: लड़का?', sentence: 'लड़का plural is ___', options: [{ text: 'लड़के', correct: true }, { text: 'ताले', correct: false }] }
-    ]
-  },
-  {
-    id: 25,
-    title: 'लिंग 🏫',
-    titleEn: 'Gender',
-    mascot: '🏫',
-    color: 'from-violet-400 to-purple-500',
-    borderColor: 'border-violet-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Match masculine & feminine pairs!', sentence: 'लड़का matches with ___', options: [{ text: 'लड़की', correct: true }, { text: 'बहन', correct: false }] }
-    ]
-  },
-  {
-    id: 26,
-    title: 'शब्द भेद परिचय 🏫',
-    titleEn: 'Parts of Speech Intro',
-    mascot: '🏫',
-    color: 'from-violet-400 to-purple-500',
-    borderColor: 'border-violet-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'What is: दौड़ना (running)? 🏃', sentence: 'दौड़ना is a ___', options: [{ text: 'क्रिया (Verb) 🏃', correct: true }, { text: 'संज्ञा (Noun) 🏫', correct: false }] }
-    ]
-  },
-
-  // --- CHAPTER 6: वाक्य रचना ---
-  {
-    id: 27,
-    title: 'सरल वाक्य 🚂',
-    titleEn: 'Simple Sentences',
-    mascot: '🚂',
-    color: 'from-sky-400 to-blue-500',
-    borderColor: 'border-sky-300',
-    questions: [
-      { type: 'sentence_train' as any, instruction: 'Assemble the sentence! 🚂', words: ['घर', 'चल', 'अब'], correctSentence: 'अब घर चल', options: [] }
-    ]
-  },
-  {
-    id: 28,
-    title: 'शब्दों से वाक्य बनाना 🚂',
-    titleEn: 'Making Sentences',
-    mascot: '🚂',
-    color: 'from-sky-400 to-blue-500',
-    borderColor: 'border-sky-300',
-    questions: [
-      { type: 'sentence_train' as any, instruction: 'Build sentence: Fruit eat! 🚂', words: ['खा', 'फल', 'अब'], correctSentence: 'अब फल खा', options: [] }
-    ]
-  },
-  {
-    id: 29,
-    title: 'वाक्य क्रम 🚂',
-    titleEn: 'Sentence Ordering',
-    mascot: '🚂',
-    color: 'from-sky-400 to-blue-500',
-    borderColor: 'border-sky-300',
-    questions: [
-      { type: 'sentence_train' as any, instruction: 'Put in correct order! 🚂', words: ['जा', 'स्कूल', 'रोज'], correctSentence: 'रोज स्कूल जा', options: [] }
-    ]
-  },
-  {
-    id: 30,
-    title: 'प्रश्न और उत्तर 🚂',
-    titleEn: 'Questions & Answers',
-    mascot: '🚂',
-    color: 'from-sky-400 to-blue-500',
-    borderColor: 'border-sky-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Choose the correct answer for: तुम्हारा नाम क्या है?', sentence: 'मेरा नाम ___ है।', options: [{ text: 'राहुल 👦', correct: true }, { text: 'सेब 🍎', correct: false }] }
-    ]
-  },
-  {
-    id: 31,
-    title: 'छोटा अनुच्छेद 🚂',
-    titleEn: 'Short Paragraph',
-    mascot: '🚂',
-    color: 'from-sky-400 to-blue-500',
-    borderColor: 'border-sky-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Fill the blank in paragraph!', sentence: 'यह एक बाग है। यहाँ सुंदर ___ खिले हैं।', options: [{ text: 'फूल 🌸', correct: true }, { text: 'किताब 📖', correct: false }] }
-    ]
-  },
-
-  // --- CHAPTER 7: पठन कौशल ---
-  {
-    id: 32,
-    title: 'शब्द पढ़ना 📖',
-    titleEn: 'Word Reading',
-    mascot: '📖',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Read: कलम 🖊️ What does it mean?', sentence: 'कलम means ___', options: [{ text: 'Pen 🖊️', correct: true }, { text: 'Pot 🪴', correct: false }] }
-    ]
-  },
-  {
-    id: 33,
-    title: 'वाक्य पढ़ना 📖',
-    titleEn: 'Sentence Reading',
-    mascot: '📖',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Read: यह आम है। 🥭 What does it mean?', sentence: 'यह आम है means ___', options: [{ text: 'This is a mango 🥭', correct: true }, { text: 'Ram is reading 📖', correct: false }] }
-    ]
-  },
-  {
-    id: 35,
-    title: 'छोटी कहानियाँ 📖',
-    titleEn: 'Short Stories',
-    mascot: '📖',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'प्यासा कौआ 🐦', explanation: 'एक कौआ बहुत प्यासा था। उसे एक घड़ा मिला। घड़े में पानी बहुत नीचे था। उसने घड़े में कंकड़ डाले। पानी ऊपर आ गया। कौए ने पानी पिया और उड़ गया!', mascot: '🐦', examples: ['कौआ - Crow', 'पानी - Water', 'घड़ा - Pot'], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Based on story, what did the crow drop in the pot?', sentence: 'कौए ने घड़े में ___ डाले।', options: [{ text: 'कंकड़ (Pebbles)', correct: true }, { text: 'पत्ते (Leaves)', correct: false }] }
-    ]
-  },
-  {
-    id: 36,
-    title: 'कविता पठन 📖',
-    titleEn: 'Poem Reading',
-    mascot: '📖',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'learn_card' as any, conceptTitle: 'चंदा मामा 🌙', explanation: 'चंदा मामा दूर के, पुए पकाएँ बूर के। आप खाएँ थाली में, मुन्ने को दें प्याली में!', mascot: '🌙', examples: ['चंदा मामा - Moon', 'प्याली - Cup', 'थाली - Plate'], options: [] },
-      { type: 'garden_repair' as any, instruction: 'Where does munna get the sweet?', sentence: 'मुन्ने को दें ___ में।', options: [{ text: 'प्याली (Cup)', correct: true }, { text: 'हाथ (Hand)', correct: false }] }
-    ]
-  },
-  {
-    id: 37,
-    title: 'समझ आधारित प्रश्न 📖',
-    titleEn: 'Comprehension',
-    mascot: '📖',
-    color: 'from-pink-400 to-rose-500',
-    borderColor: 'border-pink-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Read: राम आम खाता है। Who eats mango?', sentence: '___ आम खाता है।', options: [{ text: 'राम', correct: true }, { text: 'मोहन', correct: false }] }
-    ]
-  },
-
-  // --- CHAPTER 8: लेखन कौशल ---
-  {
-    id: 38,
-    title: 'अक्षर लेखन ✍️',
-    titleEn: 'Letter Writing',
-    mascot: '✍️',
-    color: 'from-lime-400 to-green-500',
-    borderColor: 'border-lime-300',
-    questions: [
-      { type: 'trace' as any, instruction: 'Trace the letter: ग ✍️', letter: 'ग', options: [] },
-      { type: 'trace' as any, instruction: 'Trace the letter: घ ✍️', letter: 'घ', options: [] }
-    ]
-  },
-  {
-    id: 39,
-    title: 'शब्द लेखन ✍️',
-    titleEn: 'Word Writing',
-    mascot: '✍️',
-    color: 'from-lime-400 to-green-500',
-    borderColor: 'border-lime-300',
-    questions: [
-      { type: 'writing_lab' as any, subType: 'missing', instruction: 'Complete the word for Home: GH_R 🏠', sentence: 'घ_र', options: [{ text: 'र', correct: true }, { text: 'ल', correct: false }] }
-    ]
-  },
-  {
-    id: 40,
-    title: 'खाली स्थान भरना ✍️',
-    titleEn: 'Fill in the Blanks',
-    mascot: '✍️',
-    color: 'from-lime-400 to-green-500',
-    borderColor: 'border-lime-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Fill with correct letter: फ___', sentence: 'यह ___ है। (Fruit)', options: [{ text: 'फल 🍎', correct: true }, { text: 'घर 🏠', correct: false }] }
-    ]
-  },
-  {
-    id: 41,
-    title: 'वाक्य लेखन ✍️',
-    titleEn: 'Sentence Writing',
-    mascot: '✍️',
-    color: 'from-lime-400 to-green-500',
-    borderColor: 'border-lime-300',
-    questions: [
-      { type: 'writing_lab' as any, subType: 'complete', instruction: 'Complete the sentence: Ram is writing.', sentence: 'राम ___ रहा है।', options: [{ text: 'लिख', correct: true }, { text: 'खा', correct: false }] }
-    ]
-  },
-  {
-    id: 42,
-    title: 'चित्र आधारित लेखन ✍️',
-    titleEn: 'Picture Writing',
-    mascot: '✍️',
-    color: 'from-lime-400 to-green-500',
-    borderColor: 'border-lime-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Look at the picture: 🥭 What is it?', sentence: 'यह एक ___ है।', options: [{ text: 'आम 🥭', correct: true }, { text: 'सेब 🍎', correct: false }] }
-    ]
-  },
-
-  // --- CHAPTER 9: पुनरावृत्ति और भाषा खेल ---
-  {
-    id: 43,
-    title: 'अक्षर अभ्यास 🎯',
-    titleEn: 'Letter Game',
-    mascot: '🎯',
+    title: 'Brain Challenge 🧠',
+    titleEn: 'Brain Challenge',
+    mascot: '🧠',
     color: 'from-purple-400 to-indigo-500',
     borderColor: 'border-purple-300',
     questions: [
-      { type: 'grid_search' as any, instruction: 'Select all letters that make the /ka/ sound! 🔍', gridItems: [{ text: 'क', correct: true }, { text: 'का', correct: true }, { text: 'को', correct: true }, { text: 'म', correct: false }, { text: 'प', correct: false }], options: [] }
-    ]
-  },
-  {
-    id: 44,
-    title: 'शब्द अभ्यास 🎯',
-    titleEn: 'Word Game',
-    mascot: '🎯',
-    color: 'from-purple-400 to-indigo-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Select the matching word for: आम 🥭', sentence: 'आम = ___', options: [{ text: 'आम 🥭', correct: true }, { text: 'घर 🏠', correct: false }] }
-    ]
-  },
-  {
-    id: 45,
-    title: 'वाक्य अभ्यास 🎯',
-    titleEn: 'Sentence Game',
-    mascot: '🎯',
-    color: 'from-purple-400 to-indigo-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      { type: 'sentence_train' as any, instruction: 'Assemble: Water drink! 🚂', words: ['पी', 'पानी', 'अब'], correctSentence: 'अब पानी पी', options: [] }
-    ]
-  },
-  {
-    id: 46,
-    title: 'कहानी अभ्यास 🎯',
-    titleEn: 'Story Game',
-    mascot: '🎯',
-    color: 'from-purple-400 to-indigo-500',
-    borderColor: 'border-purple-300',
-    questions: [
-      { type: 'garden_repair' as any, instruction: 'Who flew away at the end of the story?', sentence: '___ उड़ गया।', options: [{ text: 'कौआ 🐦', correct: true }, { text: 'हाथी 🐘', correct: false }] }
+      {
+        type: 'choice' as any,
+        instruction: 'Odd One Out: Which one does NOT belong with the others? 🚫',
+        options: [
+          { text: 'Sun (not a planet) 🌞', correct: true },
+          { text: 'Mars 🔴', correct: false },
+          { text: 'Earth 🌍', correct: false }
+        ]
+      },
+      {
+        type: 'order' as any,
+        instruction: 'Pattern Complete: What comes next: Square, Circle, Square, Circle, ___? 🔷',
+        options: [
+          { text: 'Square ➔ Circle ➔ Square ➔ Circle ➔ Square', correct: true },
+          { text: 'Square ➔ Circle ➔ Square ➔ Circle ➔ Triangle', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Memory Mission: Apple, Mango, Banana were on the list. Which fruit is missing? 🍌',
+        options: [
+          { text: 'Banana 🍌', correct: true },
+          { text: 'Orange 🍊', correct: false }
+        ]
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Classification Puzzle: Sort these mixed objects to their correct groups! 🗂️',
+        pairs: [
+          { left: 'Rose', right: 'Rose is a Flower 🌹' },
+          { left: 'Eagle', right: 'Eagle is a Bird 🦅' },
+          { left: 'River', right: 'River is Water body 🌊' }
+        ],
+        options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Final GK Mission: Which of these actions is MOST helpful for our country? 🌟',
+        options: [
+          { text: 'Planting trees & keeping India clean 🌳', correct: true },
+          { text: 'Littering in public places 🚮', correct: false }
+        ]
+      }
     ]
   }
-
 ];
+export const GRADE1_HINDI_LEVELS: Level[] = [
+  {
+    id: 1,
+    title: 'वर्ण & मात्राएँ Mission 🔤',
+    titleEn: 'Letters & Matras',
+    mascot: '🔤',
+    color: 'from-orange-400 to-amber-500',
+    borderColor: 'border-orange-300',
+    questions: [
+      {
+        type: 'order' as any,
+        instruction: 'Alphabetical Order: Sort these letters correctly! 🔤',
+        instructionTa: 'वर्ण क्रम: अक्षरों को सही क्रम में व्यवस्थित करें! 🔤',
+        options: [
+          { text: 'अ ➔ आ ➔ इ ➔ ई', correct: true },
+          { text: 'ई ➔ इ ➔ आ ➔ अ', correct: false },
+          { text: 'आ ➔ अ ➔ ई ➔ इ', correct: false }
+        ]
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Sort Vowels & Consonants! 🏷️',
+        instructionTa: 'स्वर / व्यंजन वर्गीकरण! 🏷️',
+        pairs: [
+          { left: 'अ', right: 'अ एक स्वर है 🎙️' },
+          { left: 'क', right: 'क एक व्यंजन है 🎙️' },
+          { left: 'इ', right: 'इ एक स्वर है 🎙️' }
+        ],
+        options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Matra Builder: Complete spelling for KA! ✏️',
+        instructionTa: 'मात्रा चयन: सही मात्रा चुनकर शब्द पूरा करें! ✏️',
+        options: [
+          { text: 'का', correct: true },
+          { text: 'कि', correct: false },
+          { text: 'कु', correct: false }
+        ]
+      },
+      {
+        type: 'garden_repair' as any,
+        instruction: 'Missing Letter: Fill the missing letter for Garm! ☀️',
+        instructionTa: 'विடுபட்ட எழுத்து: गरम शब्द को पूरा करने के लिए सही अक्षर चुनें! ☀️',
+        sentence: 'ग _____ म',
+        options: [
+          { text: 'र', correct: true },
+          { text: 'क', correct: false }
+        ]
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Letters & Pictures: Connect letter to correct picture! 🖼️',
+        instructionTa: 'वर्ण चित्र मिलान: अक्षर को सही चित्र से मिलाएँ! 🖼️',
+        pairs: [
+          { left: 'आ', right: 'आ से आम 🥭' },
+          { left: 'इ', right: 'इ से इमली 🍇' },
+          { left: 'उ', right: 'उ से उल्लू 🦉' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: 'शब्द निर्माण 🌱',
+    titleEn: 'Word Builder',
+    mascot: '🌱',
+    color: 'from-emerald-400 to-green-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      {
+        type: 'sentence_train' as any,
+        instruction: 'Word Builder: Arrange the letters to build: कमल 🌸',
+        instructionTa: 'शब्द निर्माण: अक्षरों को मिलाकर शब्द बनाएँ: कमल 🌸',
+        words: ['क', 'म', 'ल'],
+        correctSentence: 'कमल',
+        options: []
+      },
+      {
+        type: 'garden_repair' as any,
+        instruction: 'Missing Letter: Find the missing letter for fruit (फल) 🍏',
+        instructionTa: 'विடுபட்ட சொல்: फल शब्द का छूटा हुआ अक्षर चुनें 🍏',
+        sentence: 'फ _____ ल',
+        options: [
+          { text: 'ल', correct: true },
+          { text: 'क', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Picture Word Match: Choose the correct word for the House picture! 🏠',
+        instructionTa: 'चित्र शब्द मिलान: घर के चित्र के लिए सही शब्द चुनें! 🏠',
+        options: [
+          { text: 'घर 🏠', correct: true },
+          { text: 'पेड़ 🌳', correct: false },
+          { text: 'बस 🚌', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Word Repair: Choose the correct spelling for Kamal! 🌸',
+        instructionTa: 'वर्तनी सुधार: कमल शब्द का सही रूप चुनें! 🌸',
+        options: [
+          { text: 'कमल', correct: true },
+          { text: 'कमळ', correct: false },
+          { text: 'कम्ल', correct: false }
+        ]
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Word Sorting: Sort the words into correct groups! 🗂️',
+        instructionTa: 'शब्द वर्गीकरण: शब्दों को सही समूहों में मिलाएँ! 🗂️',
+        pairs: [
+          { left: 'आम', right: 'आम एक फल है 🍏' },
+          { left: 'शेर', right: 'शेर एक जानवर है 🦁' },
+          { left: 'किताब', right: 'किताब एक वस्तु है 📚' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: 'शब्द भंडार 📖',
+    titleEn: 'Vocabulary World',
+    mascot: '📖',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Opposite Match: Match the opposite words! ↔️',
+        instructionTa: 'विलोम शब्द: विपरीतार्थक शब्दों का मिलान करें! ↔️',
+        pairs: [
+          { left: 'बड़ा', right: 'छोटा' },
+          { left: 'ऊपर', right: 'नीचे' },
+          { left: 'दिन', right: 'रात' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Singular Plural Match: Connect singular to its plural! 👥',
+        instructionTa: 'एकवचन बहुवचन: एकवचन को बहुवचन से जोड़ें! 👥',
+        pairs: [
+          { left: 'लड़का', right: 'लड़के' },
+          { left: 'किताब', right: 'किताबें' },
+          { left: 'तारा', right: 'तारे' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Gender Match: Match masculine to feminine! 👫',
+        instructionTa: 'लिंग मिलान: पुरुषलिंग को स्त्रीलिंग से मिलाएँ! 👫',
+        pairs: [
+          { left: 'लड़का', right: 'लड़की' },
+          { left: 'माता', right: 'पिता' },
+          { left: 'शेर', right: 'शेरनी' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Category Sort: Connect words to categories! 🗂️',
+        pairs: [
+          { left: 'हाथी', right: 'हाथी जानवर है 🐘' },
+          { left: 'सेब', right: 'सेब भोजन है 🍎' },
+          { left: 'दिल्ली', right: 'दिल्ली स्थान है 🏙️' }
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Synonym Match: Connect words with the same meaning! 🤝',
+        instructionTa: 'पर्यायवाची: समान अर्थ वाले शब्दों का मिलान करें! 🤝',
+        pairs: [
+          { left: 'पानी', right: 'पानी को जल कहते हैं 💧' },
+          { left: 'हवा', right: 'हवा को पवन कहते हैं 💨' },
+          { left: 'आकाश', right: 'आकाश को गगन कहते हैं 🌌' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 4,
+    title: 'Grammar Garden 🌿',
+    titleEn: 'Grammar Garden',
+    mascot: '🌿',
+    color: 'from-violet-400 to-indigo-500',
+    borderColor: 'border-violet-300',
+    questions: [
+      {
+        type: 'choice' as any,
+        instruction: 'Noun Finder: Find the Noun (संज्ञा) in: "राम खेलता है" 🏃‍♂️',
+        instructionTa: 'संज्ञा पहचान: "राम खेलता है" में संज्ञा शब्द कौन सा है? 🏃‍♂️',
+        options: [
+          { text: 'राम', correct: true },
+          { text: 'खेलता', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Action Word: Find the Verb (क्रिया) in: "चिड़िया उड़ती है" 🐦',
+        instructionTa: 'क्रिया पहचान: "चिड़िया उड़ती है" में क्रिया शब्द कौन सा है? 🐦',
+        options: [
+          { text: 'उड़ती', correct: true },
+          { text: 'चिड़िया', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Correct Auxiliary: Complete the sentence! ✏️',
+        instructionTa: 'सहायक क्रिया: वाक्य पूरा करने के लिए सही शब्द चुनें! "मैं स्कूल जाता ____"',
+        options: [
+          { text: 'हूँ', correct: true },
+          { text: 'है', correct: false },
+          { text: 'हो', correct: false }
+        ]
+      },
+      {
+        type: 'sentence_train' as any,
+        instruction: 'Sentence Repair: Arrange the words to form correct Hindi sentence! 🚂',
+        instructionTa: 'वाक्य सुधार: सही वाक्य बनाने के लिए शब्दों को व्यवस्थित करें! 🚂',
+        words: ['यह', 'घर', 'है'],
+        correctSentence: 'यह घर है',
+        options: []
+      },
+      {
+        type: 'order' as any,
+        instruction: 'Word Order: Choose the correct sentence order! 🗂️',
+        instructionTa: 'शब्द अनुक्रम: वाक्य का सही रूप चुनें! 🗂️',
+        options: [
+          { text: 'यह मेरा घर है', correct: true },
+          { text: 'मेरा घर यह है', correct: false }
+        ]
+      }
+    ]
+  },
+  {
+    id: 5,
+    title: 'Reading Mission 📚',
+    titleEn: 'Reading Mission',
+    mascot: '📚',
+    color: 'from-pink-400 to-rose-500',
+    borderColor: 'border-pink-300',
+    questions: [
+      {
+        type: 'order' as any,
+        instruction: 'Routine Timeline: Sort the story timeline correctly! 📅',
+        instructionTa: 'कहानी अनुक्रम: समय-क्रम में व्यवस्थित करें! 📅',
+        options: [
+          { text: 'सुबह उठना ➔ स्कूल जाना ➔ शाम को खेलना', correct: true },
+          { text: 'शाम को खेलना ➔ सुबह उठना ➔ स्कूल जाना', correct: false }
+        ]
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Character Match: Match story character names with animal picture guides! 🐇',
+        pairs: [
+          { left: 'खरगोश', right: 'तेज दौड़ने वाला खरगोश 🐇' },
+          { left: 'कछुआ', right: 'धीमे चलने वाला कछुआ 🐢' }
+        ],
+        options: []
+      },
+      {
+        type: 'story_cave' as any,
+        instruction: 'Read the story and answer: What is the color of the cat? 🐱',
+        instructionTa: 'कहानी पढ़कर उत्तर दें: बिल्ली का रंग क्या है? 🐱',
+        storyText: 'राम के पास एक बिल्ली है। बिल्ली का नाम पुसी है। पुसी सफेद रंग की है। राम पुसी से बहुत प्यार करता है।',
+        options: [
+          { text: 'सफेद', correct: true },
+          { text: 'काली', correct: false },
+          { text: 'भूरी', correct: false }
+        ]
+      },
+      {
+        type: 'story_cave' as any,
+        instruction: 'Story Completion: Choose the best sentence to fill the gap. 📖',
+        instructionTa: 'कहानी पूरा करें: खाली स्थान के लिए सही वाक्य चुनें! 📖\n"एक कौआ प्यासा था। वह पानी की खोज में ___। उसे एक घड़ा दिखा। "',
+        storyText: 'एक कौआ प्यासा था। वह पानी की खोज में ___। उसे एक घड़ा दिखा।',
+        options: [
+          { text: 'इधर-उधर उड़ रहा था', correct: true },
+          { text: 'पेड़ पर सो रहा था', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Picture Match: Choose the sentence that describes the picture of a swimming fish! 🐟',
+        instructionTa: 'चित्र चयन: पानी में तैरती मछली को दर्शाने वाला सही वाक्य चुनें! 🐟',
+        options: [
+          { text: 'मछली पानी में तैरती है।', correct: true },
+          { text: 'चिड़िया आसमान में उड़ती है।', correct: false }
+        ]
+      }
+    ]
+  },
+  {
+    id: 6,
+    title: 'Writing + Language ✏️',
+    titleEn: 'Writing & Language',
+    mascot: '✏️',
+    color: 'from-purple-400 to-indigo-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      {
+        type: 'trace' as any,
+        instruction: 'Handwriting Mission: Trace the letter: अ ✍️',
+        instructionTa: 'लेखन अभ्यास: वर्ण "अ" को लिखें! ✍️',
+        letter: 'अ',
+        options: []
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Word Writing: Choose the correct spelling for Pen (कलम)! 🖊️',
+        instructionTa: 'लेखन अभ्यास: पेन/कलम का सही हिज्जे चुनें! 🖊️',
+        options: [
+          { text: 'कलम', correct: true },
+          { text: 'कलळ', correct: false }
+        ]
+      },
+      {
+        type: 'sentence_train' as any,
+        instruction: 'Sentence Builder: Arrange the words to write a sentence! 🚂',
+        instructionTa: 'वाक्य निर्माण: शब्दों को व्यवस्थित कर वाक्य बनाएँ! 🚂',
+        words: ['मैं', 'स्कूल', 'जाता', 'हूँ'],
+        correctSentence: 'मैं स्कूल जाता हूँ',
+        options: []
+      },
+      {
+        type: 'garden_repair' as any,
+        instruction: 'Fill Blank: Complete the sentence with your name! ✏️',
+        instructionTa: 'रिक्त स्थान भरें: वाक्य पूरा करें! "मेरा नाम ___ है।"',
+        sentence: 'मेरा नाम _____ है।',
+        options: [
+          { text: 'राम', correct: true },
+          { text: 'है', correct: false }
+        ]
+      },
+      {
+        type: 'choice' as any,
+        instruction: 'Hindi Capstone: Which of these words is a sweet fruit? 🥭',
+        instructionTa: 'अंतिम चुनौती: इनमें से मीठा फल कौन सा है? 🥭',
+        options: [
+          { text: 'आम 🥭', correct: true },
+          { text: 'करेला 🥒', correct: false }
+        ]
+      }
+    ]
+  }
+];
+
