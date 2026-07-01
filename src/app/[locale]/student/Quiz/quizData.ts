@@ -6,13 +6,31 @@ export type Option = {
 };
 
 export type Question = {
-  type: 'trace' | 'sequence' | 'find' | 'match' | 'choice' | 'spelling' | 'sorting' | 'order' | 'math_compare' | 'math_count' | 'math_pattern';
-  instruction: string;
+  type: 'trace' | 'sequence' | 'find' | 'match' | 'choice' | 'spelling' | 'sorting' | 'order' | 'math_compare' | 'math_count' | 'math_pattern' | 'drag_hunt' | 'garden_repair' | 'sentence_train' | 'story_cave' | 'detective_highlight' | 'writing_lab' | 'connect_pairs' | 'grid_search' | 'learn_card';
+  instruction?: string;
   instructionTa?: string;
   letter?: string;
   sequence?: string[];
   options: Option[];
   matchImage?: string;
+  sentence?: string;
+  words?: string[];
+  correctSentence?: string;
+  storyText?: string;
+  questionText?: string;
+  isSequence?: boolean;
+  sequenceSteps?: string[];
+  targetWord?: string;
+  category?: string;
+  subType?: 'trace' | 'missing' | 'complete';
+  pairs?: { left: string; right: string }[];
+  gridItems?: { text: string; correct: boolean; emoji?: string }[];
+  conceptTitle?: string;
+  mascot?: string;
+  explanation?: string;
+  explanationTa?: string;
+  examples?: string[];
+  clockTime?: string;
 };
 
 export type Level = {

@@ -4,6 +4,11 @@ import * as maths from './maths';
 import * as evs from './evs';
 import * as hindi from './hindi';
 import * as ukgEnglish from './ukg/english';
+import * as grade1English from './grade1/english';
+import * as grade1Tamil from './grade1/tamil';
+import * as grade1Maths from './grade1/maths';
+import * as grade1Evs from './grade1/evs';
+import * as grade1Hindi from './grade1/hindi';
 import { type TutorialStep } from './english';
 
 export { type TutorialStep };
@@ -139,10 +144,20 @@ export function getSubjectVisuals(name: string) {
  */
 export function getChapterVisuals(subjectName: string, name: string, gradeName?: string): { emoji: string; mascot: string; color: string; sound: string; image?: string } {
   const isUKG = gradeName?.toUpperCase() === 'UKG';
+  const isGrade1 = gradeName?.toUpperCase() === 'GRADE 1' || gradeName?.toLowerCase().includes('grade 1') || gradeName?.toLowerCase().includes('class 1');
+
   if (isUKG) {
     if (!isTamilSubject(subjectName) && !isHindiSubject(subjectName) && !isMathsSubject(subjectName) && !isEvsSubject(subjectName)) {
       return ukgEnglish.getChapterVisuals(name);
     }
+  }
+
+  if (isGrade1) {
+    if (isTamilSubject(subjectName)) return grade1Tamil.getChapterVisuals(name);
+    if (isHindiSubject(subjectName)) return grade1Hindi.getChapterVisuals(name);
+    if (isMathsSubject(subjectName)) return grade1Maths.getChapterVisuals(name);
+    if (isEvsSubject(subjectName)) return grade1Evs.getChapterVisuals(name);
+    return grade1English.getChapterVisuals(name);
   }
 
   if (isTamilSubject(subjectName)) {
@@ -165,10 +180,20 @@ export function getChapterVisuals(subjectName: string, name: string, gradeName?:
  */
 export function getLessonVisuals(subjectName: string, title: string, gradeName?: string) {
   const isUKG = gradeName?.toUpperCase() === 'UKG';
+  const isGrade1 = gradeName?.toUpperCase() === 'GRADE 1' || gradeName?.toLowerCase().includes('grade 1') || gradeName?.toLowerCase().includes('class 1');
+
   if (isUKG) {
     if (!isTamilSubject(subjectName) && !isHindiSubject(subjectName) && !isMathsSubject(subjectName) && !isEvsSubject(subjectName)) {
       return ukgEnglish.getLessonVisuals(title);
     }
+  }
+
+  if (isGrade1) {
+    if (isTamilSubject(subjectName)) return grade1Tamil.getLessonVisuals(title);
+    if (isHindiSubject(subjectName)) return grade1Hindi.getLessonVisuals(title);
+    if (isMathsSubject(subjectName)) return grade1Maths.getLessonVisuals(title);
+    if (isEvsSubject(subjectName)) return grade1Evs.getLessonVisuals(title);
+    return grade1English.getLessonVisuals(title);
   }
 
   if (isTamilSubject(subjectName)) {
@@ -191,10 +216,19 @@ export function getLessonVisuals(subjectName: string, title: string, gradeName?:
  */
 export function buildTutorial(subjectName: string, title: string, studentName?: string, gradeName?: string): TutorialStep[] {
   const isUKG = gradeName?.toUpperCase() === 'UKG';
+  const isGrade1 = gradeName?.toUpperCase() === 'GRADE 1' || gradeName?.toLowerCase().includes('grade 1') || gradeName?.toLowerCase().includes('class 1');
+
   if (isUKG) {
     if (!isTamilSubject(subjectName) && !isHindiSubject(subjectName) && !isMathsSubject(subjectName) && !isEvsSubject(subjectName)) {
       return ukgEnglish.buildTutorial(title, studentName);
     }
+  }
+
+  if (isGrade1) {
+    if (isTamilSubject(subjectName)) return grade1Tamil.buildTutorial(title, studentName);
+    if (isMathsSubject(subjectName)) return grade1Maths.buildTutorial(title, studentName);
+    if (isEvsSubject(subjectName)) return grade1Evs.buildTutorial(title, studentName);
+    return grade1English.buildTutorial(title, studentName);
   }
 
   if (isTamilSubject(subjectName)) {

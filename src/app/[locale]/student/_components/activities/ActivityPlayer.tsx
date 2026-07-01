@@ -93,6 +93,8 @@ import TamilSentenceReadingQuiz from './TamilSentenceReadingQuiz';
 import UkgEvsQuiz from './UkgEvsQuiz';
 import UkgGkQuiz from './UkgGkQuiz';
 import UkgHindiQuiz from './UkgHindiQuiz';
+import { Grade1EnglishActivityPlayer, GRADE1_MATH_LESSON_IDS } from './Grade1EnglishGames';
+
 
 type Props = {
   lessonId: string;
@@ -182,6 +184,7 @@ const ACTIVITY_TYPE_MAP: Record<number, string> = {
   77: 'ukg_evs_quiz',
   78: 'ukg_gk_quiz',
   79: 'ukg_hindi_quiz',
+  85: 'grade1_english_quiz',
 };
 
 export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onClose, studentName, subjectName }: Props) {
@@ -200,6 +203,20 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   });
 
   const activities = useMemo(() => {
+    if (!studentProfile) return undefined;
+
+    const gradeName = studentProfile?.grade_name?.toUpperCase() || '';
+    const isGrade1 = gradeName === 'GRADE 1' || gradeName.includes('GRADE 1') || gradeName.includes('CLASS 1');
+    const isG1EnglishSubject = subjectName?.toLowerCase().includes('english');
+    const isG1MathSubject = subjectName?.toLowerCase().includes('math') || subjectName?.toLowerCase().includes('arithmetic') || GRADE1_MATH_LESSON_IDS.has(lessonId);
+
+    if (isGrade1) {
+      if (isG1EnglishSubject || isG1MathSubject) {
+        return [{ id: `${lessonId}-g1game`, name: isG1MathSubject ? 'Grade 1 Maths Challenge' : 'Grade 1 English Challenge', activity_type_id: 85, config: {}, sort_order: 1, attempt: null }] as Activity[];
+      }
+      return rawActivities;
+    }
+
     if (!rawActivities) return undefined;
 
     const isUKG = studentProfile?.grade_name?.toUpperCase() === 'UKG';
@@ -1007,7 +1024,7 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
       }
     }
     return rawActivities;
-  }, [rawActivities, lessonId, lessonTitle, subjectName]);
+  }, [rawActivities, lessonId, lessonTitle, subjectName, studentProfile]);
 
   const submitMutation = useMutation({
     mutationFn: ({ activityId, body }: { activityId: string; body: Parameters<typeof studentApi.submitActivityAttempt>[2] }) =>
@@ -1117,6 +1134,10 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
 
   const getNumberAdventureConceptKey = () => {
     if (!isMathSubject) return null;
+    const gradeName = studentProfile?.grade_name?.toUpperCase() || '';
+    const isGrade1 = gradeName === 'GRADE 1' || gradeName.includes('GRADE 1') || gradeName.includes('CLASS 1');
+    if (isGrade1) return null;
+
     const isUKG = studentProfile?.grade_name?.toUpperCase() === 'UKG';
     if (isUKG) return null;
     const lower = lessonTitle.toLowerCase();
@@ -1141,6 +1162,10 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
 
   const getNumberAdventure610ConceptKey = () => {
     if (!isMathSubject) return null;
+    const gradeName = studentProfile?.grade_name?.toUpperCase() || '';
+    const isGrade1 = gradeName === 'GRADE 1' || gradeName.includes('GRADE 1') || gradeName.includes('CLASS 1');
+    if (isGrade1) return null;
+
     const isUKG = studentProfile?.grade_name?.toUpperCase() === 'UKG';
     if (isUKG) return null;
     const lower = lessonTitle.toLowerCase();
@@ -1165,6 +1190,10 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
 
   const getSortingComparisonConceptKey = () => {
     if (!isMathSubject) return null;
+    const gradeName = studentProfile?.grade_name?.toUpperCase() || '';
+    const isGrade1 = gradeName === 'GRADE 1' || gradeName.includes('GRADE 1') || gradeName.includes('CLASS 1');
+    if (isGrade1) return null;
+
     const lower = lessonTitle.toLowerCase();
     // Require 'sort' + 'color'/'size' together — prevents "Color Patterns" / "Size Patterns" from matching here
     if (lower.includes('sort') && lower.includes('color')) return 'sort-by-color';
@@ -1177,6 +1206,10 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
   const sortingComparisonConceptKey = getSortingComparisonConceptKey();
 
   const getEvsConceptKey = () => {
+    const gradeName = studentProfile?.grade_name?.toUpperCase() || '';
+    const isGrade1 = gradeName === 'GRADE 1' || gradeName.includes('GRADE 1') || gradeName.includes('CLASS 1');
+    if (isGrade1) return null;
+
     const isUKG = studentProfile?.grade_name?.toUpperCase() === 'UKG';
     const isEvsSubject = subjectName?.toLowerCase().includes('environmental') || subjectName?.toLowerCase().includes('studies') || subjectName?.toLowerCase().includes('evs');
     const isGkSubject = subjectName?.toLowerCase().includes('general') || subjectName?.toLowerCase().includes('knowledge') || subjectName?.toLowerCase().includes('gk');
@@ -1647,6 +1680,8 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
         return <UkgGkQuiz lessonTitle={lessonTitle} {...commonProps} />;
       case 'ukg_hindi_quiz':
         return <UkgHindiQuiz lessonTitle={lessonTitle} {...commonProps} />;
+      case 'grade1_english_quiz':
+        return <Grade1EnglishActivityPlayer lessonId={lessonId} onComplete={commonProps.onComplete} />;
       default:
         return (
           <div className="flex flex-col items-center gap-4 p-8">

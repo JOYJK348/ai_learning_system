@@ -521,19 +521,20 @@ function UltimateLearnEngineInner() {
         const isTamilSubject = activeSubject?.name?.toLowerCase().includes('tamil') || activeSubject?.name?.toLowerCase().includes('தமிழ்');
         const chapterName = activeChapter?.name || '';
 
-        // ── UKG Tamil bypass: skip ALL LKG routing, let ActivityPlayer handle it ──
+        // ── UKG / Grade 1 Tamil bypass: skip ALL LKG routing, let ActivityPlayer handle it ──
         const isUKGStudent = studentProfile?.grade_name?.toUpperCase() === 'UKG';
+        const isGrade1Student = studentProfile?.grade_name?.toUpperCase() === 'GRADE 1' || studentProfile?.grade_name?.toUpperCase() === 'CLASS 1';
 
-        // ── UKG Hindi / GK / EVS bypass: go straight to ActivityPlayer, skip all LKG intercepts ──
+        // ── UKG / Grade 1 Hindi / GK / EVS bypass: go straight to ActivityPlayer, skip all LKG intercepts ──
         const isHindiSubject = activeSubject?.name?.toLowerCase().includes('hindi');
         const isGkSubject = activeSubject?.name?.toLowerCase().includes('general') || activeSubject?.name?.toLowerCase().includes('gk') || activeSubject?.name?.toLowerCase().includes('knowledge');
         const isEvsSubject = activeSubject?.name?.toLowerCase().includes('evs') || activeSubject?.name?.toLowerCase().includes('environment') || activeSubject?.name?.toLowerCase().includes('studies');
-        if (isUKGStudent && (isHindiSubject || isGkSubject || isEvsSubject)) {
+        if ((isUKGStudent || isGrade1Student) && (isHindiSubject || isGkSubject || isEvsSubject)) {
             // ActivityPlayer will pick up the right quiz via activity_type_id 79/78/77
             return;
         }
 
-        if (isTamilSubject && !isUKGStudent) {
+        if (isTamilSubject && !isUKGStudent && !isGrade1Student) {
             const isVowelAU =
                 chapterName.includes('உயிர் எழுத்துக்கள் அ-ஊ') ||
                 (chapterName.toLowerCase().includes('vowel') && !chapterName.includes('எ-ஔ') && !chapterName.includes('எ-ஃ')) ||
@@ -607,7 +608,7 @@ function UltimateLearnEngineInner() {
         // Only trigger for the actual Pre-Writing chapter (supports Tamil name "முன் எழுத்து பயிற்சிகள்")
         // Skip entirely for UKG Tamil lessons — they have their own ActivityPlayer games
         const isPreWritingChapter =
-            !isUKGStudent && (
+            !isUKGStudent && !isGrade1Student && (
             activeChapter?.name?.toLowerCase().includes('pre-writing') ||
             activeChapter?.name?.toLowerCase().includes('pattern') ||
             activeChapter?.name?.toLowerCase().includes('முன் எழுத்து') ||
