@@ -93,7 +93,7 @@ import TamilSentenceReadingQuiz from './TamilSentenceReadingQuiz';
 import UkgEvsQuiz from './UkgEvsQuiz';
 import UkgGkQuiz from './UkgGkQuiz';
 import UkgHindiQuiz from './UkgHindiQuiz';
-import { Grade1EnglishActivityPlayer, GRADE1_MATH_LESSON_IDS, GRADE1_TAMIL_LESSON_IDS } from './Grade1EnglishGames';
+import { Grade1EnglishActivityPlayer, GRADE1_MATH_LESSON_IDS, GRADE1_TAMIL_LESSON_IDS, GRADE1_GK_LESSON_IDS } from './Grade1EnglishGames';
 
 
 type Props = {
@@ -216,11 +216,12 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
     const isUKG = gradeName === 'UKG';
     const isG1EnglishSubject = subjectName?.toLowerCase().includes('english');
     const isG1MathSubject = subjectName?.toLowerCase().includes('math') || subjectName?.toLowerCase().includes('arithmetic') || GRADE1_MATH_LESSON_IDS.has(lessonId);
+    const isG1GkSubject = subjectName?.toLowerCase().includes('knowledge') || subjectName?.toLowerCase().includes('gk') || GRADE1_GK_LESSON_IDS.has(lessonId);
     const isUKGStudentTamilBypass = isUKG && GRADE1_TAMIL_LESSON_IDS.has(lessonId);
 
     if (isGrade1 || isUKGStudentTamilBypass) {
-      if (isG1EnglishSubject || isG1MathSubject || GRADE1_TAMIL_LESSON_IDS.has(lessonId)) {
-        return [{ id: `${lessonId}-g1game`, name: isG1MathSubject ? 'Grade 1 Maths Challenge' : GRADE1_TAMIL_LESSON_IDS.has(lessonId) ? 'Grade 1 Tamil Challenge' : 'Grade 1 English Challenge', activity_type_id: 85, config: {}, sort_order: 1, attempt: null }] as Activity[];
+      if (isG1EnglishSubject || isG1MathSubject || GRADE1_TAMIL_LESSON_IDS.has(lessonId) || isG1GkSubject) {
+        return [{ id: `${lessonId}-g1game`, name: isG1MathSubject ? 'Grade 1 Maths Challenge' : GRADE1_TAMIL_LESSON_IDS.has(lessonId) ? 'Grade 1 Tamil Challenge' : isG1GkSubject ? 'Grade 1 GK Challenge' : 'Grade 1 English Challenge', activity_type_id: 85, config: {}, sort_order: 1, attempt: null }] as Activity[];
       }
       return rawActivities;
     }

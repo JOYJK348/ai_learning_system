@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { GRADE1_ENGLISH_LEVELS, GRADE1_MATH_LEVELS, GRADE1_TAMIL_LEVELS } from '../../Quiz/grade1QuizData';
+import { GRADE1_ENGLISH_LEVELS, GRADE1_MATH_LEVELS, GRADE1_TAMIL_LEVELS, GRADE1_GK_LEVELS } from '../../Quiz/grade1QuizData';
 
 export function shuffleArray<T>(array: T[]): T[] {
   const arr = [...array];
@@ -753,16 +753,17 @@ export function SimpleTraceCanvas({ letter, onComplete }: { letter: string; onCo
 // 1A. Connect Pairs (connect_pairs)
 export function Grade1ConnectPairs({ question, onAnswer, isMath }: { question: any; onAnswer: (opt: any) => void; isMath?: boolean }) {
   const [selectedLeft, setSelectedLeft] = useState<number | null>(null);
-  const [matchedIndices, setMatchedIndices] = useState<number[]>([]);
+  const [matchedLeftIndices, setMatchedLeftIndices] = useState<number[]>([]);
+  const [matchedRightIndices, setMatchedRightIndices] = useState<number[]>([]);
   const [isAnswered, setIsAnswered] = useState(false);
 
-  // Shuffle right items once on mount, saving original indices
+  // Shuffle right items once on mount, saving unique helper indices
   const shuffledRight = useMemo<any[]>(() => {
     const items = question.pairs.map((p: any, idx: number) => ({ value: p.right, originalIndex: idx }));
     return shuffleArray(items);
   }, [question]);
 
-  // Shuffle left items once on mount, saving original indices
+  // Shuffle left items once on mount, saving unique helper indices
   const shuffledLeft = useMemo<any[]>(() => {
     const items = question.pairs.map((p: any, idx: number) => ({ value: p.left, originalIndex: idx }));
     let shuffled = shuffleArray([...items]);
@@ -789,17 +790,26 @@ export function Grade1ConnectPairs({ question, onAnswer, isMath }: { question: a
     setSelectedLeft(originalIndex);
   };
 
-  const handleRightClick = (originalIndex: number) => {
+  const handleRightClick = (rightItemIndex: number) => {
     if (selectedLeft === null || isAnswered) return;
     
-    // Check if the clicked right item originalIndex matches the selected left item originalIndex
-    if (selectedLeft === originalIndex) {
-      const newMatches = [...matchedIndices, originalIndex];
-      setMatchedIndices(newMatches);
+    // Support matching by value equality to allow selecting duplicate options (e.g. Can Fly / Cannot Fly)
+    const selectedLeftValue = question.pairs[selectedLeft].left;
+    const correctRightValueForLeft = question.pairs[selectedLeft].right;
+    
+    // Find the right value of the clicked element from shuffledRight
+    const clickedRightItem = shuffledRight.find(item => item.originalIndex === rightItemIndex);
+    if (!clickedRightItem) return;
+
+    if (correctRightValueForLeft === clickedRightItem.value) {
+      const nextMatchedLeft = [...matchedLeftIndices, selectedLeft];
+      const nextMatchedRight = [...matchedRightIndices, rightItemIndex];
+      setMatchedLeftIndices(nextMatchedLeft);
+      setMatchedRightIndices(nextMatchedRight);
       setSelectedLeft(null);
 
       // Check if all matched
-      if (newMatches.length === question.pairs.length) {
+      if (nextMatchedLeft.length === question.pairs.length) {
         setIsAnswered(true);
         onAnswer({ text: 'connected_all', correct: true });
       }
@@ -814,33 +824,39 @@ export function Grade1ConnectPairs({ question, onAnswer, isMath }: { question: a
     return typeof firstLeft === 'string' && firstLeft.length === 1 && firstLeft >= 'A' && firstLeft <= 'Z';
   }, [question.pairs]);
 
-  const leftHeader = isLetterMatch ? 'Capital' : 'Question';
-  const rightHeader = isLetterMatch ? 'Small' : 'Match';
+  const leftHeader = isLetterMatch ? 'Capital' : 'Question 🔑';
+  const rightHeader = isLetterMatch ? 'Small' : 'Match 🎯';
 
   return (
-    <div className={`flex flex-col items-center gap-6 w-full mt-2 font-sans p-2 sm:p-4 rounded-[2rem] relative overflow-hidden transition-all duration-350
-      ${isMath ? 'bg-gradient-to-br from-purple-50 to-indigo-50/50 border-4 border-purple-200 shadow-md' : ''}`}>
-      <div className="grid grid-cols-2 gap-3.5 sm:gap-8 w-full max-w-sm justify-center items-stretch relative z-10">
+    <div className={`flex flex-col items-center gap-6 w-full max-w-lg mx-auto mt-2 font-sans p-6 rounded-[2.5rem] bg-gradient-to-br from-indigo-50/70 via-slate-50 to-blue-50/70 border-4 border-indigo-200 shadow-xl relative overflow-hidden transition-all duration-350`}>
+      
+      {/* Decorative connecting lines container */}
+      <div className="absolute inset-0 bg-[radial-gradient(#e0e7ff_1.5px,transparent_1.5px)] [background-size:16px_16px] opacity-45 pointer-events-none" />
+
+      <div className="grid grid-cols-2 gap-4 sm:gap-8 w-full justify-center items-stretch relative z-10">
         {/* Left Column */}
         <div className="flex flex-col gap-3">
-          <p className={`text-xs font-black uppercase tracking-widest text-center ${isMath ? 'text-purple-600' : 'text-slate-400'}`}>{leftHeader}</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-center text-indigo-950/40 select-none">{leftHeader}</p>
           {shuffledLeft.map((leftItem: any, idx: number) => {
-            const isMatched = matchedIndices.includes(leftItem.originalIndex);
+            const isMatched = matchedLeftIndices.includes(leftItem.originalIndex);
             const isSelected = selectedLeft === leftItem.originalIndex;
             return (
               <button
                 key={idx}
                 disabled={isMatched}
                 onClick={() => handleLeftClick(leftItem.originalIndex)}
-                className={`py-2 px-3 sm:py-3.5 sm:px-6 rounded-xl sm:rounded-2xl font-black text-xs sm:text-lg border-2 shadow transition-all duration-150 flex items-center justify-center text-center w-full min-h-[55px] sm:min-h-[75px]
+                className={`py-3.5 px-4 sm:px-6 rounded-2xl font-black text-xs sm:text-base border-3 shadow-md transition-all duration-200 flex items-center justify-center text-center w-full min-h-[65px] sm:min-h-[85px] active:scale-98 select-none relative
                   ${isMatched 
-                    ? isMath ? 'bg-emerald-50 border-emerald-355 text-emerald-650 opacity-60' : 'bg-emerald-55 border-emerald-300 text-emerald-600 opacity-60' 
+                    ? 'bg-emerald-500 border-emerald-600 text-white opacity-85 scale-95 shadow-none' 
                     : isSelected 
-                      ? 'bg-amber-400 border-amber-500 text-indigo-955 scale-105 shadow-md font-extrabold' 
-                      : isMath 
-                        ? 'bg-white border-purple-200 text-purple-900 hover:border-purple-300' 
-                        : 'bg-white border-slate-150 text-slate-700 hover:border-amber-300'}`}
+                      ? 'bg-gradient-to-r from-amber-400 to-orange-400 border-amber-500 text-slate-900 scale-105 shadow-lg font-black' 
+                      : 'bg-white border-violet-100 text-slate-800 hover:border-violet-300 hover:scale-101'}`}
               >
+                {isMatched && (
+                  <span className="absolute top-1 left-1.5 text-[8px] bg-white text-emerald-600 rounded-full px-1 border border-emerald-100 font-extrabold select-none">
+                    ✓
+                  </span>
+                )}
                 {renderVisualValue(leftItem.value, isMath)}
               </button>
             );
@@ -849,33 +865,39 @@ export function Grade1ConnectPairs({ question, onAnswer, isMath }: { question: a
 
         {/* Right Column */}
         <div className="flex flex-col gap-3">
-          <p className={`text-xs font-black uppercase tracking-widest text-center ${isMath ? 'text-purple-600' : 'text-slate-400'}`}>{rightHeader}</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-center text-indigo-950/40 select-none">{rightHeader}</p>
           {shuffledRight.map((rightItem: any, idx: number) => {
-            const isMatched = matchedIndices.includes(rightItem.originalIndex);
+            const isMatched = matchedRightIndices.includes(rightItem.originalIndex);
+            const isAwaitingLeft = selectedLeft !== null;
             return (
               <button
                 key={idx}
                 disabled={isMatched}
                 onClick={() => handleRightClick(rightItem.originalIndex)}
-                className={`py-2 px-3 sm:py-3.5 sm:px-6 rounded-xl sm:rounded-2xl font-black text-xs sm:text-lg border-2 shadow transition-all duration-150 flex items-center justify-center text-center w-full min-h-[55px] sm:min-h-[75px]
+                className={`py-3.5 px-4 sm:px-6 rounded-2xl font-black text-xs sm:text-base border-3 shadow-md transition-all duration-200 flex items-center justify-center text-center w-full min-h-[65px] sm:min-h-[85px] active:scale-98 select-none relative
                   ${isMatched 
-                    ? isMath ? 'bg-emerald-50 border-emerald-355 text-emerald-650 opacity-60' : 'bg-emerald-55 border-emerald-300 text-emerald-600 opacity-60' 
-                    : selectedLeft !== null
-                      ? isMath 
-                        ? 'bg-purple-50 border-dashed border-purple-355 text-purple-800 hover:bg-purple-100/50'
-                        : 'bg-amber-50 border-dashed border-amber-300 text-amber-800 hover:bg-amber-100/50' 
-                      : isMath 
-                        ? 'bg-white border-purple-200 text-purple-900 hover:border-purple-300' 
-                        : 'bg-white border-slate-150 text-slate-700 hover:border-amber-300'}`}
+                    ? 'bg-emerald-500 border-emerald-600 text-white opacity-85 scale-95 shadow-none' 
+                    : isAwaitingLeft
+                      ? 'bg-violet-50 border-dashed border-violet-300 text-violet-800 hover:bg-violet-100/50 hover:scale-101 animate-pulse'
+                      : 'bg-white border-violet-100 text-slate-800 hover:border-violet-300 hover:scale-101'}`}
               >
+                {isMatched && (
+                  <span className="absolute top-1 right-1.5 text-[8px] bg-white text-emerald-600 rounded-full px-1 border border-emerald-100 font-extrabold select-none">
+                    ✓
+                  </span>
+                )}
                 {renderVisualValue(rightItem.value, isMath)}
               </button>
             );
           })}
         </div>
       </div>
+
       {isAnswered && (
-        <span className={`font-extrabold text-sm relative z-10 ${isMath ? 'text-emerald-450' : 'text-emerald-600'}`}>Great Match! 🤝</span>
+        <div className="flex items-center gap-2 bg-emerald-500 text-white px-6 py-2.5 rounded-full font-black text-sm relative z-10 shadow-md animate-bounce select-none">
+          <span>✨</span>
+          <span>Great Match! 🤝</span>
+        </div>
       )}
     </div>
   );
@@ -886,6 +908,11 @@ export function Grade1GridSearch({ question, onAnswer }: { question: any; onAnsw
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [isAnswered, setIsAnswered] = useState(false);
   const [wrongAttempt, setWrongAttempt] = useState(false);
+
+  // Shuffle grid items once on mount
+  const shuffledGridItems = useMemo<any[]>(() => {
+    return shuffleArray([...question.gridItems]);
+  }, [question]);
 
   const handleItemToggle = (text: string) => {
     if (isAnswered) return;
@@ -916,39 +943,75 @@ export function Grade1GridSearch({ question, onAnswer }: { question: any; onAnsw
     }
   };
 
+  const totalRequired = question.gridItems.filter((i: any) => i.correct).length;
+  const currentCount = selectedItems.length;
+
   return (
-    <div className="flex flex-col items-center gap-6 w-full mt-2 font-sans">
-      <div className="grid grid-cols-3 gap-3 w-full max-w-sm">
-        {question.gridItems.map((item: any, idx: number) => {
+    <div className="flex flex-col items-center gap-6 w-full max-w-md mx-auto mt-2 font-sans p-6 rounded-[2.5rem] bg-gradient-to-br from-indigo-50/50 via-slate-50 to-blue-50/50 border-4 border-indigo-200 shadow-xl relative overflow-hidden transition-all">
+      
+      {/* Target Progress Bubble */}
+      <div className="flex items-center gap-3 bg-white px-5 py-2 rounded-full border-2 border-indigo-100 shadow-sm relative z-10 select-none">
+        <span className="text-xs font-black text-indigo-950/40 uppercase tracking-widest">Select target:</span>
+        <div className="flex items-center gap-1.5">
+          <span className={`text-base font-black ${currentCount === totalRequired ? 'text-emerald-500 scale-105' : 'text-indigo-950'} transition-all`}>
+            {currentCount}
+          </span>
+          <span className="text-slate-300 font-extrabold text-sm">/</span>
+          <span className="text-indigo-950/60 font-black text-sm">{totalRequired}</span>
+        </div>
+        {currentCount === totalRequired && !isAnswered && (
+          <span className="text-emerald-500 ml-1 text-xs font-black animate-pulse">✨ READY!</span>
+        )}
+      </div>
+
+      {/* Grid container */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5 w-full justify-center items-stretch relative z-10 mt-1">
+        {shuffledGridItems.map((item: any, idx: number) => {
           const isSelected = selectedItems.includes(item.text);
+          // Try to get emoji if not defined in grid item
+          const emoji = item.emoji || (item.text.includes('Ant') ? '🐜' : item.text.includes('Mosquito') ? '🦟' : item.text.includes('Housefly') ? '🪰' : item.text.includes('Parrot') ? '🦜' : item.text.includes('Shark') ? '🦈' : item.text.includes('Lion') ? '🦁' : item.text.includes('Tiger') ? '🐯' : item.text.includes('Elephant') ? '🐘' : item.text.includes('Cow') ? '🐮' : item.text.includes('Dog') ? '🐶' : item.text.includes('Goat') ? '🐐' : item.text.includes('Sheep') ? '🐑' : item.text.includes('Octopus') ? '🐙' : item.text.includes('Dolphin') ? '🐬' : item.text.includes('Eagle') ? '🦅' : item.text.includes('Honeybee') ? '🐝' : item.text.includes('Silkworm') ? '🐛' : item.text.includes('Earthworm') ? '🪱' : item.text.includes('Plant') ? '🌱' : item.text.includes('Puppy') ? '🐶' : item.text.includes('Bird') ? '🐦' : item.text.includes('Stone') ? '🪨' : item.text.includes('Car') ? '🚗' : item.text.includes('Bus') ? '🚌' : item.text.includes('Train') ? '🚂' : item.text.includes('Ship') ? '🚢' : item.text.includes('Boat') ? '⛵' : item.text.includes('Submarine') ? '🚢' : item.text.includes('Bicycle') ? '🚲' : item.text.includes('Helicopter') ? '🚁' : item.text.includes('Aeroplane') ? '✈️' : item.text.includes('Hot Air Balloon') ? '🎈' : item.text.includes('Motorcycle') ? '🏍️' : item.text.includes('Metro Train') ? '🚇' : item.text.includes('Wash Hands') ? '🧼' : item.text.includes('Brush Teeth') ? '🪥' : item.text.includes('Bite Nails') ? '💅' : item.text.includes('Shout') ? '🗣️' : '📦');
+          
           return (
             <button
               key={idx}
               onClick={() => handleItemToggle(item.text)}
-              className={`p-4 rounded-2xl border-2 shadow flex flex-col items-center justify-center gap-1.5 transition-all active:scale-95 min-h-[90px]
+              className={`p-4 rounded-3xl border-3 shadow-md flex flex-col items-center justify-center gap-1.5 transition-all duration-200 active:scale-95 min-h-[105px] relative overflow-hidden select-none
                 ${isAnswered && item.correct
-                  ? 'bg-emerald-50 border-emerald-500 text-emerald-700'
+                  ? 'bg-emerald-500 border-emerald-600 text-white shadow-emerald-100 scale-95 shadow-none'
                   : isSelected
-                    ? 'bg-amber-400 border-amber-500 text-indigo-950 scale-105'
-                    : 'bg-white border-slate-150 text-slate-700 hover:border-amber-300'}`}
+                    ? 'bg-gradient-to-r from-amber-400 to-orange-400 border-amber-500 text-indigo-955 scale-102 shadow-lg'
+                    : 'bg-white border-violet-100 text-slate-700 hover:border-violet-300 hover:scale-101'}`}
             >
-              {item.emoji && <span className="text-3xl select-none">{item.emoji}</span>}
-              <span className="text-xs font-black">{item.text}</span>
+              {isSelected && !isAnswered && (
+                <span className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-indigo-950 text-amber-400 flex items-center justify-center text-[10px] font-black border border-white">
+                  ✓
+                </span>
+              )}
+              {emoji && <span className="text-4xl filter drop-shadow-sm transform group-hover:scale-115 transition-transform duration-200">{emoji}</span>}
+              <span className="text-xs font-black tracking-wide leading-tight text-center">{item.text}</span>
             </button>
           );
         })}
       </div>
 
+      {/* Error alert banner */}
       {wrongAttempt && (
-        <span className="text-rose-500 font-extrabold text-sm">Keep searching! Some matches are incorrect or missing. 🔎</span>
+        <span className="text-rose-500 font-extrabold text-sm relative z-10 animate-bounce">
+          Keep searching! Try other elements. 🔎
+        </span>
       )}
 
-      {!isAnswered && selectedItems.length > 0 && (
+      {/* Action check button */}
+      {!isAnswered && (
         <button
           onClick={handleCheck}
-          className="mt-2 px-8 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 border-2 border-white text-white font-black rounded-2xl shadow-md active:scale-95 transition-all text-sm uppercase tracking-wider"
+          disabled={selectedItems.length === 0}
+          className={`w-full mt-2 py-4 rounded-2xl text-white font-black text-base uppercase tracking-wider transition-all duration-300 shadow-md border-b-4 relative z-10
+            ${selectedItems.length > 0 
+              ? 'bg-gradient-to-r from-emerald-500 to-teal-500 border-emerald-600 hover:brightness-105 active:scale-98' 
+              : 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed border-b-2'}`}
         >
-          Check 🔎
+          Check Options 🔎
         </button>
       )}
     </div>
@@ -1706,7 +1769,49 @@ const GRADE1_LESSON_LEVEL_NUM: Record<string, number> = {
   'dd7cacd6-f5b3-4cc8-8b02-165e417faa64': 28, // Tamil Songs
   'f3c8d488-7c9e-49b9-abfe-59d9c6c1e701': 29, // Simple Poems
   'f2742e51-0256-4dd0-8d34-dde1d30c62e6': 30, // Short Stories
-  'eb3f8e7c-b04b-418c-8ce7-5fda2190c535': 31  // Story comprehension
+  'eb3f8e7c-b04b-418c-8ce7-5fda2190c535': 31,  // Story comprehension
+
+  // --- General Knowledge (GK) Lesson UUIDs ---
+  '892cd0a0-d5ea-48a2-a87a-9059cc573556': 1,
+  'd7f55ee5-3d3d-49d5-b39e-ff6c9fa5a6b0': 2,
+  '746a200f-b7fc-47f2-a321-96661c0eac11': 3,
+  'b415e7b6-6043-4fce-bade-bba6530c7d17': 4,
+  '113edde3-3cc4-4b75-97e6-af520e571fcf': 5,
+  'f33bdd85-9e8f-49de-b157-d92b2f78ce84': 6,
+  'db900d9a-29cd-43c0-96d8-5e4267f74513': 7,
+  '45321862-bf71-43a0-9869-dec925268708': 8,
+  '12c4cc90-8ea2-4481-8a7f-9fe819ef614b': 9,
+  '8a63c689-db11-4187-9224-097b1b73f3c6': 10,
+  '93190f8b-981c-4977-adc8-152352715c23': 11,
+  '803593cb-b539-486b-9019-56ef739630e7': 12,
+  'b7dc2744-20cb-4495-a2cc-bde7404883de': 13,
+  '801699de-731d-4fb2-9403-2df07250cea4': 14,
+  '07ef5c50-2325-4b08-a1df-6b1253572ffb': 15,
+  '4d8ec3b8-1bef-4b6d-ac0d-1f051ace82ef': 16,
+  'afedd2e8-b60e-49ef-a1bd-ca43f6ad1c37': 17,
+  '54efc9b2-03e6-4614-b506-16c565bbaac2': 18,
+  'ce34cab7-8765-43ea-b1f5-a9a100676912': 19,
+  'ea86b6a3-a906-49c9-96cc-988fb8e183be': 20,
+  '2d413854-08b7-4233-aeee-e246aa48d12b': 21,
+  '96cc7759-b3ae-438c-8544-b32ba7901741': 22,
+  'b7b7880d-79ab-4b42-888f-4157a059ccd9': 23,
+  '9c02ca60-a053-4954-a1d4-953a1c68d805': 24,
+  '346f54a6-dd9a-4a0f-9959-70f603aceac0': 25,
+  'ab5a1959-6084-49ea-abe4-63b068c045f2': 26,
+  'a6bf2c40-d8a6-4111-b206-8605f90fafc6': 27,
+  '756b5810-8a3a-4980-9a8a-b61e5a3b846d': 28,
+  '5b5f2174-aa0a-4d19-91f7-0a9f74dcf66e': 29,
+  '9a67a090-2364-4604-a067-3e96ebda7fd8': 30,
+  'f28040b1-d85c-41a9-9507-759e52d8f66d': 31,
+  '267cb4b7-e337-49fd-b605-0b1a770d4bf8': 32,
+  'f709a181-a39c-43f2-ad18-cd0cfa324f78': 33,
+  '5ea7c073-6f5b-4bff-9425-7dbde6fe7bc2': 34,
+  '74acb0c6-d1f1-450b-b7c7-33fcdac937ac': 35,
+  '229e9437-98ce-44bf-a54f-2db0b2327260': 36,
+  'ad63032e-289b-4fb9-9eb0-4db18f3ae805': 37,
+  '9df7a99d-2b11-4718-92b8-b99176f484c0': 38,
+  '626c0c29-94a4-47a4-ac79-610bb5cfc5ae': 39,
+  '7430eb93-2bea-4335-8f26-900963caf22e': 40
 };
 
 export const GRADE1_MATH_LESSON_IDS = new Set([
@@ -1789,6 +1894,49 @@ export const GRADE1_TAMIL_LESSON_IDS = new Set([
   'f3c8d488-7c9e-49b9-abfe-59d9c6c1e701',
   'f2742e51-0256-4dd0-8d34-dde1d30c62e6',
   'eb3f8e7c-b04b-418c-8ce7-5fda2190c535'
+]);
+
+export const GRADE1_GK_LESSON_IDS = new Set([
+  '892cd0a0-d5ea-48a2-a87a-9059cc573556',
+  'd7f55ee5-3d3d-49d5-b39e-ff6c9fa5a6b0',
+  '746a200f-b7fc-47f2-a321-96661c0eac11',
+  'b415e7b6-6043-4fce-bade-bba6530c7d17',
+  '113edde3-3cc4-4b75-97e6-af520e571fcf',
+  'f33bdd85-9e8f-49de-b157-d92b2f78ce84',
+  'db900d9a-29cd-43c0-96d8-5e4267f74513',
+  '45321862-bf71-43a0-9869-dec925268708',
+  '12c4cc90-8ea2-4481-8a7f-9fe819ef614b',
+  '8a63c689-db11-4187-9224-097b1b73f3c6',
+  '93190f8b-981c-4977-adc8-152352715c23',
+  '803593cb-b539-486b-9019-56ef739630e7',
+  'b7dc2744-20cb-4495-a2cc-bde7404883de',
+  '801699de-731d-4fb2-9403-2df07250cea4',
+  '07ef5c50-2325-4b08-a1df-6b1253572ffb',
+  '4d8ec3b8-1bef-4b6d-ac0d-1f051ace82ef',
+  'afedd2e8-b60e-49ef-a1bd-ca43f6ad1c37',
+  '54efc9b2-03e6-4614-b506-16c565bbaac2',
+  'ce34cab7-8765-43ea-b1f5-a9a100676912',
+  'ea86b6a3-a906-49c9-96cc-988fb8e183be',
+  '2d413854-08b7-4233-aeee-e246aa48d12b',
+  '96cc7759-b3ae-438c-8544-b32ba7901741',
+  'b7b7880d-79ab-4b42-888f-4157a059ccd9',
+  '9c02ca60-a053-4954-a1d4-953a1c68d805',
+  '346f54a6-dd9a-4a0f-9959-70f603aceac0',
+  'ab5a1959-6084-49ea-abe4-63b068c045f2',
+  'a6bf2c40-d8a6-4111-b206-8605f90fafc6',
+  '756b5810-8a3a-4980-9a8a-b61e5a3b846d',
+  '5b5f2174-aa0a-4d19-91f7-0a9f74dcf66e',
+  '9a67a090-2364-4604-a067-3e96ebda7fd8',
+  'f28040b1-d85c-41a9-9507-759e52d8f66d',
+  '267cb4b7-e337-49fd-b605-0b1a770d4bf8',
+  'f709a181-a39c-43f2-ad18-cd0cfa324f78',
+  '5ea7c073-6f5b-4bff-9425-7dbde6fe7bc2',
+  '74acb0c6-d1f1-450b-b7c7-33fcdac937ac',
+  '229e9437-98ce-44bf-a54f-2db0b2327260',
+  'ad63032e-289b-4fb9-9eb0-4db18f3ae805',
+  '9df7a99d-2b11-4718-92b8-b99176f484c0',
+  '626c0c29-94a4-47a4-ac79-610bb5cfc5ae',
+  '7430eb93-2bea-4335-8f26-900963caf22e'
 ]);
 
 /* ==========================================================================
@@ -2045,7 +2193,8 @@ export function Grade1EnglishActivityPlayer({ lessonId, onComplete }: { lessonId
   const levelNum = GRADE1_LESSON_LEVEL_NUM[lessonId] || 1;
   const isMath = GRADE1_MATH_LESSON_IDS.has(lessonId);
   const isTamil = GRADE1_TAMIL_LESSON_IDS.has(lessonId);
-  const levelsSource = isTamil ? GRADE1_TAMIL_LEVELS : (isMath ? GRADE1_MATH_LEVELS : GRADE1_ENGLISH_LEVELS);
+  const isGk = GRADE1_GK_LESSON_IDS.has(lessonId);
+  const levelsSource = isTamil ? GRADE1_TAMIL_LEVELS : (isMath ? GRADE1_MATH_LEVELS : (isGk ? GRADE1_GK_LEVELS : GRADE1_ENGLISH_LEVELS));
   const levelData = levelsSource.find((l) => l.id === levelNum) || levelsSource[0];
   
   const [qIndex, setQIndex] = useState(0);

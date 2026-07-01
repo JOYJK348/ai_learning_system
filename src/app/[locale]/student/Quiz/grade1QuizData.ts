@@ -1417,7 +1417,6 @@ export const GRADE1_MATH_LEVELS: Level[] = [
 ];
 
 export const GRADE1_EVS_LEVELS: Level[] = [];
-export const GRADE1_GK_LEVELS: Level[] = [];
 export const GRADE1_HINDI_LEVELS: Level[] = [];
 
 export const GRADE1_TAMIL_LEVELS: Level[] = [
@@ -2288,15 +2287,880 @@ export const GRADE1_TAMIL_LEVELS: Level[] = [
       { type: 'story_cave' as any, storyText: 'ஆமையும் முயலும் பந்தயம் வைத்த கதையை நினைவுகூரவும்.', questionText: 'யார் வேகமாக ஓடி தூங்கியது?', options: [{ text: 'முயல் 🐇', correct: true }, { text: 'ஆமை 🐢', correct: false }] }
     ]
   },
+];
+
+export const GRADE1_GK_LEVELS: Level[] = [
+  // --- CHAPTER 1: My Amazing World 🌍 (Levels 1 - 5) ---
   {
-    id: 41,
-    title: 'கதை கருத்து புரிதல் 🧠',
-    titleEn: 'Moral Values',
-    mascot: '🧠',
-    color: 'from-rose-400 to-red-500',
-    borderColor: 'border-rose-350',
+    id: 1,
+    title: 'Myself & My Surroundings 🧍',
+    titleEn: 'Myself & My Surroundings',
+    mascot: '🧍',
+    color: 'from-sky-400 to-blue-500',
+    borderColor: 'border-sky-300',
     questions: [
-      { type: 'garden_repair' as any, instruction: 'What is the moral of tortoise race?', instructionTa: 'முயல் ஆமை கதையின் நீதி என்ன?', sentence: 'விடாமுயற்சி ___ தரும்.', options: [{ text: 'வெற்றி', correct: true }, { text: 'தோல்வி', correct: false }] }
+      {
+        type: 'learn_card' as any,
+        conceptTitle: 'My Surroundings 🏡',
+        explanation: 'Everything around us forms our surroundings. This includes our house, family, school, parks, and neighbors. Keeping our surroundings clean is our duty!',
+        mascot: '🏡',
+        examples: [
+          'My Home 🏠 - Where I live with family',
+          'My School 🏫 - Where I learn and play',
+          'The Park 🌳 - Where I run and slide'
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match places to their descriptions! 🔗',
+        pairs: [
+          { left: 'Where I sleep 🛌', right: 'Bedroom 🛏️' },
+          { left: 'Where I study 🏫', right: 'School 🎒' },
+          { left: 'Where I play 🎠', right: 'Park 🌳' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: 'My Country India 🇮🇳',
+    titleEn: 'My Country India',
+    mascot: '🇮🇳',
+    color: 'from-orange-400 to-amber-500',
+    borderColor: 'border-orange-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match our great country facts! 🔗',
+        pairs: [
+          { left: 'Our Country 🗺️', right: 'India 🇮🇳' },
+          { left: 'National Anthem 🎵', right: 'Jana Gana Mana 🇮🇳' },
+          { left: 'Capital City 🏢', right: 'New Delhi 🏛️' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: 'States & Capitals (basic intro) 🗺️',
+    titleEn: 'States & Capitals',
+    mascot: '🗺️',
+    color: 'from-orange-400 to-amber-500',
+    borderColor: 'border-orange-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match States to their capital cities! 🏢',
+        pairs: [
+          { left: 'Tamil Nadu 🗺️', right: 'Chennai 🌊' },
+          { left: 'Maharashtra 🗺️', right: 'Mumbai 🏙️' },
+          { left: 'Karnataka 🗺️', right: 'Bengaluru 💻' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 4,
+    title: 'National Symbols 🦁',
+    titleEn: 'National Symbols',
+    mascot: '🦁',
+    color: 'from-orange-400 to-amber-500',
+    borderColor: 'border-orange-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match National Symbols! 🔗',
+        pairs: [
+          { left: 'National Animal 🐯', right: 'Bengal Tiger 🐅' },
+          { left: 'National Bird 🦚', right: 'Peacock 🦚' },
+          { left: 'National Flower 🪷', right: 'Lotus 🪷' },
+          { left: 'National Fruit 🥭', right: 'Mango 🥭' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 5,
+    title: 'Important Places in India 🏛️',
+    titleEn: 'Important Places in India',
+    mascot: '🏛️',
+    color: 'from-orange-400 to-amber-500',
+    borderColor: 'border-orange-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match Monuments to their locations! 🔗',
+        pairs: [
+          { left: 'Taj Mahal 🕌', right: 'Agra 🏛️' },
+          { left: 'Gateway of India 🗼', right: 'Mumbai 🏙️' },
+          { left: 'Red Fort 🏰', right: 'Delhi 🏛️' }
+        ],
+        options: []
+      }
+    ]
+  },
+
+  // --- CHAPTER 2: Animal Kingdom 🐾 (Levels 6 - 10) ---
+  {
+    id: 6,
+    title: 'Wild Animals 🦁',
+    titleEn: 'Wild Animals',
+    mascot: '🦁',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select all Wild Animals! 🦁',
+        gridItems: [
+          { text: 'Lion 🦁', correct: true },
+          { text: 'Tiger 🐯', correct: true },
+          { text: 'Elephant 🐘', correct: true },
+          { text: 'Cow 🐮', correct: false },
+          { text: 'Dog 🐶', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 7,
+    title: 'Domestic Animals 🐮',
+    titleEn: 'Domestic Animals',
+    mascot: '🐮',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select all Domestic/Farm Animals! 🐮',
+        gridItems: [
+          { text: 'Cow 🐮', correct: true },
+          { text: 'Goat 🐐', correct: true },
+          { text: 'Sheep 🐑', correct: true },
+          { text: 'Lion 🦁', correct: false },
+          { text: 'Shark 🦈', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 8,
+    title: 'Sea Animals 🦈',
+    titleEn: 'Sea Animals',
+    mascot: '🦈',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match sea creatures to their names! 🐙',
+        pairs: [
+          { left: 'Eight arms 🐙', right: 'Octopus 🐙' },
+          { left: 'Friendly swimmer 🐬', right: 'Dolphin 🐬' },
+          { left: 'Big teeth 🦈', right: 'Shark 🦈' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 9,
+    title: 'Baby Animals 🍼',
+    titleEn: 'Baby Animals',
+    mascot: '🍼',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match parents to babies! 🤝',
+        pairs: [
+          { left: 'Dog 🐶', right: 'Puppy 🐕' },
+          { left: 'Cat 🐱', right: 'Kitten 🐈' },
+          { left: 'Cow 🐮', right: 'Calf 🐂' },
+          { left: 'Lion 🦁', right: 'Cub 🦁' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 10,
+    title: 'Animal Homes 🏡',
+    titleEn: 'Animal Homes',
+    mascot: '🏡',
+    color: 'from-emerald-400 to-teal-500',
+    borderColor: 'border-emerald-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Who lives where? Match them! ⛺',
+        pairs: [
+          { left: 'Lion 🦁', right: 'Den 🪨' },
+          { left: 'Bird 🐦', right: 'Nest 🪹' },
+          { left: 'Dog 🐶', right: 'Kennel 🏠' },
+          { left: 'Cow 🐮', right: 'Shed 🛖' }
+        ],
+        options: []
+      }
+    ]
+  },
+
+  // --- CHAPTER 3: Bird & Insect World 🐦 (Levels 11 - 15) ---
+  {
+    id: 11,
+    title: 'Common Birds 🦜',
+    titleEn: 'Common Birds',
+    mascot: '🦜',
+    color: 'from-purple-400 to-pink-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select all Birds! 🦜',
+        gridItems: [
+          { text: 'Crow 🐦', correct: true },
+          { text: 'Parrot 🦜', correct: true },
+          { text: 'Eagle 🦅', correct: true },
+          { text: 'Ant 🐜', correct: false },
+          { text: 'Spider 🕷️', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 12,
+    title: 'Bird Features 🪶',
+    titleEn: 'Bird Features',
+    mascot: '🪶',
+    color: 'from-purple-400 to-pink-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match features to their uses! 🪶',
+        pairs: [
+          { left: 'Wings 🪶', right: 'To Fly ☁️' },
+          { left: 'Beak 👄', right: 'To Eat 🍒' },
+          { left: 'Claws 👣', right: 'To Perch 🪵' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 13,
+    title: 'Flying & Non Flying Birds 🐧',
+    titleEn: 'Flying & Non Flying Birds',
+    mascot: '🐧',
+    color: 'from-purple-400 to-pink-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Classify flying and non-flying birds! 🔗',
+        pairs: [
+          { left: 'Peacock 🦚', right: 'Flies high ☁️' },
+          { left: 'Penguin 🐧', right: 'Swims in ice ❄️' },
+          { left: 'Ostrich 🦤', right: 'Runs very fast 🏃' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 14,
+    title: 'Insects Around Us 🐜',
+    titleEn: 'Insects Around Us',
+    mascot: '🐜',
+    color: 'from-purple-400 to-pink-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select all Insects! 🐜',
+        gridItems: [
+          { text: 'Ant 🐜', correct: true },
+          { text: 'Mosquito 🦟', correct: true },
+          { text: 'Housefly 🪰', correct: true },
+          { text: 'Parrot 🦜', correct: false },
+          { text: 'Shark 🦈', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 15,
+    title: 'Useful Insects 🐝',
+    titleEn: 'Useful Insects',
+    mascot: '🐝',
+    color: 'from-purple-400 to-pink-500',
+    borderColor: 'border-purple-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match useful insects to their products! 🔗',
+        pairs: [
+          { left: 'Honeybee 🐝', right: 'Honey 🍯' },
+          { left: 'Silkworm 🐛', right: 'Silk 🥻' },
+          { left: 'Earthworm 🪱', right: 'Soil Health 🌱' }
+        ],
+        options: []
+      }
+    ]
+  },
+
+  // --- CHAPTER 4: Plant World 🌱 (Levels 16 - 20) ---
+  {
+    id: 16,
+    title: 'Parts of Plant 🍃',
+    titleEn: 'Parts of Plant',
+    mascot: '🍃',
+    color: 'from-lime-400 to-green-500',
+    borderColor: 'border-lime-300',
+    questions: [
+      {
+        type: 'learn_card' as any,
+        conceptTitle: 'Parts of a Plant 🌳',
+        explanation: 'Just like us, plants have different parts that do different jobs. Roots take in water. Stem holds the plant up. Leaves make food. Flowers make seeds!',
+        mascot: '🌳',
+        examples: [
+          'Roots 🪵 - Stay under the soil',
+          'Leaves 🍃 - Green parts making food',
+          'Flower 🌸 - Beautiful part that smells nice'
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match parts to their locations! 🔗',
+        pairs: [
+          { left: 'Under the soil 🪱', right: 'Roots 🪵' },
+          { left: 'Green color part 🍃', right: 'Leaf 🍂' },
+          { left: 'Holds plant straight 🎋', right: 'Stem 🪵' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 17,
+    title: 'Types of Plants 🌵',
+    titleEn: 'Types of Plants',
+    mascot: '🌵',
+    color: 'from-lime-400 to-green-500',
+    borderColor: 'border-lime-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match plant types to examples! 🌳',
+        pairs: [
+          { left: 'Big strong plant 🪵', right: 'Tree 🌳' },
+          { left: 'Small bushy plant 🌿', right: 'Shrub 🪴' },
+          { left: 'Needs support to climb 🧗', right: 'Climber 🍇' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 18,
+    title: 'Trees & Flowers 🌸',
+    titleEn: 'Trees & Flowers',
+    mascot: '🌸',
+    color: 'from-lime-400 to-green-500',
+    borderColor: 'border-lime-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match flowers and trees to their names! 🌳',
+        pairs: [
+          { left: 'National Tree 🌳', right: 'Banyan Tree 🦚' },
+          { left: 'Smells beautiful 🌹', right: 'Rose 🌹' },
+          { left: 'Yellow flower facing sun 🌻', right: 'Sunflower 🌻' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 19,
+    title: 'Fruits & Vegetables 🍎',
+    titleEn: 'Fruits & Vegetables',
+    mascot: '🍎',
+    color: 'from-lime-400 to-green-500',
+    borderColor: 'border-lime-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Classify Fruits and Vegetables! 🍇',
+        pairs: [
+          { left: 'Apple 🍎', right: 'Sweet Fruit 🍎' },
+          { left: 'Spinach 🥬', right: 'Leafy Green 🥬' },
+          { left: 'Potato 🥔', right: 'Root Vegetable 🥔' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 20,
+    title: 'Uses of Plants 🪵',
+    titleEn: 'Uses of Plants',
+    mascot: '🪵',
+    color: 'from-lime-400 to-green-500',
+    borderColor: 'border-lime-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match plant uses to items! 🔗',
+        pairs: [
+          { left: 'To write on 📄', right: 'Paper 📄' },
+          { left: 'To wear 👕', right: 'Cotton ☁️' },
+          { left: 'To build chairs 🪑', right: 'Wood 🪵' }
+        ],
+        options: []
+      }
+    ]
+  },
+
+  // --- CHAPTER 5: Science Around Us 🔬 (Levels 21 - 25) ---
+  {
+    id: 21,
+    title: 'Five Senses 👀',
+    titleEn: 'Five Senses',
+    mascot: '👀',
+    color: 'from-cyan-400 to-teal-500',
+    borderColor: 'border-cyan-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match sense organs to their actions! 👃',
+        pairs: [
+          { left: 'Eyes 👀', right: 'To See 🌈' },
+          { left: 'Nose 👃', right: 'To Smell 🌹' },
+          { left: 'Ears 👂', right: 'To Hear 🎵' },
+          { left: 'Tongue 👅', right: 'To Taste 🍦' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 22,
+    title: 'Living & Non Living Things 🪨',
+    titleEn: 'Living & Non Living Things',
+    mascot: '🪨',
+    color: 'from-cyan-400 to-teal-500',
+    borderColor: 'border-cyan-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select all Living Things (which grow and breathe)! 🌱',
+        gridItems: [
+          { text: 'Plant 🌱', correct: true },
+          { text: 'Puppy 🐶', correct: true },
+          { text: 'Bird 🐦', correct: true },
+          { text: 'Stone 🪨', correct: false },
+          { text: 'Toy Car 🚗', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 23,
+    title: 'Day & Night 🌞',
+    titleEn: 'Day & Night',
+    mascot: '🌞',
+    color: 'from-cyan-400 to-teal-500',
+    borderColor: 'border-cyan-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match time to elements! 🌙',
+        pairs: [
+          { left: 'Bright Sun ☀️', right: 'Day Time 🌞' },
+          { left: 'Stars & Moon 🌙', right: 'Night Time 🌃' },
+          { left: 'Eating breakfast 🍳', right: 'Morning Time 🌅' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 24,
+    title: 'Weather Basics ☁️',
+    titleEn: 'Weather Basics',
+    mascot: '☁️',
+    color: 'from-cyan-400 to-teal-500',
+    borderColor: 'border-cyan-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match weather to items we use! ☔',
+        pairs: [
+          { left: 'Hot Sun ☀️', right: 'Sunglasses 🕶️' },
+          { left: 'Rainy Day 🌧️', right: 'Umbrella ☔' },
+          { left: 'Cold Day ❄️', right: 'Sweater 🧥' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 25,
+    title: 'Water & Air 💨',
+    titleEn: 'Water & Air',
+    mascot: '💨',
+    color: 'from-cyan-400 to-teal-500',
+    borderColor: 'border-cyan-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match uses of water and air! 🔗',
+        pairs: [
+          { left: 'Thirsty 🥤', right: 'Drink Water 💧' },
+          { left: 'Flying Kite 🪁', right: 'Moving Air 💨' },
+          { left: 'Washing hands 🧼', right: 'Clean Water 💧' }
+        ],
+        options: []
+      }
+    ]
+  },
+
+  // --- CHAPTER 6: People & Community 👥 (Levels 26 - 30) ---
+  {
+    id: 26,
+    title: 'Community Helpers 🧑‍🚒',
+    titleEn: 'Community Helpers',
+    mascot: '🧑‍🚒',
+    color: 'from-rose-400 to-pink-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      {
+        type: 'learn_card' as any,
+        conceptTitle: 'Community Helpers 👥',
+        explanation: 'Many people help us every day in our community. Doctors keep us healthy. Firefighters put out fires. Teachers teach us reading and writing.',
+        mascot: '👥',
+        examples: [
+          'Doctor 🩺 - Helps when we are sick',
+          'Teacher 👩‍🏫 - Helps us learn new things',
+          'Firefighter 🧑‍🚒 - Keeps us safe from fire'
+        ],
+        options: []
+      },
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Who helps us? Match helper to task! 🔗',
+        pairs: [
+          { left: 'When sick 🩺', right: 'Doctor 👨‍⚕️' },
+          { left: 'To learn lessons 📚', right: 'Teacher 👩‍🏫' },
+          { left: 'Keeps us safe 👮', right: 'Police Officer 👮' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 27,
+    title: 'Doctor, Teacher, Police 🩺',
+    titleEn: 'Doctor, Teacher, Police',
+    mascot: '🩺',
+    color: 'from-rose-400 to-pink-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match helper tools! 🛠️',
+        pairs: [
+          { left: 'Stethoscope 🩺', right: 'Doctor 👨‍⚕️' },
+          { left: 'Blackboard 🪵', right: 'Teacher 👩‍🏫' },
+          { left: 'Handcuffs ⛓️', right: 'Police Officer 👮' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 28,
+    title: 'Places Around Us 🏥',
+    titleEn: 'Places Around Us',
+    mascot: '🏥',
+    color: 'from-rose-400 to-pink-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match descriptions to neighborhood places! 🏥',
+        pairs: [
+          { left: 'To buy stamps ✉️', right: 'Post Office 🏤' },
+          { left: 'To treat patients 🏥', right: 'Hospital 🏥' },
+          { left: 'To keep money safe 💰', right: 'Bank 🏦' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 29,
+    title: 'Good Habits 🧼',
+    titleEn: 'Good Habits',
+    mascot: '🧼',
+    color: 'from-rose-400 to-pink-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select all Good Habits! 🧼',
+        gridItems: [
+          { text: 'Wash Hands 🧼', correct: true },
+          { text: 'Brush Teeth 🪥', correct: true },
+          { text: 'Throw trash in bin 🗑️', correct: true },
+          { text: 'Bite Nails 💅', correct: false },
+          { text: 'Shout loud 🗣️', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 30,
+    title: 'Safety Rules ⚠️',
+    titleEn: 'Safety Rules',
+    mascot: '⚠️',
+    color: 'from-rose-400 to-pink-500',
+    borderColor: 'border-rose-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match Safety Rules! ⚠️',
+        pairs: [
+          { left: 'With matchsticks 🔥', right: 'Do NOT play ❌' },
+          { left: 'On the road 🛣️', right: 'Do NOT run ❌' },
+          { left: 'While crossing 🚶', right: 'Use Zebra crossing 🦓' }
+        ],
+        options: []
+      }
+    ]
+  },
+
+  // --- CHAPTER 7: Transport & Communication 🚗 (Levels 31 - 35) ---
+  {
+    id: 31,
+    title: 'Land Transport 🚗',
+    titleEn: 'Land Transport',
+    mascot: '🚗',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select all Land Vehicles! 🚗',
+        gridItems: [
+          { text: 'Car 🚗', correct: true },
+          { text: 'Bus 🚌', correct: true },
+          { text: 'Train 🚂', correct: true },
+          { text: 'Ship 🚢', correct: false },
+          { text: 'Aeroplane ✈️', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 32,
+    title: 'Water Transport 🚢',
+    titleEn: 'Water Transport',
+    mascot: '🚢',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select all Water Vehicles! 🚢',
+        gridItems: [
+          { text: 'Ship 🚢', correct: true },
+          { text: 'Boat ⛵', correct: true },
+          { text: 'Submarine 🚢', correct: true },
+          { text: 'Bicycle 🚲', correct: false },
+          { text: 'Helicopter 🚁', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 33,
+    title: 'Air Transport ✈️',
+    titleEn: 'Air Transport',
+    mascot: '✈️',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      {
+        type: 'grid_search' as any,
+        instruction: 'Select all Air Vehicles! ✈️',
+        gridItems: [
+          { text: 'Aeroplane ✈️', correct: true },
+          { text: 'Helicopter 🚁', correct: true },
+          { text: 'Hot Air Balloon 🎈', correct: true },
+          { text: 'Motorcycle 🏍️', correct: false },
+          { text: 'Metro Train 🚇', correct: false }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 34,
+    title: 'Communication Tools 📞',
+    titleEn: 'Communication Tools',
+    mascot: '📞',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match tools to their uses! 📞',
+        pairs: [
+          { left: 'Mobile Phone 📱', right: 'Calling 📞' },
+          { left: 'Letter ✉️', right: 'Post Box 📮' },
+          { left: 'Newspaper 📰', right: 'Reading news 🗞️' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 35,
+    title: 'Road Safety 🚦',
+    titleEn: 'Road Safety',
+    mascot: '🚦',
+    color: 'from-amber-400 to-orange-500',
+    borderColor: 'border-amber-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'What do traffic lights mean? Match them! 🚦',
+        pairs: [
+          { left: 'Red light 🔴', right: 'Stop 🛑' },
+          { left: 'Yellow light 🟡', right: 'Get Ready ⏳' },
+          { left: 'Green light 🟢', right: 'Go ➡️' }
+        ],
+        options: []
+      }
+    ]
+  },
+
+  // --- CHAPTER 8: Fun Knowledge Zone 🧠 (Levels 36 - 40) ---
+  {
+    id: 36,
+    title: 'Colours & Shapes Around Us 🎨',
+    titleEn: 'Colours & Shapes',
+    mascot: '🎨',
+    color: 'from-indigo-400 to-purple-500',
+    borderColor: 'border-indigo-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match objects to their shapes! 📐',
+        pairs: [
+          { left: 'Carrom Board 🔲', right: 'Square ⬜' },
+          { left: 'Football ⚽', right: 'Circle ⚪' },
+          { left: 'Ice Cream Cone 🍦', right: 'Triangle 🔺' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 37,
+    title: 'Festivals 🎉',
+    titleEn: 'Festivals',
+    mascot: '🎉',
+    color: 'from-indigo-400 to-purple-500',
+    borderColor: 'border-indigo-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match festivals to descriptions! 🏮',
+        pairs: [
+          { left: 'Festival of lights 🪔', right: 'Diwali 🎆' },
+          { left: 'Festival of colors 🎨', right: 'Holi 🌈' },
+          { left: 'Santa Claus 🎅', right: 'Christmas 🎄' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 38,
+    title: 'Food Around World 🍕',
+    titleEn: 'Food Around World',
+    mascot: '🍕',
+    color: 'from-indigo-400 to-purple-500',
+    borderColor: 'border-indigo-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match popular foods! 🍔',
+        pairs: [
+          { left: 'Pizza 🍕', right: 'Italy 🇮🇹' },
+          { left: 'Burger 🍔', right: 'America 🇺🇸' },
+          { left: 'Idli 🍛', right: 'India 🇮🇳' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 39,
+    title: 'Sports Basics ⚽',
+    titleEn: 'Sports Basics',
+    mascot: '⚽',
+    color: 'from-indigo-400 to-purple-500',
+    borderColor: 'border-indigo-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match sports to equipment! 🏸',
+        pairs: [
+          { left: 'Cricket 🏏', right: 'Bat & Ball ⚾' },
+          { left: 'Football ⚽', right: 'Goal Post 🥅' },
+          { left: 'Badminton 🏸', right: 'Racket & Shuttle 🏸' }
+        ],
+        options: []
+      }
+    ]
+  },
+  {
+    id: 40,
+    title: 'Space Intro (Sun, Moon, Stars) 🚀',
+    titleEn: 'Space Intro',
+    mascot: '🚀',
+    color: 'from-indigo-400 to-purple-500',
+    borderColor: 'border-indigo-300',
+    questions: [
+      {
+        type: 'connect_pairs' as any,
+        instruction: 'Match space elements! 🌠',
+        pairs: [
+          { left: 'Gives us heat ☀️', right: 'Sun ☀️' },
+          { left: 'Changes shape at night 🌙', right: 'Moon 🌙' },
+          { left: 'Twinkle in the sky 🌟', right: 'Stars ✨' }
+        ],
+        options: []
+      }
     ]
   }
 ];
