@@ -2,13 +2,57 @@ import type { ParentProfile, ChildSummary, ChildProgress, QuizAttempt, Badge, Su
 
 const BASE = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, '') ?? '';
 
+let isRefreshing = false;
+let refreshQueue: Array<(token: string | null) => void> = [];
+
+async function refreshSessionToken(): Promise<string | null> {
+  if (isRefreshing) {
+    return new Promise((resolve) => {
+      refreshQueue.push(resolve);
+    });
+  }
+  isRefreshing = true;
+  try {
+    const res = await fetch(`${BASE}/api/auth/refresh`, { credentials: 'include' });
+    if (res.ok) {
+      const data = await res.json();
+      const newToken = data.access_token || null;
+      if (newToken && typeof window !== 'undefined') {
+        sessionStorage.setItem('zhi_auth_token', newToken);
+      }
+      refreshQueue.forEach((cb) => cb(newToken));
+      refreshQueue = [];
+      return newToken;
+    }
+  } catch (err) {
+    console.error("Token refresh failed:", err);
+  } finally {
+    isRefreshing = false;
+  }
+  refreshQueue.forEach((cb) => cb(null));
+  refreshQueue = [];
+  return null;
+}
+
 async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
-  const token = typeof window !== 'undefined' ? sessionStorage.getItem('zhi_auth_token') : null;
+  let token = typeof window !== 'undefined' ? sessionStorage.getItem('zhi_auth_token') : null;
   const headers = {
     ...(init?.headers || {}),
     ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
   };
-  const res = await fetch(`${BASE}${path}`, { credentials: 'include', ...init, headers });
+  let res = await fetch(`${BASE}${path}`, { credentials: 'include', ...init, headers });
+  
+  if (res.status === 401 && typeof window !== 'undefined' && !path.includes('/auth/refresh') && !path.includes('/auth/login')) {
+    const newToken = await refreshSessionToken();
+    if (newToken) {
+      const retryHeaders = {
+        ...(init?.headers || {}),
+        'Authorization': `Bearer ${newToken}`,
+      };
+      res = await fetch(`${BASE}${path}`, { credentials: 'include', ...init, headers: retryHeaders });
+    }
+  }
+
   const payload = await res.json().catch(() => ({}));
   if (!res.ok) {
     if ((res.status === 401 || res.status === 403) && typeof window !== 'undefined') {
