@@ -336,7 +336,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const handleExpired = () => {
-      setSessionExpired(true);
+      const token = sessionStorage.getItem('zhi_auth_token');
+      if (token) {
+        setSessionExpired(true);
+      }
     };
     window.addEventListener('zhi-session-expired', handleExpired);
     return () => window.removeEventListener('zhi-session-expired', handleExpired);
@@ -346,7 +349,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setSessionExpired(false);
     await logout();
     const loc = (typeof window !== 'undefined' ? window.location.pathname.split('/')[1] : 'en') || 'en';
-    window.location.href = `/${loc}/login?expired=1`;
+    window.location.href = `/${loc}/login?session_closed=1`;
   };
 
   useEffect(() => {

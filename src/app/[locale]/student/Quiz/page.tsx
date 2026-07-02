@@ -985,12 +985,7 @@ export default function QuizArena() {
   }, [quizQuestions, currentQuestionIndex]);
 
 
-  // Dynamically compute unlocked quiz levels based on completed chapters in Database
   const unlockedLevels = useMemo(() => {
-    if (isGrade1) {
-      return [1, 2, 3, 4, 5, 6];
-    }
-
     const activeSubjectMap = isGrade1
       ? GRADE1_MAPPINGS[activeSubject]
       : (isUKG ? UKG_MAPPINGS[activeSubject] : LKG_MAPPINGS[activeSubject]);

@@ -98,7 +98,7 @@ export default function ParentDashboard() {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('zhi_auth_user');
       document.cookie = 'zhi_user_role=; path=/; max-age=0';
-      window.location.href = `/${locale}/login?expired=1`;
+      window.location.href = `/${locale}/login?session_closed=1`;
     }
   };
   const [showSessionExpired, setShowSessionExpired] = useState(false);
