@@ -67,14 +67,67 @@ function saveCachedToken(token: string | null) {
   } catch {}
 }
 
+let isRefreshing = false;
+let refreshQueue: Array<(token: string | null) => void> = [];
+
+async function refreshSessionToken(): Promise<string | null> {
+  if (isRefreshing) {
+    return new Promise((resolve) => {
+      refreshQueue.push(resolve);
+    });
+  }
+  isRefreshing = true;
+  try {
+    const rToken = typeof window !== 'undefined' ? sessionStorage.getItem('zhi_refresh_token') : null;
+    const res = await fetch(`${API_BASE}/api/auth/refresh`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: rToken }),
+      credentials: 'include'
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const newToken = data.access_token || null;
+      if (newToken && typeof window !== 'undefined') {
+        saveCachedToken(newToken);
+      }
+      if (data.refresh_token && typeof window !== 'undefined') {
+        sessionStorage.setItem('zhi_refresh_token', data.refresh_token);
+      }
+      refreshQueue.forEach((cb) => cb(newToken));
+      refreshQueue = [];
+      return newToken;
+    }
+  } catch (err) {
+    console.error("Token refresh failed in AuthContext:", err);
+  } finally {
+    isRefreshing = false;
+  }
+  refreshQueue.forEach((cb) => cb(null));
+  refreshQueue = [];
+  return null;
+}
+
 async function api(path: string, options: RequestInit = {}) {
-  const token = loadCachedToken();
+  let token = loadCachedToken();
   const headers = {
     'Content-Type': 'application/json',
     ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
     ...(options.headers || {})
   };
-  const res = await fetch(`${API_BASE}${path}`, { credentials: 'include', ...options, headers });
+  let res = await fetch(`${API_BASE}${path}`, { credentials: 'include', ...options, headers });
+  
+  if (res.status === 401 && typeof window !== 'undefined' && !path.includes('/auth/refresh') && !path.includes('/auth/login')) {
+    const newToken = await refreshSessionToken();
+    if (newToken) {
+      const retryHeaders = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${newToken}`,
+        ...(options.headers || {})
+      };
+      res = await fetch(`${API_BASE}${path}`, { credentials: 'include', ...options, headers: retryHeaders });
+    }
+  }
   return res;
 }
 
@@ -116,11 +169,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setError(null);
     try {
       const res = await api('/api/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) });
-      const data = (await res.json()) as AuthResponse & { access_token?: string };
+      const data = (await res.json()) as AuthResponse & { access_token?: string; refresh_token?: string };
       if (!res.ok) { setError(data.error || 'Login failed'); return null; }
       if (!data.user) { setError('Login failed'); return null; }
       saveCachedUser(data.user);
       saveCachedToken(data.access_token || null);
+      if (data.refresh_token && typeof window !== 'undefined') {
+        sessionStorage.setItem('zhi_refresh_token', data.refresh_token);
+      }
       clearPersistedCache();
       setUser(data.user);
       document.cookie = `zhi_user_role=${data.user.role}; path=/; max-age=${60 * 60 * 24 * 30}`;
@@ -208,6 +264,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async () => {
     saveCachedUser(null);
     saveCachedToken(null);
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('zhi_refresh_token');
+    }
     setUser(null);
     document.cookie = 'zhi_user_role=; path=/; max-age=0';
     clearPersistedCache();

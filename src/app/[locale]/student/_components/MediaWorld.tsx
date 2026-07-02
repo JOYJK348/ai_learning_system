@@ -14,6 +14,7 @@ interface RhymeEntry {
   color: string;
   grades: string[];
   subjects: string[]; // keywords matched against subject name
+  youtubeId: string;
 }
 
 interface VideoEntry {
@@ -29,39 +30,47 @@ interface VideoEntry {
 
 /* ─────────── RHYME CATALOGUE ─────────── */
 const RHYME_CATALOGUE: RhymeEntry[] = [
+  // ── LKG ──────────────────────────────────────────────
   // English
-  { id: 1,  title: 'Twinkle Twinkle',      image: '⭐', color: 'from-violet-400 to-purple-500',   grades: ['lkg','ukg','grade 1','class 1'], subjects: ['english'] },
-  { id: 2,  title: 'ABC Song',             image: '🔤', color: 'from-blue-400 to-indigo-500',     grades: ['lkg','ukg','grade 1','class 1'], subjects: ['english'] },
-  { id: 3,  title: 'Wheels on the Bus',    image: '🚌', color: 'from-yellow-400 to-orange-500',   grades: ['lkg','ukg','grade 1','class 1'], subjects: ['english'] },
-  { id: 4,  title: 'Humpty Dumpty',        image: '🥚', color: 'from-red-400 to-rose-500',        grades: ['lkg','ukg','grade 1','class 1'], subjects: ['english'] },
-  { id: 5,  title: 'Baa Baa Black Sheep',  image: '🐑', color: 'from-slate-400 to-gray-500',      grades: ['lkg','ukg','grade 1','class 1'], subjects: ['english'] },
-  { id: 6,  title: 'Jack & Jill',          image: '⛰️', color: 'from-lime-400 to-green-500',     grades: ['lkg','ukg','grade 1','class 1'], subjects: ['english'] },
-  { id: 7,  title: 'Old MacDonald',        image: '🐄', color: 'from-emerald-400 to-teal-500',    grades: ['lkg','ukg','grade 1','class 1'], subjects: ['english'] },
-  { id: 8,  title: 'Baby Shark',           image: '🦈', color: 'from-cyan-400 to-sky-500',        grades: ['lkg','ukg','grade 1','class 1'], subjects: ['english'] },
+  { id: 1,  title: 'ABC Song',                    image: '🔤', color: 'from-blue-400 to-indigo-500',     grades: ['lkg'], subjects: ['english'], youtubeId: 'hq3yfQnllfQ' },
+  { id: 2,  title: 'Twinkle Twinkle Little Star', image: '⭐', color: 'from-violet-400 to-purple-500',   grades: ['lkg'], subjects: ['english'], youtubeId: 'yCjJyiup8ld' },
+  { id: 3,  title: 'Baa Baa Black Sheep',         image: '🐑', color: 'from-slate-400 to-gray-500',      grades: ['lkg'], subjects: ['english'], youtubeId: 'm_l1s0Xf3_8' },
   // Tamil
-  { id: 9,  title: 'நிலா நிலா ஓடி வா',    image: '🌙', color: 'from-amber-400 to-orange-500',    grades: ['lkg','ukg','grade 1','class 1'], subjects: ['tamil','தமிழ்'] },
-  { id: 10, title: 'தாலாட்டு பாடல்',      image: '🎵', color: 'from-pink-400 to-rose-500',       grades: ['lkg','ukg','grade 1','class 1'], subjects: ['tamil','தமிழ்'] },
-  { id: 11, title: 'வண்ண பூக்கள்',         image: '🌸', color: 'from-fuchsia-400 to-pink-500',    grades: ['ukg','grade 1','class 1'], subjects: ['tamil','தமிழ்'] },
-  { id: 12, title: 'அ ஆ இ ஈ பாடல்',      image: '🔡', color: 'from-indigo-400 to-purple-500',   grades: ['lkg','ukg','grade 1','class 1'], subjects: ['tamil','தமிழ்'] },
-  { id: 13, title: 'குயில் பாட்டு',        image: '🐦', color: 'from-teal-400 to-emerald-500',    grades: ['grade 1','class 1'], subjects: ['tamil','தமிழ்'] },
-  // Maths
-  { id: 14, title: 'Count 1 to 10',        image: '🔢', color: 'from-blue-400 to-sky-500',        grades: ['lkg','ukg','grade 1','class 1'], subjects: ['math','கணிதம்'] },
-  { id: 15, title: 'Shape Song',           image: '🔺', color: 'from-orange-400 to-amber-500',    grades: ['lkg','ukg','grade 1','class 1'], subjects: ['math','கணிதம்'] },
-  { id: 16, title: '1 2 3 Number Rap',     image: '🎤', color: 'from-purple-400 to-indigo-500',   grades: ['ukg','grade 1','class 1'], subjects: ['math','கணிதம்'] },
-  { id: 17, title: 'Skip Count Song',      image: '⏩', color: 'from-emerald-400 to-teal-500',    grades: ['grade 1','class 1'], subjects: ['math','கணிதம்'] },
-  // EVS / Science
-  { id: 18, title: 'Body Parts Song',      image: '🦷', color: 'from-teal-400 to-cyan-500',       grades: ['lkg','ukg','grade 1','class 1'], subjects: ['evs','environment','science'] },
-  { id: 19, title: 'Animals Around Us',    image: '🦁', color: 'from-amber-500 to-yellow-600',    grades: ['lkg','ukg','grade 1','class 1'], subjects: ['evs','environment','science'] },
-  { id: 20, title: 'Plant a Seed',         image: '🌱', color: 'from-green-400 to-lime-500',      grades: ['ukg','grade 1','class 1'], subjects: ['evs','environment','science'] },
-  { id: 21, title: 'Rain Rain Go Away',    image: '🌧️', color: 'from-sky-400 to-blue-500',       grades: ['lkg','ukg'], subjects: ['evs','environment','science'] },
-  // GK
-  { id: 22, title: 'National Anthem',      image: '🇮🇳', color: 'from-orange-500 to-amber-600',  grades: ['grade 1','class 1'], subjects: ['general','gk','knowledge'] },
-  { id: 23, title: 'Colours of India',     image: '🎨', color: 'from-rose-400 to-fuchsia-500',    grades: ['ukg','grade 1','class 1'], subjects: ['general','gk','knowledge'] },
-  { id: 24, title: 'Festivals Song',       image: '🪔', color: 'from-yellow-400 to-orange-500',   grades: ['ukg','grade 1','class 1'], subjects: ['general','gk','knowledge'] },
+  { id: 4,  title: 'நிலா நிலா ஓடி வா',            image: '🌙', color: 'from-amber-400 to-orange-500',    grades: ['lkg'], subjects: ['tamil','தமிழ்'], youtubeId: 'eG_Wlh28Pxs' },
+  { id: 5,  title: 'யானை யானை',                   image: '🐘', color: 'from-sky-400 to-blue-500',        grades: ['lkg'], subjects: ['tamil','தமிழ்'], youtubeId: 'wW5-uB7m7qA' },
+  { id: 6,  title: 'காக்கா காக்கா',               image: '🐦', color: 'from-slate-600 to-slate-800',    grades: ['lkg'], subjects: ['tamil','தமிழ்'], youtubeId: 'w7e0ClyXQJ8' },
   // Hindi
-  { id: 25, title: 'अ आ इ ई गाना',        image: '🕉️', color: 'from-orange-400 to-amber-600',   grades: ['grade 1','class 1'], subjects: ['hindi','हिंदी','இந்தி'] },
-  { id: 26, title: 'मछली जल की रानी',     image: '🐟', color: 'from-cyan-500 to-teal-600',       grades: ['ukg','grade 1','class 1'], subjects: ['hindi','हिंदी','இந்தி'] },
-  { id: 27, title: 'चंदा मामा',            image: '🌕', color: 'from-indigo-400 to-purple-600',   grades: ['ukg','grade 1','class 1'], subjects: ['hindi','हिंदी','இந்தி'] },
+  { id: 7,  title: 'मछली जल की रानी',             image: '🐟', color: 'from-cyan-500 to-teal-600',       grades: ['lkg'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'B_B93jJ3Kns' },
+  { id: 8,  title: 'नानी तेरी मोरनी',              image: '🦚', color: 'from-emerald-400 to-teal-500',    grades: ['lkg'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: '8C67x8D2Vb4' },
+  { id: 9,  title: 'लकड़ी की काठी',                image: '🐎', color: 'from-yellow-600 to-amber-700',    grades: ['lkg'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'vV_yQ9X_uYg' },
+
+  // ── UKG ──────────────────────────────────────────────
+  // English
+  { id: 10, title: 'Rain Rain Go Away',           image: '🌧️', color: 'from-sky-400 to-blue-500',       grades: ['ukg'], subjects: ['english'], youtubeId: 'c3v0rL7uS1I' },
+  { id: 11, title: 'Jack and Jill',               image: '⛰️', color: 'from-lime-400 to-green-500',     grades: ['ukg'], subjects: ['english'], youtubeId: 'fv_0R2_u0g4' },
+  { id: 12, title: 'Row, Row, Row Your Boat',     image: '🛶', color: 'from-cyan-400 to-sky-500',        grades: ['ukg'], subjects: ['english'], youtubeId: '7otA2mYgSFE' },
+  // Tamil
+  { id: 13, title: 'பள்ளிக்குப் போவோம்',          image: '🎒', color: 'from-pink-400 to-rose-500',       grades: ['ukg'], subjects: ['tamil','தமிழ்'], youtubeId: 'lQfTz1_R_u8' },
+  { id: 14, title: 'மரம் வளர்ப்போம்',             image: '🌳', color: 'from-emerald-400 to-green-600',   grades: ['ukg'], subjects: ['tamil','தமிழ்'], youtubeId: 'v0l4k8Y_u0g' },
+  { id: 15, title: 'வண்ணத்துப்பூச்சி',             image: '🦋', color: 'from-fuchsia-400 to-pink-500',    grades: ['ukg'], subjects: ['tamil','தமிழ்'], youtubeId: 'x2O7uA2vN_o' },
+  // Hindi
+  { id: 16, title: 'आलू कचालू',                   image: '🥔', color: 'from-amber-500 to-yellow-600',    grades: ['ukg'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: '8t4nO_uY_g4' },
+  { id: 17, title: 'रेल चली',                     image: '🚂', color: 'from-purple-400 to-indigo-500',   grades: ['ukg'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'H8x0n1b2_w' },
+  { id: 18, title: 'चिड़िया रानी',                 image: '🐦', color: 'from-sky-400 to-teal-500',        grades: ['ukg'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'H8x0n1b2_w' },
+
+  // ── GRADE 1 ──────────────────────────────────────────
+  // English
+  { id: 19, title: 'The Rainbow',                 image: '🌈', color: 'from-rose-450 to-pink-550',      grades: ['grade 1','class 1'], subjects: ['english'], youtubeId: 'ySbFi6bkR_g' },
+  { id: 20, title: 'The Swing',                   image: '🎢', color: 'from-teal-400 to-cyan-500',      grades: ['grade 1','class 1'], subjects: ['english'], youtubeId: '3P1n_uX2YgE' },
+  { id: 21, title: 'My Shadow',                   image: '👤', color: 'from-slate-500 to-zinc-700',     grades: ['grade 1','class 1'], subjects: ['english'], youtubeId: '8b6nO_u1g8Y' },
+  // Tamil
+  { id: 22, title: 'என் பள்ளி',                   image: '🏫', color: 'from-indigo-400 to-purple-500',   grades: ['grade 1','class 1'], subjects: ['tamil','தமிழ்'], youtubeId: 'vLz10e1uE_g' },
+  { id: 23, title: 'என் நாடு',                    image: '🇮🇳', color: 'from-orange-500 to-amber-600',    grades: ['grade 1','class 1'], subjects: ['tamil','தமிழ்'], youtubeId: 'XZz7iLiB3P0' },
+  { id: 24, title: 'இயற்கையை காப்போம்',            image: '🌲', color: 'from-green-500 to-emerald-600',   grades: ['grade 1','class 1'], subjects: ['tamil','தமிழ்'], youtubeId: 'v7uYBGJTmac' },
+  // Hindi
+  { id: 25, title: 'मेरा भारत महान',               image: '🇮🇳', color: 'from-orange-400 to-amber-600',    grades: ['grade 1','class 1'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'BqOXHXOX0dA' },
+  { id: 26, title: 'पेड़ लगाओ',                    image: '🌳', color: 'from-green-450 to-lime-550',     grades: ['grade 1','class 1'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'BqOXHXOX0dA' },
+  { id: 27, title: 'मेरी किताब',                  image: '📖', color: 'from-cyan-400 to-blue-500',       grades: ['grade 1','class 1'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'BqOXHXOX0dA' },
 ];
 
 /* ─────────── VIDEO CATALOGUE ─────────── */
@@ -136,7 +145,7 @@ function detectTab(subjectName: string): string {
 export default function MediaWorld() {
   const { studentProfile, subjects } = useData();
   const [playing, setPlaying] = useState<number | null>(null);
-  const [video, setVideo] = useState<VideoEntry | null>(null);
+  const [video, setVideo] = useState<any | null>(null);
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -183,15 +192,14 @@ export default function MediaWorld() {
   );
 
   const handleRhymePlay = (rhyme: RhymeEntry) => {
-    if (playing === rhyme.id) {
-      audioEngine?.stopAllAudio();
-      setPlaying(null);
-    } else {
-      audioEngine?.stopAllAudio();
-      setPlaying(rhyme.id);
-      audioEngine?.speak(`Let's sing ${rhyme.title}!`);
-      setTimeout(() => setPlaying(prev => prev === rhyme.id ? null : prev), 3500);
-    }
+    // Open the Youtube video player directly in popup
+    setVideo({
+      id: rhyme.id,
+      title: rhyme.title,
+      emoji: rhyme.image,
+      tag: 'Rhyme Sing-along 🎤',
+      youtubeId: rhyme.youtubeId
+    });
   };
 
   const gradeLabel = grade === 'lkg' ? 'LKG' : grade === 'ukg' ? 'UKG' : 'Grade 1';

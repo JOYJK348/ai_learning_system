@@ -165,42 +165,42 @@ export default function ReportsAdminPage() {
 
   const { data: revenue, isLoading: isRevLoading } = useQuery({
     queryKey: ['reports', 'revenue', dateRange],
-    queryFn: () => adminApi.reportsRevenue(dateRange),
+    queryFn: () => adminApi.reportsRevenue(dateRange) as Promise<any>,
     staleTime: 60_000,
     enabled: !!user && (activeTab === 'overview' || activeTab === 'revenue'),
   });
 
   const { data: userStats, isLoading: isUsersLoading } = useQuery({
     queryKey: ['reports', 'users'],
-    queryFn: () => adminApi.reportsUsers(),
+    queryFn: () => adminApi.reportsUsers() as Promise<any>,
     staleTime: 300_000,
     enabled: !!user && (activeTab === 'overview' || activeTab === 'users'),
   });
 
   const { data: schoolStats, isLoading: isSchoolsLoading } = useQuery({
     queryKey: ['reports', 'schools'],
-    queryFn: () => adminApi.reportsSchools(),
+    queryFn: () => adminApi.reportsSchools() as Promise<any>,
     staleTime: 300_000,
     enabled: !!user && (activeTab === 'overview' || activeTab === 'schools'),
   });
 
   const { data: studentStats, isLoading: isStudentsLoading } = useQuery({
     queryKey: ['reports', 'students'],
-    queryFn: () => adminApi.reportsStudents(),
+    queryFn: () => adminApi.reportsStudents() as Promise<any>,
     staleTime: 300_000,
     enabled: !!user && (activeTab === 'overview' || activeTab === 'students'),
   });
 
   const { data: engagement, isLoading: isEngageLoading } = useQuery({
     queryKey: ['reports', 'engagement'],
-    queryFn: () => adminApi.reportsEngagement(),
+    queryFn: () => adminApi.reportsEngagement() as Promise<any>,
     staleTime: 300_000,
     enabled: !!user && activeTab === 'overview',
   });
 
   const { data: subjectStats, isLoading: isSubjectsLoading } = useQuery({
     queryKey: ['reports', 'subjects'],
-    queryFn: () => adminApi.reportsSubjects(),
+    queryFn: () => adminApi.reportsSubjects() as Promise<any>,
     staleTime: 300_000,
     enabled: !!user && (activeTab === 'overview' || activeTab === 'subjects'),
   });
@@ -220,13 +220,13 @@ export default function ReportsAdminPage() {
   const filteredStudents = useMemo(() => {
     if (!studentStats?.top_students) return [];
     if (!selectedGrade) return studentStats.top_students;
-    return studentStats.top_students.filter(s => s.grade?.toLowerCase() === selectedGrade.toLowerCase());
+    return studentStats.top_students.filter((s: any) => s.grade?.toLowerCase() === selectedGrade.toLowerCase());
   }, [studentStats, selectedGrade]);
 
   const filteredSubjects = useMemo(() => {
     if (!subjectStats?.subjects) return [];
     if (!selectedGrade) return subjectStats.subjects;
-    return subjectStats.subjects.filter(s => s.grade?.toLowerCase() === selectedGrade.toLowerCase());
+    return subjectStats.subjects.filter((s: any) => s.grade?.toLowerCase() === selectedGrade.toLowerCase());
   }, [subjectStats, selectedGrade]);
 
   const filteredSubjectSummary = useMemo(() => {
@@ -234,8 +234,8 @@ export default function ReportsAdminPage() {
       return { avg_completion: 0, on_track: 0, needs_attention: 0 };
     }
     const total = filteredSubjects.length;
-    const avg = Math.round(filteredSubjects.reduce((sum, s) => sum + s.completion_rate, 0) / total);
-    const onTrack = filteredSubjects.filter(s => s.status === 'on_track').length;
+    const avg = Math.round(filteredSubjects.reduce((sum: number, s: any) => sum + s.completion_rate, 0) / total);
+    const onTrack = filteredSubjects.filter((s: any) => s.status === 'on_track').length;
     const needsAttention = total - onTrack;
     return { avg_completion: avg, on_track: onTrack, needs_attention: needsAttention };
   }, [filteredSubjects]);
@@ -414,7 +414,7 @@ export default function ReportsAdminPage() {
                 <div className={styles.chartBody}>
                   {revenue && (
                     <div className={styles.barChart}>
-                      {revenue.dates.map((date, i) => (
+                      {revenue.dates.map((date: string, i: number) => (
                         <div key={date} className={styles.barGroup}>
                           <div className={styles.barStack}>
                             <div
@@ -442,7 +442,7 @@ export default function ReportsAdminPage() {
                 <div className={styles.chartBody}>
                   {userStats && (
                     <div className={styles.lineChart}>
-                      {userStats.daily_active.map((val, i) => (
+                      {userStats.daily_active.map((val: number, i: number) => (
                         <div key={i} className={styles.linePoint} style={{ left: `${(i / 29) * 100}%`, bottom: `${(val / Math.max(...userStats.daily_active)) * 100}%` }}>
                           <div className={styles.lineDot} />
                         </div>
@@ -452,7 +452,7 @@ export default function ReportsAdminPage() {
                           fill="none"
                           stroke="#16a085"
                           strokeWidth="2"
-                          points={userStats.daily_active.map((val, i) => `${(i / 29) * 100},${100 - (val / Math.max(...userStats.daily_active)) * 100}`).join(' ')}
+                          points={userStats.daily_active.map((val: number, i: number) => `${(i / 29) * 100},${100 - (val / Math.max(...userStats.daily_active)) * 100}`).join(' ')}
                         />
                       </svg>
                     </div>
@@ -468,8 +468,8 @@ export default function ReportsAdminPage() {
                 <div className={styles.chartBody}>
                   {userStats && (
                     <div className={styles.donutChart}>
-                      {Object.entries(userStats.plan_distribution).map(([plan, count], i, arr) => {
-                        const total = Object.values(userStats.plan_distribution).reduce((a, b) => a + b, 0);
+                      {Object.entries(userStats.plan_distribution).map(([plan, count]: [string, any], i: number) => {
+                        const total = Object.values(userStats.plan_distribution).reduce((a: any, b: any) => (a as number) + (b as number), 0) as number;
                         const pct = total > 0 ? (count / total) * 100 : 0;
                         const colors = ['#16a085', '#8b5cf6', '#f59e0b', '#ef4444'];
                         return (
@@ -501,7 +501,7 @@ export default function ReportsAdminPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {schoolStats.top_schools.slice(0, 5).map((school, i) => (
+                        {schoolStats.top_schools.slice(0, 5).map((school: any, i: number) => (
                           <tr key={school.id}>
                             <td>
                               <span className={`${styles.rankBadge} ${i < 3 ? styles.topRank : ''}`}>
@@ -543,7 +543,7 @@ export default function ReportsAdminPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {filteredStudents.slice(0, 5).map((student, i) => (
+                        {filteredStudents.slice(0, 5).map((student: any, i: number) => (
                           <tr key={student.id}>
                             <td>
                               <span className={`${styles.rankBadge} ${i < 3 ? styles.topRank : ''}`}>
@@ -574,7 +574,7 @@ export default function ReportsAdminPage() {
                 <div className={styles.chartBody}>
                   {filteredSubjects.length > 0 && (
                     <div className={styles.subjectBars}>
-                      {filteredSubjects.slice(0, 6).map((subject) => (
+                      {filteredSubjects.slice(0, 6).map((subject: any) => (
                         <div key={subject.id} className={styles.subjectBar}>
                           <div className={styles.subjectHeader}>
                             <span>{subject.name} <small style={{ opacity: 0.6, fontSize: '0.75rem' }}>({subject.grade})</small></span>
@@ -643,10 +643,10 @@ export default function ReportsAdminPage() {
                 <div className={styles.detailGrid}>
                   <div className={styles.detailCard}>
                     <h3>User Distribution</h3>
-                    {Object.entries(userStats.total_users).map(([role, count]) => (
+                    {Object.entries(userStats.total_users).map(([role, count]: [string, any]) => (
                       <div key={role} className={styles.detailRow}>
                         <span>{role}</span>
-                        <strong>{count}</strong>
+                        <strong>{count as any}</strong>
                       </div>
                     ))}
                   </div>
@@ -692,7 +692,7 @@ export default function ReportsAdminPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {schoolStats.all_schools.map((school, i) => (
+                      {schoolStats.all_schools.map((school: any, i: number) => (
                         <tr key={school.id}>
                           <td>{i + 1}</td>
                           <td>{school.name}</td>
@@ -736,7 +736,7 @@ export default function ReportsAdminPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredStudents.map((student, i) => (
+                      {filteredStudents.map((student: any, i: number) => (
                         <tr key={student.id}>
                           <td>
                             <span className={`${styles.rankBadge} ${i < 3 ? styles.topRank : ''}`}>
@@ -794,7 +794,7 @@ export default function ReportsAdminPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {filteredSubjects.map((subject) => (
+                        {filteredSubjects.map((subject: any) => (
                           <tr key={subject.id}>
                             <td>{subject.name}</td>
                             <td>{subject.grade}</td>

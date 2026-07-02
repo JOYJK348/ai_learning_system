@@ -11,19 +11,28 @@ async function refreshSessionToken(): Promise<string | null> {
   }
   isRefreshing = true;
   try {
-    const res = await fetch(`${BASE}/api/auth/refresh`, { credentials: 'include' });
+    const rToken = typeof window !== 'undefined' ? sessionStorage.getItem('zhi_refresh_token') : null;
+    const res = await fetch(`${BASE}/api/auth/refresh`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: rToken }),
+      credentials: 'include'
+    });
     if (res.ok) {
       const data = await res.json();
       const newToken = data.access_token || null;
       if (newToken && typeof window !== 'undefined') {
         sessionStorage.setItem('zhi_auth_token', newToken);
       }
+      if (data.refresh_token && typeof window !== 'undefined') {
+        sessionStorage.setItem('zhi_refresh_token', data.refresh_token);
+      }
       refreshQueue.forEach((cb) => cb(newToken));
       refreshQueue = [];
       return newToken;
     }
   } catch (err) {
-    console.error("Token refresh failed:", err);
+    console.error("Token refresh failed in adminApi:", err);
   } finally {
     isRefreshing = false;
   }
