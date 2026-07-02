@@ -767,58 +767,51 @@ function UltimateLearnEngineInner() {
                             </h2>
                             <p className="text-sm font-bold text-amber-800/80 mt-2 font-sans leading-relaxed">
                                 {isTamil 
-                                    ? 'உங்கள் அமர்வு முடிந்துவிட்டது. தயவுசெய்து மீண்டும் உள்நுழையவும்!' 
-                                    : 'Your session has expired. Please log in again to continue your adventure!'}
-                            </p>
-                        </div>
-
-                        <motion.button
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => {
-                                window.location.href = `/${params?.locale || 'en'}/login?session_closed=1`;
-                            }}
-                            className="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-black text-base rounded-2xl shadow-lg border-b-4 border-emerald-700 active:scale-95 font-sans"
-                        >
-                            {isTamil ? 'மீண்டும் உள்நுழைக ➡️' : 'Log In Again ➡️'}
-                        </motion.button>
-                    </div>
-                </motion.div>
-            </div>
-        );
-    }
-
-    return (
-        <div className="relative font-sans overflow-hidden bg-sky-400">
-            <div className="fixed inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-sky-300 via-sky-400 to-blue-500" />
-                <div className="absolute inset-0 opacity-40" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} />
-                <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-white/20 blur-[120px] rounded-full" />
-                <div className="absolute bottom-[10%] left-[-5%] w-[40%] h-[40%] bg-blue-300/30 blur-[100px] rounded-full" />
-            </div>
-
-            <div className="relative z-10 w-full pt-0">
-                <div className="w-full">
-                    <div className="relative px-0">
-                        <div className="relative w-full flex items-center overflow-hidden pt-10 pb-10 sm:pt-14 sm:pb-12 border-b-8 border-white/10">
+                                    ? 'உங்கள் அமர்வு முடிந்த�                        <div className="relative w-full flex items-center overflow-hidden pt-6 pb-6 sm:pt-8 sm:pb-8 border-b-4 border-white/10">
                             <div className="absolute inset-0 opacity-40" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} />
-                            <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-white/30 to-transparent skew-x-[-20deg] transform translate-x-32" />
-                            <div className="absolute top-10 left-[10%] text-6xl opacity-40 cursor-default">☁️</div>
-                            <div className="absolute bottom-20 left-[30%] text-4xl opacity-30 cursor-default">☁️</div>
-                            <div className="absolute top-20 right-[40%] text-8xl opacity-30 cursor-default" style={{ animationDelay: '1s' }}>☁️</div>
-
-                            <div className="relative z-20 w-full px-6 sm:px-16 flex flex-col md:flex-row items-center justify-between gap-12">
-                                <div className="flex-1 space-y-6 text-center md:text-left">
+                            <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-white/20 to-transparent skew-x-[-20deg] transform translate-x-32 pointer-events-none" />
+                            <div className="absolute top-6 left-[10%] text-4xl opacity-45 cursor-default">☁️</div>
+                            <div className="absolute bottom-10 left-[30%] text-3xl opacity-35 cursor-default">☁️</div>
+                            <div className="absolute top-10 right-[40%] text-6xl opacity-35 cursor-default" style={{ animationDelay: '1s' }}>☁️</div>
+ 
+                            <div className="relative z-20 w-full px-6 sm:px-16 flex flex-col md:flex-row items-center justify-between gap-6">
+                                <div className="flex-1 space-y-3 text-center md:text-left">
                                     <motion.div
                                         initial={{ opacity: 1, x: -50 }}
                                         animate={{ opacity: 1, x: 0 }}
-                                        className="inline-flex items-center gap-3 px-6 py-2 bg-indigo-600 text-white rounded-full font-black text-xs uppercase tracking-[0.3em] shadow-xl shadow-indigo-600/20"
+                                        className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-indigo-600 text-white rounded-full font-black text-[10px] uppercase tracking-[0.2em] shadow-md border border-white/25"
                                     >
-                                        <Star size={16} fill="currentColor" /> Level {level} Legend
+                                        <Star size={12} fill="currentColor" /> Level {level} Legend
                                     </motion.div>
-
-                                    <h1 className="text-5xl sm:text-8xl font-black text-indigo-950 leading-[0.9] tracking-tighter drop-shadow-sm">
+ 
+                                    <h1 className="text-2xl sm:text-4xl font-black text-indigo-950 leading-tight tracking-tight drop-shadow-sm font-sans">
                                         READY FOR A <br />
                                         <span className="text-indigo-800">MISSION, {studentName.toUpperCase()}?</span>
+                                    </h1>
+ 
+                                    <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
+                                        <div className="px-5 py-2 bg-white/95 border border-white/60 rounded-xl flex items-center gap-3">
+                                            <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center shadow-md">
+                                                <Zap size={14} className="text-white" />
+                                            </div>
+                                            <div className="text-left">
+                                                <p className="text-[9px] font-black text-indigo-950 uppercase leading-none mb-1">Status</p>
+                                                <p className="text-xs font-black text-indigo-900">Hyper Active 🔥</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+ 
+                                <div className="relative group shrink-0">
+                                    <div className="absolute inset-0 bg-white/40 blur-[50px] rounded-full group-hover:bg-white/60 transition-all duration-500" />
+                                    <div className="relative w-28 h-28 sm:w-44 sm:h-44 drop-shadow-[0_8px_16px_rgba(0,0,0,0.15)] transform group-hover:scale-105 transition-transform duration-500">
+                                        <img
+                                            src="/assets/avatars/owl-removebg-preview.png"
+                                            className="w-full h-full object-contain"
+                                            alt="Mission Master Owl"
+                                        />
+                                    </div>
+                                </div>pan>
                                     </h1>
 
                                     <div className="flex flex-col sm:flex-row items-center gap-6 pt-4">

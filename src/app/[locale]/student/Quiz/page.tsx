@@ -1502,36 +1502,32 @@ export default function QuizArena() {
               className="w-full"
             >
               {/* Hero Quest Banner */}
-              <div className="py-10 mb-8 w-full border-b-8 border-white/10">
+              <div className="py-6 sm:py-8 mb-6 w-full border-b-4 border-white/10 relative z-10">
                  <div className="relative w-full flex items-center">
-                    <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-white/30 to-transparent skew-x-[-20deg] transform translate-x-32" />
+                    {/* Skewed white reflection overlay for identical theme feel */}
+                    <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-white/20 to-transparent skew-x-[-20deg] transform translate-x-32 pointer-events-none" />
                     
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-12 relative z-10 w-full max-w-7xl mx-auto px-2 sm:px-6">
-                       <div className="text-center md:text-left flex-1 space-y-6">
-                          <div className="inline-flex items-center gap-2 px-6 py-2 bg-amber-400 text-indigo-950 rounded-full font-black text-xs uppercase tracking-[0.3em] shadow-xl">
-                             <Trophy size={16} fill="currentColor" /> Daily Quest
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10 w-full max-w-7xl mx-auto px-2 sm:px-6">
+                       <div className="text-center md:text-left flex-1 space-y-3">
+                          
+                          {/* Yellow Capsule Badge matching Dashboard Home */}
+                          <div className="inline-flex items-center gap-1.5 px-4 py-1 bg-amber-400 text-indigo-955 rounded-full font-black text-[10px] uppercase tracking-[0.2em] shadow-md select-none w-fit">
+                             ⭐ {isGrade1 ? 'GRADE 1' : isUKG ? 'UKG' : 'LKG'} SYLLABUS
                           </div>
-                          <h1 className="text-4xl sm:text-7xl font-black text-indigo-950 tracking-tighter leading-tight font-sans">
-                             The <span className="text-indigo-800 italic font-medium font-sans">Daily 3</span> <br/>
-                             Quest Arena
+
+                          <h1 className="text-2xl sm:text-4xl font-black text-indigo-950 tracking-tight leading-tight font-sans">
+                             Activity & <br />
+                             <span className="text-indigo-800">Practice Arena</span>
                           </h1>
-                          <p className="text-indigo-900/60 font-bold text-lg">
-                             {(() => {
-                               const todayDone = studentDashboard?.today_activity?.lessons_completed ?? 0;
-                               const target = 3;
-                               if (todayDone >= target) return `You've crushed today's quest! 🏆🎉`;
-                               return `Win ${target - todayDone} more question${target - todayDone !== 1 ? 's' : ''} today to earn a Magical Star! 🌟🌸`;
-                             })()}
-                          </p>
-
-
+                          
+                          <p className="text-indigo-900/60 font-bold text-sm sm:text-base">Choose a subject cloud below to play exciting games and quizzes! 🌟🚀</p>
                        </div>
 
-                       <div className="relative w-64 h-64 sm:w-80 sm:h-80 select-none">
-                          <div className="absolute inset-0 bg-indigo-600/10 blur-[60px] rounded-full" />
+                       <div className="relative w-28 h-28 sm:w-44 sm:h-44 select-none shrink-0">
+                          <div className="absolute inset-0 bg-indigo-600/10 blur-[40px] rounded-full" />
                           <img 
                             src="/assets/avatars/owl-removebg-preview.png" 
-                            className="w-full h-full object-contain" 
+                            className="w-full h-full object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.15)]" 
                             alt="Arena Master" 
                           />
                        </div>
@@ -1731,43 +1727,39 @@ export default function QuizArena() {
                 const totalStars = Object.keys(levelScores).reduce((acc, id) => acc + Math.min(levelScores[Number(id)] || 0, 5), 0);
 
                 return (
-                  <div className={`relative w-full overflow-hidden bg-gradient-to-br ${cfg.grad} px-6 pt-6 pb-12 rounded-b-[4rem] shadow-2xl border-b-8 border-white/20`}>
-                    {/* Bubble patterns */}
-                    <div className="absolute -top-10 -right-10 w-44 h-44 bg-white/10 rounded-full pointer-events-none" />
-                    <div className="absolute top-20 left-10 w-24 h-24 bg-white/5 rounded-full pointer-events-none" />
-                    
-                    {/* Header Controls */}
-                    <div className="relative z-10 flex items-center justify-between mb-8 max-w-4xl mx-auto w-full">
-                      <button
-                        onClick={() => setView('dashboard')}
-                        className="flex items-center gap-2 bg-white/30 hover:bg-white/40 active:scale-95 border-2 border-white/50 text-indigo-950 font-black text-sm px-6 py-3 rounded-2xl shadow-lg transition-all"
-                      >
-                        <ArrowLeft size={16} strokeWidth={3} /> Back
-                      </button>
-                      <div className="flex items-center gap-2 bg-amber-400 border-2 border-white px-5 py-2.5 rounded-full shadow-lg">
-                        <span className="text-xl">⭐</span>
-                        <span className="text-sm font-black text-indigo-950">{totalStars} / {maxSubjectStars} STARS</span>
-                      </div>
-                    </div>
-
-                    {/* Title & Banner */}
-                    <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6 max-w-4xl mx-auto w-full">
-                      <div className="text-center sm:text-left">
-                        <div className="inline-flex items-center gap-1.5 bg-white/30 border border-white/40 px-4 py-1.5 rounded-full mb-3 shadow-inner">
-                          <span className="text-sm">{cfg.icon}</span>
-                          <span className="text-[10px] font-black text-indigo-950 uppercase tracking-[0.25em]">{isUKG ? 'Challenge Map' : 'Levels Roadmap'}</span>
+                  <div className={`w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden bg-gradient-to-r ${cfg.grad} border-b-8 border-white/20 pt-8 pb-10 mb-8 z-10`}>
+                     <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6 w-full">
+                        <div className="text-center sm:text-left">
+                          <div className="inline-flex items-center gap-1.5 bg-white/30 border border-white/45 px-3.5 py-1 rounded-full mb-3 shadow-inner">
+                            <span className="text-xs">{cfg.icon}</span>
+                            <span className="text-[9px] font-black text-indigo-950 uppercase tracking-[0.2em]">{isUKG ? 'Challenge Map' : 'Levels Roadmap'}</span>
+                          </div>
+                          <h1 className="text-2xl sm:text-4xl font-black text-white leading-none tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] uppercase font-sans">
+                            {cfg.label}
+                          </h1>
+                          <p className="text-white/80 font-bold text-sm mt-1">{cfg.sub}</p>
+                          
+                          {/* Back & Star progress elements */}
+                          <div className="flex items-center gap-3 mt-6">
+                            <button
+                              onClick={() => setView('dashboard')}
+                              className="flex items-center gap-2 bg-white/30 hover:bg-white/40 active:scale-95 border border-white/55 text-indigo-950 font-black text-xs px-4 py-2 rounded-xl shadow-md transition-all"
+                            >
+                              <ArrowLeft size={12} strokeWidth={3} /> Back
+                            </button>
+                            <div className="flex items-center gap-1.5 bg-amber-400 border border-white/80 px-3.5 py-1.5 rounded-full shadow-md">
+                              <span className="text-xs">⭐</span>
+                              <span className="text-[10px] font-black text-indigo-950">{totalStars} / {maxSubjectStars} STARS</span>
+                            </div>
+                          </div>
                         </div>
-                        <h1 className="text-3xl sm:text-5xl font-black text-white leading-none tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] uppercase">
-                          {cfg.label}
-                        </h1>
-                        <p className="text-white/80 font-bold text-base mt-2">{cfg.sub}</p>
-                      </div>
-                      <img
-                        src={cfg.img}
-                        alt={cfg.label}
-                        className="w-32 h-32 sm:w-44 sm:h-44 object-contain drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] shrink-0 transform hover:scale-105 transition-transform duration-350"
-                      />
-                    </div>
+
+                        <img
+                          src={cfg.img}
+                          alt={cfg.label}
+                          className="w-24 h-24 sm:w-36 sm:h-36 object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.2)] shrink-0 transform hover:scale-105 transition-transform duration-350"
+                        />
+                     </div>
                   </div>
                 );
               })()}

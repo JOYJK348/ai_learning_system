@@ -59,33 +59,33 @@ export default function DashboardHome() {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6">
         
         {/* 1. HERO QUEST GREETING BANNER (Same Theme as Quiz/Learn pages) */}
-        <div className="py-10 mb-8 w-full border-b-8 border-white/10 relative">
+        <div className="py-6 sm:py-8 mb-6 w-full border-b-4 border-white/10 relative">
           <div className="relative w-full flex items-center">
             {/* Skewed white reflection overlay for identical theme feel */}
             <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-white/20 to-transparent skew-x-[-20deg] transform translate-x-32 pointer-events-none" />
             
-            <div className="flex flex-col md:flex-row items-center justify-between gap-12 relative z-10 w-full max-w-7xl mx-auto px-2 sm:px-6">
-              <div className="text-center md:text-left flex-1 space-y-6">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10 w-full max-w-7xl mx-auto px-2 sm:px-6">
+              <div className="text-center md:text-left flex-1 space-y-3">
                 
                 {/* Yellow Capsule Badge matching Quiz page */}
-                <div className="inline-flex items-center gap-2 px-6 py-2 bg-amber-400 text-indigo-950 rounded-full font-black text-xs uppercase tracking-[0.3em] shadow-xl select-none">
+                <div className="inline-flex items-center gap-1.5 px-4 py-1 bg-amber-400 text-indigo-950 rounded-full font-black text-[10px] uppercase tracking-[0.2em] shadow-md select-none w-fit">
                   ⭐ ADVENTURE HUB
                 </div>
 
-                <h1 className="text-4xl sm:text-7xl font-black text-indigo-950 tracking-tighter leading-tight font-sans">
+                <h1 className="text-2xl sm:text-4xl font-black text-indigo-950 tracking-tight leading-tight font-sans">
                   Let's Play, <br />
                   <span className="text-indigo-800">{studentName.toUpperCase()}!</span>
                 </h1>
                 
-                <p className="text-indigo-900/60 font-bold text-lg">Pick a magical world below to start your games! 🌟🦖</p>
+                <p className="text-indigo-900/60 font-bold text-sm sm:text-base">Pick a magical world below to start your games! 🌟🦖</p>
               </div>
 
               {/* Avatar Mascot with Indigo Glow backdrop */}
-              <div className="relative w-64 h-64 sm:w-80 sm:h-80 select-none">
-                <div className="absolute inset-0 bg-indigo-600/10 blur-[60px] rounded-full" />
+              <div className="relative w-28 h-28 sm:w-44 sm:h-44 select-none shrink-0">
+                <div className="absolute inset-0 bg-indigo-600/10 blur-[40px] rounded-full" />
                 <img 
                   src="/assets/avatars/owl-removebg-preview.png" 
-                  className="w-full h-full object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.15)]" 
+                  className="w-full h-full object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.15)]" 
                   alt="Mascot Helper" 
                 />
               </div>
