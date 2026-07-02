@@ -167,9 +167,6 @@ function GradeCard({ grade, isSelected, onSelect }: { grade: GradeSummary; isSel
           <span className={styles.gradeStatPill}><FileQuestion size={11} /> {grade.quizzes_count}</span>
         </div>
       </div>
-      <span className={styles.gradeFunScore} style={{ background: `${c}20`, color: c }}>
-        {grade.fun_score}%
-      </span>
       <ChevronRight size={15} className={styles.gradeArrow} />
     </button>
   );
@@ -178,8 +175,7 @@ function GradeCard({ grade, isSelected, onSelect }: { grade: GradeSummary; isSel
 /* ─── Progress Grade Card ────────────────────────────────── */
 function ProgressGradeCard({ g, isSelected, onSelect }: { g: GradeProgressSummary; isSelected: boolean; onSelect: () => void }) {
   const c = getProgColor(g.avg_progress);
-  const passRate = g.total_quizzes_attempted > 0
-    ? Math.round((g.total_quizzes_passed / g.total_quizzes_attempted) * 100) : 0;
+  const avgLessons = g.total_students > 0 ? Math.round(g.total_lessons_completed / g.total_students) : 0;
   return (
     <button
       type="button"
@@ -201,10 +197,8 @@ function ProgressGradeCard({ g, isSelected, onSelect }: { g: GradeProgressSummar
         </div>
       </div>
       <div className={styles.progressKpiCol}>
-        <span className={styles.progressKpiNum}>{g.total_lessons_completed}</span>
-        <span className={styles.progressKpiSub}>lessons done</span>
-        <span className={styles.progressKpiNum} style={{ marginTop: '0.35rem' }}>{passRate}%</span>
-        <span className={styles.progressKpiSub}>quiz pass</span>
+        <span className={styles.progressKpiNum}>{avgLessons}</span>
+        <span className={styles.progressKpiSub}>lessons avg</span>
       </div>
       <ChevronRight size={15} className={styles.gradeArrow} />
     </button>
@@ -829,9 +823,6 @@ export default function CurriculumPage() {
                         <p className={styles.subjectMeta}>{subject.chapters_count} chapters · {subject.lessons_count} lessons</p>
                       </div>
                       <div className={styles.subjectScore}>
-                        <span className={styles.subjectFunBadge} style={{ background: sc, color: '#fff' }}>
-                          {subject.fun_score}%
-                        </span>
                         <ChevronRight size={15} className={styles.subjectChevron} style={{ transform: isExp ? 'rotate(90deg)' : undefined }} />
                       </div>
                     </button>

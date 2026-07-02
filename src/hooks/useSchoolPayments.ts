@@ -55,8 +55,17 @@ export type PaymentsData = {
   server_time: string;
 };
 
+function getAuthHeaders(): Record<string, string> {
+  if (typeof window === 'undefined') return {};
+  const token = sessionStorage.getItem('zhi_auth_token');
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+}
+
 async function fetchPayments() {
-  const res = await fetch(`${API_BASE}/api/school-admin/payments`, { credentials: 'include' });
+  const res = await fetch(`${API_BASE}/api/school-admin/payments`, {
+    credentials: 'include',
+    headers: getAuthHeaders()
+  });
   if (!res.ok) throw new Error('Failed to fetch payments');
   const json = await res.json();
   return json.data as PaymentsData;
@@ -99,7 +108,10 @@ async function fetchUpgrade(planType: string) {
   const res = await fetch(`${API_BASE}/api/school-admin/upgrade`, {
     method: 'POST',
     credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders()
+    },
     body: JSON.stringify({ plan_type: planType }),
   });
   const json = await res.json();
@@ -114,7 +126,10 @@ export type PlanItem = {
 };
 
 async function fetchPlans() {
-  const res = await fetch(`${API_BASE}/api/school-admin/plans`, { credentials: 'include' });
+  const res = await fetch(`${API_BASE}/api/school-admin/plans`, {
+    credentials: 'include',
+    headers: getAuthHeaders()
+  });
   if (!res.ok) return null;
   const json = await res.json();
   return (json.data || json) as PlanItem[];
@@ -168,7 +183,10 @@ async function fetchCreateOrder(planType: string) {
   const res = await fetch(`${API_BASE}/api/school-admin/payments/create-order`, {
     method: 'POST',
     credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders()
+    },
     body: JSON.stringify({ plan_type: planType }),
   });
   const json = await res.json();
@@ -192,7 +210,10 @@ async function fetchVerifyPayment(payload: VerifyPaymentPayload) {
   const res = await fetch(`${API_BASE}/api/school-admin/payments/verify`, {
     method: 'POST',
     credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders()
+    },
     body: JSON.stringify(payload),
   });
   const json = await res.json();
@@ -219,7 +240,10 @@ async function fetchSubmitOfflinePayment(planType: string, referenceCode: string
   const res = await fetch(`${API_BASE}/api/school-admin/payments/offline`, {
     method: 'POST',
     credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders()
+    },
     body: JSON.stringify({ plan_type: planType, reference_code: referenceCode }),
   });
   const json = await res.json();

@@ -607,6 +607,13 @@ export default function LoginPage() {
 
 
 
+                    {trialExpired && (
+                      <div className="bg-rose-500/10 border border-rose-500/15 rounded-xl p-4 text-center">
+                        <p className="text-xs font-black text-rose-700 uppercase tracking-widest mb-1">Trial / Plan Expired</p>
+                        <p className="text-xs text-rose-600 font-semibold leading-relaxed">Your school trial or parent subscription has expired. Please contact your administrator or parent to renew.</p>
+                      </div>
+                    )}
+
                     {sessionClosed && (
                       <div className="bg-amber-500/10 border border-amber-500/15 rounded-xl p-4 text-center">
                         <p className="text-xs font-black text-amber-700 uppercase tracking-widest mb-1">Session Ended</p>

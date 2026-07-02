@@ -222,6 +222,9 @@ export default function ParentDashboard() {
       return msg.includes('forbidden') || msg.includes('unauthorized') || msg.includes('failed to load') || msg.includes('login') || msg.includes('token');
     };
 
+    const token = typeof window !== 'undefined' ? sessionStorage.getItem('zhi_auth_token') : null;
+    if (!token) return;
+
     if (
       (isAuthError(meError) ||
       isAuthError(childrenError) ||

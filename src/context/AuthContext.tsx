@@ -128,6 +128,22 @@ async function api(path: string, options: RequestInit = {}) {
       res = await fetch(`${API_BASE}${path}`, { credentials: 'include', ...options, headers: retryHeaders });
     }
   }
+
+  if (res.status === 403 && typeof window !== 'undefined' && !path.includes('/auth/login') && !path.includes('/auth/me')) {
+    // If forbidden, check if it's due to plan expiration
+    fetch(`${API_BASE}/api/auth/me`, { credentials: 'include', headers })
+      .then(r => r.json())
+      .then(data => {
+        if (data.plan_expired) {
+          const locale = window.location.pathname.split('/')[1] || 'en';
+          if (data.user?.role === 'parent') {
+            window.location.href = `${window.location.origin}/${locale}/parent/profile?tab=plans&trial_expired=1`;
+          } else if (data.user?.role === 'school_admin') {
+            window.location.href = `${window.location.origin}/${locale}/school-admin/payments?trial_expired=1`;
+          }
+        }
+      }).catch(() => {});
+  }
   return res;
 }
 
@@ -148,11 +164,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
       const data = (await res.json()) as AuthResponse & { plan_expired?: boolean };
       if (data.plan_expired) {
+        const locale = typeof window !== 'undefined'
+          ? (window.location.pathname.split('/')[1] || 'en')
+          : 'en';
+        const role = data.user?.role;
+        // Don't hard-logout: let them reach the upgrade/payment page
+        if (role === 'parent') {
+          if (data.user) saveCachedUser(data.user);
+          setUser(data.user ?? null);
+          const isAllowedPath = window.location.pathname.includes('/parent/plans') || 
+                               (window.location.pathname.includes('/parent/profile') && window.location.search.includes('tab=plans'));
+          if (typeof window !== 'undefined' && !isAllowedPath) {
+            window.location.href = `${window.location.origin}/${locale}/parent/profile?tab=plans&trial_expired=1`;
+          }
+          setLoading(false);
+          return;
+        } else if (role === 'school_admin') {
+          if (data.user) saveCachedUser(data.user);
+          setUser(data.user ?? null);
+          if (typeof window !== 'undefined' && !window.location.pathname.includes('/school-admin/payments')) {
+            window.location.href = `${window.location.origin}/${locale}/school-admin/payments?trial_expired=1`;
+          }
+          setLoading(false);
+          return;
+        }
+        // Fallback: hard logout for other roles
         saveCachedUser(null);
         saveCachedToken(null);
         setUser(null);
         document.cookie = 'zhi_user_role=; path=/; max-age=0';
-        window.location.href = `${window.location.origin}/${window.location.pathname.split('/')[1] || 'en'}/login?expired=1`;
+        window.location.href = `${window.location.origin}/${locale}/login?expired=1`;
         return;
       }
       if (data.user) saveCachedUser(data.user);
@@ -169,7 +210,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setError(null);
     try {
       const res = await api('/api/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) });
-      const data = (await res.json()) as AuthResponse & { access_token?: string; refresh_token?: string };
+      const data = (await res.json()) as AuthResponse & { access_token?: string; refresh_token?: string; plan_expired?: boolean };
       if (!res.ok) { setError(data.error || 'Login failed'); return null; }
       if (!data.user) { setError('Login failed'); return null; }
       saveCachedUser(data.user);
@@ -180,6 +221,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       clearPersistedCache();
       setUser(data.user);
       document.cookie = `zhi_user_role=${data.user.role}; path=/; max-age=${60 * 60 * 24 * 30}`;
+      
+      if (data.plan_expired) {
+        const locale = typeof window !== 'undefined'
+          ? (window.location.pathname.split('/')[1] || 'en')
+          : 'en';
+        if (data.user.role === 'parent') {
+          window.location.href = `${window.location.origin}/${locale}/parent/profile?tab=plans&trial_expired=1`;
+          return data.user;
+        } else if (data.user.role === 'school_admin') {
+          window.location.href = `${window.location.origin}/${locale}/school-admin/payments?trial_expired=1`;
+          return data.user;
+        }
+      }
       // Warm admin or student cache immediately after login
       if (data.user.role === 'super_admin') {
         Promise.all([

@@ -153,6 +153,7 @@ export default function ProfilePage() {
     searchParams.get('tab') === 'plans'
       ? 'plans'
       : 'details';
+  const isTrialExpiredRedirect = searchParams.get('trial_expired') === '1';
 
   const { user, refreshUser, loading: authLoading } = useAuth();
 
@@ -784,6 +785,22 @@ export default function ProfilePage() {
         {/* ══════════════ TAB: UPGRADES ══════════════ */}
         {activeSubTab === 'plans' && (
           <div className={styles.sectionPad}>
+            {/* Trial expired redirect banner */}
+            {isTrialExpiredRedirect && (
+              <div style={{
+                display: 'flex', alignItems: 'flex-start', gap: '0.75rem',
+                background: 'linear-gradient(135deg, rgba(220,38,38,0.07), rgba(185,28,28,0.04))',
+                border: '1.5px solid rgba(220,38,38,0.2)', borderRadius: '1rem',
+                padding: '1rem 1.2rem', marginBottom: '1.25rem'
+              }}>
+                <AlertTriangle size={18} style={{ color: '#dc2626', flexShrink: 0, marginTop: '0.05rem' }} />
+                <div>
+                  <p style={{ margin: 0, fontWeight: 900, color: '#991b1b', fontSize: '0.82rem', letterSpacing: '-0.01em' }}>Your 7-Day Free Trial Has Ended</p>
+                  <p style={{ margin: '0.2rem 0 0', fontWeight: 600, color: '#b91c1c', fontSize: '0.73rem', lineHeight: 1.45 }}>Choose a plan below to continue accessing the parent portal. Your child's data and progress are safe and will be fully restored on upgrade.</p>
+                </div>
+              </div>
+            )}
+
             {alert && (
               <div
                 className={`${styles.alert} ${
@@ -995,11 +1012,7 @@ export default function ProfilePage() {
                     <p style={{ margin: 0 }}>Loading grades…</p>
                   </div>
                 ) : (
-                  <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(5.5rem, 1fr))',
-                    gap: '0.55rem',
-                  }}>
+                  <div className={styles.gradeGrid}>
                     {gradesList.map((g) => {
                       const isSelected = childGradeId === g.id;
                       return (
@@ -1007,28 +1020,9 @@ export default function ProfilePage() {
                           key={g.id}
                           type="button"
                           onClick={() => setChildGradeId(g.id)}
-                          style={{
-                            border: isSelected
-                              ? '2px solid #0f766e'
-                              : '1.5px solid rgba(15,23,42,0.08)',
-                            borderRadius: '0.85rem',
-                            padding: '0.65rem 0.4rem',
-                            background: isSelected
-                              ? 'linear-gradient(135deg, rgba(20,184,166,0.1), rgba(20,184,166,0.05))'
-                              : '#fff',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            gap: '0.15rem',
-                            transition: 'all 0.2s ease',
-                            boxShadow: isSelected
-                              ? '0 0 0 3px rgba(20,184,166,0.15)'
-                              : '0 1px 4px rgba(0,0,0,0.04)',
-                            transform: isSelected ? 'scale(1.03)' : 'scale(1)',
-                          }}
+                          className={`${styles.gradeCard} ${isSelected ? styles.gradeCardActive : ''}`}
                         >
-                          <span style={{ fontSize: '1.3rem' }}>
+                          <span className={styles.gradeEmoji}>
                             {g.code === 'lkg' ? '🌱' : g.code === 'ukg' ? '🌿' :
                              g.code === 'grade-1' ? '1️⃣' : g.code === 'grade-2' ? '2️⃣' :
                              g.code === 'grade-3' ? '3️⃣' : g.code === 'grade-4' ? '4️⃣' :
@@ -1036,11 +1030,11 @@ export default function ProfilePage() {
                              g.code === 'grade-7' ? '7️⃣' : g.code === 'grade-8' ? '8️⃣' :
                              g.code === 'grade-9' ? '9️⃣' : g.code === 'grade-10' ? '🔟' : '📚'}
                           </span>
-                          <span style={{ fontSize: '0.68rem', fontWeight: 900, color: isSelected ? '#0f766e' : '#334155', letterSpacing: '-0.01em' }}>
+                          <span className={styles.gradeName}>
                             {g.name}
                           </span>
                           {g.age_range && (
-                            <span style={{ fontSize: '0.55rem', fontWeight: 700, color: isSelected ? '#0f766e' : '#94a3b8' }}>
+                            <span className={styles.gradeAge}>
                               {g.age_range}
                             </span>
                           )}

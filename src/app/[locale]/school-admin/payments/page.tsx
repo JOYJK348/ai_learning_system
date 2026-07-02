@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Manrope } from 'next/font/google';
 import {
@@ -124,8 +125,8 @@ function CountdownTimer({ expiresAt, serverTime }: { expiresAt: string; serverTi
 }
 
 export default function PaymentsPage() {
-  const { user } = useAuth();
-  const { data, isLoading } = useSchoolPayments();
+  const { user, loading: authLoading } = useAuth();
+  const { data, isLoading, isError } = useSchoolPayments();
   const plans = usePlansConfig();
   const d = data as PaymentsData | undefined;
   const sub = d?.subscription;
@@ -134,6 +135,8 @@ export default function PaymentsPage() {
   const transactions = d?.transactions || [];
   const serverTime = d?.server_time;
   const expired = sub?.plan_status === 'expired';
+  const searchParams = useSearchParams();
+  const isTrialExpiredRedirect = searchParams?.get('trial_expired') === '1';
 
   const [selectedInvoice, setSelectedInvoice] = useState<any | null>(null);
 
@@ -173,7 +176,9 @@ export default function PaymentsPage() {
     { label: 'Active Features', value: `${enabledCount} / 6`, icon: Shield, change: `${enabledCount} of 6 enabled` },
   ];
 
-  if (isLoading) {
+  const isReallyLoading = isLoading || authLoading || (!data && !isError && !!user?.schoolId);
+
+  if (isReallyLoading) {
     return (
       <div className={`${styles.shell} ${adminFont.variable}`}>
         <div className={styles.loading}>
@@ -214,7 +219,19 @@ export default function PaymentsPage() {
         {sub && (
           <motion.div variants={CONTAINER} initial="hidden" animate="show">
 
-            {/* Alert */}
+
+            {/* Trial expired redirect banner */}
+            {isTrialExpiredRedirect && (
+              <motion.div className={`${styles.alert} ${styles.alertRed}`} variants={ITEM} style={{ background: 'linear-gradient(135deg, rgba(220,38,38,0.08), rgba(185,28,28,0.05))', border: '1.5px solid rgba(220,38,38,0.25)', borderRadius: '0.85rem', padding: '1rem 1.25rem', marginBottom: '0.5rem' }}>
+                <AlertOctagon size={16} style={{ color: '#dc2626', flexShrink: 0 }} />
+                <div style={{ flex: 1 }}>
+                  <p style={{ margin: 0, fontWeight: 900, color: '#991b1b', fontSize: '0.82rem' }}>Your 7-Day Free Trial Has Ended</p>
+                  <p style={{ margin: '0.2rem 0 0', fontWeight: 600, color: '#b91c1c', fontSize: '0.75rem', lineHeight: 1.4 }}>Please choose a plan below to continue accessing the school portal. Your data is safe and will be restored on upgrade.</p>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Existing expired alert */}
             {isExpired && (
               <motion.div className={`${styles.alert} ${styles.alertRed}`} variants={ITEM}>
                 <AlertOctagon size={16} />
