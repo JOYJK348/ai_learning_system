@@ -27,7 +27,7 @@ import EvsExploreGame from './EvsExploreGame';
 import HindiLetterQuiz from './HindiLetterQuiz';
 import { useData } from '@/context/DataContext';
 import { getLetterData } from '@/core/data/letterData';
-import AlphabetTraceBoard from './AlphabetTraceBoard';
+import AlphabetBoard from './AlphabetBoard';
 import MemoryMatch from './MemoryMatch';
 import LetterMatchQuiz from './LetterMatchQuiz';
 import MissingLettersQuiz from './MissingLettersQuiz';
@@ -77,6 +77,7 @@ import DayNightDaysQuiz from './DayNightDaysQuiz';
 import MonthsTodayTomorrowQuiz from './MonthsTodayTomorrowQuiz';
 import ClockRecognitionQuiz from './ClockRecognitionQuiz';
 import UyirEzhuthukkalIntroQuiz from './UyirEzhuthukkalIntroQuiz';
+import TamilUyirTraceBoard from './TamilUyirTraceBoard';
 import TamilLetterOrderQuiz from './TamilLetterOrderQuiz';
 import TamilMeiIntroQuiz from './TamilMeiIntroQuiz';
 import TamilSoundQuiz from './TamilSoundQuiz';
@@ -184,7 +185,8 @@ const ACTIVITY_TYPE_MAP: Record<number, string> = {
   77: 'ukg_evs_quiz',
   78: 'ukg_gk_quiz',
   79: 'ukg_hindi_quiz',
-  85: 'grade1_english_quiz',
+   85: 'grade1_english_quiz',
+   86: 'tamil_uyir_trace',
 };
 
 export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onClose, studentName, subjectName }: Props) {
@@ -758,6 +760,10 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
     // High-priority Uyir Ezhuthukkal Intro Lesson Overrides
     if ((lowerTitle.includes('அறிமுகம்') && !lowerTitle.includes('ஈரெழுத்து') && !lowerTitle.includes('மூவெழுத்து')) || lowerTitle.includes('uyir ezhuthukkal') || lowerTitle.includes('அ - ஔ')) {
       return [{ id: `${lessonId}-uyirezhuthukkalintro`, name: 'Uyir Ezhuthukkal Intro Game', activity_type_id: 63, config: {}, sort_order: 1, attempt: null }] as Activity[];
+    }
+    // High-priority Tamil Uyir Trace (எழுத்து பயிற்சி)
+    if (lowerTitle.includes('எழுத்து பயிற்சி') || lowerTitle.includes('writing practice') || (lowerTitle.includes('பயிற்சி') && lowerTitle.includes('எழுத்து'))) {
+      return [{ id: `${lessonId}-tamiluyirtrace`, name: 'Tamil Uyir Trace Board', activity_type_id: 86, config: {}, sort_order: 1, attempt: null }] as Activity[];
     }
     // High-priority Tamil Letter Order Lesson Overrides
     if (lowerTitle.includes('வரிசைமுறை') || lowerTitle.includes('letter order') || lowerTitle.includes('order')) {
@@ -1576,7 +1582,7 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
       case 'word_showcase':
         return <TamilWordShowcase config={act.config} {...commonProps} />;
       case 'alphabet_board':
-        return <AlphabetTraceBoard capital={!!act.config?.capital} {...commonProps} />;
+        return <AlphabetBoard capital={!!act.config?.capital} {...commonProps} />;
       case 'memory_match':
         return <MemoryMatch config={act.config as any} {...commonProps} />;
       case 'letter_match_quiz':
@@ -1707,6 +1713,8 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
         return <UkgGkQuiz lessonTitle={lessonTitle} {...commonProps} />;
       case 'ukg_hindi_quiz':
         return <UkgHindiQuiz lessonTitle={lessonTitle} {...commonProps} />;
+      case 'tamil_uyir_trace':
+        return <TamilUyirTraceBoard {...commonProps} />;
       case 'grade1_english_quiz':
         return <Grade1EnglishActivityPlayer lessonId={lessonId} onComplete={commonProps.onComplete} />;
       default:

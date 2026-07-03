@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useRef, useMemo } from 'react';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, CheckCircle } from 'lucide-react';
+import { SimpleTraceCanvas } from './Grade1EnglishGames';
 
 const FONT = `@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@550;750;850&display=swap');.kf{font-family:'Baloo 2',sans-serif!important;}`;
 
@@ -366,9 +367,63 @@ function getQuestions(title: string): QuestionData[] {
   ];
 }
 
+const SWAR_LIKHEN_LETTERS = ['अ', 'आ', 'इ', 'ई', 'उ', 'ऊ'];
+
 export default function UkgHindiQuiz({ lessonTitle, onComplete }: Props) {
   const t0 = useRef(Date.now());
   const title = lessonTitle.toLowerCase();
+  const isSwarLikhen = title.includes('लिखना') && title.includes('स्वर');
+
+  const [traceIndex, setTraceIndex] = useState(0);
+  const [tracedLetters, setTracedLetters] = useState<Set<string>>(new Set());
+
+  // ── SWAR LIKHEN TRACE ────────────────────────────────────────────────────────
+  if (isSwarLikhen) {
+    const currentSwar = SWAR_LIKHEN_LETTERS[traceIndex];
+    const allTraced = tracedLetters.size === SWAR_LIKHEN_LETTERS.length;
+
+    const handleTraceComplete = () => {
+      const next = new Set(tracedLetters);
+      next.add(currentSwar);
+      setTracedLetters(next);
+      if (traceIndex + 1 < SWAR_LIKHEN_LETTERS.length) {
+        setTraceIndex(traceIndex + 1);
+      }
+    };
+
+    return (
+      <div className="kf flex flex-col items-center gap-4 w-full max-w-2xl mx-auto px-2 select-none">
+        <style dangerouslySetInnerHTML={{ __html: FONT }} />
+        <div className="text-center">
+          <h2 className="text-2xl font-black text-indigo-950 flex items-center justify-center gap-2">
+            ✏️ हिंदी स्वर Trace Board
+          </h2>
+          <p className="text-xs font-black text-indigo-900/40 uppercase tracking-widest mt-1">
+            Trace each vowel! ({tracedLetters.size} / {SWAR_LIKHEN_LETTERS.length} Done)
+          </p>
+        </div>
+        <div className="w-full bg-indigo-50/40 rounded-full h-3 border border-indigo-100 overflow-hidden">
+          <div
+            className="h-full bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full transition-all duration-500"
+            style={{ width: `${(tracedLetters.size / SWAR_LIKHEN_LETTERS.length) * 100}%` }}
+          />
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="text-xs font-black text-indigo-900/50 uppercase tracking-wider">Vowel {traceIndex + 1} of {SWAR_LIKHEN_LETTERS.length}</span>
+          <span className="text-3xl font-black text-amber-700 bg-amber-50 border-2 border-amber-200 rounded-2xl px-5 py-1">{currentSwar}</span>
+        </div>
+        <div className="w-full">
+          <SimpleTraceCanvas key={currentSwar} letter={currentSwar} onComplete={handleTraceComplete} />
+        </div>
+        {allTraced && (
+          <button onClick={() => onComplete({ score: 100, max_score: 100, completion_data: { traced_count: tracedLetters.size }, time_taken_seconds: Math.round((Date.now() - t0.current) / 1000) })}
+            className="w-full max-w-xs inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-black text-lg shadow-xl bg-emerald-500 hover:bg-emerald-600 text-white border-b-4 border-emerald-700 cursor-pointer active:scale-95 animate-pulse transition-all">
+            <CheckCircle size={22} /> All Done! 🎉
+          </button>
+        )}
+      </div>
+    );
+  }
 
   const teachCards = useMemo(() => getTeachData(title), [title]);
   const questions = useMemo(() => getQuestions(title), [title]);

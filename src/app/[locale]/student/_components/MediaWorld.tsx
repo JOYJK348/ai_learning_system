@@ -17,17 +17,6 @@ interface RhymeEntry {
   youtubeId: string;
 }
 
-interface VideoEntry {
-  id: number;
-  title: string;
-  emoji: string;
-  tag: string;
-  youtubeId: string;
-  thumb: string;
-  grades: string[];
-  subjects: string[];
-}
-
 /* ─────────── RHYME CATALOGUE ─────────── */
 const RHYME_CATALOGUE: RhymeEntry[] = [
   // ── LKG ──────────────────────────────────────────────
@@ -73,31 +62,7 @@ const RHYME_CATALOGUE: RhymeEntry[] = [
   { id: 27, title: 'मेरी किताब',                  image: '📖', color: 'from-cyan-400 to-blue-500',       grades: ['grade 1','class 1'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'g_meQdy3JYM' },
 ];
 
-/* ─────────── VIDEO CATALOGUE ─────────── */
-const VIDEO_CATALOGUE: VideoEntry[] = [
-  // English
-  { id: 1,  title: 'ABC Alphabet Song',       emoji: '🔤', tag: 'ENGLISH A-Z',   youtubeId: 'hq3yfQnllfQ', thumb: 'https://img.youtube.com/vi/hq3yfQnllfQ/hqdefault.jpg', grades: ['lkg','ukg','grade 1','class 1'], subjects: ['english'] },
-  { id: 2,  title: 'Phonics for Beginners',   emoji: '📖', tag: 'PHONICS',       youtubeId: 'BELlZKpi1Zs', thumb: 'https://img.youtube.com/vi/BELlZKpi1Zs/hqdefault.jpg', grades: ['ukg','grade 1','class 1'], subjects: ['english'] },
-  { id: 3,  title: 'English Phonics Grade 1', emoji: '📚', tag: 'GRADE 1',       youtubeId: 'cBGU2HDMHsI', thumb: 'https://img.youtube.com/vi/cBGU2HDMHsI/hqdefault.jpg', grades: ['grade 1','class 1'], subjects: ['english'] },
-  // Maths
-  { id: 4,  title: 'Numbers 1-20 Song',       emoji: '🔢', tag: 'COUNT 1-20',    youtubeId: 'DR-cfDsHuGA', thumb: 'https://img.youtube.com/vi/DR-cfDsHuGA/hqdefault.jpg', grades: ['lkg','ukg','grade 1','class 1'], subjects: ['math','கணிதம்'] },
-  { id: 5,  title: 'Shapes All Around',       emoji: '🔺', tag: 'SHAPES',        youtubeId: 'OEbRDtCAFdU', thumb: 'https://img.youtube.com/vi/OEbRDtCAFdU/hqdefault.jpg', grades: ['ukg','grade 1','class 1'], subjects: ['math','கணிதம்'] },
-  { id: 6,  title: 'Addition for Class 1',    emoji: '➕', tag: 'ADDITION',      youtubeId: 'J53USqiFDVQ', thumb: 'https://img.youtube.com/vi/J53USqiFDVQ/hqdefault.jpg', grades: ['grade 1','class 1'], subjects: ['math','கணிதம்'] },
-  // Tamil
-  { id: 7,  title: 'Tamil Vowels அ ஆ',        emoji: '🔡', tag: 'UYIR EZHUTHU', youtubeId: '2lC5HPUAJEM', thumb: 'https://img.youtube.com/vi/2lC5HPUAJEM/hqdefault.jpg', grades: ['lkg','ukg','grade 1','class 1'], subjects: ['tamil','தமிழ்'] },
-  { id: 8,  title: 'Tamil Uyirmei Letters',   emoji: '🌟', tag: 'UYIRMEI',       youtubeId: 'XZz7iLiB3P0', thumb: 'https://img.youtube.com/vi/XZz7iLiB3P0/hqdefault.jpg', grades: ['grade 1','class 1'], subjects: ['tamil','தமிழ்'] },
-  { id: 9,  title: 'Tamil Consonants க-ன',    emoji: '📝', tag: 'MEI EZHUTHU',  youtubeId: 'DLDgWXUYZ5A', thumb: 'https://img.youtube.com/vi/DLDgWXUYZ5A/hqdefault.jpg', grades: ['ukg','grade 1','class 1'], subjects: ['tamil','தமிழ்'] },
-  // EVS
-  { id: 10, title: 'Animal Sounds Safari',    emoji: '🦁', tag: 'ANIMALS',       youtubeId: 'F3YoHSuXSJ4', thumb: 'https://img.youtube.com/vi/F3YoHSuXSJ4/hqdefault.jpg', grades: ['lkg','ukg','grade 1','class 1'], subjects: ['evs','environment','science'] },
-  { id: 11, title: 'Body Parts for Kids',     emoji: '🦷', tag: 'MY BODY',       youtubeId: 'MKaoSS6BqC4', thumb: 'https://img.youtube.com/vi/MKaoSS6BqC4/hqdefault.jpg', grades: ['ukg','grade 1','class 1'], subjects: ['evs','environment','science'] },
-  { id: 12, title: 'Plants & Animals EVS',    emoji: '🌿', tag: 'EVS SCIENCE',   youtubeId: 'v7uYBGJTmac', thumb: 'https://img.youtube.com/vi/v7uYBGJTmac/hqdefault.jpg', grades: ['grade 1','class 1'], subjects: ['evs','environment','science'] },
-  // GK
-  { id: 13, title: 'GK World for Kids',       emoji: '🌍', tag: 'GENERAL KG',    youtubeId: 'guRqbVWCnqQ', thumb: 'https://img.youtube.com/vi/guRqbVWCnqQ/hqdefault.jpg', grades: ['ukg','grade 1','class 1'], subjects: ['general','gk','knowledge'] },
-  { id: 14, title: 'Colours of the Rainbow',  emoji: '🌈', tag: 'COLOURS',       youtubeId: 'ySbFi6bkR_g', thumb: 'https://img.youtube.com/vi/ySbFi6bkR_g/hqdefault.jpg', grades: ['lkg','ukg'], subjects: ['general','gk','evs','environment'] },
-  // Hindi
-  { id: 15, title: 'Hindi Varnamala अ-ज्ञ',   emoji: '🕉️', tag: 'VARNAMALA',    youtubeId: 'BqOXHXOX0dA', thumb: 'https://img.youtube.com/vi/BqOXHXOX0dA/hqdefault.jpg', grades: ['ukg','grade 1','class 1'], subjects: ['hindi','हिंदी','இந்தி'] },
-  { id: 16, title: 'Hindi Numbers 1-10',      emoji: '🔟', tag: 'HINDI GINTI',   youtubeId: 'iOgENEkFl1Y', thumb: 'https://img.youtube.com/vi/iOgENEkFl1Y/hqdefault.jpg', grades: ['grade 1','class 1'], subjects: ['hindi','हिंदी','இந்தி'] },
-];
+
 
 /* ─────────── SUBJECT META ─────────── */
 const SUBJECT_META: Record<string, { label: string; emoji: string; tab: string; keywords: string[] }> = {
@@ -183,14 +148,6 @@ export default function MediaWorld() {
     [gradeRhymes, searchTerm]
   );
 
-  // Filter videos: grade + current tab's subject keywords
-  const filteredVideos = useMemo(() =>
-    VIDEO_CATALOGUE.filter(v =>
-      v.grades.includes(grade) && matchesTab(v.subjects, tabMeta.keywords)
-    ),
-    [grade, tabMeta]
-  );
-
   const handleRhymePlay = (rhyme: RhymeEntry) => {
     // Open the Youtube video player directly in popup
     setVideo({
@@ -216,10 +173,10 @@ export default function MediaWorld() {
               🎵 MEDIA WORLD
             </div>
             <h2 className="text-3xl sm:text-5xl font-black text-indigo-950 tracking-tighter leading-tight">
-              Rhymes &amp; Cinema
+              Rhymes
             </h2>
             <p className="text-indigo-900/60 font-bold text-sm mt-2">
-              Pick a subject to explore {gradeLabel} songs &amp; videos! 🌟
+              Pick a subject to explore {gradeLabel} rhymes! 🌟
             </p>
           </div>
 
@@ -343,70 +300,7 @@ export default function MediaWorld() {
           </div>
         </section>
 
-        {/* ── CINEMA PORTAL ────────────────────────────────────── */}
-        <section className="relative px-6 pb-12">
-          <div className="flex flex-col items-center text-center mb-10 px-4">
-            <div className="w-full border-b-8 border-white/10 pb-8 mb-6">
-              <h3 className="text-2xl sm:text-4xl font-black text-indigo-950 tracking-tighter">
-                🎬 {tabMeta.label} Videos
-              </h3>
-              <p className="text-indigo-900/50 font-bold text-sm mt-1">Watch &amp; Learn! 🍿</p>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <AnimatePresence mode="popLayout">
-              {filteredVideos.map(v => (
-                <motion.div
-                  key={v.id}
-                  layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.25 }}
-                  className="group relative bg-white/90 rounded-[2.5rem] border-4 border-white p-3 shadow-2xl active:scale-95 transition-transform overflow-hidden backdrop-blur-sm"
-                >
-                  <div className="aspect-video rounded-2xl overflow-hidden relative mb-4 bg-slate-800">
-                    <img
-                      src={v.thumb}
-                      className="w-full h-full object-cover"
-                      alt={v.title}
-                      onError={e => { (e.target as HTMLImageElement).src = `https://placehold.co/320x180/6366f1/fff?text=${v.emoji}`; }}
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/50 transition-colors">
-                      <span className="text-5xl absolute">{v.emoji}</span>
-                      <button
-                        onClick={() => setVideo(v)}
-                        className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-xl opacity-0 group-hover:opacity-100 transition-opacity z-10"
-                        suppressHydrationWarning
-                      >
-                        <Play size={28} className="text-indigo-600" fill="currentColor" />
-                      </button>
-                    </div>
-                    {/* Mobile always-visible play */}
-                    <button
-                      onClick={() => setVideo(v)}
-                      className="sm:hidden absolute bottom-2 right-2 w-11 h-11 bg-white/90 rounded-xl flex items-center justify-center shadow-md"
-                      suppressHydrationWarning
-                    >
-                      <Play size={22} className="text-indigo-600" fill="currentColor" />
-                    </button>
-                  </div>
-                  <div className="px-2 pb-2">
-                    <h4 className="text-sm font-black text-indigo-950 uppercase mb-1">{v.title}</h4>
-                    <span className="text-[9px] font-black text-indigo-500 uppercase tracking-widest">{v.tag}</span>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-
-            {/* Coming-soon card */}
-            <div className="group relative bg-white/30 rounded-[2.5rem] border-4 border-dashed border-white/50 p-3 shadow-lg flex flex-col items-center justify-center min-h-[220px] gap-3 opacity-50">
-              <span className="text-5xl">🎬</span>
-              <p className="text-xs font-black text-indigo-950/60 uppercase tracking-widest text-center">More videos soon!</p>
-            </div>
-          </div>
-        </section>
 
       </div>
 
