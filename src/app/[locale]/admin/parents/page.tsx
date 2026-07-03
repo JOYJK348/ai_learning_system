@@ -16,6 +16,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { adminKeys } from '@/core/constants/queryKeys';
 import { adminApi } from '@/core/services/adminApi';
 import { useAuth } from '@/context/AuthContext';
+import { useAdminPrefetch } from '@/core/hooks/useAdminPrefetch';
 import styles from './page.module.css';
 
 const adminFont = Manrope({ subsets: ['latin'], variable: '--admin-font', display: 'swap' });
@@ -24,6 +25,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, '') ?? '';
 /* ─────────────────────────── TYPES ─────────────────────────── */
 type Parent = {
   id: string; name: string; email: string; phone?: string; profile_photo_url?: string;
+  is_pending_registration?: boolean;
   plan_type_id?: number; plan_name?: string; plan_code?: string;
   plan_status_id?: number; plan_status_name?: string; plan_status_color?: string; plan_status_code?: string;
   approval_status_id?: number; approval_status_name?: string; approval_status_color?: string; approval_status_code?: string;
@@ -107,6 +109,7 @@ export default function ParentsAdminPage() {
   const locale = (params?.locale as string) || 'en';
   const { user, loading } = useAuth();
   const queryClient = useQueryClient();
+  const { prefetchParentDetails } = useAdminPrefetch(user?.id);
 
   const { data: parentsData, isLoading: parentsLoading } = useQuery({
     queryKey: [...adminKeys.parentDirectory, user?.id],
@@ -117,6 +120,14 @@ export default function ParentsAdminPage() {
 
   const parents = parentsData?.parents ?? [];
   const monthlyRevenue = parentsData?.monthlyRevenue ?? 0;
+
+  // As soon as the directory loads, prefetch ALL parent details in background
+  useEffect(() => {
+    if (parents.length > 0) {
+      prefetchParentDetails(parents as Array<{ id: string }>);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [parents.length]);
 
   const { data: regData } = useQuery<any[]>({
     queryKey: ['admin', 'pending-registrations', 'list'],
@@ -141,19 +152,25 @@ export default function ParentsAdminPage() {
   const [selectedParentId, setSelectedParentId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'profile' | 'children' | 'payments'>('profile');
 
-  const { data: detailParent, isFetching: detailLoading } = useQuery({
+  const { data: detailParent, isLoading: detailLoading } = useQuery({
     queryKey: [...adminKeys.parentDetail(selectedParentId || ''), user?.id],
     queryFn: () => adminApi.parentDetail(selectedParentId!) as Promise<DetailedParent>,
     enabled: !!selectedParentId && !loading && !!user,
     staleTime: 5 * 60_000,
+    // Show cached data immediately, silently refetch in background
+    placeholderData: (prev) => prev,
   });
 
   const prefetchDetail = (id: string) => {
-    queryClient.prefetchQuery({
-      queryKey: [...adminKeys.parentDetail(id), user?.id],
-      queryFn: () => adminApi.parentDetail(id) as Promise<DetailedParent>,
-      staleTime: 5 * 60_000,
-    });
+    const qKey = [...adminKeys.parentDetail(id), user?.id];
+    // Only prefetch if not already cached (prefetchParentDetails may have already done it)
+    if (queryClient.getQueryData(qKey) === undefined) {
+      queryClient.prefetchQuery({
+        queryKey: qKey,
+        queryFn: () => adminApi.parentDetail(id) as Promise<DetailedParent>,
+        staleTime: 5 * 60_000,
+      });
+    }
   };
 
   /* edit modal */
@@ -458,7 +475,7 @@ export default function ParentsAdminPage() {
     { label: 'Expiring Soon', value: stats.expiringSoon, sub: 'Within 7 days', icon: <AlertTriangle size={18} />, color: stats.expiringSoon > 0 ? '#dc2626' : '#64748b', iconClass: styles.statIconAccent5 },
   ], [stats, monthlyRevenue]);
 
-  if (loading || !user) return null;
+  if (!hydrated || loading || !user) return null;
 
   /* ════════════════════════════ RENDER ════════════════════════════ */
   return (
@@ -602,125 +619,139 @@ export default function ParentsAdminPage() {
           </p>
         </div>
       ) : (
-        <section className={styles.tableWrap}>
-          {/* Table Header (desktop) */}
-          <div className={styles.tableHeader}>
-            <button type="button" className={styles.sortBtn} onClick={toggleSelectAll} aria-label="Select all" style={{ display: 'flex', justifyContent: 'center' }}>
-              {selectedIds.size === filteredParents.length ? <CheckSquare size={15} /> : <Square size={15} />}
-            </button>
-            <span>Parent</span>
-            <span>Children</span>
-            <span>Plan</span>
-            <span>Status</span>
-            <span>Expiry</span>
-            <span />
+        <section className={styles.tableSection}>
+          <div className={styles.tableHeaderSection}>
+            <div className={styles.tableTitle}>
+              <h2>All Parents</h2>
+              <span>{filteredParents.length} parents</span>
+            </div>
           </div>
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th className={styles.checkboxCol}>
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.size === filteredParents.length && filteredParents.length > 0}
+                      onChange={toggleSelectAll}
+                    />
+                  </th>
+                  <th>Parent</th>
+                  <th>Children</th>
+                  <th>Plan</th>
+                  <th>Status</th>
+                  <th>Expiry</th>
+                  <th className={styles.actionsCol}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredParents.map(item => {
+                  const expiring = item.days_until_expiry !== null && item.days_until_expiry !== undefined && item.days_until_expiry >= 0 && item.days_until_expiry <= 7;
+                  const expired = item.days_until_expiry !== null && item.days_until_expiry !== undefined && item.days_until_expiry < 0;
+                  const isSelected = selectedIds.has(item.id);
 
-          <motion.div variants={CONTAINER} initial="hidden" animate="show">
-            {filteredParents.map(item => {
-              const expiring = item.days_until_expiry !== null && item.days_until_expiry !== undefined && item.days_until_expiry >= 0 && item.days_until_expiry <= 7;
-              const expired = item.days_until_expiry !== null && item.days_until_expiry !== undefined && item.days_until_expiry < 0;
-              const isSelected = selectedIds.has(item.id);
+                  return (
+                    <tr
+                      key={item.id}
+                      className={`${styles.tableRow} ${isSelected ? styles.rowSelected : ''}`}
+                    >
+                      {/* Checkbox */}
+                      <td className={styles.checkboxCol}>
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleSelect(item.id)}
+                        />
+                      </td>
 
-              return (
-                <motion.div
-                  key={item.id}
-                  variants={ROW_ITEM}
-                  className={`${styles.row} ${isSelected ? styles.rowSelected : ''}`}
-                >
-                  {/* Checkbox */}
-                  <div className={styles.cellCheck}>
-                    <button type="button" className={styles.checkBtn} onClick={(e) => { e.stopPropagation(); toggleSelect(item.id); }} aria-label={isSelected ? 'Deselect' : 'Select'}>
-                      {isSelected ? <CheckSquare size={15} color="#12312f" /> : <Square size={15} />}
-                    </button>
-                  </div>
-
-                  {/* Parent */}
-                  <div className={styles.cellParent}>
-                    <div className={styles.avatar} style={{ background: getAvatarGradient(item.name) }}>
-                      {item.profile_photo_url ? <img src={item.profile_photo_url} alt={item.name} /> : item.name.charAt(0)}
-                    </div>
-                    <div className={styles.nameGroup}>
-                      <p className={styles.name}>{item.name}</p>
-                      <p className={styles.meta}>{item.email}</p>
-                    </div>
-                  </div>
-
-                  {/* Children (mobile card row 2) */}
-                  <div className={styles.cellChildren}>
-                    {item.children_count > 0 ? (
-                      <>
-                        <div className={styles.childrenInfo}>
-                          <Users2 size={13} />
-                          <span>{item.children_count} {item.children_count === 1 ? 'Child' : 'Children'}</span>
+                      {/* Parent details */}
+                      <td>
+                        <div className={styles.cellParent}>
+                          <div className={styles.avatar} style={{ background: getAvatarGradient(item.name) }}>
+                            {item.profile_photo_url ? <img src={item.profile_photo_url} alt={item.name} /> : item.name.charAt(0)}
+                          </div>
+                          <div className={styles.nameGroup}>
+                            <span className={styles.schoolName}>{item.name}</span>
+                            <span className={styles.schoolMeta}>{item.email}</span>
+                          </div>
                         </div>
-                        <span className={styles.childrenNames}>
-                          {item.children_names.slice(0, 2).join(', ')}{item.children_names.length > 2 ? '...' : ''}
-                        </span>
-                      </>
-                    ) : (
-                      <div className={styles.childrenInfo}>
-                        <Users2 size={13} />
-                        <span style={{ color: '#94a3b8' }}>No children</span>
-                      </div>
-                    )}
-                  </div>
+                      </td>
 
-                  {/* Plan (mobile card row 3 left) */}
-                  <div className={styles.cellPlan}>
-                    <span className={`${styles.planBadge} ${(item.plan_name || '').toLowerCase() === 'paid' ? styles.planBadgePaid : styles.planBadgeFree}`}>
-                      {(item.plan_name || '').toLowerCase() === 'paid' ? <><CreditCard size={10} /> Paid</> : (item.plan_name || 'Free')}
-                    </span>
-                  </div>
+                      {/* Children count only (No list of names) */}
+                      <td>
+                        <div className={styles.cellChildren}>
+                          {item.children_count > 0 ? (
+                            <span className={styles.childrenCountBadge}>
+                              👶 {item.children_count} {item.children_count === 1 ? 'Child' : 'Children'}
+                            </span>
+                          ) : (
+                            <span className={styles.noChildrenText}>No children</span>
+                          )}
+                        </div>
+                      </td>
 
-                  {/* Status (mobile card row 3 right) */}
-                  <div className={styles.cellStatus}>
-                    <span className={`${styles.statusPill} ${item.status_id !== 1 ? styles.statusPillInactive : ''}`}>
-                      {item.status_id === 1 ? 'Active' : 'Inactive'}
-                    </span>
-                    <span className={`${styles.approvalBadge} ${(item.approval_status_code || 'approved') === 'pending' ? styles.approvalPending : (item.approval_status_code || 'approved') === 'rejected' ? styles.approvalRejected : styles.approvalApproved}`}>
-                      <Clock size={10} />
-                      {item.approval_status_name || 'Approved'}
-                    </span>
-                  </div>
+                      {/* Plan */}
+                      <td>
+                        <div className={styles.cellPlan}>
+                          <span className={`${styles.planBadge} ${(item.plan_name || '').toLowerCase() === 'paid' ? styles.planPaid : styles.planFree}`}>
+                            {(item.plan_name || '').toLowerCase() === 'paid' ? <><CreditCard size={10} /> Paid</> : (item.plan_name || 'Free')}
+                          </span>
+                        </div>
+                      </td>
 
-                  {/* Expiry (desktop only) */}
-                  <div className={styles.cellExpiry}>
-                    {item.plan_expires_at ? (
-                      <span className={expired ? styles.cellExpiryExpired : expiring ? styles.cellExpiryExpiring : ''}>
-                        {new Date(item.plan_expires_at).toLocaleDateString('en-IN')}
-                      </span>
-                    ) : (
-                      <span style={{ color: '#94a3b8' }}>—</span>
-                    )}
-                  </div>
+                      {/* Status */}
+                      <td>
+                        <div className={styles.cellStatus}>
+                          <span className={`${styles.statusPill} ${item.status_id !== 1 ? styles.statusPillInactive : ''}`}>
+                            {item.status_id === 1 ? 'Active' : 'Inactive'}
+                          </span>
+                          <span className={`${styles.approvalBadge} ${(item.approval_status_code || 'approved') === 'pending' ? styles.approvalPending : (item.approval_status_code || 'approved') === 'rejected' ? styles.approvalRejected : styles.approvalApproved}`}>
+                            {item.approval_status_name || 'Approved'}
+                          </span>
+                        </div>
+                      </td>
 
-                  {/* Actions */}
-                  <div className={styles.cellActions}>
-                    {item.is_pending_registration ? (
-                      <>
-                        <button type="button" className={styles.actionBtn} onClick={() => openPendingDetail(item)} title="View Details"><Eye size={14} /></button>
-                        {item.approval_status_code === 'pending' && (
-                          <>
-                            <button type="button" className={styles.actionBtn} onClick={() => handleApprovePending(item)} title="Approve" style={{ color: '#16a34a' }}><CheckCircle2 size={14} /></button>
-                            <button type="button" className={styles.actionBtn} onClick={() => handleRejectPending(item)} title="Reject" style={{ color: '#dc2626' }}><XCircle size={14} /></button>
-                          </>
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        <button type="button" className={styles.actionBtn} onClick={() => openDetail(item.id)} onMouseEnter={() => prefetchDetail(item.id)} title="View Details"><Eye size={14} /></button>
-                        <button type="button" className={styles.actionBtn} onClick={() => openEdit(item)} title="Edit"><Pencil size={14} /></button>
-                        <button type="button" className={styles.actionBtn} onClick={() => openPayment(item)} title="Add Payment" style={{ color: '#059669' }}><CreditCard size={14} /></button>
-                        <button type="button" className={styles.actionBtn} onClick={() => openEmail(item)} title="Send Email"><Send size={14} /></button>
-                        <button type="button" className={`${styles.actionBtn} ${styles.actionBtnDanger}`} onClick={() => deleteParent(item)} title="Delete"><Trash2 size={14} /></button>
-                      </>
-                    )}
-                  </div>
-                </motion.div>
-              );
-            })}
-          </motion.div>
+                      {/* Expiry */}
+                      <td>
+                        <div className={styles.cellExpiry}>
+                          {item.plan_expires_at ? (
+                            <span className={expired ? styles.cellExpiryExpired : expiring ? styles.cellExpiryExpiring : ''}>
+                              {new Date(item.plan_expires_at).toLocaleDateString('en-IN')}
+                            </span>
+                          ) : (
+                            <span style={{ color: '#94a3b8' }}>No expiry</span>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Actions */}
+                      <td className={styles.actionsCol}>
+                        <div className={styles.actionMenu}>
+                          {item.is_pending_registration ? (
+                            <>
+                              <button type="button" className={styles.iconButton} onClick={() => openPendingDetail(item)} title="View Details"><Eye size={14} /></button>
+                              {item.approval_status_code === 'pending' && (
+                                <>
+                                  <button type="button" className={styles.iconButton} onClick={() => handleApprovePending(item)} title="Approve" style={{ color: '#16a34a' }}><CheckCircle2 size={14} /></button>
+                                  <button type="button" className={styles.iconButton} onClick={() => handleRejectPending(item)} title="Reject" style={{ color: '#dc2626' }}><XCircle size={14} /></button>
+                                </>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              <button type="button" className={styles.iconButton} onClick={() => openDetail(item.id)} onMouseEnter={() => prefetchDetail(item.id)} title="View Details"><Eye size={14} /></button>
+                              <button type="button" className={`${styles.iconButton} ${styles.iconButtonDanger}`} onClick={() => deleteParent(item)} title="Delete"><Trash2 size={14} /></button>
+                            </>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </section>
       )}
 

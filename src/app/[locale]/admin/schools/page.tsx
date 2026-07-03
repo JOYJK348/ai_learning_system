@@ -1037,13 +1037,6 @@ export default function SchoolsAdminPage() {
                           </button>
                           <button 
                             className={styles.iconButton} 
-                            onClick={() => sendReminder(school)}
-                            title="Send reminder"
-                          >
-                            <Mail size={16} />
-                          </button>
-                          <button 
-                            className={styles.iconButton} 
                             onClick={() => setExpandedSchool(expandedSchool === school.id ? null : school.id)}
                             title="Quick view"
                           >

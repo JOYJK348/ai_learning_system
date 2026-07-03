@@ -3,7 +3,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { adminKeys } from '@/core/constants/queryKeys';
 import { adminApi } from '@/core/services/adminApi';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 
 type PrefetchItem = {
   key: readonly string[];
@@ -79,5 +79,45 @@ export function useAdminPrefetch(userId?: string) {
     });
   }, [queryClient, userId]);
 
-  return { prefetchAll };
+  // Track which parent IDs we've already prefetched so we don't re-fire
+  const prefetchedIds = useRef<Set<string>>(new Set());
+
+  /**
+   * Call this after the parent directory list loads.
+   * It will fire off background detail-fetches for every parent
+   * that isn't already in the React Query cache, staggered by 80ms
+   * so we don't hammer the network at once.
+   */
+  const prefetchParentDetails = useCallback(
+    (parents: Array<{ id: string }>) => {
+      const STAGGER_MS = 80;
+
+      parents.forEach((p, i) => {
+        if (!p.id) return;
+        if (prefetchedIds.current.has(p.id)) return;
+
+        // Mark as enqueued immediately to prevent duplicate calls
+        prefetchedIds.current.add(p.id);
+
+        const qKey = [...adminKeys.parentDetail(p.id), userId];
+
+        // If already cached and fresh, skip
+        if (queryClient.getQueryData(qKey) !== undefined) return;
+
+        setTimeout(() => {
+          queryClient.prefetchQuery({
+            queryKey: qKey,
+            queryFn: () => adminApi.parentDetail(p.id),
+            staleTime: 5 * 60_000,
+          }).catch(() => {
+            // Remove from set on failure so next visit can retry
+            prefetchedIds.current.delete(p.id);
+          });
+        }, i * STAGGER_MS);
+      });
+    },
+    [queryClient, userId]
+  );
+
+  return { prefetchAll, prefetchParentDetails };
 }

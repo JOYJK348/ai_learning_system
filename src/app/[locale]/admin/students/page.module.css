@@ -686,6 +686,19 @@
   gap: 0.35rem;
 }
 
+/* Compatibility classes used in markup */
+.actionRow {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.actionsCell {
+  width: auto;
+  white-space: nowrap;
+  text-align: right;
+}
+
 .iconButton,
 .iconButtonDanger {
   display: inline-flex;
@@ -714,6 +727,18 @@
 
 .iconButtonDanger:hover {
   background: rgba(254, 226, 226, 0.96);
+}
+
+/* Mobile-only helper: hide by default, show in card/mobile layout */
+.mobileOnly {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .mobileOnly {
+    display: inline-flex;
+    margin-left: auto;
+  }
 }
 
 /* Expanded Row */
