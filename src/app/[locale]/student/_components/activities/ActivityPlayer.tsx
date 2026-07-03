@@ -27,7 +27,7 @@ import EvsExploreGame from './EvsExploreGame';
 import HindiLetterQuiz from './HindiLetterQuiz';
 import { useData } from '@/context/DataContext';
 import { getLetterData } from '@/core/data/letterData';
-import AlphabetBoard from './AlphabetBoard';
+import AlphabetTraceBoard from './AlphabetTraceBoard';
 import MemoryMatch from './MemoryMatch';
 import LetterMatchQuiz from './LetterMatchQuiz';
 import MissingLettersQuiz from './MissingLettersQuiz';
@@ -1576,7 +1576,7 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
       case 'word_showcase':
         return <TamilWordShowcase config={act.config} {...commonProps} />;
       case 'alphabet_board':
-        return <AlphabetBoard capital={!!act.config?.capital} {...commonProps} />;
+        return <AlphabetTraceBoard capital={!!act.config?.capital} {...commonProps} />;
       case 'memory_match':
         return <MemoryMatch config={act.config as any} {...commonProps} />;
       case 'letter_match_quiz':
