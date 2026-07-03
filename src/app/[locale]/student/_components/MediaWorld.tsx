@@ -32,45 +32,45 @@ interface VideoEntry {
 const RHYME_CATALOGUE: RhymeEntry[] = [
   // ── LKG ──────────────────────────────────────────────
   // English
-  { id: 1,  title: 'ABC Song',                    image: '🔤', color: 'from-blue-400 to-indigo-500',     grades: ['lkg'], subjects: ['english'], youtubeId: 'hq3yfQnllfQ' },
-  { id: 2,  title: 'Twinkle Twinkle Little Star', image: '⭐', color: 'from-violet-400 to-purple-500',   grades: ['lkg'], subjects: ['english'], youtubeId: 'yCjJyiup8ld' },
-  { id: 3,  title: 'Baa Baa Black Sheep',         image: '🐑', color: 'from-slate-400 to-gray-500',      grades: ['lkg'], subjects: ['english'], youtubeId: 'm_l1s0Xf3_8' },
+  { id: 1,  title: 'ABC Song',                    image: '🔤', color: 'from-blue-400 to-indigo-500',     grades: ['lkg'], subjects: ['english'], youtubeId: 'kpy6QEAuLJw' },
+  { id: 2,  title: 'Twinkle Twinkle Little Star', image: '⭐', color: 'from-violet-400 to-purple-500',   grades: ['lkg'], subjects: ['english'], youtubeId: 'hqzvHfy-Ij0' },
+  { id: 3,  title: 'Baa Baa Black Sheep',         image: '🐑', color: 'from-slate-400 to-gray-500',      grades: ['lkg'], subjects: ['english'], youtubeId: '1dttq5p0xUM' },
   // Tamil
-  { id: 4,  title: 'நிலா நிலா ஓடி வா',            image: '🌙', color: 'from-amber-400 to-orange-500',    grades: ['lkg'], subjects: ['tamil','தமிழ்'], youtubeId: 'eG_Wlh28Pxs' },
-  { id: 5,  title: 'யானை யானை',                   image: '🐘', color: 'from-sky-400 to-blue-500',        grades: ['lkg'], subjects: ['tamil','தமிழ்'], youtubeId: 'wW5-uB7m7qA' },
-  { id: 6,  title: 'காக்கா காக்கா',               image: '🐦', color: 'from-slate-600 to-slate-800',    grades: ['lkg'], subjects: ['tamil','தமிழ்'], youtubeId: 'w7e0ClyXQJ8' },
+  { id: 4,  title: 'நிலா நிலா ஓடி வா',            image: '🌙', color: 'from-amber-400 to-orange-500',    grades: ['lkg'], subjects: ['tamil','தமிழ்'], youtubeId: 'W1n592oiwrE' },
+  { id: 5,  title: 'யானை யானை',                   image: '🐘', color: 'from-sky-400 to-blue-500',        grades: ['lkg'], subjects: ['tamil','தமிழ்'], youtubeId: 'JGOZ98fufIc' },
+  { id: 6,  title: 'காக்கா காக்கா',               image: '🐦', color: 'from-slate-600 to-slate-800',    grades: ['lkg'], subjects: ['tamil','தமிழ்'], youtubeId: 'NvRI5SQtaOA' },
   // Hindi
-  { id: 7,  title: 'मछली जल की रानी',             image: '🐟', color: 'from-cyan-500 to-teal-600',       grades: ['lkg'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'B_B93jJ3Kns' },
-  { id: 8,  title: 'नानी तेरी मोरनी',              image: '🦚', color: 'from-emerald-400 to-teal-500',    grades: ['lkg'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: '8C67x8D2Vb4' },
-  { id: 9,  title: 'लकड़ी की काठी',                image: '🐎', color: 'from-yellow-600 to-amber-700',    grades: ['lkg'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'vV_yQ9X_uYg' },
+  { id: 7,  title: 'मछली जल की रानी',             image: '🐟', color: 'from-cyan-500 to-teal-600',       grades: ['lkg'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'CUciBrtqFGM' },
+  { id: 8,  title: 'नानी तेरी मोरनी',              image: '🦚', color: 'from-emerald-400 to-teal-500',    grades: ['lkg'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'k8sN7Vl3IFQ' },
+  { id: 9,  title: 'लकड़ी की काठी',                image: '🐎', color: 'from-yellow-600 to-amber-700',    grades: ['lkg'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'P2r7LoytBfo' },
 
   // ── UKG ──────────────────────────────────────────────
   // English
-  { id: 10, title: 'Rain Rain Go Away',           image: '🌧️', color: 'from-sky-400 to-blue-500',       grades: ['ukg'], subjects: ['english'], youtubeId: 'c3v0rL7uS1I' },
-  { id: 11, title: 'Jack and Jill',               image: '⛰️', color: 'from-lime-400 to-green-500',     grades: ['ukg'], subjects: ['english'], youtubeId: 'fv_0R2_u0g4' },
-  { id: 12, title: 'Row, Row, Row Your Boat',     image: '🛶', color: 'from-cyan-400 to-sky-500',        grades: ['ukg'], subjects: ['english'], youtubeId: '7otA2mYgSFE' },
+  { id: 10, title: 'Rain Rain Go Away',           image: '🌧️', color: 'from-sky-400 to-blue-500',       grades: ['ukg'], subjects: ['english'], youtubeId: 'Zu6o23Pu0Do' },
+  { id: 11, title: 'Jack and Jill',               image: '⛰️', color: 'from-lime-400 to-green-500',     grades: ['ukg'], subjects: ['english'], youtubeId: 'RbNQ0SQT0Z4' },
+  { id: 12, title: 'Row, Row, Row Your Boat',     image: '🛶', color: 'from-cyan-400 to-sky-500',        grades: ['ukg'], subjects: ['english'], youtubeId: 'fDR_pRHYMGA' },
   // Tamil
-  { id: 13, title: 'பள்ளிக்குப் போவோம்',          image: '🎒', color: 'from-pink-400 to-rose-500',       grades: ['ukg'], subjects: ['tamil','தமிழ்'], youtubeId: 'lQfTz1_R_u8' },
-  { id: 14, title: 'மரம் வளர்ப்போம்',             image: '🌳', color: 'from-emerald-400 to-green-600',   grades: ['ukg'], subjects: ['tamil','தமிழ்'], youtubeId: 'v0l4k8Y_u0g' },
-  { id: 15, title: 'வண்ணத்துப்பூச்சி',             image: '🦋', color: 'from-fuchsia-400 to-pink-500',    grades: ['ukg'], subjects: ['tamil','தமிழ்'], youtubeId: 'x2O7uA2vN_o' },
+  { id: 13, title: 'பள்ளிக்குப் போவோம்',          image: '🎒', color: 'from-pink-400 to-rose-500',       grades: ['ukg'], subjects: ['tamil','தமிழ்'], youtubeId: 'NgTUYxHzi5E' },
+  { id: 14, title: 'மரம் வளர்ப்போம்',             image: '🌳', color: 'from-emerald-400 to-green-600',   grades: ['ukg'], subjects: ['tamil','தமிழ்'], youtubeId: 'mqLOxqew_Zg' },
+  { id: 15, title: 'வண்ணத்துப்பூச்சி',             image: '🦋', color: 'from-fuchsia-400 to-pink-500',    grades: ['ukg'], subjects: ['tamil','தமிழ்'], youtubeId: '8hhML4oO-Zg' },
   // Hindi
-  { id: 16, title: 'आलू कचालू',                   image: '🥔', color: 'from-amber-500 to-yellow-600',    grades: ['ukg'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: '8t4nO_uY_g4' },
-  { id: 17, title: 'रेल चली',                     image: '🚂', color: 'from-purple-400 to-indigo-500',   grades: ['ukg'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'H8x0n1b2_w' },
-  { id: 18, title: 'चिड़िया रानी',                 image: '🐦', color: 'from-sky-400 to-teal-500',        grades: ['ukg'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'H8x0n1b2_w' },
+  { id: 16, title: 'आलू कचालू',                   image: '🥔', color: 'from-amber-500 to-yellow-600',    grades: ['ukg'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'MKlM07RkGU0' },
+  { id: 17, title: 'रेल चली',                     image: '🚂', color: 'from-purple-400 to-indigo-500',   grades: ['ukg'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'HiZ7x55IHps' },
+  { id: 18, title: 'चिड़िया रानी',                 image: '🐦', color: 'from-sky-400 to-teal-500',        grades: ['ukg'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: '9-ZXyJAAsWE' },
 
   // ── GRADE 1 ──────────────────────────────────────────
   // English
-  { id: 19, title: 'The Rainbow',                 image: '🌈', color: 'from-rose-450 to-pink-550',      grades: ['grade 1','class 1'], subjects: ['english'], youtubeId: 'ySbFi6bkR_g' },
-  { id: 20, title: 'The Swing',                   image: '🎢', color: 'from-teal-400 to-cyan-500',      grades: ['grade 1','class 1'], subjects: ['english'], youtubeId: '3P1n_uX2YgE' },
-  { id: 21, title: 'My Shadow',                   image: '👤', color: 'from-slate-500 to-zinc-700',     grades: ['grade 1','class 1'], subjects: ['english'], youtubeId: '8b6nO_u1g8Y' },
+  { id: 19, title: 'The Rainbow',                 image: '🌈', color: 'from-rose-450 to-pink-550',      grades: ['grade 1','class 1'], subjects: ['english'], youtubeId: 'wceMsYSyNUQ' },
+  { id: 20, title: 'The Swing',                   image: '🎢', color: 'from-teal-400 to-cyan-500',      grades: ['grade 1','class 1'], subjects: ['english'], youtubeId: 'dv3tOAh-dH8' },
+  { id: 21, title: 'My Shadow',                   image: '👤', color: 'from-slate-500 to-zinc-700',     grades: ['grade 1','class 1'], subjects: ['english'], youtubeId: 'FKSP8Efd94Y' },
   // Tamil
-  { id: 22, title: 'என் பள்ளி',                   image: '🏫', color: 'from-indigo-400 to-purple-500',   grades: ['grade 1','class 1'], subjects: ['tamil','தமிழ்'], youtubeId: 'vLz10e1uE_g' },
-  { id: 23, title: 'என் நாடு',                    image: '🇮🇳', color: 'from-orange-500 to-amber-600',    grades: ['grade 1','class 1'], subjects: ['tamil','தமிழ்'], youtubeId: 'XZz7iLiB3P0' },
-  { id: 24, title: 'இயற்கையை காப்போம்',            image: '🌲', color: 'from-green-500 to-emerald-600',   grades: ['grade 1','class 1'], subjects: ['tamil','தமிழ்'], youtubeId: 'v7uYBGJTmac' },
+  { id: 22, title: 'என் பள்ளி',                   image: '🏫', color: 'from-indigo-400 to-purple-500',   grades: ['grade 1','class 1'], subjects: ['tamil','தமிழ்'], youtubeId: 'dzJr8xBwQYk' },
+  { id: 23, title: 'என் நாடு',                    image: '🇮🇳', color: 'from-orange-500 to-amber-600',    grades: ['grade 1','class 1'], subjects: ['tamil','தமிழ்'], youtubeId: 'tFX7SPmxq3I' },
+  { id: 24, title: 'இயற்கையை காப்போம்',            image: '🌲', color: 'from-green-500 to-emerald-600',   grades: ['grade 1','class 1'], subjects: ['tamil','தமிழ்'], youtubeId: '_Vi38gAvoQk' },
   // Hindi
-  { id: 25, title: 'मेरा भारत महान',               image: '🇮🇳', color: 'from-orange-400 to-amber-600',    grades: ['grade 1','class 1'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'BqOXHXOX0dA' },
-  { id: 26, title: 'पेड़ लगाओ',                    image: '🌳', color: 'from-green-450 to-lime-550',     grades: ['grade 1','class 1'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'BqOXHXOX0dA' },
-  { id: 27, title: 'मेरी किताब',                  image: '📖', color: 'from-cyan-400 to-blue-500',       grades: ['grade 1','class 1'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'BqOXHXOX0dA' },
+  { id: 25, title: 'मेरा भारत महान',               image: '🇮🇳', color: 'from-orange-400 to-amber-600',    grades: ['grade 1','class 1'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'H7zLP0It0Wg' },
+  { id: 26, title: 'पेड़ लगाओ',                    image: '🌳', color: 'from-green-450 to-lime-550',     grades: ['grade 1','class 1'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'O-DcfnNZU4Y' },
+  { id: 27, title: 'मेरी किताब',                  image: '📖', color: 'from-cyan-400 to-blue-500',       grades: ['grade 1','class 1'], subjects: ['hindi','हिंदी','இந்தி'], youtubeId: 'g_meQdy3JYM' },
 ];
 
 /* ─────────── VIDEO CATALOGUE ─────────── */
