@@ -976,7 +976,7 @@ function UltimateLearnEngineInner() {
                                                         transition={{ delay: idx * 0.05 }}
                                                         whileHover={chapter.is_unlocked ? { y: -6 } : {}}
                                                         whileTap={chapter.is_unlocked ? { scale: 0.97 } : {}}
-                                                        className={`group relative w-[75vw] max-w-[280px] sm:w-full sm:max-w-[270px] aspect-square mx-auto rounded-[2.5rem] border-4 border-white shadow-2xl active:scale-95 transition-all bg-gradient-to-br ${visuals.color} flex flex-col items-center justify-between p-4 ${
+                                                        className={`group relative w-[75vw] max-w-[280px] sm:w-full sm:max-w-[270px] aspect-square mx-auto rounded-[2.5rem] border-4 border-white shadow-2xl active:scale-95 transition-all bg-gradient-to-br ${visuals.color} flex flex-col items-center justify-between p-4 overflow-hidden ${
                                                             !chapter.is_unlocked ? 'opacity-50 cursor-not-allowed' : ''
                                                         }`}
                                                     >
@@ -990,27 +990,33 @@ function UltimateLearnEngineInner() {
                                                             )}
                                                         </div>
 
-                                                        {/* Character image centered in card - matching DashboardHome */}
-                                                        <div className="w-full flex-1 flex items-center justify-center select-none pointer-events-none mt-2 relative">
-                                                            {chapter.is_unlocked ? (
-                                                                visuals.image ? (
-                                                                    <Image
-                                                                        src={visuals.image}
-                                                                        alt={chapter.name}
-                                                                        width={200}
-                                                                        height={200}
-                                                                        priority={true}
-                                                                        className="max-h-[170px] w-auto h-auto object-contain transform scale-105 group-hover:scale-110 transition-all duration-200 drop-shadow-[0_8px_8px_rgba(0,0,0,0.2)]"
-                                                                    />
-                                                                ) : (
+                                                        {/* Character image - fills entire card when image exists */}
+                                                        {chapter.is_unlocked ? (
+                                                            visuals.image ? (
+                                                                <>
+                                                                    <div className="absolute inset-0 rounded-[2.5rem] overflow-hidden z-0">
+                                                                        <Image
+                                                                            src={visuals.image}
+                                                                            alt={chapter.name}
+                                                                            fill
+                                                                            priority={true}
+                                                                            className="object-cover group-hover:scale-110 transition-all duration-200"
+                                                                        />
+                                                                    </div>
+                                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent rounded-[2.5rem] z-[1]" />
+                                                                </>
+                                                            ) : (
+                                                                <div className="w-full flex-1 flex items-center justify-center select-none pointer-events-none mt-2 relative">
                                                                     <span className="text-6xl font-black text-white drop-shadow-md">
                                                                         {visuals.mascot}
                                                                     </span>
-                                                                )
-                                                            ) : (
+                                                                </div>
+                                                            )
+                                                        ) : (
+                                                            <div className="w-full flex-1 flex items-center justify-center select-none pointer-events-none mt-2 relative">
                                                                 <Lock size={40} className="text-white/40" />
-                                                            )}
-                                                        </div>
+                                                            </div>
+                                                        )}
 
                                                         {/* In-progress progress bar directly overlayed at the bottom of mascot */}
                                                         {chapter.is_unlocked && chapter.completion_percentage > 0 && chapter.completion_percentage < 100 && (
@@ -1025,7 +1031,7 @@ function UltimateLearnEngineInner() {
                                                         )}
 
                                                         {/* Clean text directly on card (No white container) - matching DashboardHome */}
-                                                        <h3 className="text-white font-black text-base sm:text-xl tracking-tight leading-tight drop-shadow-[0_2px_2px_rgba(0,0,0,0.4)] uppercase w-full text-center mt-2">
+                                                        <h3 className="text-white font-black text-base sm:text-xl tracking-tight leading-tight drop-shadow-[0_2px_2px_rgba(0,0,0,0.4)] uppercase w-full text-center mt-auto pt-2">
                                                             {cleanSoundTerms(chapter.name)}
                                                         </h3>
                                                     </motion.button>
@@ -1070,7 +1076,7 @@ function UltimateLearnEngineInner() {
                                                 const t = l.title.toLowerCase();
                                                 return !t.includes('inside') && !t.includes('outside') && !t.includes('complete the pattern') && !(t.includes('animal') && t.includes('sound'));
                                             }).map((lesson) => {
-                                                const visuals = getLessonVisuals(activeSubject.name, lesson.title);
+                                                const visuals = getLessonVisuals(activeSubject.name, lesson.title, studentProfile?.grade_name);
                                                 return (
                                                     <motion.button
                                                         key={lesson.id}
@@ -1078,59 +1084,50 @@ function UltimateLearnEngineInner() {
                                                         disabled={!lesson.is_unlocked}
                                                         whileHover={lesson.is_unlocked ? { y: -6, scale: 1.02 } : {}}
                                                         whileTap={lesson.is_unlocked ? { scale: 0.97 } : {}}
-                                                        className={`relative bg-white/40 backdrop-blur-2xl border-2 rounded-[2.5rem] p-5 text-center shadow-xl transition-all overflow-hidden group ${lesson.is_unlocked
+                                                        className={`group relative w-[75vw] max-w-[280px] sm:w-full sm:max-w-[270px] aspect-square mx-auto rounded-[2.5rem] border-2 shadow-xl transition-all overflow-hidden ${lesson.is_unlocked
                                                                 ? 'border-white/60 hover:bg-white/60 active:scale-95'
                                                                 : 'border-gray-300/30 opacity-50 cursor-not-allowed'
                                                             }`}
                                                     >
-                                                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                                        <div className="relative inline-block mb-4">
-                                                            <motion.div
-                                                                animate={lesson.is_unlocked ? { y: [0, -6, 0] } : {}}
-                                                                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                                                                className={`w-24 h-24 sm:w-28 sm:h-28 rounded-[2rem] flex items-center justify-center text-5xl sm:text-6xl shadow-xl border-4 border-white transform group-hover:scale-110 transition-transform duration-500 ${lesson.is_unlocked
-                                                                        ? `bg-gradient-to-br ${visuals.color} text-white`
-                                                                        : 'bg-gray-200 grayscale'
-                                                                    }`}
-                                                            >
-                                                                {lesson.is_unlocked ? (() => {
-                                                                const checkpointKey = getCheckpointKey(lesson.title);
-                                                                if (checkpointKey) return <CheckpointIcon type={checkpointKey} className="w-16 h-16 sm:w-20 sm:h-20" />;
-                                                                const wordsKey = getWordsKey(lesson.title);
-                                                                if (wordsKey) return <WordsIcon type={wordsKey} className="w-16 h-16 sm:w-20 sm:h-20" />;
-                                                                const consonantKey = getConsonantKey(lesson.title);
-                                                                if (consonantKey) return <ConsonantIcon group={consonantKey} className="w-16 h-16 sm:w-20 sm:h-20" />;
-                                                                const strokeKey = getStrokeKey(lesson.title);
-                                                                if (strokeKey) return <StrokeIcon type={strokeKey} className="w-14 h-14 sm:w-16 sm:h-16 drop-shadow-[0_2px_6px_rgba(0,0,0,0.25)]" />;
-                                                                return <span className="text-5xl sm:text-6xl">{visuals.mascot}</span>;
-                                                            })() : '🔒'}
-                                                            </motion.div>
+                                                        {lesson.is_unlocked && visuals.image ? (
+                                                            <>
+                                                                <div className="absolute inset-0">
+                                                                    <Image
+                                                                        src={visuals.image}
+                                                                        alt={lesson.title}
+                                                                        fill
+                                                                        className="object-cover"
+                                                                    />
+                                                                </div>
+                                                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                                                            </>
+                                                        ) : (
+                                                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5" />
+                                                        )}
+                                                        <div className="relative flex flex-col items-center justify-end p-5 h-full w-full">
                                                             {lesson.progress?.status === 'completed' && (
-                                                                <div className="absolute -top-2 -right-2">
-                                                                    <div className="w-9 h-9 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg border-2 border-white">
-                                                                        <CheckCircle size={20} className="text-white" />
+                                                                <div className="absolute top-4 right-4 z-20">
+                                                                    <div className="w-7 h-7 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg border-2 border-white">
+                                                                        <CheckCircle size={14} className="text-white" />
                                                                     </div>
                                                                 </div>
                                                             )}
-                                                        </div>
-                                                        <h3 className={`text-base sm:text-lg font-black mb-1 tracking-tight ${lesson.is_unlocked ? 'text-indigo-950' : 'text-gray-500'
-                                                            }`}>
-                                                            {cleanSoundTerms(lesson.title)}
-                                                        </h3>
-                                                        {lesson.description && (
-                                                            <p className="text-[10px] font-bold text-indigo-900/40 mb-3 leading-tight line-clamp-1">{cleanSoundTerms(lesson.description)}</p>
-                                                        )}
-                                                        <div className={`w-full py-2.5 rounded-2xl text-[10px] font-black shadow-lg flex items-center justify-center gap-2 transition-all ${lesson.progress?.status === 'completed'
-                                                                ? 'bg-emerald-500 text-white'
-                                                                : lesson.progress?.status === 'in_progress'
-                                                                    ? 'bg-amber-500 text-white'
-                                                                    : lesson.is_unlocked
-                                                                        ? `bg-gradient-to-r ${visuals.color} text-white group-hover:brightness-110`
-                                                                        : 'bg-gray-300 text-gray-500'
-                                                            }`}>
-                                                            {lesson.progress?.status === 'completed' ? 'DONE ✅' :
-                                                                lesson.progress?.status === 'in_progress' ? 'PLAY ▶' :
-                                                                    lesson.is_unlocked ? 'START' : '🔒 LOCKED'}
+                                                            <h3 className={`text-white font-black text-center text-sm sm:text-lg tracking-tight leading-tight drop-shadow-[0_2px_2px_rgba(0,0,0,0.6)] w-full mt-auto ${lesson.is_unlocked ? '' : 'text-gray-400'
+                                                                }`}>
+                                                                {cleanSoundTerms(lesson.title)}
+                                                            </h3>
+                                                            <div className={`w-full py-2 rounded-2xl text-[10px] font-black shadow-lg flex items-center justify-center gap-2 transition-all ${lesson.progress?.status === 'completed'
+                                                                    ? 'bg-emerald-500 text-white'
+                                                                    : lesson.progress?.status === 'in_progress'
+                                                                        ? 'bg-amber-500 text-white'
+                                                                        : lesson.is_unlocked
+                                                                            ? 'bg-white/30 text-white backdrop-blur-sm'
+                                                                            : 'bg-gray-300 text-gray-500'
+                                                                }`}>
+                                                                {lesson.progress?.status === 'completed' ? 'DONE ✅' :
+                                                                    lesson.progress?.status === 'in_progress' ? 'PLAY ▶' :
+                                                                        lesson.is_unlocked ? 'START' : '🔒 LOCKED'}
+                                                            </div>
                                                         </div>
                                                     </motion.button>
                                                 );
