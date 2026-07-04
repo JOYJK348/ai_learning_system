@@ -83,56 +83,72 @@ export function getLessonVisuals(title: string) {
   if (letterWordMatch) {
     const word = letterWordMatch[1].trim();
     const visuals = WORD_VISUALS[word];
-    if (visuals) return visuals;
+    if (visuals) {
+      // Pick A-M or N-Z image based on first letter
+      const firstLetter = lower.match(/^letter\s+([a-z])/)?.[1] || 'a';
+      const img = firstLetter <= 'm'
+        ? '/assets/subjects/english_alphabet_a_m-removebg-preview.png'
+        : '/assets/subjects/english_alphabet_n_z-removebg-preview.png';
+      return { ...visuals, image: img };
+    }
   }
 
   if (lower.includes('small letters') && lower.includes('a-m'))
-    return { emoji: '🍎', mascot: '🅰️', color: 'from-red-400 to-rose-500', sound: 'Small letters a to m!' };
+    return { emoji: '🍎', mascot: '🅰️', color: 'from-red-400 to-rose-500', sound: 'Small letters a to m!', image: '/assets/subjects/english_alphabet_a_m-removebg-preview.png' };
   if (lower.includes('small letters') && lower.includes('n-z'))
-    return { emoji: '🦓', mascot: '🆉', color: 'from-indigo-400 to-violet-500', sound: 'Small letters n to z!' };
+    return { emoji: '🦓', mascot: '🆉', color: 'from-indigo-400 to-violet-500', sound: 'Small letters n to z!', image: '/assets/subjects/english_alphabet_n_z-removebg-preview.png' };
 
   if (lower.includes('phonics') && (lower.includes('at') || lower.includes('am') || lower.includes('an')) && !lower.includes('it') && !lower.includes('in') && !lower.includes('ig') && !lower.includes('op') && !lower.includes('ot') && !lower.includes('og'))
-    return { emoji: '🐱', mascot: '🐱', color: 'from-orange-400 to-red-500', sound: 'at words like cat!' };
+    return { emoji: '🐱', mascot: '🐱', color: 'from-orange-400 to-red-500', sound: 'at words like cat!', image: '/assets/subjects/english_small_phonics-removebg-preview.png' };
   if (lower.includes('phonics') && (lower.includes('it') || lower.includes('in') || lower.includes('ig')))
-    return { emoji: '🐷', mascot: '🐷', color: 'from-pink-400 to-purple-500', sound: 'it words like pig!' };
+    return { emoji: '🐷', mascot: '🐷', color: 'from-pink-400 to-purple-500', sound: 'it words like pig!', image: '/assets/subjects/english_small_phonics-removebg-preview.png' };
   if (lower.includes('phonics') && (lower.includes('op') || lower.includes('ot') || lower.includes('og')))
-    return { emoji: '🐶', mascot: '🐶', color: 'from-amber-400 to-yellow-500', sound: 'og words like dog!' };
+    return { emoji: '🐶', mascot: '🐶', color: 'from-amber-400 to-yellow-500', sound: 'og words like dog!', image: '/assets/subjects/english_small_phonics-removebg-preview.png' };
   if (lower.includes('phonics') && (lower.includes('un') || lower.includes('ut') || lower.includes('ub')))
-    return { emoji: '☀️', mascot: '☀️', color: 'from-yellow-400 to-orange-500', sound: 'un words like sun!' };
+    return { emoji: '☀️', mascot: '☀️', color: 'from-yellow-400 to-orange-500', sound: 'un words like sun!', image: '/assets/subjects/english_small_phonics-removebg-preview.png' };
+  if (lower.includes('phonics'))
+    return { emoji: '🐝', mascot: '🔤', color: 'from-teal-400 to-cyan-500', sound: 'Phonics time!', image: '/assets/subjects/english_small_phonics-removebg-preview.png' };
 
   if (lower.includes('cvc') && lower.includes('cat'))
-    return { emoji: '🐱', mascot: '🐱', color: 'from-orange-400 to-red-500', sound: 'CVC words like cat!' };
+    return { emoji: '🐱', mascot: '🐱', color: 'from-orange-400 to-red-500', sound: 'CVC words like cat!', image: '/assets/subjects/english_small_phonics-removebg-preview.png' };
   if (lower.includes('cvc') && lower.includes('dog'))
-    return { emoji: '🐶', mascot: '🐶', color: 'from-amber-400 to-yellow-500', sound: 'CVC words like dog!' };
+    return { emoji: '🐶', mascot: '🐶', color: 'from-amber-400 to-yellow-500', sound: 'CVC words like dog!', image: '/assets/subjects/english_small_phonics-removebg-preview.png' };
+  if (lower.includes('cvc'))
+    return { emoji: '📖', mascot: '🐱', color: 'from-orange-400 to-red-500', sound: 'CVC words!', image: '/assets/subjects/english_small_phonics-removebg-preview.png' };
 
   if (lower.includes('name') || lower.includes('name writing'))
-    return { emoji: '✏️', mascot: '👤', color: 'from-pink-400 to-purple-500', sound: 'Write your name!' };
+    return { emoji: '✏️', mascot: '👤', color: 'from-pink-400 to-purple-500', sound: 'Write your name!', image: '/assets/subjects/english_checkpoint-removebg-preview.png' };
 
-  if (lower.includes('standing')) {
-    return { emoji: '📏', mascot: '↕️', color: 'from-blue-400 to-indigo-500', sound: 'Standing line! Up and down!' };
-  }
-  if (lower.includes('sleeping')) {
-    return { emoji: '🛏️', mascot: '↔️', color: 'from-emerald-400 to-teal-500', sound: 'Sleeping line! Left to right!' };
-  }
-  if (lower.includes('slanting')) {
-    return { emoji: '📐', mascot: '↗️', color: 'from-orange-400 to-amber-500', sound: 'Slanting line!' };
-  }
-  if (lower.includes('curved') || lower.includes('curve')) {
-    return { emoji: '🌈', mascot: '〰️', color: 'from-purple-400 to-pink-500', sound: 'Curved line! Like a rainbow!' };
-  }
-  if (lower.includes('zig') || lower.includes('zag')) {
-    return { emoji: '⚡', mascot: '〽️', color: 'from-yellow-400 to-orange-500', sound: 'Zig zag line! Like lightning!' };
-  }
-  if (lower.includes('exam'))
-    return { emoji: '🎓', mascot: '📝', color: 'from-red-400 to-rose-500', sound: 'Exam time!' };
+  if (lower.includes('standing'))
+    return { emoji: '📏', mascot: '↕️', color: 'from-blue-400 to-indigo-500', sound: 'Standing line! Up and down!', image: '/assets/subjects/english-removebg-preview.png' };
+  if (lower.includes('sleeping'))
+    return { emoji: '🛏️', mascot: '↔️', color: 'from-emerald-400 to-teal-500', sound: 'Sleeping line! Left to right!', image: '/assets/subjects/english-removebg-preview.png' };
+  if (lower.includes('slanting'))
+    return { emoji: '📐', mascot: '↗️', color: 'from-orange-400 to-amber-500', sound: 'Slanting line!', image: '/assets/subjects/english-removebg-preview.png' };
+  if (lower.includes('curved') || lower.includes('curve'))
+    return { emoji: '🌈', mascot: '〰️', color: 'from-purple-400 to-pink-500', sound: 'Curved line! Like a rainbow!', image: '/assets/subjects/english-removebg-preview.png' };
+  if (lower.includes('zig') || lower.includes('zag'))
+    return { emoji: '⚡', mascot: '〽️', color: 'from-yellow-400 to-orange-500', sound: 'Zig zag line! Like lightning!', image: '/assets/subjects/english-removebg-preview.png' };
+
+  if (lower.includes('rhyme') || lower.includes('song') || lower.includes('twinkle') || lower.includes('johnny') || lower.includes('baa') || lower.includes('humpty') || lower.includes('rain'))
+    return { emoji: '🎤', mascot: '🎶', color: 'from-pink-400 to-rose-500', sound: 'Sing along!', image: '/assets/subjects/english_rhymes_songs-removebg-preview.png' };
+
+  if (lower.includes('story') || lower.includes('lion') || lower.includes('crow') || lower.includes('tortoise') || lower.includes('duckling') || lower.includes('gingerbread') || lower.includes('hood'))
+    return { emoji: '📖', mascot: '🧚', color: 'from-violet-400 to-purple-500', sound: 'Story time!', image: '/assets/subjects/english_story_time-removebg-preview.png' };
+
+  if (lower.includes('exam') || lower.includes('checkpoint') || lower.includes('review'))
+    return { emoji: '🎓', mascot: '📝', color: 'from-red-400 to-rose-500', sound: 'Exam time!', image: '/assets/subjects/english_checkpoint-removebg-preview.png' };
+
   if (lower.includes('letter') || /^[a-z]$/.test(lower)) {
-    return { emoji: '🔤', mascot: '🔠', color: 'from-blue-400 to-indigo-500', sound: `Letter ${title}!` };
+    const img = lower < 'n' ? '/assets/subjects/english_alphabet_a_m-removebg-preview.png' : '/assets/subjects/english_alphabet_n_z-removebg-preview.png';
+    return { emoji: '🔤', mascot: '🔠', color: 'from-blue-400 to-indigo-500', sound: `Letter ${title}!`, image: img };
   }
-  if (lower.includes('number') || /\d/.test(lower)) {
-    return { emoji: '🔢', mascot: '🧮', color: 'from-orange-400 to-amber-500', sound: `Number ${title}!` };
-  }
-  return { emoji: '📚', mascot: '📖', color: 'from-indigo-400 to-purple-500', sound: `${title}!` };
+  if (lower.includes('number') || /\d/.test(lower))
+    return { emoji: '🔢', mascot: '🧮', color: 'from-orange-400 to-amber-500', sound: `Number ${title}!`, image: '/assets/subjects/english-removebg-preview.png' };
+
+  return { emoji: '📚', mascot: '📖', color: 'from-indigo-400 to-purple-500', sound: `${title}!`, image: '/assets/subjects/english-removebg-preview.png' };
 }
+
 
 export function buildTutorial(title: string, studentName?: string): TutorialStep[] {
   const t = title.trim();

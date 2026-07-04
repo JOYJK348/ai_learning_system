@@ -32,24 +32,33 @@ export function getChapterVisuals(name: string) {
 export function getLessonVisuals(title: string) {
   const lower = title.toLowerCase();
   if (lower.includes('capital letters')) {
-    return { emoji: '🔠', mascot: '🅰️', color: 'from-indigo-400 to-violet-500', sound: 'Capital letters A to Z!' };
+    return { emoji: '🔠', mascot: '🅰️', color: 'from-indigo-400 to-violet-500', sound: 'Capital letters A to Z!', image: '/assets/subjects/english_alphabet_a_m-removebg-preview.png' };
   }
   if (lower.includes('small letters')) {
-    return { emoji: '🔡', mascot: '🆎', color: 'from-sky-400 to-blue-500', sound: 'Small letters a to z!' };
+    return { emoji: '🔡', mascot: '🆎', color: 'from-sky-400 to-blue-500', sound: 'Small letters a to z!', image: '/assets/subjects/english_alphabet_n_z-removebg-preview.png' };
   }
   if (lower.includes('matching')) {
-    return { emoji: '🧩', mascot: '🤝', color: 'from-emerald-400 to-teal-500', sound: 'Match the letters!' };
+    return { emoji: '🧩', mascot: '🤝', color: 'from-emerald-400 to-teal-500', sound: 'Match the letters!', image: '/assets/subjects/english_checkpoint-removebg-preview.png' };
   }
   if (lower.includes('missing letters')) {
-    return { emoji: '❓', mascot: '🔍', color: 'from-amber-400 to-orange-500', sound: 'Find the missing letter!' };
+    return { emoji: '❓', mascot: '🔍', color: 'from-amber-400 to-orange-500', sound: 'Find the missing letter!', image: '/assets/subjects/english_checkpoint-removebg-preview.png' };
   }
   if (lower.includes('at family') || lower.includes('cat') || lower.includes('hat')) {
-    return { emoji: '🎩', mascot: '🐱', color: 'from-rose-400 to-pink-500', sound: 'The "at" family!' };
+    return { emoji: '🎩', mascot: '🐱', color: 'from-rose-400 to-pink-500', sound: 'The "at" family!', image: '/assets/subjects/english_small_phonics-removebg-preview.png' };
   }
   if (lower.includes('sight words')) {
-    return { emoji: '👁️', mascot: '👀', color: 'from-purple-400 to-violet-500', sound: 'Sight words!' };
+    return { emoji: '👁️', mascot: '👀', color: 'from-purple-400 to-violet-500', sound: 'Sight words!', image: '/assets/subjects/english_checkpoint-removebg-preview.png' };
   }
-  return { emoji: '🎒', mascot: '📖', color: 'from-blue-400 to-sky-500', sound: 'Ready to learn!' };
+  if (lower.includes('phonics') || lower.includes('word family') || lower.includes('cvc')) {
+    return { emoji: '🐝', mascot: '🔤', color: 'from-teal-400 to-cyan-500', sound: 'Phonics time!', image: '/assets/subjects/english_small_phonics-removebg-preview.png' };
+  }
+  if (lower.includes('rhyme') || lower.includes('song')) {
+    return { emoji: '🎤', mascot: '🎶', color: 'from-pink-400 to-rose-500', sound: 'Sing along!', image: '/assets/subjects/english_rhymes_songs-removebg-preview.png' };
+  }
+  if (lower.includes('story') || lower.includes('sentence') || lower.includes('reading')) {
+    return { emoji: '📖', mascot: '🧚', color: 'from-violet-400 to-purple-500', sound: 'Story time!', image: '/assets/subjects/english_story_time-removebg-preview.png' };
+  }
+  return { emoji: '🎒', mascot: '📖', color: 'from-blue-400 to-sky-500', sound: 'Ready to learn!', image: '/assets/subjects/english-removebg-preview.png' };
 }
 
 export function buildTutorial(title: string, studentName?: string): TutorialStep[] {

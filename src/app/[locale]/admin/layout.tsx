@@ -18,15 +18,18 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     if (!loading && user) prefetchAll();
   }, [loading, user, prefetchAll]);
 
-  // Prevent back button from leaving the admin home page
+  // Prevent back button from leaving the admin home page.
+  // capture:true intercepts before Next.js Router, stopImmediatePropagation blocks it completely.
   useEffect(() => {
-    const isHome = typeof window !== 'undefined' &&
-      (window.location.pathname.endsWith('/admin') || window.location.pathname === '/admin');
+    const isHome = pathname.endsWith('/admin') || pathname === '/admin';
     if (!isHome) return;
-    window.history.pushState(null, '', window.location.href);
-    const handlePop = () => window.history.pushState(null, '', window.location.href);
-    window.addEventListener('popstate', handlePop);
-    return () => window.removeEventListener('popstate', handlePop);
+    window.history.pushState({ page: 'home' }, '', window.location.href);
+    const handlePop = (e: PopStateEvent) => {
+      e.stopImmediatePropagation();
+      window.history.pushState({ page: 'home' }, '', window.location.href);
+    };
+    window.addEventListener('popstate', handlePop, true);
+    return () => window.removeEventListener('popstate', handlePop, true);
   }, [pathname]);
 
   return (

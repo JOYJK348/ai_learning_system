@@ -29,45 +29,66 @@ export function getLessonVisuals(title: string) {
   const lower = title.toLowerCase();
 
   if (lower.includes('body') && lower.includes('part'))
-    return { emoji: '🧍', mascot: '👀', color: 'from-sky-400 to-blue-500', sound: 'My Body Parts!' };
+    return { emoji: '🧍', mascot: '👀', color: 'from-sky-400 to-blue-500', sound: 'My Body Parts!', image: '/assets/subjects/evs-removebg-preview.png' };
   if (lower.includes('five') && lower.includes('sense'))
-    return { emoji: '👁️', mascot: '👂', color: 'from-indigo-400 to-violet-500', sound: 'My Five Senses!' };
+    return { emoji: '👁️', mascot: '👂', color: 'from-indigo-400 to-violet-500', sound: 'My Five Senses!', image: '/assets/subjects/evs-removebg-preview.png' };
   if (lower.includes('taking') && lower.includes('care'))
-    return { emoji: '🪥', mascot: '🛁', color: 'from-cyan-400 to-teal-500', sound: 'Taking Care of My Body!' };
+    return { emoji: '🪥', mascot: '🛁', color: 'from-cyan-400 to-teal-500', sound: 'Taking Care of My Body!', image: '/assets/subjects/evs-removebg-preview.png' };
 
   if (lower.includes('family') && lower.includes('member'))
-    return { emoji: '👨‍👩‍👧', mascot: '👵', color: 'from-pink-400 to-rose-500', sound: 'Family Members!' };
+    return { emoji: '👨‍👩‍👧', mascot: '👵', color: 'from-pink-400 to-rose-500', sound: 'Family Members!', image: '/assets/subjects/evs-removebg-preview.png' };
   if (lower.includes('animal') && lower.includes('home'))
-    return { emoji: '🪺', mascot: '🏡', color: 'from-amber-400 to-brown-500', sound: 'Animal Homes!' };
+    return { emoji: '🪺', mascot: '🏡', color: 'from-amber-400 to-brown-500', sound: 'Animal Homes!', image: '/assets/subjects/gk-removebg-preview.png' };
   if (lower.includes('home'))
-    return { emoji: '🏠', mascot: '🛏️', color: 'from-orange-400 to-amber-500', sound: 'My Home!' };
+    return { emoji: '🏠', mascot: '🛏️', color: 'from-orange-400 to-amber-500', sound: 'My Home!', image: '/assets/subjects/evs-removebg-preview.png' };
 
   if (lower.includes('pet') && lower.includes('wild'))
-    return { emoji: '🐕', mascot: '🦁', color: 'from-amber-400 to-yellow-500', sound: 'Pet & Wild Animals!' };
+    return { emoji: '🐕', mascot: '🦁', color: 'from-amber-400 to-yellow-500', sound: 'Pet & Wild Animals!', image: '/assets/subjects/gk-removebg-preview.png' };
+  if (lower.includes('animal'))
+    return { emoji: '🐾', mascot: '🦁', color: 'from-amber-400 to-orange-500', sound: 'Animals!', image: '/assets/subjects/gk-removebg-preview.png' };
 
   if (lower.includes('part') && lower.includes('plant'))
-    return { emoji: '🌱', mascot: '🌻', color: 'from-green-400 to-emerald-500', sound: 'Parts of a Plant!' };
+    return { emoji: '🌱', mascot: '🌻', color: 'from-green-400 to-emerald-500', sound: 'Parts of a Plant!', image: '/assets/subjects/evs-removebg-preview.png' };
   if (lower.includes('thing') && lower.includes('nature'))
-    return { emoji: '☀️', mascot: '🌈', color: 'from-sky-400 to-blue-500', sound: 'Things Around Nature!' };
+    return { emoji: '☀️', mascot: '🌈', color: 'from-sky-400 to-blue-500', sound: 'Things Around Nature!', image: '/assets/subjects/evs-removebg-preview.png' };
   if (lower.includes('season'))
-    return { emoji: '🌤️', mascot: '❄️', color: 'from-cyan-400 to-indigo-500', sound: 'Seasons!' };
+    return { emoji: '🌤️', mascot: '❄️', color: 'from-cyan-400 to-indigo-500', sound: 'Seasons!', image: '/assets/subjects/evs-removebg-preview.png' };
 
   if (lower.includes('land') && lower.includes('transport'))
-    return { emoji: '🚗', mascot: '🚲', color: 'from-violet-400 to-purple-500', sound: 'Land Transport!' };
+    return { emoji: '🚗', mascot: '🚲', color: 'from-violet-400 to-purple-500', sound: 'Land Transport!', image: '/assets/subjects/gk-removebg-preview.png' };
   if (lower.includes('air') && lower.includes('water') && lower.includes('transport'))
-    return { emoji: '✈️', mascot: '🚢', color: 'from-sky-400 to-blue-600', sound: 'Air & Water Transport!' };
+    return { emoji: '✈️', mascot: '🚢', color: 'from-sky-400 to-blue-600', sound: 'Air & Water Transport!', image: '/assets/subjects/gk-removebg-preview.png' };
   if (lower.includes('traffic') && lower.includes('rule'))
-    return { emoji: '🚦', mascot: '🚸', color: 'from-red-400 to-rose-500', sound: 'Traffic Rules!' };
+    return { emoji: '🚦', mascot: '🚸', color: 'from-red-400 to-rose-500', sound: 'Traffic Rules!', image: '/assets/subjects/gk-removebg-preview.png' };
+  if (lower.includes('transport'))
+    return { emoji: '🚗', mascot: '🚌', color: 'from-violet-400 to-purple-500', sound: 'Transport!', image: '/assets/subjects/gk-removebg-preview.png' };
 
   if (lower.includes('clean') && lower.includes('habit'))
-    return { emoji: '🧼', mascot: '🪥', color: 'from-cyan-400 to-teal-500', sound: 'Clean Habits!' };
+    return { emoji: '🧼', mascot: '🪥', color: 'from-cyan-400 to-teal-500', sound: 'Clean Habits!', image: '/assets/subjects/evs-removebg-preview.png' };
   if (lower.includes('healthy') && lower.includes('food'))
-    return { emoji: '🍎', mascot: '🥕', color: 'from-green-400 to-emerald-600', sound: 'Healthy Food!' };
+    return { emoji: '🍎', mascot: '🥕', color: 'from-green-400 to-emerald-600', sound: 'Healthy Food!', image: '/assets/subjects/evs-removebg-preview.png' };
   if (lower.includes('daily') && lower.includes('routine'))
-    return { emoji: '⏰', mascot: '🌅', color: 'from-amber-400 to-yellow-500', sound: 'My Daily Routine!' };
+    return { emoji: '⏰', mascot: '🌅', color: 'from-amber-400 to-yellow-500', sound: 'My Daily Routine!', image: '/assets/subjects/evs-removebg-preview.png' };
 
-  return { emoji: '🌍', mascot: '🌳', color: 'from-emerald-400 to-teal-500', sound: `${title}!` };
+  // GK lessons
+  if (lower.includes('color') || lower.includes('colour'))
+    return { emoji: '🎨', mascot: '🌈', color: 'from-purple-400 to-fuchsia-500', sound: 'Colors!', image: '/assets/subjects/gk-removebg-preview.png' };
+  if (lower.includes('shape'))
+    return { emoji: '⭕', mascot: '🔺', color: 'from-blue-400 to-indigo-500', sound: 'Shapes!', image: '/assets/subjects/gk-removebg-preview.png' };
+  if (lower.includes('number') || lower.includes('count'))
+    return { emoji: '🔢', mascot: '🧮', color: 'from-orange-400 to-amber-500', sound: 'Numbers!', image: '/assets/subjects/gk-removebg-preview.png' };
+  if (lower.includes('fruit') || lower.includes('vegetable'))
+    return { emoji: '🍎', mascot: '🥕', color: 'from-green-400 to-lime-500', sound: 'Fruits & Vegetables!', image: '/assets/subjects/gk-removebg-preview.png' };
+  if (lower.includes('bird') || lower.includes('insect'))
+    return { emoji: '🐦', mascot: '🦋', color: 'from-sky-400 to-cyan-500', sound: 'Birds & Insects!', image: '/assets/subjects/gk-removebg-preview.png' };
+  if (lower.includes('festival') || lower.includes('celebration'))
+    return { emoji: '🎉', mascot: '🪔', color: 'from-yellow-400 to-orange-500', sound: 'Festivals!', image: '/assets/subjects/gk-removebg-preview.png' };
+  if (lower.includes('country') || lower.includes('flag') || lower.includes('national'))
+    return { emoji: '🇮🇳', mascot: '🗺️', color: 'from-green-400 to-emerald-500', sound: 'Our Country!', image: '/assets/subjects/gk-removebg-preview.png' };
+
+  return { emoji: '🌍', mascot: '🌳', color: 'from-emerald-400 to-teal-500', sound: `${title}!`, image: '/assets/subjects/evs-removebg-preview.png' };
 }
+
 
 export function buildTutorial(title: string, studentName?: string): TutorialStep[] {
   const lower = title.toLowerCase();

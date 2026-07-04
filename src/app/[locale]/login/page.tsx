@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { Link, useRouter } from '@/i18n/routing';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth, isThisTabLoggedIn } from '@/context/AuthContext';
 import { Manrope } from 'next/font/google';
 import { Mail, Lock, ShieldCheck, AlertCircle, ArrowLeft, Award, GraduationCap, ChevronRight, CheckCircle2, Eye, EyeOff } from 'lucide-react';
 import Image from 'next/image';
@@ -179,22 +179,39 @@ export default function LoginPage() {
     setIsLoading(false);
 
     if (loggedIn) {
-      const route = loggedIn.role === 'super_admin' ? 'admin' : loggedIn.role === 'school_admin' ? 'school-admin' : loggedIn.role;
-      router.replace(`/${route}`);
+      // Route directly to home subpage — skips intermediate redirect page
+      // which was causing the loading spinner to show on first login
+      let destination: string;
+      if (loggedIn.role === 'super_admin') {
+        destination = `/${locale}/admin`;
+      } else if (loggedIn.role === 'school_admin') {
+        destination = `/${locale}/school-admin`;
+      } else if (loggedIn.role === 'parent') {
+        destination = `/${locale}/parent`;
+      } else {
+        // student — go directly to Home, skip the redirect page
+        destination = `/${locale}/student/Home`;
+      }
+      window.location.replace(destination);
     } else {
       setErrorMessage(authError || 'Invalid email or password.');
     }
   };
 
-  // If user is already authenticated (after auth check completes), redirect away from login
+  // Auto-redirect only when THIS tab explicitly logged in.
+  // We deliberately do NOT redirect based on a cookie from another tab —
+  // that would cause cross-tab session pollution (Bug: Tab2 auto-logs-in as Tab1's user).
   useEffect(() => {
-    // Only redirect once authLoading is done — avoids stale cache false-positives
     if (authLoading) return;
-    if (user) {
-      const route = user.role === 'super_admin' ? 'admin' : user.role === 'school_admin' ? 'school-admin' : user.role;
-      router.replace(`/${route}`);
+    if (user && isThisTabLoggedIn()) {
+      let destination: string;
+      if (user.role === 'super_admin') destination = `/${locale}/admin`;
+      else if (user.role === 'school_admin') destination = `/${locale}/school-admin`;
+      else if (user.role === 'parent') destination = `/${locale}/parent`;
+      else destination = `/${locale}/student/Home`;
+      window.location.replace(destination);
     }
-  }, [authLoading, user, router]);
+  }, [authLoading, user, locale]);
 
   const shellStyle: React.CSSProperties = {
     minHeight: '100vh',

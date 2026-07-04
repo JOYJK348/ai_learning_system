@@ -34,15 +34,19 @@ export default function SchoolAdminLayout({ children }: { children: ReactNode })
     }
   }, [mounted, loading, router, user]);
 
-  // Prevent back button from leaving the school-admin home page
+  // Prevent back button from leaving the school-admin home page.
+  // capture:true intercepts before Next.js Router.
   useEffect(() => {
     const isHome = typeof window !== 'undefined' &&
-      (window.location.pathname.endsWith('/school-admin') || window.location.pathname.match(/\/school-admin\/?$/));
+      /\/school-admin\/?$/.test(window.location.pathname);
     if (!isHome) return;
-    window.history.pushState(null, '', window.location.href);
-    const handlePop = () => window.history.pushState(null, '', window.location.href);
-    window.addEventListener('popstate', handlePop);
-    return () => window.removeEventListener('popstate', handlePop);
+    window.history.pushState({ page: 'home' }, '', window.location.href);
+    const handlePop = (e: PopStateEvent) => {
+      e.stopImmediatePropagation();
+      window.history.pushState({ page: 'home' }, '', window.location.href);
+    };
+    window.addEventListener('popstate', handlePop, true);
+    return () => window.removeEventListener('popstate', handlePop, true);
   }, [mounted]);
 
   if (!mounted || loading || !user) {

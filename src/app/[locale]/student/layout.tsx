@@ -42,17 +42,20 @@ export default function StudentLayout({
     }
   }, [user, loading, router]);
 
-  // Prevent back button from leaving the home page
+  // Prevent back button from leaving the home page.
+  // Use capture:true so we intercept BEFORE Next.js Router handles the popstate.
   useEffect(() => {
-    if (pathname !== `/${locale}/student/Home` && pathname !== '/student/Home') return;
-    // Push a duplicate entry so back press stays here
-    window.history.pushState(null, '', window.location.href);
-    const handlePop = () => {
-      window.history.pushState(null, '', window.location.href);
+    const isHome = pathname.includes('/student/Home') || pathname.endsWith('/student');
+    if (!isHome) return;
+    // Push a duplicate state so the first back press stays here
+    window.history.pushState({ page: 'home' }, '', window.location.href);
+    const handlePop = (e: PopStateEvent) => {
+      e.stopImmediatePropagation();
+      window.history.pushState({ page: 'home' }, '', window.location.href);
     };
-    window.addEventListener('popstate', handlePop);
-    return () => window.removeEventListener('popstate', handlePop);
-  }, [pathname, locale]);
+    window.addEventListener('popstate', handlePop, true); // capture phase
+    return () => window.removeEventListener('popstate', handlePop, true);
+  }, [pathname]);
 
   useEffect(() => {
     // Force absolute scroll reset on any internal navigation

@@ -22,30 +22,40 @@ export function getChapterVisuals(name: string) {
 export function getLessonVisuals(title: string) {
   const lower = title.toLowerCase();
   if (lower.includes('நேர் கோடு') || lower.includes('standing')) {
-    return { emoji: '📏', mascot: '↕️', color: 'from-blue-400 to-indigo-500', sound: 'நேர் கோடு!' };
+    return { emoji: '📏', mascot: '↕️', color: 'from-blue-400 to-indigo-500', sound: 'நேர் கோடு!', image: '/assets/subjects/tamil_writing_strokes-removebg-preview.png' };
   }
   if (lower.includes('படுத்த கோடு') || lower.includes('sleeping')) {
-    return { emoji: '🛏️', mascot: '↔️', color: 'from-emerald-400 to-teal-500', sound: 'படுத்த கோடு!' };
+    return { emoji: '🛏️', mascot: '↔️', color: 'from-emerald-400 to-teal-500', sound: 'படுத்த கோடு!', image: '/assets/subjects/tamil_writing_strokes-removebg-preview.png' };
   }
   if (lower.includes('சாய்வு கோடு') || lower.includes('slanting')) {
-    return { emoji: '📐', mascot: '↗️', color: 'from-orange-400 to-amber-500', sound: 'சாய்வு கோடு!' };
+    return { emoji: '📐', mascot: '↗️', color: 'from-orange-400 to-amber-500', sound: 'சாய்வு கோடு!', image: '/assets/subjects/tamil_writing_strokes-removebg-preview.png' };
   }
   if (lower.includes('வளைவு கோடு') || lower.includes('curve')) {
-    return { emoji: '🌈', mascot: '〰️', color: 'from-purple-400 to-pink-500', sound: 'வளைவு கோடு!' };
+    return { emoji: '🌈', mascot: '〰️', color: 'from-purple-400 to-pink-500', sound: 'வளைவு கோடு!', image: '/assets/subjects/tamil_writing_strokes-removebg-preview.png' };
   }
   if (lower.includes('அ') || lower.includes('ஆ') || lower.includes('இ') || lower.includes('ஈ')) {
-    return { emoji: '🍎', mascot: 'அ', color: 'from-red-400 to-rose-500', sound: 'உயிர் எழுத்துக்கள்!' };
+    return { emoji: '🍎', mascot: 'அ', color: 'from-red-400 to-rose-500', sound: 'உயிர் எழுத்துக்கள்!', image: '/assets/subjects/tamil_vowels_1-removebg-preview.png' };
+  }
+  if (lower.includes('எ') || lower.includes('ஏ') || lower.includes('ஒ') || lower.includes('ஓ') || lower.includes('ஃ')) {
+    return { emoji: '🍇', mascot: 'எ', color: 'from-red-400 to-rose-500', sound: 'உயிர் எழுத்துக்கள்!', image: '/assets/subjects/tamil_vowels_2-removebg-preview.png' };
   }
   if (lower.includes('ய்') || lower.includes('ர்') || lower.includes('ல்') || lower.includes('வ்') ||
       lower.includes('க்') || lower.includes('ங்') || lower.includes('ச்') || lower.includes('ஞ்') ||
       lower.includes('ட்') || lower.includes('ண்') || lower.includes('த்') || lower.includes('ந்') ||
       lower.includes('ப்') || lower.includes('ம்') ||
-      lower.includes('ழ்') || lower.includes('ள்') || lower.includes('ற்') || lower.includes('ன்'))
-    return { emoji: '⭐', mascot: 'க்', color: 'from-blue-400 to-indigo-500', sound: 'மெய் எழுத்துக்கள்!' };
-  if (lower.includes('அம்மா') || lower.includes('ஆடு') || lower.includes('எலி') || lower.includes('கடிகாரம்') || lower.includes('சொற்கள்'))
-    return { emoji: '🗣️', mascot: 'சொல்', color: 'from-emerald-400 to-teal-500', sound: 'எளிய சொற்கள்!' };
-  return { emoji: '📚', mascot: '📖', color: 'from-indigo-400 to-purple-500', sound: `${title}!` };
+      lower.includes('ழ்') || lower.includes('ள்') || lower.includes('ற்') || lower.includes('ன்')) {
+    const isRow2 = lower.includes('ட்') || lower.includes('ண்') || lower.includes('த்') || lower.includes('ந்') || lower.includes('ப்') || lower.includes('ம்') || lower.includes('ய்') || lower.includes('ர்') || lower.includes('ல்') || lower.includes('வ்') || lower.includes('ழ்') || lower.includes('ள்') || lower.includes('ற்') || lower.includes('ன்');
+    return { emoji: '⭐', mascot: 'க்', color: 'from-blue-400 to-indigo-500', sound: 'மெய் எழுத்துக்கள்!', image: isRow2 ? '/assets/subjects/tamil_consonants_2-removebg-preview.png' : '/assets/subjects/tamil_consonants_1-removebg-preview.png' };
+  }
+  if (lower.includes('அம்மா') || lower.includes('ஆடு') || lower.includes('எலி') || lower.includes('கடிகாரம்') || lower.includes('சொற்கள்')) {
+    return { emoji: '🗣️', mascot: 'சொல்', color: 'from-emerald-400 to-teal-500', sound: 'எளிய சொற்கள்!', image: '/assets/subjects/tamil_simple_words-removebg-preview.png' };
+  }
+  if (lower.includes('பாட') || lower.includes('கதை') || lower.includes('song') || lower.includes('story')) {
+    return { emoji: '🎵', mascot: '🎶', color: 'from-pink-400 to-rose-500', sound: 'பாடல்கள்!', image: '/assets/subjects/tamil_songs_stories-removebg-preview.png' };
+  }
+  return { emoji: '📚', mascot: '📖', color: 'from-indigo-400 to-purple-500', sound: `${title}!`, image: '/assets/subjects/tamil_writing_strokes-removebg-preview.png' };
 }
+
 
 export function buildTutorial(title: string, studentName?: string): TutorialStep[] {
   const t = title.trim();

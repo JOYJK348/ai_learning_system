@@ -33,83 +33,83 @@ export function getLessonVisuals(title: string) {
 
   // Pre-Math Concepts
   if (lower.includes('big') && lower.includes('small'))
-    return { emoji: '🐘', mascot: '🐁', color: 'from-purple-400 to-pink-500', sound: 'Big and Small!' };
+    return { emoji: '🐘', mascot: '🐁', color: 'from-purple-400 to-pink-500', sound: 'Big and Small!', image: '/assets/subjects/maths_pre_math_concepts-removebg-preview.png' };
   if (lower.includes('tall') && lower.includes('short'))
-    return { emoji: '🌳', mascot: '🌱', color: 'from-green-400 to-emerald-500', sound: 'Tall and Short!' };
+    return { emoji: '🌳', mascot: '🌱', color: 'from-green-400 to-emerald-500', sound: 'Tall and Short!', image: '/assets/subjects/maths_pre_math_concepts-removebg-preview.png' };
   if (lower.includes('more') && lower.includes('less'))
-    return { emoji: '🍎', mascot: '🍏', color: 'from-red-400 to-rose-500', sound: 'More and Less!' };
+    return { emoji: '🍎', mascot: '🍏', color: 'from-red-400 to-rose-500', sound: 'More and Less!', image: '/assets/subjects/maths_sorting_comparison-removebg-preview.png' };
   if (lower.includes('heavy') && lower.includes('light'))
-    return { emoji: '🪨', mascot: '🪶', color: 'from-amber-400 to-yellow-500', sound: 'Heavy and Light!' };
+    return { emoji: '🪨', mascot: '🪶', color: 'from-amber-400 to-yellow-500', sound: 'Heavy and Light!', image: '/assets/subjects/maths_pre_math_concepts-removebg-preview.png' };
   if (lower.includes('same') && lower.includes('different') && lower.includes('object'))
-    return { emoji: '🍎', mascot: '🧸', color: 'from-cyan-400 to-blue-500', sound: 'Same and Different!' };
+    return { emoji: '🍎', mascot: '🧸', color: 'from-cyan-400 to-blue-500', sound: 'Same and Different!', image: '/assets/subjects/maths_sorting_comparison-removebg-preview.png' };
 
   // Shapes
   if (lower.includes('circle') && lower.includes('square'))
-    return { emoji: '⭕', mascot: '⬛', color: 'from-blue-400 to-indigo-500', sound: 'Circle and Square!' };
+    return { emoji: '⭕', mascot: '⬛', color: 'from-blue-400 to-indigo-500', sound: 'Circle and Square!', image: '/assets/subjects/maths_shapes_spatial_awareness-removebg-preview.png' };
   if (lower.includes('triangle') && lower.includes('rectangle'))
-    return { emoji: '🔺', mascot: '▬', color: 'from-orange-400 to-amber-500', sound: 'Triangle and Rectangle!' };
+    return { emoji: '🔺', mascot: '▬', color: 'from-orange-400 to-amber-500', sound: 'Triangle and Rectangle!', image: '/assets/subjects/maths_shapes_spatial_awareness-removebg-preview.png' };
   if (lower.includes('shape') && lower.includes('around'))
-    return { emoji: '🔍', mascot: '🏠', color: 'from-sky-400 to-blue-500', sound: 'Shapes Around Us!' };
+    return { emoji: '🔍', mascot: '🏠', color: 'from-sky-400 to-blue-500', sound: 'Shapes Around Us!', image: '/assets/subjects/maths_shapes_spatial_awareness-removebg-preview.png' };
   if (lower.includes('find') && lower.includes('shape'))
-    return { emoji: '🎯', mascot: '🔍', color: 'from-pink-400 to-rose-500', sound: 'Find the Shape!' };
+    return { emoji: '🎯', mascot: '🔍', color: 'from-pink-400 to-rose-500', sound: 'Find the Shape!', image: '/assets/subjects/maths_shapes_spatial_awareness-removebg-preview.png' };
   if (lower.includes('shape') && lower.includes('sort'))
-    return { emoji: '🎨', mascot: '🧩', color: 'from-violet-400 to-purple-500', sound: 'Shape Sorting!' };
+    return { emoji: '🎨', mascot: '🧩', color: 'from-violet-400 to-purple-500', sound: 'Shape Sorting!', image: '/assets/subjects/maths_shapes_spatial_awareness-removebg-preview.png' };
 
   // Numbers 1-5
   if (lower.includes('how many') && (lower.includes('1') || lower.includes('2')) && !lower.includes('3') && !lower.includes('4') && !lower.includes('5') && !lower.includes('6') && !lower.includes('7') && !lower.includes('8') && !lower.includes('9') && !lower.includes('10'))
-    return { emoji: '🍎', mascot: '✌️', color: 'from-red-400 to-rose-500', sound: 'Count 1 and 2!' };
+    return { emoji: '🍎', mascot: '✌️', color: 'from-red-400 to-rose-500', sound: 'Count 1 and 2!', image: '/assets/subjects/maths_numbers_1_5-removebg-preview.png' };
   if (lower.includes('how many') && (lower.includes('3') || lower.includes('4')))
-    return { emoji: '🐱', mascot: '🍀', color: 'from-green-400 to-emerald-500', sound: 'Count 3 and 4!' };
+    return { emoji: '🐱', mascot: '🍀', color: 'from-green-400 to-emerald-500', sound: 'Count 3 and 4!', image: '/assets/subjects/maths_numbers_1_5-removebg-preview.png' };
   if (lower.includes('how many') && lower.includes('5'))
-    return { emoji: '✋', mascot: '🖐️', color: 'from-orange-400 to-amber-500', sound: 'Count to 5!' };
+    return { emoji: '✋', mascot: '🖐️', color: 'from-orange-400 to-amber-500', sound: 'Count to 5!', image: '/assets/subjects/maths_numbers_1_5-removebg-preview.png' };
   if (lower.includes('count') && lower.includes('review') && lower.includes('1-5'))
-    return { emoji: '🔢', mascot: '🎯', color: 'from-amber-400 to-yellow-500', sound: 'Count 1 to 5!' };
+    return { emoji: '🔢', mascot: '🎯', color: 'from-amber-400 to-yellow-500', sound: 'Count 1 to 5!', image: '/assets/subjects/maths_numbers_1_5-removebg-preview.png' };
 
   // Numbers 6-10
   if (lower.includes('how many') && (lower.includes('6') || lower.includes('7')))
-    return { emoji: '🐟', mascot: '🐠', color: 'from-blue-400 to-cyan-500', sound: 'Count 6 and 7!' };
+    return { emoji: '🐟', mascot: '🐠', color: 'from-blue-400 to-cyan-500', sound: 'Count 6 and 7!', image: '/assets/subjects/maths_numbers_6_10-removebg-preview.png' };
   if (lower.includes('how many') && (lower.includes('8') || lower.includes('9') || lower.includes('10')))
-    return { emoji: '🐧', mascot: '🔟', color: 'from-purple-400 to-pink-500', sound: 'Count 8 to 10!' };
+    return { emoji: '🐧', mascot: '🔟', color: 'from-purple-400 to-pink-500', sound: 'Count 8 to 10!', image: '/assets/subjects/maths_numbers_6_10-removebg-preview.png' };
   if (lower.includes('count') && lower.includes('object') && lower.includes('1-10'))
-    return { emoji: '🧮', mascot: '📦', color: 'from-teal-400 to-cyan-500', sound: 'Count Objects!' };
+    return { emoji: '🧮', mascot: '📦', color: 'from-teal-400 to-cyan-500', sound: 'Count Objects!', image: '/assets/subjects/maths_numbers_6_10-removebg-preview.png' };
   if (lower.includes('count') && lower.includes('match') && lower.includes('1-10'))
-    return { emoji: '🧩', mascot: '🔗', color: 'from-indigo-400 to-violet-500', sound: 'Count and Match!' };
+    return { emoji: '🧩', mascot: '🔗', color: 'from-indigo-400 to-violet-500', sound: 'Count and Match!', image: '/assets/subjects/maths_numbers_6_10-removebg-preview.png' };
   if (lower.includes('before') && lower.includes('after'))
-    return { emoji: '✨', mascot: '⭐', color: 'from-yellow-400 to-orange-500', sound: 'Before and After!' };
+    return { emoji: '✨', mascot: '⭐', color: 'from-yellow-400 to-orange-500', sound: 'Before and After!', image: '/assets/subjects/maths_numbers_6_10-removebg-preview.png' };
 
   // Position Words
   if (lower.includes('inside') && lower.includes('outside'))
-    return { emoji: '📦', mascot: '🏠', color: 'from-cyan-400 to-blue-500', sound: 'Inside and Outside!' };
+    return { emoji: '📦', mascot: '🏠', color: 'from-cyan-400 to-blue-500', sound: 'Inside and Outside!', image: '/assets/subjects/maths_position_words-removebg-preview.png' };
   if (lower.includes('above') && lower.includes('below'))
-    return { emoji: '⬆️', mascot: '⬇️', color: 'from-sky-400 to-indigo-500', sound: 'Above and Below!' };
+    return { emoji: '⬆️', mascot: '⬇️', color: 'from-sky-400 to-indigo-500', sound: 'Above and Below!', image: '/assets/subjects/maths_position_words-removebg-preview.png' };
   if (lower.includes('top') && lower.includes('bottom'))
-    return { emoji: '⛰️', mascot: '🏔️', color: 'from-emerald-400 to-teal-500', sound: 'Top and Bottom!' };
+    return { emoji: '⛰️', mascot: '🏔️', color: 'from-emerald-400 to-teal-500', sound: 'Top and Bottom!', image: '/assets/subjects/maths_position_words-removebg-preview.png' };
   if (lower.includes('left') && lower.includes('right'))
-    return { emoji: '👈', mascot: '👉', color: 'from-pink-400 to-rose-500', sound: 'Left and Right!' };
+    return { emoji: '👈', mascot: '👉', color: 'from-pink-400 to-rose-500', sound: 'Left and Right!', image: '/assets/subjects/maths_position_words-removebg-preview.png' };
   if (lower.includes('near') && lower.includes('far'))
-    return { emoji: '🐶', mascot: '🏡', color: 'from-amber-400 to-orange-500', sound: 'Near and Far!' };
+    return { emoji: '🐶', mascot: '🏡', color: 'from-amber-400 to-orange-500', sound: 'Near and Far!', image: '/assets/subjects/maths_position_words-removebg-preview.png' };
   if (lower.includes('open') && lower.includes('close'))
-    return { emoji: '🚪', mascot: '📂', color: 'from-violet-400 to-purple-500', sound: 'Open and Close!' };
+    return { emoji: '🚪', mascot: '📂', color: 'from-violet-400 to-purple-500', sound: 'Open and Close!', image: '/assets/subjects/maths_position_words-removebg-preview.png' };
 
   // Sorting & Comparison
   if (lower.includes('sort') && lower.includes('color'))
-    return { emoji: '🎨', mascot: '🌈', color: 'from-pink-400 to-purple-500', sound: 'Sort by Color!' };
+    return { emoji: '🎨', mascot: '🌈', color: 'from-pink-400 to-purple-500', sound: 'Sort by Color!', image: '/assets/subjects/maths_sorting_comparison-removebg-preview.png' };
   if (lower.includes('sort') && lower.includes('size'))
-    return { emoji: '📏', mascot: '📐', color: 'from-green-400 to-emerald-500', sound: 'Sort by Size!' };
+    return { emoji: '📏', mascot: '📐', color: 'from-green-400 to-emerald-500', sound: 'Sort by Size!', image: '/assets/subjects/maths_sorting_comparison-removebg-preview.png' };
   if (lower.includes('compare') && lower.includes('group'))
-    return { emoji: '🔢', mascot: '📊', color: 'from-orange-400 to-amber-500', sound: 'Compare Groups!' };
+    return { emoji: '🔢', mascot: '📊', color: 'from-orange-400 to-amber-500', sound: 'Compare Groups!', image: '/assets/subjects/maths_sorting_comparison-removebg-preview.png' };
   if (lower.includes('same') && lower.includes('different'))
-    return { emoji: '🔍', mascot: '🧩', color: 'from-indigo-400 to-violet-500', sound: 'Same and Different!' };
+    return { emoji: '🔍', mascot: '🧩', color: 'from-indigo-400 to-violet-500', sound: 'Same and Different!', image: '/assets/subjects/maths_sorting_comparison-removebg-preview.png' };
 
   // Patterns
   if (lower.includes('color') && lower.includes('pattern'))
-    return { emoji: '🔴', mascot: '🔵', color: 'from-red-400 to-blue-500', sound: 'Color Patterns!' };
+    return { emoji: '🔴', mascot: '🔵', color: 'from-red-400 to-blue-500', sound: 'Color Patterns!', image: '/assets/subjects/maths_patterns-removebg-preview.png' };
   if (lower.includes('shape') && lower.includes('pattern'))
-    return { emoji: '⭕', mascot: '🔺', color: 'from-yellow-400 to-orange-500', sound: 'Shape Patterns!' };
+    return { emoji: '⭕', mascot: '🔺', color: 'from-yellow-400 to-orange-500', sound: 'Shape Patterns!', image: '/assets/subjects/maths_patterns-removebg-preview.png' };
   if (lower.includes('complete') && lower.includes('pattern'))
-    return { emoji: '🧩', mascot: '🎯', color: 'from-purple-400 to-pink-500', sound: 'Complete the Pattern!' };
+    return { emoji: '🧩', mascot: '🎯', color: 'from-purple-400 to-pink-500', sound: 'Complete the Pattern!', image: '/assets/subjects/maths_patterns-removebg-preview.png' };
 
-  return { emoji: '🔢', mascot: '🧮', color: 'from-orange-400 to-amber-500', sound: `${title}!` };
+  return { emoji: '🔢', mascot: '🧮', color: 'from-orange-400 to-amber-500', sound: `${title}!`, image: '/assets/subjects/maths-removebg-preview.png' };
 }
 
 export function buildTutorial(title: string, studentName?: string): TutorialStep[] {

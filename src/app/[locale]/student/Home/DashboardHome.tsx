@@ -11,11 +11,15 @@ export default function DashboardHome() {
   const router = useRouter();
   const params = useParams();
   const locale = params.locale || 'en';
-  const { subjects, studentProfile, studentLoading } = useData();
+  const { subjects, studentProfile, studentLoading, lessonsLoading } = useData();
   const [mounted, setMounted] = useState(false);
+  // Force-show content after 3s max, even if data is still loading (prevents stuck screen)
+  const [forceShow, setForceShow] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    const t = setTimeout(() => setForceShow(true), 3000);
+    return () => clearTimeout(t);
   }, []);
 
   const activeSubjects = useMemo(() => {
@@ -24,7 +28,10 @@ export default function DashboardHome() {
 
   const studentName = studentProfile?.name || 'Explorer';
 
-  if (!mounted || studentLoading) {
+  // Show loading only while truly waiting — never block if subjects are already in
+  const isLoading = !mounted || (studentLoading && lessonsLoading && subjects.length === 0 && !forceShow);
+
+  if (isLoading) {
     return (
       <div className="relative min-h-screen font-sans overflow-hidden bg-sky-400 flex items-center justify-center">
         <div className="text-2xl font-black text-white">Loading your adventure...</div>

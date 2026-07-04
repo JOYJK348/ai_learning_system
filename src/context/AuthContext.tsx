@@ -5,6 +5,14 @@ import { clearPersistedCache, queryClientSingleton } from '@/providers/QueryProv
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, '') ?? '';
 const AUTH_CACHE_KEY = 'zhi_auth_user';
+// Tab-specific flag: set only when THIS tab explicitly called login().
+// sessionStorage is NOT shared between tabs, so this stays tab-isolated.
+const TAB_SESSION_KEY = 'zhi_tab_session';
+
+export function isThisTabLoggedIn(): boolean {
+  if (typeof window === 'undefined') return false;
+  try { return sessionStorage.getItem(TAB_SESSION_KEY) === '1'; } catch { return false; }
+}
 
 type UserRole = 'super_admin' | 'school_admin' | 'parent' | 'student';
 
@@ -131,6 +139,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!res.ok) { setError(data.error || 'Login failed'); return null; }
       if (!data.user) { setError('Login failed'); return null; }
       saveCachedUser(data.user);
+      // Mark this tab as having explicitly logged in
+      try { sessionStorage.setItem(TAB_SESSION_KEY, '1'); } catch {}
       clearPersistedCache();
       setUser(data.user);
       
@@ -229,6 +239,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     saveCachedUser(null);
+    // Clear this tab's explicit session flag
+    try { sessionStorage.removeItem(TAB_SESSION_KEY); } catch {}
     setUser(null);
     clearPersistedCache();
     setLoading(false);

@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect } from 'react';
 import { useRouter } from '@/i18n/routing';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import ParentTopNav from './_components/ParentTopNav';
 import ParentBottomNav from './_components/ParentBottomNav';
@@ -14,6 +14,7 @@ export default function ParentLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
   const params = useParams();
   const locale = (params?.locale as string) || 'en';
+  const pathname = usePathname();
   const { logout: authLogout, user, loading } = useAuth();
 
   useEffect(() => {
@@ -27,16 +28,19 @@ export default function ParentLayout({ children }: { children: ReactNode }) {
     }
   }, [user, loading, router]);
 
-  // Prevent back button from leaving the parent home page
+  // Prevent back button from leaving the parent home page.
+  // capture:true intercepts before Next.js Router.
   useEffect(() => {
-    const isHome = typeof window !== 'undefined' &&
-      (window.location.pathname.endsWith('/parent') || window.location.pathname.match(/\/parent\/?$/));
+    const isHome = pathname.endsWith('/parent') || /\/parent\/?$/.test(pathname);
     if (!isHome) return;
-    window.history.pushState(null, '', window.location.href);
-    const handlePop = () => window.history.pushState(null, '', window.location.href);
-    window.addEventListener('popstate', handlePop);
-    return () => window.removeEventListener('popstate', handlePop);
-  }, []);
+    window.history.pushState({ page: 'home' }, '', window.location.href);
+    const handlePop = (e: PopStateEvent) => {
+      e.stopImmediatePropagation();
+      window.history.pushState({ page: 'home' }, '', window.location.href);
+    };
+    window.addEventListener('popstate', handlePop, true);
+    return () => window.removeEventListener('popstate', handlePop, true);
+  }, [pathname]);
 
   useEffect(() => {
     if (user && user.role === 'parent') {
