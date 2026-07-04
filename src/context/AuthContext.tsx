@@ -69,8 +69,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const res = await api('/api/auth/me');
       if (!res.ok) {
         if (res.status === 401 && typeof window !== 'undefined') {
-          // Session is truly expired — show modal (don't immediately clear user)
-          setSessionExpired(true);
+          // Session is truly expired — show modal (don't immediately clear user) if they were logged in
+          if (loadCachedUser()) {
+            setSessionExpired(true);
+          }
           setLoading(false);
           return;
         }

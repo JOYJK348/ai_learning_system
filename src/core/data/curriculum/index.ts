@@ -7,8 +7,8 @@ import * as ukgEnglish from './ukg/english';
 import * as grade1English from './grade1/english';
 import * as grade1Tamil from './grade1/tamil';
 import * as grade1Maths from './grade1/maths';
-import * as grade1Evs from './grade1/evs';
 import * as grade1Hindi from './grade1/hindi';
+import * as grade1Evs from './grade1/evs';
 import { type TutorialStep } from './english';
 
 export { type TutorialStep };

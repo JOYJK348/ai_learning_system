@@ -41,7 +41,6 @@ import {
   GRADE1_ENGLISH_LEVELS,
   GRADE1_TAMIL_LEVELS,
   GRADE1_MATH_LEVELS,
-  GRADE1_EVS_LEVELS,
   GRADE1_GK_LEVELS,
   GRADE1_HINDI_LEVELS
 } from './grade1ExamData';
@@ -922,12 +921,11 @@ export default function QuizArena() {
   const [activeGame, setActiveGame] = useState<string | null>(null);
 
   // Subject Quiz Levels state
-  const [activeSubject, setActiveSubject] = useState<'tamil' | 'english' | 'math' | 'evs' | 'gk' | 'hindi'>('tamil');
+  const [activeSubject, setActiveSubject] = useState<'tamil' | 'english' | 'math' | 'gk' | 'hindi'>('tamil');
   const activeLevels = useMemo(() => {
     if (isGrade1) {
       if (activeSubject === 'tamil') return GRADE1_TAMIL_LEVELS.slice(0, 6);
       if (activeSubject === 'english') return GRADE1_ENGLISH_LEVELS.slice(0, 6);
-      if (activeSubject === 'evs') return GRADE1_EVS_LEVELS.slice(0, 6);
       if (activeSubject === 'gk') return GRADE1_GK_LEVELS.slice(0, 6);
       if (activeSubject === 'hindi') return GRADE1_HINDI_LEVELS.slice(0, 6);
       return GRADE1_MATH_LEVELS.slice(0, 6);
