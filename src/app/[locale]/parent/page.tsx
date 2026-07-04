@@ -96,8 +96,7 @@ export default function ParentDashboard() {
 
   const handleRedirectToLogin = () => {
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('zhi_auth_user');
-      document.cookie = 'zhi_user_role=; path=/; max-age=0';
+      sessionStorage.removeItem('zhi_auth_user');
       window.location.href = `/${locale}/login?session_closed=1`;
     }
   };
@@ -221,9 +220,6 @@ export default function ParentDashboard() {
       const msg = String(err.message || '').toLowerCase();
       return msg.includes('forbidden') || msg.includes('unauthorized') || msg.includes('failed to load') || msg.includes('login') || msg.includes('token');
     };
-
-    const token = typeof window !== 'undefined' ? sessionStorage.getItem('zhi_auth_token') : null;
-    if (!token) return;
 
     if (
       (isAuthError(meError) ||

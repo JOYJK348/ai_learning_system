@@ -12,11 +12,9 @@ export async function fetchClient<T = any>(
   options?: RequestInit
 ): Promise<FetchResponse<T>> {
   try {
-    const token = typeof window !== 'undefined' ? sessionStorage.getItem('zhi_auth_token') : null;
     const headers = {
       'Content-Type': 'application/json',
       ...(options?.headers || {}),
-      ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
     } as Record<string, string>;
 
     const res = await fetch(`${BASE}${path}`, {

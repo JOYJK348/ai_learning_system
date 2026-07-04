@@ -336,14 +336,10 @@ export default function BulkUploadModal({ open, onClose, onUploadComplete }: Pro
       }
 
       const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, '') ?? '';
-      const token = typeof window !== 'undefined' ? sessionStorage.getItem('zhi_auth_token') : null;
       
       const res = await fetch(`${API_BASE}/api/school-admin/students/bulk`, {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ students: studentsList }),
         credentials: 'include'
       });

@@ -1,75 +1,13 @@
 const BASE = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, '') ?? '';
 
-let isRefreshing = false;
-let refreshQueue: Array<(token: string | null) => void> = [];
-
-async function refreshSessionToken(): Promise<string | null> {
-  if (isRefreshing) {
-    return new Promise((resolve) => {
-      refreshQueue.push(resolve);
-    });
-  }
-  isRefreshing = true;
-  try {
-    const rToken = typeof window !== 'undefined' ? sessionStorage.getItem('zhi_refresh_token') : null;
-    const res = await fetch(`${BASE}/api/auth/refresh`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refresh_token: rToken }),
-      credentials: 'include'
-    });
-    if (res.ok) {
-      const data = await res.json();
-      const newToken = data.access_token || null;
-      if (newToken && typeof window !== 'undefined') {
-        sessionStorage.setItem('zhi_auth_token', newToken);
-      }
-      if (data.refresh_token && typeof window !== 'undefined') {
-        sessionStorage.setItem('zhi_refresh_token', data.refresh_token);
-      }
-      refreshQueue.forEach((cb) => cb(newToken));
-      refreshQueue = [];
-      return newToken;
-    }
-  } catch (err) {
-    console.error("Token refresh failed in adminApi:", err);
-  } finally {
-    isRefreshing = false;
-  }
-  refreshQueue.forEach((cb) => cb(null));
-  refreshQueue = [];
-  return null;
-}
-
 async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
-  let token = typeof window !== 'undefined' ? sessionStorage.getItem('zhi_auth_token') : null;
-  const headers = {
-    ...(init?.headers || {}),
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-  };
-  let res = await fetch(`${BASE}${path}`, { credentials: 'include', ...init, headers });
-  
-  if (res.status === 401 && typeof window !== 'undefined' && !path.includes('/auth/refresh') && !path.includes('/auth/login')) {
-    const newToken = await refreshSessionToken();
-    if (newToken) {
-      const retryHeaders = {
-        ...(init?.headers || {}),
-        'Authorization': `Bearer ${newToken}`,
-      };
-      res = await fetch(`${BASE}${path}`, { credentials: 'include', ...init, headers: retryHeaders });
-    }
-  }
-
+  const res = await fetch(`${BASE}${path}`, {
+    credentials: 'include',
+    ...init,
+    headers: { 'Content-Type': 'application/json', ...(init?.headers || {}) },
+  });
   const payload = await res.json().catch(() => ({}));
-  if (!res.ok) {
-    if ((res.status === 401 || res.status === 403) && typeof window !== 'undefined') {
-      const token = sessionStorage.getItem('zhi_auth_token');
-      if (token) {
-        window.dispatchEvent(new CustomEvent('zhi-session-expired'));
-      }
-    }
-    throw new Error(payload.error || `Failed to load ${path}`);
-  }
+  if (!res.ok) throw new Error(payload.error || `Failed to load ${path}`);
   return payload.data ?? payload;
 }
 
@@ -117,9 +55,7 @@ export const adminApi = {
     fetchJson<unknown>('/api/admin/parents'),
 
   parentDirectory: async (): Promise<ParentDirectory> => {
-    const token = typeof window !== 'undefined' ? sessionStorage.getItem('zhi_auth_token') : null;
-    const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined;
-    const res = await fetch(`${BASE}/api/admin/parents`, { credentials: 'include', headers });
+    const res = await fetch(`${BASE}/api/admin/parents`, { credentials: 'include' });
     const payload = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(payload.error || 'Failed to load parents');
     const items = Array.isArray(payload.data) ? payload.data : [];

@@ -48,10 +48,7 @@ export default function SchoolStudentsPage({ params }: { params: Promise<{ id: s
   const { data: students, isLoading } = useQuery({
     queryKey: ['admin', 'schools', id, 'students'],
     queryFn: async () => {
-      const token = sessionStorage.getItem('zhi_auth_token');
-      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-      if (token) headers['Authorization'] = `Bearer ${token}`;
-      const res = await fetch(`${API_BASE}/api/admin/schools/${id}/students`, { credentials: 'include', headers });
+      const res = await fetch(`${API_BASE}/api/admin/schools/${id}/students`, { credentials: 'include', headers: { 'Content-Type': 'application/json' } });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || 'Failed to load students');
       return json.data as Student[];
@@ -62,10 +59,7 @@ export default function SchoolStudentsPage({ params }: { params: Promise<{ id: s
   const { data: school } = useQuery({
     queryKey: ['admin', 'schools', 'detail', id],
     queryFn: async () => {
-      const token = sessionStorage.getItem('zhi_auth_token');
-      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-      if (token) headers['Authorization'] = `Bearer ${token}`;
-      const res = await fetch(`${API_BASE}/api/admin/schools/${id}`, { credentials: 'include', headers });
+      const res = await fetch(`${API_BASE}/api/admin/schools/${id}`, { credentials: 'include', headers: { 'Content-Type': 'application/json' } });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || 'Failed to load school');
       return json.data as SchoolInfo;

@@ -34,8 +34,6 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const AUTH_TOKEN_KEY = 'zhi_auth_token';
-
 function loadCachedUser(): AuthUser | null {
   if (typeof window === 'undefined') return null;
   try {
@@ -52,99 +50,12 @@ function saveCachedUser(user: AuthUser | null) {
   } catch {}
 }
 
-function loadCachedToken(): string | null {
-  if (typeof window === 'undefined') return null;
-  try {
-    return sessionStorage.getItem(AUTH_TOKEN_KEY);
-  } catch { return null; }
-}
-
-function saveCachedToken(token: string | null) {
-  if (typeof window === 'undefined') return;
-  try {
-    if (token) sessionStorage.setItem(AUTH_TOKEN_KEY, token);
-    else sessionStorage.removeItem(AUTH_TOKEN_KEY);
-  } catch {}
-}
-
-let isRefreshing = false;
-let refreshQueue: Array<(token: string | null) => void> = [];
-
-async function refreshSessionToken(): Promise<string | null> {
-  if (isRefreshing) {
-    return new Promise((resolve) => {
-      refreshQueue.push(resolve);
-    });
-  }
-  isRefreshing = true;
-  try {
-    const rToken = typeof window !== 'undefined' ? sessionStorage.getItem('zhi_refresh_token') : null;
-    const res = await fetch(`${API_BASE}/api/auth/refresh`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refresh_token: rToken }),
-      credentials: 'include'
-    });
-    if (res.ok) {
-      const data = await res.json();
-      const newToken = data.access_token || null;
-      if (newToken && typeof window !== 'undefined') {
-        saveCachedToken(newToken);
-      }
-      if (data.refresh_token && typeof window !== 'undefined') {
-        sessionStorage.setItem('zhi_refresh_token', data.refresh_token);
-      }
-      refreshQueue.forEach((cb) => cb(newToken));
-      refreshQueue = [];
-      return newToken;
-    }
-  } catch (err) {
-    console.error("Token refresh failed in AuthContext:", err);
-  } finally {
-    isRefreshing = false;
-  }
-  refreshQueue.forEach((cb) => cb(null));
-  refreshQueue = [];
-  return null;
-}
-
 async function api(path: string, options: RequestInit = {}) {
-  let token = loadCachedToken();
   const headers = {
     'Content-Type': 'application/json',
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
     ...(options.headers || {})
   };
-  let res = await fetch(`${API_BASE}${path}`, { credentials: 'include', ...options, headers });
-  
-  if (res.status === 401 && typeof window !== 'undefined' && !path.includes('/auth/refresh') && !path.includes('/auth/login')) {
-    const newToken = await refreshSessionToken();
-    if (newToken) {
-      const retryHeaders = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${newToken}`,
-        ...(options.headers || {})
-      };
-      res = await fetch(`${API_BASE}${path}`, { credentials: 'include', ...options, headers: retryHeaders });
-    }
-  }
-
-  if (res.status === 403 && typeof window !== 'undefined' && !path.includes('/auth/login') && !path.includes('/auth/me')) {
-    // If forbidden, check if it's due to plan expiration
-    fetch(`${API_BASE}/api/auth/me`, { credentials: 'include', headers })
-      .then(r => r.json())
-      .then(data => {
-        if (data.plan_expired) {
-          const locale = window.location.pathname.split('/')[1] || 'en';
-          if (data.user?.role === 'parent') {
-            window.location.href = `${window.location.origin}/${locale}/parent/profile?tab=plans&trial_expired=1`;
-          } else if (data.user?.role === 'school_admin') {
-            window.location.href = `${window.location.origin}/${locale}/school-admin/payments?trial_expired=1`;
-          }
-        }
-      }).catch(() => {});
-  }
-  return res;
+  return fetch(`${API_BASE}${path}`, { credentials: 'include', ...options, headers });
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -157,9 +68,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const res = await api('/api/auth/me');
       if (!res.ok) {
+        if (res.status === 401 && typeof window !== 'undefined') {
+          // Session is truly expired — show modal (don't immediately clear user)
+          setSessionExpired(true);
+          setLoading(false);
+          return;
+        }
         saveCachedUser(null);
-        saveCachedToken(null);
         setUser(null);
+        setLoading(false);
         return;
       }
       const data = (await res.json()) as AuthResponse & { plan_expired?: boolean };
@@ -190,9 +107,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
         // Fallback: hard logout for other roles
         saveCachedUser(null);
-        saveCachedToken(null);
         setUser(null);
-        document.cookie = 'zhi_user_role=; path=/; max-age=0';
         window.location.href = `${window.location.origin}/${locale}/login?expired=1`;
         return;
       }
@@ -214,13 +129,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!res.ok) { setError(data.error || 'Login failed'); return null; }
       if (!data.user) { setError('Login failed'); return null; }
       saveCachedUser(data.user);
-      saveCachedToken(data.access_token || null);
-      if (data.refresh_token && typeof window !== 'undefined') {
-        sessionStorage.setItem('zhi_refresh_token', data.refresh_token);
-      }
       clearPersistedCache();
       setUser(data.user);
-      document.cookie = `zhi_user_role=${data.user.role}; path=/; max-age=${60 * 60 * 24 * 30}`;
       
       if (data.plan_expired) {
         const locale = typeof window !== 'undefined'
@@ -317,17 +227,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     saveCachedUser(null);
-    saveCachedToken(null);
-    if (typeof window !== 'undefined') {
-      sessionStorage.removeItem('zhi_refresh_token');
-    }
     setUser(null);
-    document.cookie = 'zhi_user_role=; path=/; max-age=0';
     clearPersistedCache();
     setLoading(false);
     setError(null);
     
-    // Call server logout in background without blocking redirect/UI
+    // Call server logout in background — clears httpOnly cookies
     api('/api/auth/logout', { method: 'POST' }).catch(() => {});
   };
 
@@ -335,12 +240,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const handleExpired = () => {
-      const token = sessionStorage.getItem('zhi_auth_token');
-      if (token) {
-        setSessionExpired(true);
-      }
-    };
+    const handleExpired = () => setSessionExpired(true);
     window.addEventListener('zhi-session-expired', handleExpired);
     return () => window.removeEventListener('zhi-session-expired', handleExpired);
   }, []);
