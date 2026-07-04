@@ -126,7 +126,7 @@ export default function PaymentDetailPage() {
         </div>
       </div>
 
-      {/* Invoice Layout */}
+        {/* Invoice Layout */}
       <div className={styles.invoiceContainer}>
         {/* Paid Stamp */}
         {(latestPayment?.status === 'success' || paymentsList.length === 0) && (

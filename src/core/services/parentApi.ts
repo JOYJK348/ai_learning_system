@@ -110,6 +110,7 @@ export type ParentSubscription = {
   end_date: string | null;
   trial_start: string | null;
   trial_end: string | null;
+  metadata: Record<string, unknown> | null;
   plan: Plan;
 };
 

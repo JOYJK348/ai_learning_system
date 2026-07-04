@@ -1055,6 +1055,34 @@
   box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12), 0 20px 40px -15px rgba(16, 185, 129, 0.08) !important;
 }
 
+.planCardComingSoon {
+  opacity: 0.55;
+  filter: grayscale(0.6);
+  border-color: #e2e8f0 !important;
+  background: #f8fafc !important;
+  pointer-events: none;
+}
+
+.planCardComingSoon:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: #e2e8f0 !important;
+}
+
+.comingSoonBadge {
+  display: inline-block;
+  width: fit-content;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.85rem;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: #94a3b8;
+  font-size: 0.6rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
 /* Beautiful color strip at the top of each card */
 .planCard::after {
   content: '';
@@ -1142,6 +1170,44 @@
   color: #94a3b8;
 }
 
+.intervalToggle {
+  display: flex;
+  gap: 0;
+  margin: 0.5rem 0 0.2rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.intervalBtn {
+  padding: 0.35rem 0.85rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  background: #fff;
+  color: #94a3b8;
+  transition: all 0.15s;
+}
+
+.intervalBtnActive {
+  background: #12312f;
+  color: #fff;
+}
+
+.discountBadge {
+  font-size: 0.58rem;
+  font-weight: 950;
+  color: #16a34a;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  margin-left: 0.4rem;
+  white-space: nowrap;
+}
+
 .planDesc {
   margin: 0.4rem 0 0;
   font-size: 0.72rem;
@@ -1150,62 +1216,19 @@
   line-height: 1.4;
 }
 
-.featureGroups {
+.simpleFeatures {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  margin: 1rem 0;
+  gap: 0.35rem;
+  margin: 0.85rem 0;
   flex: 1;
 }
 
-.featureCategory {
-  margin: 0 0 0.2rem;
-  font-size: 0.54rem;
-  font-weight: 950;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #94a3b8;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.featureList {
-  display: flex;
-  flex-direction: column;
-  gap: 0.18rem;
-}
-
-.featureItem {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 0.35rem;
-  align-items: center;
-  font-size: 0.7rem;
-  font-weight: 800;
-  color: #475569;
-  padding: 0.1rem 0;
-}
-
-.featureItem svg {
-  color: #94a3b8;
-  flex-shrink: 0;
-}
-
-.featureLimit {
-  font-size: 0.65rem;
-  font-weight: 950;
-  color: #15803d;
-}
-
-.featureDisabled {
-  color: #cbd5e1;
-}
-
-.featureName {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.simpleFeat {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #334155;
+  padding: 0.15rem 0;
 }
 
 .ctaBtn {

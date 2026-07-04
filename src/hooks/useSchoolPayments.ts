@@ -58,7 +58,58 @@ export type PaymentsData = {
 function getAuthHeaders(): Record<string, string> {
   if (typeof window === 'undefined') return {};
   const token = sessionStorage.getItem('zhi_auth_token');
+  if (!token) console.warn('[getAuthHeaders] No zhi_auth_token in sessionStorage');
   return token ? { 'Authorization': `Bearer ${token}` } : {};
+}
+
+async function refreshAuthToken(): Promise<string | null> {
+  try {
+    const refreshToken = sessionStorage.getItem('zhi_refresh_token');
+    if (!refreshToken) {
+      console.warn('[authFetch] No refresh token in sessionStorage');
+      return null;
+    }
+    const res = await fetch(`${API_BASE}/api/auth/refresh`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: refreshToken }),
+      credentials: 'include',
+    });
+    if (!res.ok) {
+      console.warn('[authFetch] Refresh failed:', res.status, await res.text().catch(() => ''));
+      return null;
+    }
+    const data = await res.json();
+    if (data.access_token) {
+      sessionStorage.setItem('zhi_auth_token', data.access_token);
+      if (data.refresh_token) sessionStorage.setItem('zhi_refresh_token', data.refresh_token);
+      return data.access_token;
+    }
+    return null;
+  } catch (e) {
+    console.warn('[authFetch] Refresh error:', e);
+    return null;
+  }
+}
+
+async function authFetch(url: string, options: RequestInit = {}): Promise<Response> {
+  let res = await fetch(url, { ...options, credentials: 'include', headers: { ...options.headers, ...getAuthHeaders() } });
+  let refreshed = false;
+  if ((res.status === 401 || res.status === 403) && typeof window !== 'undefined') {
+    const newToken = await refreshAuthToken();
+    if (newToken) {
+      res = await fetch(url, { ...options, credentials: 'include', headers: { ...options.headers, 'Authorization': `Bearer ${newToken}`, 'Content-Type': 'application/json' } });
+      refreshed = true;
+    }
+  }
+  if (res.status === 403 && typeof window !== 'undefined') {
+    sessionStorage.removeItem('zhi_auth_token');
+    sessionStorage.removeItem('zhi_refresh_token');
+    sessionStorage.removeItem('zhi_user');
+    window.dispatchEvent(new CustomEvent('zhi-session-expired'));
+    window.location.href = '/login';
+  }
+  return res;
 }
 
 async function fetchPayments() {
@@ -104,7 +155,7 @@ export type UpgradeResult = {
   subscription: SubscriptionInfo;
 };
 
-async function fetchUpgrade(planType: string) {
+async function fetchUpgrade(planType: string, maxStudents?: number) {
   const res = await fetch(`${API_BASE}/api/school-admin/upgrade`, {
     method: 'POST',
     credentials: 'include',
@@ -112,17 +163,22 @@ async function fetchUpgrade(planType: string) {
       'Content-Type': 'application/json',
       ...getAuthHeaders()
     },
-    body: JSON.stringify({ plan_type: planType }),
+    body: JSON.stringify({ plan_type: planType, max_students: maxStudents || 100 }),
   });
   const json = await res.json();
   if (!res.ok) throw new Error(json.error || 'Upgrade failed');
   return json.data as UpgradeResult;
 }
 
+export type PlanTier = {
+  max_students: number; price: number; displayPrice: string; label: string;
+};
+
 export type PlanItem = {
   type: string; name: string; price: string; display_price: string;
   numeric_price: number; period: string; desc: string; days: number;
   features: { key: string; label: string }[];
+  tiers: PlanTier[] | null;
 };
 
 async function fetchPlans() {
@@ -136,9 +192,18 @@ async function fetchPlans() {
 }
 
 const FALLBACK_PLANS: PlanItem[] = [
-  { type: 'free', name: 'Free', price: '₹0', display_price: '₹0', numeric_price: 0, period: 'forever', desc: 'For small schools getting started', days: 0, features: [{ key: 'videos', label: 'Video Lessons' }, { key: 'quizzes', label: 'Quizzes' }, { key: 'activities', label: 'Activities' }] },
-  { type: 'paid', name: 'Paid', price: '₹1,999', display_price: '₹1,999', numeric_price: 1999, period: '/month', desc: 'For growing schools with more needs', days: 30, features: [{ key: 'videos', label: 'Video Lessons' }, { key: 'quizzes', label: 'Quizzes' }, { key: 'activities', label: 'Activities' }, { key: 'reports', label: 'Reports & Analytics' }] },
-  { type: 'school', name: 'School', price: '₹3,000', display_price: '₹3,000', numeric_price: 3000, period: '/month', desc: 'Full platform access for your school', days: 365, features: [{ key: 'videos', label: 'Video Lessons' }, { key: 'quizzes', label: 'Quizzes' }, { key: 'activities', label: 'Activities' }, { key: 'reports', label: 'Reports & Analytics' }, { key: 'ai_tutor', label: 'AI Tutor' }, { key: 'bulk_import', label: 'Bulk Student Import' }] },
+  { type: 'free', name: 'Basic', price: '7 Days Free Trial', display_price: '₹0', numeric_price: 0, period: '', desc: 'Essential digital learning tools to get your school started', days: 7, features: [{ key: 'videos', label: 'Video Lessons' }, { key: 'quizzes', label: 'Quizzes' }, { key: 'activities', label: 'Activities' }], tiers: null },
+  { type: 'paid', name: 'Paid', price: '₹1,999', display_price: '₹1,999', numeric_price: 1999, period: '/month', desc: 'For growing schools with more needs', days: 30, features: [{ key: 'videos', label: 'Video Lessons' }, { key: 'quizzes', label: 'Quizzes' }, { key: 'activities', label: 'Activities' }, { key: 'reports', label: 'Reports & Analytics' }], tiers: null },
+  {
+    type: 'school', name: 'Premium', price: '₹3,000', display_price: '₹3,000', numeric_price: 3000, period: '/month',
+    desc: 'Complete platform with AI-powered tutoring and bulk management', days: 365,
+    features: [{ key: 'videos', label: 'Video Lessons' }, { key: 'quizzes', label: 'Quizzes' }, { key: 'activities', label: 'Activities' }, { key: 'reports', label: 'Reports & Analytics' }, { key: 'bulk_import', label: 'Bulk Student Import' }, { key: 'support', label: 'Dedicated Support' }],
+    tiers: [
+      { max_students: 100, price: 3000, displayPrice: '₹3,000', label: '100 Students' },
+      { max_students: 200, price: 5000, displayPrice: '₹5,000', label: '200 Students' },
+      { max_students: 500, price: 8000, displayPrice: '₹8,000', label: '500 Students' },
+    ],
+  },
 ];
 
 export function usePlansConfig() {
@@ -159,7 +224,7 @@ export function useSchoolUpgrade() {
   const schoolId = user?.schoolId;
 
   return useMutation({
-    mutationFn: (planType: string) => fetchUpgrade(planType),
+    mutationFn: ({ planType, maxStudents }: { planType: string; maxStudents?: number }) => fetchUpgrade(planType, maxStudents),
     onSuccess: () => {
       if (schoolId) {
         queryClient.invalidateQueries({ queryKey: schoolAdminKeys.payments(schoolId) });
@@ -179,24 +244,48 @@ export type CreateOrderResult = {
   key_id: string;
 };
 
-async function fetchCreateOrder(planType: string) {
-  const res = await fetch(`${API_BASE}/api/school-admin/payments/create-order`, {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      ...getAuthHeaders()
-    },
-    body: JSON.stringify({ plan_type: planType }),
-  });
+async function fetchCreateOrder(planType: string, maxStudents?: number, isTierUpgrade?: boolean) {
+  const tryFetch = async (): Promise<Response> => {
+    const token = typeof window !== 'undefined' ? sessionStorage.getItem('zhi_auth_token') : null;
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return fetch(`${API_BASE}/api/school-admin/payments/create-order`, {
+      method: 'POST',
+      credentials: 'include',
+      headers,
+      body: JSON.stringify({ plan_type: planType, max_students: maxStudents || 100, is_tier_upgrade: isTierUpgrade }),
+    });
+  };
+  let res = await tryFetch();
+  let refreshed = false;
+  let refreshFailed = false;
+  if ((res.status === 401 || res.status === 403) && typeof window !== 'undefined') {
+    const newToken = await refreshAuthToken();
+    if (newToken) {
+      res = await tryFetch();
+      refreshed = true;
+    } else {
+      refreshFailed = true;
+    }
+  }
   const json = await res.json();
-  if (!res.ok) throw new Error(json.error || 'Failed to create payment order');
+  if (!res.ok) {
+    if (res.status === 403 && typeof window !== 'undefined') {
+      // Token belongs to wrong user type or session is invalid — force re-login
+      sessionStorage.removeItem('zhi_auth_token');
+      sessionStorage.removeItem('zhi_refresh_token');
+      sessionStorage.removeItem('zhi_user');
+      window.dispatchEvent(new CustomEvent('zhi-session-expired'));
+      window.location.href = '/login';
+    }
+    throw new Error(json.error || 'Failed to create payment order');
+  }
   return json.data as CreateOrderResult;
 }
 
 export function useCreateSchoolOrder() {
   return useMutation({
-    mutationFn: (planType: string) => fetchCreateOrder(planType),
+    mutationFn: ({ planType, maxStudents, isTierUpgrade }: { planType: string; maxStudents?: number; isTierUpgrade?: boolean }) => fetchCreateOrder(planType, maxStudents, isTierUpgrade),
   });
 }
 
@@ -207,13 +296,10 @@ export type VerifyPaymentPayload = {
 };
 
 async function fetchVerifyPayment(payload: VerifyPaymentPayload) {
-  const res = await fetch(`${API_BASE}/api/school-admin/payments/verify`, {
+  const res = await authFetch(`${API_BASE}/api/school-admin/payments/verify`, {
     method: 'POST',
     credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      ...getAuthHeaders()
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
   const json = await res.json();
@@ -236,15 +322,12 @@ export function useVerifySchoolPayment() {
   });
 }
 
-async function fetchSubmitOfflinePayment(planType: string, referenceCode: string) {
-  const res = await fetch(`${API_BASE}/api/school-admin/payments/offline`, {
+async function fetchSubmitOfflinePayment(planType: string, referenceCode: string, maxStudents?: number, isTierUpgrade?: boolean) {
+  const res = await authFetch(`${API_BASE}/api/school-admin/payments/offline`, {
     method: 'POST',
     credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      ...getAuthHeaders()
-    },
-    body: JSON.stringify({ plan_type: planType, reference_code: referenceCode }),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ plan_type: planType, reference_code: referenceCode, max_students: maxStudents || 100, is_tier_upgrade: isTierUpgrade }),
   });
   const json = await res.json();
   if (!res.ok) throw new Error(json.error || 'Failed to submit reference');
@@ -257,8 +340,8 @@ export function useSubmitOfflinePayment() {
   const schoolId = user?.schoolId;
 
   return useMutation({
-    mutationFn: ({ planType, referenceCode }: { planType: string; referenceCode: string }) => 
-      fetchSubmitOfflinePayment(planType, referenceCode),
+    mutationFn: ({ planType, referenceCode, maxStudents, isTierUpgrade }: { planType: string; referenceCode: string; maxStudents?: number; isTierUpgrade?: boolean }) => 
+      fetchSubmitOfflinePayment(planType, referenceCode, maxStudents, isTierUpgrade),
     onSuccess: () => {
       if (schoolId) {
         queryClient.invalidateQueries({ queryKey: schoolAdminKeys.payments(schoolId) });

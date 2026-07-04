@@ -275,6 +275,14 @@ export default function PaymentsAdminPage() {
     enabled: !!user,
   });
 
+  // School payments data (used by both "Active Paid+School filter" and "Schools" tab)
+  const { data: rawSchoolData } = useQuery({
+    queryKey: ['admin', 'payments', 'schools'],
+    queryFn: adminApi.paymentsSchoolPayments,
+    staleTime: 60_000,
+    enabled: !!user,
+  });
+
   // Tab data query (separate per tab + registration_type for independent caching)
   const { data: rawTabData, isLoading } = useQuery({
     queryKey: [...adminKeys.paymentsTab(activeTab), regTypeFilter || 'all'],
@@ -308,7 +316,8 @@ export default function PaymentsAdminPage() {
   const expiredParents: ParentPlan[] = activeTab === 'expired' ? (Array.isArray(rawTabData) ? rawTabData : []) : [];
   const freeParents: ParentPlan[] = activeTab === 'free' ? (Array.isArray(rawTabData) ? rawTabData : []) : [];
   const transactions: Transaction[] = activeTab === 'transactions' ? (Array.isArray(rawTabData) ? rawTabData : []) : [];
-  const schoolPayments: any[] = activeTab === 'schools' ? (Array.isArray(rawTabData) ? rawTabData : []) : [];
+  const schoolPayments: any[] = (activeTab === 'schools' || (activeTab === 'active' && (regTypeFilter === 'school' || !regTypeFilter)))
+    ? (Array.isArray(rawSchoolData) ? rawSchoolData : []) : [];
 
   // Individual-only count for the card (persistent query, not dependent on activeTab)
   const individualFreeCount = useMemo(() => {
@@ -455,6 +464,26 @@ export default function PaymentsAdminPage() {
     const query = searchQuery.toLowerCase();
     switch (activeTab) {
       case 'active':
+        if (regTypeFilter === 'school') {
+          return (Array.isArray(schoolPayments) ? schoolPayments : []).filter((s: any) =>
+            (s.school_name || '').toLowerCase().includes(query) ||
+            (s.school_code || '').toLowerCase().includes(query) ||
+            (s.school_email || '').toLowerCase().includes(query)
+          );
+        }
+        if (!regTypeFilter) {
+          // "All" — merge parents + schools, tag each with type
+          const parentRows = activeParents.filter(p =>
+            (p.parent_name || '').toLowerCase().includes(query) ||
+            (p.parent_email || '').toLowerCase().includes(query)
+          ).map(p => ({ ...p, _type: 'parent' as const }));
+          const schoolRows = (Array.isArray(schoolPayments) ? schoolPayments : []).filter((s: any) =>
+            (s.school_name || '').toLowerCase().includes(query) ||
+            (s.school_code || '').toLowerCase().includes(query) ||
+            (s.school_email || '').toLowerCase().includes(query)
+          ).map(s => ({ ...s, _type: 'school' as const }));
+          return [...parentRows, ...schoolRows];
+        }
         return activeParents.filter(p => 
           (p.parent_name || '').toLowerCase().includes(query) ||
           (p.parent_email || '').toLowerCase().includes(query)
@@ -483,7 +512,7 @@ export default function PaymentsAdminPage() {
       default:
         return [];
     }
-  }, [activeTab, activeParents, expiredParents, freeParents, transactions, schoolPayments, searchQuery]);
+  }, [activeTab, activeParents, expiredParents, freeParents, transactions, schoolPayments, searchQuery, regTypeFilter]);
 
   const tabs: { id: TabType; label: string; icon: React.ElementType; iconClass: string; count?: number }[] = [
     { id: 'active', label: 'Active Paid', icon: Crown, iconClass: styles.kpiGold, count: stats?.active_paid_users },
@@ -614,102 +643,232 @@ export default function PaymentsAdminPage() {
                   </button>
                 </div>
                 <div className={styles.tableWrapper}>
-                  <table className={styles.table}>
-                    <thead>
-                      <tr>
-                        <th>Parent</th>
-                        <th>Plan</th>
-                        <th>Amount</th>
-                        <th>Expiry</th>
-                        <th>Churn Risk</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredData.length > 0 ? (
-                        (filteredData as ParentPlan[]).map(item => (
-                          <tr key={item.id} className={`${styles.tableRow} ${styles.tableRowClick}`}
-                            onClick={() => setDetailParentId(item.parent_id)}
-                            onMouseEnter={() => prefetchParent(item.parent_id)}>
-                            <td>
-                              <div className={styles.parentCell}>
-                                <div className={styles.parentAvatar}>
-                                  <User size={20} />
+                  {regTypeFilter === 'school' ? (
+                    <table className={styles.table}>
+                      <thead>
+                        <tr>
+                          <th>School</th>
+                          <th>Plan</th>
+                          <th>Amount</th>
+                          <th>Expiry</th>
+                          <th>Students</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredData.length > 0 ? (
+                          (filteredData as SchoolPayment[]).map(item => (
+                            <tr key={item.id} className={styles.tableRow}>
+                              <td>
+                                <div className={styles.parentCell}>
+                                  <div className={styles.parentAvatar}>
+                                    <Building2 size={20} />
+                                  </div>
+                                  <div className={styles.parentInfo}>
+                                    <span className={styles.parentName}>{item.school_name}</span>
+                                    <span className={styles.regTypeBadge}><Building2 size={10} /> School</span>
+                                    <span className={styles.parentMeta}>{item.school_email}</span>
+                                    <span className={styles.parentMeta}>{item.school_city}, {item.school_state}</span>
+                                  </div>
                                 </div>
-                                <div className={styles.parentInfo}>
-                                  <span className={styles.parentName}>{item.parent_name}</span>
-                                  {item.registration_type === 'school' && <span className={styles.regTypeBadge}><Building2 size={10} /> School</span>}
-                                  {(!item.registration_type || item.registration_type === 'individual') && <span className={styles.regTypeBadgeInd}><User size={10} /> Individual</span>}
-                                  <span className={styles.parentMeta}>{item.parent_email}</span>
-                                  <span className={styles.parentMeta}>{item.children_count} children</span>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <span className={`${styles.planBadge} ${styles.planPaid}`}>
-                                <Crown size={12} /> {item.plan_name}
-                              </span>
-                              <span className={styles.priceText}>₹{item.plan_price}/mo</span>
-                            </td>
-                            <td>
-                              <span className={styles.amountText}>₹{(item.total_paid || 0).toLocaleString()}</span>
-                              <span className={styles.parentMeta}>Last: {item.last_payment_date || 'N/A'}</span>
-                            </td>
-                            <td>
-                              <div className={styles.expiryCell}>
-                                <span className={`${styles.expiryText} ${item.days_until_expiry <= 7 ? styles.expiryUrgent : ''}`}>
-                                  <Timer size={12} />
-                                  {item.days_until_expiry} days left
+                              </td>
+                              <td>
+                                <span className={`${styles.planBadge} ${styles.planPaid}`}>
+                                  <Crown size={12} /> {item.plan_name}
                                 </span>
-                                <div className={styles.expiryBar}>
-                                  <div 
-                                    className={styles.expiryFill} 
-                                    style={{ width: `${Math.min(100, (item.days_until_expiry / 30) * 100)}%` }}
-                                  />
+                                <span className={styles.priceText}>₹{item.plan_price}/mo</span>
+                              </td>
+                              <td>
+                                <span className={styles.amountText}>₹{(item.revenue_total || 0).toLocaleString()}</span>
+                                <span className={styles.parentMeta}>Last: {item.last_paid_at ? new Date(item.last_paid_at).toLocaleDateString() : 'N/A'}</span>
+                              </td>
+                              <td>
+                                <div className={styles.expiryCell}>
+                                  <span className={`${styles.expiryText} ${item.days_until_expiry <= 7 ? styles.expiryUrgent : ''}`}>
+                                    <Timer size={12} />
+                                    {item.days_until_expiry} days left
+                                  </span>
+                                  <div className={styles.expiryBar}>
+                                    <div 
+                                      className={styles.expiryFill} 
+                                      style={{ width: `${Math.min(100, (item.days_until_expiry / 365) * 100)}%` }}
+                                    />
+                                  </div>
                                 </div>
-                              </div>
-                            </td>
-                            <td>
-                              <span className={`${styles.churnBadge} ${getChurnColor(item.churn_risk)}`}>
-                                <TrendingUp size={12} />
-                                {item.churn_risk}
-                              </span>
-                            </td>
-                            <td>
-                              <div className={styles.actionMenu}>
-                                <button 
-                                  className={`${styles.actionButton} ${styles.upgradeButton}`}
-                                  onClick={(e) => { e.stopPropagation(); setUpgradeModal(item); }}
-                                >
-                                  <ArrowUpRight size={14} /> Upgrade
-                                </button>
-                                <button 
-                                  className={`${styles.actionButton} ${styles.renewButton}`}
-                                  onClick={(e) => { e.stopPropagation(); setRemindModal(item); }}
-                                >
-                                  <Send size={14} /> Remind
-                                </button>
-                                <button 
-                                  className={`${styles.actionButton} ${styles.offerButton}`}
-                                  onClick={(e) => { e.stopPropagation(); router.push(`/${locale}/admin/payments/${item.parent_id}`); }}
-                                  onMouseEnter={() => prefetchParent(item.parent_id)}
-                                >
-                                  <FileText size={14} /> Invoice
-                                </button>
-                              </div>
+                              </td>
+                              <td>
+                                <span className={styles.amountText}>{item.student_count} / {item.max_students}</span>
+                              </td>
+                              <td>
+                                <div className={styles.actionMenu}>
+                                  <button 
+                                    className={`${styles.actionButton} ${styles.offerButton}`}
+                                    onClick={(e) => { e.stopPropagation(); router.push(`/${locale}/admin/schools/${item.school_id}`); }}
+                                  >
+                                    <Eye size={14} /> View
+                                  </button>
+                                  <button 
+                                    className={`${styles.actionButton} ${styles.invoiceButton}`}
+                                    onClick={(e) => { e.stopPropagation(); router.push(`/${locale}/admin/schools/${item.school_id}/invoice`); }}
+                                  >
+                                    <FileText size={14} /> Invoice
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={6} className={styles.emptyState}>
+                              <Building2 size={32} />
+                              <p>No paid schools</p>
                             </td>
                           </tr>
-                        ))
-                      ) : (
+                        )}
+                      </tbody>
+                    </table>
+                  ) : (
+                    <table className={styles.table}>
+                      <thead>
                         <tr>
-                          <td colSpan={6} className={styles.emptyState}>
-                            <Crown size={32} />
-                            <p>No active paid users</p>
-                          </td>
+                          <th>User</th>
+                          <th>Plan</th>
+                          <th>Amount</th>
+                          <th>Expiry</th>
+                          <th>{regTypeFilter === 'individual' ? 'Churn Risk' : 'Details'}</th>
+                          <th>Actions</th>
                         </tr>
-                      )}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {filteredData.length > 0 ? (
+                          (filteredData as any[]).map((item: any) => {
+                            if (item._type === 'school') {
+                              return (
+                                <tr key={`sch_${item.id}`} className={styles.tableRow}>
+                                  <td>
+                                    <div className={styles.parentCell}>
+                                      <div className={styles.parentAvatar}>
+                                        <Building2 size={20} />
+                                      </div>
+                                      <div className={styles.parentInfo}>
+                                        <span className={styles.parentName}>{item.school_name}</span>
+                                        <span className={styles.regTypeBadge}><Building2 size={10} /> School</span>
+                                        <span className={styles.parentMeta}>{item.school_email}</span>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <span className={`${styles.planBadge} ${styles.planPaid}`}>
+                                      <Crown size={12} /> {item.plan_name}
+                                    </span>
+                                    <span className={styles.priceText}>₹{item.plan_price}/mo</span>
+                                  </td>
+                                  <td>
+                                    <span className={styles.amountText}>₹{(item.revenue_total || 0).toLocaleString()}</span>
+                                    <span className={styles.parentMeta}>Last: {item.last_paid_at ? new Date(item.last_paid_at).toLocaleDateString() : 'N/A'}</span>
+                                  </td>
+                                  <td>
+                                    <div className={styles.expiryCell}>
+                                      <span className={`${styles.expiryText} ${item.days_until_expiry <= 7 ? styles.expiryUrgent : ''}`}>
+                                        <Timer size={12} />
+                                        {item.days_until_expiry} days left
+                                      </span>
+                                      <div className={styles.expiryBar}>
+                                        <div className={styles.expiryFill} style={{ width: `${Math.min(100, (item.days_until_expiry / 365) * 100)}%` }} />
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#64748b' }}>{item.student_count} students</span>
+                                  </td>
+                                  <td>
+                                    <div className={styles.actionMenu}>
+                                      <button className={`${styles.actionButton} ${styles.offerButton}`}
+                                        onClick={(e) => { e.stopPropagation(); router.push(`/${locale}/admin/schools/${item.school_id}`); }}>
+                                        <Eye size={14} /> View
+                                      </button>
+                                      <button className={`${styles.actionButton} ${styles.invoiceButton}`}
+                                        onClick={(e) => { e.stopPropagation(); router.push(`/${locale}/admin/schools/${item.school_id}/invoice`); }}>
+                                        <FileText size={14} /> Invoice
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              );
+                            }
+                            const p = item as ParentPlan;
+                            return (
+                              <tr key={`par_${p.id}`} className={`${styles.tableRow} ${styles.tableRowClick}`}
+                                onClick={() => setDetailParentId(p.parent_id)}
+                                onMouseEnter={() => prefetchParent(p.parent_id)}>
+                                <td>
+                                  <div className={styles.parentCell}>
+                                    <div className={styles.parentAvatar}>
+                                      <User size={20} />
+                                    </div>
+                                    <div className={styles.parentInfo}>
+                                      <span className={styles.parentName}>{p.parent_name}</span>
+                                      {p.registration_type === 'school' && <span className={styles.regTypeBadge}><Building2 size={10} /> School</span>}
+                                      {(!p.registration_type || p.registration_type === 'individual') && <span className={styles.regTypeBadgeInd}><User size={10} /> Individual</span>}
+                                      <span className={styles.parentMeta}>{p.parent_email}</span>
+                                      <span className={styles.parentMeta}>{p.children_count} children</span>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td>
+                                  <span className={`${styles.planBadge} ${styles.planPaid}`}>
+                                    <Crown size={12} /> {p.plan_name}
+                                  </span>
+                                  <span className={styles.priceText}>₹{p.plan_price}/mo</span>
+                                </td>
+                                <td>
+                                  <span className={styles.amountText}>₹{(p.total_paid || 0).toLocaleString()}</span>
+                                  <span className={styles.parentMeta}>Last: {p.last_payment_date || 'N/A'}</span>
+                                </td>
+                                <td>
+                                  <div className={styles.expiryCell}>
+                                    <span className={`${styles.expiryText} ${p.days_until_expiry <= 7 ? styles.expiryUrgent : ''}`}>
+                                      <Timer size={12} />
+                                      {p.days_until_expiry} days left
+                                    </span>
+                                    <div className={styles.expiryBar}>
+                                      <div className={styles.expiryFill} style={{ width: `${Math.min(100, (p.days_until_expiry / 30) * 100)}%` }} />
+                                    </div>
+                                  </div>
+                                </td>
+                                <td>
+                                  <span className={`${styles.churnBadge} ${getChurnColor(p.churn_risk)}`}>
+                                    <TrendingUp size={12} />
+                                    {p.churn_risk}
+                                  </span>
+                                </td>
+                                <td>
+                                  <div className={styles.actionMenu}>
+                                    <button className={`${styles.actionButton} ${styles.upgradeButton}`} onClick={(e) => { e.stopPropagation(); setUpgradeModal(p); }}>
+                                      <ArrowUpRight size={14} /> Upgrade
+                                    </button>
+                                    <button className={`${styles.actionButton} ${styles.renewButton}`} onClick={(e) => { e.stopPropagation(); setRemindModal(p); }}>
+                                      <Send size={14} /> Remind
+                                    </button>
+                                    <button className={`${styles.actionButton} ${styles.offerButton}`} onClick={(e) => { e.stopPropagation(); router.push(`/${locale}/admin/payments/${p.parent_id}`); }} onMouseEnter={() => prefetchParent(p.parent_id)}>
+                                      <FileText size={14} /> Invoice
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })
+                        ) : (
+                          <tr>
+                            <td colSpan={6} className={styles.emptyState}>
+                              <Crown size={32} />
+                              <p>No active paid users</p>
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  )}
                 </div>
               </div>
             )}

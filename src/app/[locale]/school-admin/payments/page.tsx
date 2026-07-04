@@ -7,29 +7,18 @@ import { Manrope } from 'next/font/google';
 import {
   CreditCard,
   Users,
-  Shield,
-  Clock,
-  Zap,
-  Video,
-  BarChart3,
-  Bot,
-  Upload,
   CheckCircle2,
   XCircle,
-  TrendingUp,
-  Wallet,
   AlertTriangle,
   Building2,
   PiggyBank,
   Sparkles,
   Crown,
   ArrowUpRight,
-  Info,
   Timer,
   AlertOctagon,
   FileText,
   Printer,
-  Download,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useSchoolPayments, usePlansConfig } from '@/hooks/useSchoolPayments';
@@ -131,7 +120,6 @@ export default function PaymentsPage() {
   const d = data as PaymentsData | undefined;
   const sub = d?.subscription;
   const usage = d?.usage;
-  const revenue = d?.revenue;
   const transactions = d?.transactions || [];
   const serverTime = d?.server_time;
   const expired = sub?.plan_status === 'expired';
@@ -143,9 +131,6 @@ export default function PaymentsPage() {
   const currentPlanPrice = sub && sub.plan_price > 0
     ? `₹${Number(sub.plan_price).toLocaleString('en-IN')}`
     : '₹0';
-
-  const enabledCount = sub ? Object.values(sub.features).filter(Boolean).length : 0;
-  const activeFeatures = sub ? Object.entries(sub.features).filter(([, v]) => v).map(([k]) => k) : [];
 
   const [localExpired, setLocalExpired] = useState(false);
   const offsetRef = useRef(0);
@@ -165,16 +150,20 @@ export default function PaymentsPage() {
 
   const isExpired = expired || localExpired;
 
-  const [upgradeTarget, setUpgradeTarget] = useState<PlanItem | null>(null);
+  const [upgradeTarget, setUpgradeTarget] = useState<{
+    plan: PlanItem;
+    isTierUpgrade?: boolean;
+    tierDiff?: number;
+    tierLabel?: string;
+    tierMaxStudents?: number;
+  } | null>(null);
+  const [isSchoolYearly, setIsSchoolYearly] = useState(false);
+  const [selectedTier, setSelectedTier] = useState<number>(100);
 
   const currentPlanTier = plans.find(p => p.type === sub?.plan_type) || plans[0];
-
-  const kpis = [
-    { label: 'Monthly Revenue', value: `₹${Number(revenue?.this_month || 0).toLocaleString('en-IN')}`, icon: TrendingUp, change: 'Current month' },
-    { label: 'Total Revenue', value: `₹${Number(revenue?.total || 0).toLocaleString('en-IN')}`, icon: Wallet, change: 'All time' },
-    { label: 'Student Capacity', value: `${usage?.current_students ?? 0} / ${usage?.max_students ?? 0}`, icon: Users, change: `${usage?.usage_percent ?? 0}% utilised` },
-    { label: 'Active Features', value: `${enabledCount} / 6`, icon: Shield, change: `${enabledCount} of 6 enabled` },
-  ];
+  const currentPlanDisplayName = currentPlanTier?.name || sub?.plan_type_name || 'School';
+  const currentPlanSuffix = sub?.plan_type === 'school' && sub?.max_students
+    ? ` (${sub.max_students} Students)` : '';
 
   const isReallyLoading = isLoading || authLoading || (!data && !isError && !!user?.schoolId);
 
@@ -246,43 +235,37 @@ export default function PaymentsPage() {
               <div className={styles.currentGrid}>
                 <div className={styles.currentLeft}>
                   <div className={styles.currentLabel}>Current Plan</div>
-                  <div className={styles.currentName}>{sub.plan_type_name || 'School'} Plan</div>
+                  <div className={styles.currentName}>{currentPlanDisplayName}{currentPlanSuffix}</div>
                   <div className={styles.currentPriceRow}>
                     <span className={styles.currentPrice}>{currentPlanPrice}</span>
-                    <span className={styles.currentPeriod}>/ month</span>
+                    <span className={styles.currentPeriod}>{sub?.plan_type === 'free' ? '' : '/ month'}</span>
                   </div>
                   <div className={styles.currentMeta}>
                     <Badge status={isExpired ? 'expired' : sub.plan_status} />
                   </div>
-                  <div className={styles.currentPills}>
-                    {sub.discount_percent > 0 && <span className={styles.pill}>{sub.discount_percent}% discount</span>}
-                    {sub.setup_fee > 0 && <span className={styles.pill}>₹{Number(sub.setup_fee).toLocaleString('en-IN')} setup fee</span>}
-                    {sub.trial_days > 0 && <span className={styles.pill}>{sub.trial_days}-day trial</span>}
+                </div>
+                  <div className={styles.currentRight}>
+                    {sub.plan_expires_at && serverTime && !isExpired ? (
+                      <div className={styles.countdownCard}>
+                        <div className={styles.countdownHeader}>
+                          <Timer size={13} />
+                          <span>{sub?.plan_type === 'free' ? 'Trial Remaining' : 'Time Remaining'}</span>
+                        </div>
+                        <CountdownTimer expiresAt={sub.plan_expires_at} serverTime={serverTime} />
+                      </div>
+                    ) : isExpired ? (
+                      <div className={styles.countdownCard}>
+                        <div className={styles.countdownHeader}>
+                          <AlertOctagon size={13} />
+                          <span>Plan Expired</span>
+                        </div>
+                        <div className={styles.countdownExpiredBlock}>
+                          <span className={styles.countdownExpiredIcon}>⏰</span>
+                          <span className={styles.countdownExpiredText}>{sub?.plan_type === 'free' ? 'Trial ended — upgrade to continue' : 'Plan expired — renew to continue'}</span>
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
-                </div>
-                <div className={styles.currentRight}>
-                  {sub.plan_expires_at && serverTime && !isExpired && (
-                    <div className={styles.countdownCard}>
-                      <div className={styles.countdownHeader}>
-                        <Timer size={13} />
-                        <span>Time Remaining</span>
-                      </div>
-                      <CountdownTimer expiresAt={sub.plan_expires_at} serverTime={serverTime} />
-                    </div>
-                  )}
-                  {isExpired && (
-                    <div className={styles.countdownCard}>
-                      <div className={styles.countdownHeader}>
-                        <AlertOctagon size={13} />
-                        <span>Plan Expired</span>
-                      </div>
-                      <div className={styles.countdownExpiredBlock}>
-                        <span className={styles.countdownExpiredIcon}>⏰</span>
-                        <span className={styles.countdownExpiredText}>Access restricted</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
               </div>
             </motion.div>
 
@@ -293,59 +276,152 @@ export default function PaymentsPage() {
                 <h3>Available Plans</h3>
               </div>
               <div className={styles.plansGrid}>
-                {plans.map((plan) => {
+                {[...plans].sort((a, b) => a.type === 'paid' ? 1 : b.type === 'paid' ? -1 : 0).map((plan) => {
                   const isCurrent = plan.type === sub.plan_type;
-                  const isUpgrade = plans.findIndex((p) => p.type === plan.type) > plans.findIndex((p) => p.type === sub.plan_type);
+                  const isUpgrade = plan.type === 'school' && sub.plan_type !== 'school';
+                  const isComingSoon = plan.type === 'paid';
+
+                  if (isComingSoon) {
+                    return (
+                      <motion.div key={plan.type} className={`${styles.planCard} ${styles.planCardComingSoon}`} variants={ITEM}>
+                        <div className={styles.planCardTop}>
+                          <Crown size={18} color="#cbd5e1" />
+                          <div className={styles.planCardName} style={{ color: '#cbd5e1' }}>Ultimate</div>
+                          <div className={styles.planCardPrice} style={{ color: '#cbd5e1' }}>
+                            ₹4,999
+                            <span className={styles.planCardPeriod} style={{ color: '#e2e8f0' }}>/month</span>
+                          </div>
+                        </div>
+                        <div className={styles.schoolSimpleFeats} style={{ opacity: 0.45 }}>
+                          <div className={styles.schoolSimpleFeat}>🤖 AI Support & Chat Bot</div>
+                          <div className={styles.schoolSimpleFeat}>📊 Progress Tracking AI</div>
+                          <div className={styles.schoolSimpleFeat}>📈 Predictive Analytics</div>
+                          <div className={styles.schoolSimpleFeat}>🥽 AR/VR Video Lessons</div>
+                        </div>
+                        <span className={styles.comingSoonBadgeSch}>Coming Soon</span>
+                      </motion.div>
+                    );
+                  }
+
+                  const currentTier = plan.tiers?.find(t => t.max_students === sub?.max_students);
+                  const isCurrentSchool = isCurrent && plan.type === 'school';
                   return (
                     <motion.div key={plan.type} className={`${styles.planCard} ${isCurrent ? styles.planCurrent : ''}`} variants={ITEM}>
                       {isCurrent && <span className={styles.planCurrentBadge}>Current Plan</span>}
                       <div className={styles.planCardTop}>
                         <Crown size={18} color={isCurrent ? '#12312f' : '#94a3b8'} />
                         <div className={styles.planCardName}>{plan.name}</div>
+                        {plan.type === 'school' && isCurrentSchool ? (
+                          <div className={styles.currentTierStrip}>
+                            {plan.tiers?.map(t => {
+                              const isCurrentTier = t.max_students === sub?.max_students;
+                              const isHigherTier = t.max_students > (sub?.max_students || 0);
+                              const currentPrice = sub?.plan_price || 0;
+                              const diff = isHigherTier ? t.price - currentPrice : 0;
+                              if (!isCurrentTier && !isHigherTier) return null;
+                              return (
+                                <button
+                                  key={t.max_students}
+                                  type="button"
+                                  className={`${styles.currentTierDot} ${isCurrentTier ? styles.currentTierDotActive : styles.currentTierDotUpgrade}`}
+                                  disabled={isCurrentTier}
+                                  onClick={() => {
+                                    if (!isHigherTier || diff <= 0) return;
+                                    const defaultTier = plan.tiers?.[0];
+                                    setUpgradeTarget({
+                                      plan: { ...plan, numeric_price: defaultTier ? defaultTier.price : plan.numeric_price, price: defaultTier ? defaultTier.displayPrice : plan.price },
+                                      isTierUpgrade: true,
+                                      tierDiff: diff,
+                                      tierLabel: t.label,
+                                      tierMaxStudents: t.max_students,
+                                    });
+                                  }}
+                                >
+                                  {isCurrentTier ? t.label : `${t.label} (+₹${diff.toLocaleString('en-IN')}/mo)`}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        ) : plan.type === 'school' ? (
+                          <>
+                            <div className={styles.schoolToggle}>
+                              <button
+                                type="button"
+                                className={`${styles.schoolToggleBtn} ${!isSchoolYearly ? styles.schoolToggleActive : ''}`}
+                                onClick={() => setIsSchoolYearly(false)}
+                              >
+                                Monthly
+                              </button>
+                              <button
+                                type="button"
+                                className={`${styles.schoolToggleBtn} ${isSchoolYearly ? styles.schoolToggleActive : ''}`}
+                                onClick={() => setIsSchoolYearly(true)}
+                              >
+                                Yearly
+                              </button>
+                            </div>
+                          </>
+                        ) : null}
                         <div className={styles.planCardPrice}>
-                          {plan.price}
-                          <span className={styles.planCardPeriod}>{plan.period}</span>
+                          {(() => {
+                            if (isCurrentSchool) {
+                              const activeTier = plan.tiers?.find(t => t.max_students === sub?.max_students);
+                              const currPrice = sub?.plan_price || activeTier?.price || plan.numeric_price;
+                              return <>{`₹${currPrice.toLocaleString('en-IN')}`}<span className={styles.planCardPeriod}>/mo</span></>;
+                            }
+                            if (plan.type !== 'school') return <>{plan.price}<span className={styles.planCardPeriod}>{plan.period}</span></>;
+                            // Upgrade card always defaults to 100 students — no tier selector (prevents accidental ₹8K charge)
+                            const defaultTier = plan.tiers?.[0];
+                            const monthlyPrice = defaultTier ? defaultTier.displayPrice : plan.price;
+                            if (isSchoolYearly) {
+                              const yearlyPrice = defaultTier ? `₹${(defaultTier.price * 10).toLocaleString('en-IN')}` : '₹30,000';
+                              return <>{yearlyPrice}<span className={styles.planCardPeriod}>/yr</span></>;
+                            }
+                            return <>{monthlyPrice}<span className={styles.planCardPeriod}>/mo</span></>;
+                          })()}
+                          {!isCurrentSchool && isSchoolYearly && plan.type === 'school' && (
+                            <span className={styles.schoolDiscountBadge}>Save ~17% 💰</span>
+                          )}
+                          {!isCurrentSchool && plan.type === 'school' && !isSchoolYearly && (
+                            <div style={{ fontSize: '0.55rem', fontWeight: 700, color: '#94a3b8', marginTop: '0.1rem' }}>100 Students • upgrade tiers anytime</div>
+                          )}
                         </div>
                         <p className={styles.planCardDesc}>{plan.desc}</p>
                       </div>
-                      <div className={styles.planCardFeatures}>
-                        {plans.flatMap((t) => t.features).filter((f, i, arr) => arr.findIndex((x) => x.key === f.key) === i).map((f) => {
-                          const has = isCurrent ? activeFeatures.includes(f.key) : plan.features.some((pf) => pf.key === f.key);
-                          return (
-                            <div key={f.key} className={`${styles.planFeat} ${!has ? styles.planFeatOff : ''}`}>
-                              {has ? <CheckCircle2 size={12} color="#22c55e" /> : <XCircle size={12} color="#cbd5e1" />}
-                              {f.label}
-                            </div>
-                          );
-                        })}
+                      <div className={styles.schoolSimpleFeats}>
+                        {plan.type === 'free' ? (
+                          <>
+                            <div className={styles.schoolSimpleFeat}>📚 Video Lessons</div>
+                            <div className={styles.schoolSimpleFeat}>📝 Quizzes & Assessments</div>
+                            <div className={styles.schoolSimpleFeat}>🎮 Interactive Activities</div>
+                          </>
+                        ) : (
+                          <>
+                            <div className={styles.schoolSimpleFeat}>📝 Quizzes & Assessments</div>
+                            <div className={styles.schoolSimpleFeat}>🎮 Interactive Activities</div>
+                            <div className={styles.schoolSimpleFeat}>📊 Reports & Analytics</div>
+                            <div className={styles.schoolSimpleFeat}>📦 Bulk Student Import</div>
+                            <div className={styles.schoolSimpleFeat}>👩‍🏫 Dedicated Support</div>
+                          </>
+                        )}
                       </div>
-                      {!isCurrent && (
+                      {!isCurrent && isUpgrade && (
                         <button
-                          className={`${styles.planCta} ${isUpgrade ? styles.planCtaUp : styles.planCtaDown}`}
-                          onClick={() => setUpgradeTarget(plan)}
+                          className={`${styles.planCta} ${styles.planCtaUp}`}
+                          onClick={() => {
+                            const defaultTier = plan.tiers?.[0];
+                            setUpgradeTarget({
+                              plan: { ...plan, numeric_price: defaultTier ? defaultTier.price : plan.numeric_price, price: defaultTier ? defaultTier.displayPrice : plan.price },
+                            });
+                          }}
                         >
-                          {isUpgrade ? 'Upgrade' : 'Downgrade'}
-                          <ArrowUpRight size={13} />
+                          Upgrade to Premium <ArrowUpRight size={14} />
                         </button>
                       )}
                     </motion.div>
                   );
                 })}
               </div>
-            </section>
-
-            {/* KPI Grid */}
-            <section className={styles.kpiGrid}>
-              {kpis.map((k, i) => (
-                <motion.div key={k.label} variants={ITEM} className={styles.kpiCard}>
-                  <div className={styles.kpiTop}>
-                    <div className={styles.kpiIcon}><k.icon size={17} /></div>
-                    <span className={styles.kpiChange}>{k.change}</span>
-                  </div>
-                  <p className={styles.kpiLabel}>{k.label}</p>
-                  <h2 className={styles.kpiValue}>{k.value}</h2>
-                </motion.div>
-              ))}
             </section>
 
             {/* Usage */}
@@ -385,9 +461,6 @@ export default function PaymentsPage() {
               </motion.div>
             )}
 
-            {/* Timeline + Features */}
-            <TimelineCard sub={sub} expired={isExpired} serverTime={serverTime} />
-            <FeaturesCard plans={plans} activeFeatures={activeFeatures} enabledCount={enabledCount} />
             <InvoicesCard transactions={transactions} onViewInvoice={(t) => setSelectedInvoice(t)} />
 
           </motion.div>
@@ -400,9 +473,13 @@ export default function PaymentsPage() {
         <UpgradeModal
           open={!!upgradeTarget}
           onClose={() => setUpgradeTarget(null)}
-          targetPlan={upgradeTarget}
+          targetPlan={upgradeTarget.plan}
           currentPlan={currentPlanTier}
           currentSub={sub}
+          selectedStudents={upgradeTarget.tierMaxStudents || selectedTier}
+          isTierUpgrade={upgradeTarget.isTierUpgrade}
+          tierDiffAmount={upgradeTarget.tierDiff}
+          tierUpgradeLabel={upgradeTarget.tierLabel}
         />
       )}
 
@@ -414,84 +491,6 @@ export default function PaymentsPage() {
         schoolName={user?.name || 'Partner School'}
       />
     </div>
-  );
-}
-
-function TimelineCard({ sub, expired: isExpired, serverTime }: {
-  sub: NonNullable<PaymentsData['subscription']>;
-  expired: boolean;
-  serverTime?: string;
-}) {
-  const entries = useMemo(() => {
-    const e: { label: string; date: string }[] = [];
-    if (sub.plan_started_at) {
-      e.push({
-        label: `${sub.plan_type_name || 'Current'} plan started`,
-        date: new Date(sub.plan_started_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
-      });
-    }
-    if (sub.plan_expires_at && !isExpired) {
-      e.push({
-        label: 'Plan renewal',
-        date: new Date(sub.plan_expires_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
-      });
-    }
-    e.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    return e;
-  }, [sub, isExpired]);
-
-  return (
-    <motion.div className={styles.card} variants={ITEM}>
-      <div className={styles.cardHdr}>
-        <Clock size={16} color="#12312f" />
-        <h3>Timeline</h3>
-      </div>
-      {entries.length === 0 ? (
-        <p className={styles.emptySmall}>No timeline events</p>
-      ) : (
-        <div className={styles.tl}>
-          {entries.map((e, i) => (
-            <div key={i} className={styles.tlItem}>
-              <div className={styles.tlDot} />
-              {i < entries.length - 1 && <div className={styles.tlLine} />}
-              <div className={styles.tlBody}>
-                <span className={styles.tlDate}>{e.date}</span>
-                <span className={styles.tlLabel}>{e.label}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </motion.div>
-  );
-}
-
-function FeaturesCard({ plans, activeFeatures, enabledCount }: { plans: PlanItem[]; activeFeatures: string[]; enabledCount: number }) {
-  const allFeatures = plans.flatMap((t) => t.features)
-    .filter((f, i, arr) => arr.findIndex((x) => x.key === f.key) === i);
-
-  return (
-    <motion.div className={styles.card} variants={ITEM}>
-      <div className={styles.cardHdr}>
-        <Shield size={16} color="#12312f" />
-        <h3>Features</h3>
-        <span className={styles.cardBadge}>{enabledCount} / 6</span>
-      </div>
-      <div className={styles.fList}>
-        {allFeatures.map((f) => {
-          const on = activeFeatures.includes(f.key);
-          return (
-            <div key={f.key} className={`${styles.fItem} ${!on ? styles.fOff : ''}`}>
-              <div className={styles.fIcon} style={{ background: on ? '#dbeafe' : '#f1f5f9' }}>
-                {on ? <CheckCircle2 size={13} color="#2563eb" /> : <XCircle size={13} color="#94a3b8" />}
-              </div>
-              <span className={styles.fLabel}>{f.label}</span>
-              {on && <Info size={12} color="#94a3b8" />}
-            </div>
-          );
-        })}
-      </div>
-    </motion.div>
   );
 }
 
@@ -592,7 +591,10 @@ function InvoicesCard({ transactions, onViewInvoice }: { transactions: any[]; on
                   <tr key={t.id} className={styles.tr}>
                     <td className={styles.td}>{formattedDate}</td>
                     <td className={styles.td}>{displayId}</td>
-                    <td className={styles.td}>{t.plan_name_snapshot || 'Standard Upgrade'}</td>
+                    <td className={styles.td}>
+                      {t.plan_name_snapshot || 'Premium'}
+                      {t.notes ? (() => { try { const n = JSON.parse(t.notes); return n.max_students ? ` (${n.max_students} stds)` : ''; } catch { return ''; } })() : ''}
+                    </td>
                     <td className={styles.td}>₹{Number(t.amount).toLocaleString('en-IN')}.00</td>
                     <td className={styles.td}>{t.payment_method || 'Online'}</td>
                     <td className={styles.td}>
@@ -639,6 +641,10 @@ function InvoiceDetailModal({ open, onClose, transaction, schoolName }: InvoiceD
 
   const basePrice = Math.round(Number(transaction.amount) / 1.18);
   const gst = Number(transaction.amount) - basePrice;
+
+  const maxStudents = transaction.notes
+    ? (() => { try { const n = JSON.parse(transaction.notes); return n.max_students; } catch { return null; } })()
+    : null;
 
   return (
     <div className={styles.modalOverlay}>
@@ -689,9 +695,9 @@ function InvoiceDetailModal({ open, onClose, transaction, schoolName }: InvoiceD
               <tbody>
                 <tr>
                   <td className={styles.itemTd}>
-                    <div>{transaction.plan_name_snapshot || 'Standard Upgrade'}</div>
+                    <div>{transaction.plan_name_snapshot || 'Premium'} {maxStudents ? `(${maxStudents} Students)` : ''}</div>
                     <div style={{ fontSize: '0.62rem', color: '#64748b', marginTop: '0.1rem' }}>
-                      Premium school platform subscription access.
+                      School platform subscription - {maxStudents ? `${maxStudents} student${maxStudents > 1 ? 's' : ''}` : 'Standard access'}
                     </div>
                   </td>
                   <td className={styles.itemTd} style={{ textAlign: 'right' }}>

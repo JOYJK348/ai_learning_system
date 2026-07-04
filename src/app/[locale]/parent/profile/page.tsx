@@ -8,7 +8,7 @@ import {
   ArrowLeft, Mail, Phone, User, Award, Sparkles, CheckCircle2,
   GraduationCap, Building2, Zap, BookOpen, Star, Crown,
   Calendar, Clock, AlertTriangle, Loader2, ChevronRight,
-  HelpCircle, Bot, FilePlus, CalendarCheck, TrendingUp,
+  HelpCircle, Bot, Lock, FilePlus, CalendarCheck, TrendingUp,
   Smartphone, Eye, Shield, CheckSquare, X, Users, ShieldCheck,
 } from 'lucide-react';
 import { parentApi } from '@/core/services/parentApi';
@@ -171,6 +171,7 @@ export default function ProfilePage() {
   const [alert, setAlert] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [selectedPlanId, setSelectedPlanId] = useState<number | null>(null);
   const [subscribing, setSubscribing] = useState(false);
+  const [isYearly, setIsYearly] = useState(false);
 
   // Child Link Modal
   const [showLinkModal, setShowLinkModal] = useState(false);
@@ -379,7 +380,8 @@ export default function ProfilePage() {
         setAlert({ type: 'success', message: 'Free plan activated successfully!' });
         return;
       }
-      const orderData = await parentApi.createPaymentOrder(planId, 'monthly');
+      const intervalType = isYearly ? 'yearly' : 'monthly';
+      const orderData = await parentApi.createPaymentOrder(planId, intervalType);
       await new Promise<void>((resolve, reject) => {
         const loadRazorpay = () =>
           new Promise<void>((res) => {
@@ -395,7 +397,7 @@ export default function ProfilePage() {
             amount: orderData.amount,
             currency: orderData.currency,
             name: 'Zhi Learning',
-            description: `${orderData.plan.name} Plan - Monthly`,
+            description: `${orderData.plan.name} Plan - ${isYearly ? 'Yearly' : 'Monthly'}`,
             order_id: orderData.razorpay_order_id,
             prefill: { name: parentProfile?.name || '', email: parentProfile?.email || '' },
             theme: { color: '#12312f' },
@@ -424,7 +426,10 @@ export default function ProfilePage() {
           rzp.open();
         });
       });
-      await queryClient.invalidateQueries({ queryKey: parentKeys.subscription });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: parentKeys.subscription }),
+        queryClient.invalidateQueries({ queryKey: parentKeys.me }),
+      ]);
       setActiveSubTab('plans');
       setAlert({ type: 'success', message: `🎉 Payment successful! Welcome to ${orderData.plan.name}!` });
     } catch (err: any) {
@@ -666,7 +671,8 @@ export default function ProfilePage() {
                   </span>
                   <h3 className={styles.cardTitle}>Linked Students</h3>
                   <span style={{ marginLeft: 'auto', fontSize: '0.7rem', fontWeight: 900, color: '#94a3b8' }}>
-                    {children.length} / linked
+                    {children.length}
+                    {subscription?.plan?.features ? ` / ${(() => { const mp = subscription.plan.features.find((f: any) => f.code === 'multi_profile'); return mp ? parseInt(String(mp.limit), 10) : '—'; })()}` : ''}
                   </span>
                 </div>
 
@@ -825,18 +831,45 @@ export default function ProfilePage() {
               <div className={styles.plansGrid}>
                 {(() => {
                   const currentPlanAmount = subscription?.plan?.amount_monthly ?? 0;
-                  return (plans || []).map((plan) => {
+                  const visibleCodes = ['free', 'premium', 'ultimate'];
+                  return (plans || [])
+                    .filter(p => p.code !== 'focus')
+                    .map((plan) => {
+                    const isActive = visibleCodes.includes(plan.code) && plan.code !== 'ultimate';
+                    const isComingSoon = plan.code === 'ultimate';
                     const isCurrent = plan.id === currentPlanId;
                     const isUpgrade = plan.amount_monthly > currentPlanAmount;
-                    const isDowngrade = plan.amount_monthly < currentPlanAmount;
-                    
-                    const featuresByCategory = plan.features.reduce<
-                      Record<string, typeof plan.features>
-                    >((acc, f) => {
-                      if (!acc[f.category]) acc[f.category] = [];
-                      acc[f.category].push(f);
-                      return acc;
-                    }, {});
+
+                    if (isComingSoon) {
+                      return (
+                        <div
+                          key={plan.id}
+                          className={`${styles.planCard} ${styles.planCardComingSoon} plan-card-${plan.code}`}
+                        >
+                          <div
+                            className={styles.planIcon}
+                            style={{
+                              background: '#f1f5f9',
+                              color: '#cbd5e1',
+                            }}
+                          >
+                            <Sparkles size={18} />
+                          </div>
+                          <h2 className={styles.planName} style={{ color: '#cbd5e1' }}>{plan.name}</h2>
+                          <div className={styles.planPriceRow}>
+                            <span className={styles.priceNum} style={{ color: '#cbd5e1' }}>₹{plan.amount_monthly}</span>
+                            <span className={styles.pricePer} style={{ color: '#e2e8f0' }}>/mo</span>
+                          </div>
+                          <div className={styles.simpleFeatures} style={{ opacity: 0.5 }}>
+                            <div className={styles.simpleFeat}>🤖 AI Support & Chat Bot</div>
+                            <div className={styles.simpleFeat}>📊 Progress Tracking AI</div>
+                            <div className={styles.simpleFeat}>📈 Predictive Analytics</div>
+                            <div className={styles.simpleFeat}>🥽 AR/VR Video Lessons</div>
+                          </div>
+                          <span className={styles.comingSoonBadge}>Coming Soon</span>
+                        </div>
+                      );
+                    }
 
                     return (
                       <div
@@ -858,67 +891,101 @@ export default function ProfilePage() {
                         </div>
 
                         <h2 className={styles.planName}>{plan.name}</h2>
+                        {plan.amount_monthly > 0 && (
+                          <div className={styles.intervalToggle}>
+                            <button
+                              type="button"
+                              className={`${styles.intervalBtn} ${!isYearly ? styles.intervalBtnActive : ''}`}
+                              onClick={() => setIsYearly(false)}
+                            >
+                              Monthly
+                            </button>
+                            <button
+                              type="button"
+                              className={`${styles.intervalBtn} ${isYearly ? styles.intervalBtnActive : ''}`}
+                              onClick={() => setIsYearly(true)}
+                            >
+                              Yearly
+                            </button>
+                          </div>
+                        )}
                         <div className={styles.planPriceRow}>
-                          <span className={styles.priceNum}>₹{plan.amount_monthly}</span>
-                          <span className={styles.pricePer}>/mo</span>
+                          {(() => {
+                            const defaultYearly = plan.amount_monthly * 12;
+                            const yearlyPrice = plan.amount_yearly || defaultYearly;
+                            const showYearly = isYearly && plan.amount_monthly > 0;
+                            const price = showYearly ? yearlyPrice : plan.amount_monthly;
+                            return (
+                              <>
+                                <span className={styles.priceNum}>₹{price}</span>
+                                <span className={styles.pricePer}>{showYearly ? '/yr' : '/mo'}</span>
+                                {showYearly && (
+                                  <span className={styles.discountBadge}>
+                                    Save ₹{plan.amount_monthly * 12 - price}/yr 🎉
+                                  </span>
+                                )}
+                              </>
+                            );
+                          })()}
                         </div>
                         <p className={styles.planDesc}>{plan.description}</p>
 
-                        <div className={styles.featureGroups}>
-                          {Object.entries(featuresByCategory).map(([category, features]) => (
-                            <div key={category}>
-                              <p className={styles.featureCategory}>
-                                {CATEGORY_ICONS[category]}
-                                {CATEGORY_LABELS[category] || category}
-                              </p>
-                              <div className={styles.featureList}>
-                                {features.map((f) => (
-                                  <div key={f.id} className={styles.featureItem}>
-                                    <FeatureIcon code={f.code} />
-                                    <span
-                                      className={`${styles.featureName} ${
-                                        f.limit === false ? styles.featureDisabled : ''
-                                      }`}
-                                    >
-                                      {f.name}
-                                    </span>
-                                    <span
-                                      className={`${styles.featureLimit} ${
-                                        f.limit === false ? styles.featureDisabled : ''
-                                      }`}
-                                    >
-                                      {formatLimit(f.limit)}
-                                    </span>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          ))}
+                        <div className={styles.simpleFeatures}>
+                          {(() => {
+                            const multiProfile = plan.features?.find((f: any) => f.code === 'multi_profile');
+                            const childLimit = multiProfile?.limit ? parseInt(String(multiProfile.limit), 10) : 1;
+                            const childLabel = childLimit >= 5 ? `${childLimit} Kids` : `${childLimit} Kid${childLimit > 1 ? 's' : ''}`;
+                            const webOnly = childLimit <= 1 ? ', Web Only' : ', All Devices';
+                            if (plan.code === 'free') {
+                              return (
+                                <>
+                                  <div className={styles.simpleFeat}>📚 Basic Subjects Access</div>
+                                  <div className={styles.simpleFeat}>📖 2 Units per Subject</div>
+                                  <div className={styles.simpleFeat}>📺 720p Video Quality</div>
+                                  <div className={styles.simpleFeat}>👶 {childLabel}{webOnly}</div>
+                                </>
+                              );
+                            }
+                            return (
+                              <>
+                                <div className={styles.simpleFeat}>📚 All Subjects Access</div>
+                                <div className={styles.simpleFeat}>🎮 Unlimited Activities & Games</div>
+                                <div className={styles.simpleFeat}>📺 1080p HD Cinematic Lessons</div>
+                                <div className={styles.simpleFeat}>🤖 AI Parent Insights</div>
+                                <div className={styles.simpleFeat}>👨‍👩‍👧‍👦 {childLabel}{webOnly}</div>
+                              </>
+                            );
+                          })()}
                         </div>
 
-                        <button
-                          id={`subscribe-plan-${plan.id}`}
-                          type="button"
-                          className={`${styles.ctaBtn} ${
-                            isCurrent
-                              ? styles.ctaBtnCurrent
-                              : isUpgrade
-                              ? styles.ctaBtnUpgrade
-                              : styles.ctaBtnDowngrade
-                          }`}
-                          onClick={() => handleSubscribe(plan.id, plan.name, plan.amount_monthly)}
-                          disabled={isCurrent || (subscribing && selectedPlanId === plan.id)}
-                        >
-                          {subscribing && selectedPlanId === plan.id ? (
-                            <><Loader2 size={15} className={styles.spinner} /> Processing…</>
-                          ) : isCurrent ? (
-                            <><CheckCircle2 size={14} /> Current Plan</>
-                          ) : isUpgrade ? (
-                            <>Upgrade Now <ChevronRight size={14} /></>
-                          ) : (
-                            <>Downgrade / Switch <ChevronRight size={14} /></>
-                          )}
-                        </button>
+                        {(isCurrent || isUpgrade) && (
+                          <button
+                            id={`subscribe-plan-${plan.id}`}
+                            type="button"
+                            className={`${styles.ctaBtn} ${
+                              isCurrent && (!isYearly || subscription?.metadata?.interval_type === 'yearly') ? styles.ctaBtnCurrent : styles.ctaBtnUpgrade
+                            }`}
+                            onClick={() => {
+                              const defaultYearly = plan.amount_monthly * 12;
+                              const yearlyPrice = plan.amount_yearly || defaultYearly;
+                              const amt = isYearly && plan.amount_monthly > 0 ? yearlyPrice : plan.amount_monthly;
+                              handleSubscribe(plan.id, plan.name, amt);
+                            }}
+                            disabled={(isCurrent && (!isYearly || subscription?.metadata?.interval_type === 'yearly')) || (subscribing && selectedPlanId === plan.id)}
+                          >
+                            {subscribing && selectedPlanId === plan.id ? (
+                              <><Loader2 size={15} className={styles.spinner} /> Processing…</>
+                            ) : isCurrent && !isYearly ? (
+                              <><CheckCircle2 size={14} /> Current Plan</>
+                            ) : isCurrent && isYearly && subscription?.metadata?.interval_type === 'yearly' ? (
+                              <><CheckCircle2 size={14} /> Current Plan</>
+                            ) : isCurrent && isYearly ? (
+                              <>Switch to Yearly <ChevronRight size={14} /></>
+                            ) : (
+                              <>Upgrade Now <ChevronRight size={14} /></>
+                            )}
+                          </button>
+                        )}
                       </div>
                     );
                   });

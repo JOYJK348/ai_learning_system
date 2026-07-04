@@ -16,6 +16,10 @@ interface UpgradeModalProps {
   targetPlan: PlanInfo;
   currentPlan: PlanInfo;
   currentSub: SubscriptionInfo;
+  selectedStudents?: number;
+  isTierUpgrade?: boolean;
+  tierDiffAmount?: number;
+  tierUpgradeLabel?: string;
 }
 
 const loadRazorpayScript = () => {
@@ -32,7 +36,7 @@ const loadRazorpayScript = () => {
   });
 };
 
-export default function UpgradeModal({ open, onClose, targetPlan, currentPlan, currentSub }: UpgradeModalProps) {
+export default function UpgradeModal({ open, onClose, targetPlan, currentPlan, currentSub, selectedStudents, isTierUpgrade, tierDiffAmount, tierUpgradeLabel }: UpgradeModalProps) {
   const [paymentMode, setPaymentMode] = useState<'online' | 'offline'>('online');
   const [referenceCode, setReferenceCode] = useState('');
 
@@ -42,11 +46,11 @@ export default function UpgradeModal({ open, onClose, targetPlan, currentPlan, c
 
   if (!open) return null;
 
-  const isUpgrade = targetPlan.type === 'school' || (targetPlan.type === 'paid' && currentSub.plan_type === 'free');
+  const isUpgrade = !!isTierUpgrade || targetPlan.type === 'school' || (targetPlan.type === 'paid' && currentSub.plan_type === 'free');
 
   const handleOnlinePayment = async () => {
     try {
-      const order = await createOrder.mutateAsync(targetPlan.type);
+      const order = await createOrder.mutateAsync({ planType: targetPlan.type, maxStudents: selectedStudents, isTierUpgrade });
       const isLoaded = await loadRazorpayScript();
       if (!isLoaded) {
         alert('Failed to load Razorpay payment SDK. Please try again.');
@@ -90,6 +94,8 @@ export default function UpgradeModal({ open, onClose, targetPlan, currentPlan, c
       await submitOffline.mutateAsync({
         planType: targetPlan.type,
         referenceCode: referenceCode.trim(),
+        maxStudents: selectedStudents,
+        isTierUpgrade,
       });
     } catch (err) {
       console.error('Offline submission failed:', err);
@@ -158,35 +164,51 @@ export default function UpgradeModal({ open, onClose, targetPlan, currentPlan, c
         {/* Body (Scrollable if content overflows) */}
         <div style={{ padding: '1.25rem 1.5rem', overflowY: 'auto', flex: 1 }}>
           <div style={{
-            display: 'flex', gap: '0.75rem', marginBottom: '1rem',
-          }}>
-            {/* Current */}
-            <div style={{
-              flex: 1, padding: '0.75rem', borderRadius: '0.7rem',
-              border: '1px solid #e2e8f0', background: '#f8fafc',
+              display: 'flex', gap: '0.75rem', marginBottom: '1rem',
             }}>
-              <div style={{ fontSize: '0.55rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#94a3b8', marginBottom: '0.2rem' }}>
-                Current
+              {/* Current */}
+              <div style={{
+                flex: 1, padding: '0.75rem', borderRadius: '0.7rem',
+                border: '1px solid #e2e8f0', background: '#f8fafc',
+              }}>
+                <div style={{ fontSize: '0.55rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#94a3b8', marginBottom: '0.2rem' }}>
+                  Current
+                </div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 950, color: '#475569' }}>{currentPlan.name}</div>
+                <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#94a3b8' }}>{currentPlan.price}{currentPlan.period}</div>
               </div>
-              <div style={{ fontSize: '0.85rem', fontWeight: 950, color: '#475569' }}>{currentPlan.name}</div>
-              <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#94a3b8' }}>{currentPlan.price}{currentPlan.period}</div>
-            </div>
-            {/* Arrow */}
-            <div style={{ display: 'grid', placeItems: 'center', color: '#94a3b8' }}>
-              <ArrowUpRight size={20} />
-            </div>
-            {/* Target */}
-            <div style={{
-              flex: 1, padding: '0.75rem', borderRadius: '0.7rem',
-              border: '2px solid #12312f', background: 'rgba(18, 49, 47, 0.03)',
-            }}>
-              <div style={{ fontSize: '0.55rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#12312f', marginBottom: '0.2rem' }}>
-                New Plan
+              {/* Arrow */}
+              <div style={{ display: 'grid', placeItems: 'center', color: '#94a3b8' }}>
+                <ArrowUpRight size={20} />
               </div>
-              <div style={{ fontSize: '0.85rem', fontWeight: 950, color: '#12312f' }}>{targetPlan.name}</div>
-              <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#12312f' }}>{targetPlan.price}{targetPlan.period}</div>
+              {/* Target */}
+              <div style={{
+                flex: 1, padding: '0.75rem', borderRadius: '0.7rem',
+                border: '2px solid #12312f', background: 'rgba(18, 49, 47, 0.03)',
+              }}>
+                <div style={{ fontSize: '0.55rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#12312f', marginBottom: '0.2rem' }}>
+                  {isTierUpgrade ? 'Upgrade To' : 'New Plan'}
+                </div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 950, color: '#12312f' }}>{isTierUpgrade ? tierUpgradeLabel || targetPlan.name : targetPlan.name}</div>
+                <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#12312f' }}>{targetPlan.price}{targetPlan.period}</div>
+              </div>
             </div>
-          </div>
+
+            {isTierUpgrade && tierDiffAmount != null && (
+              <div style={{
+                padding: '0.65rem 0.75rem', borderRadius: '0.5rem',
+                background: '#fef3c7', border: '1px solid #fcd34d',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                marginBottom: '1rem',
+              }}>
+                <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#92400e' }}>
+                  Additional Amount
+                </div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 950, color: '#78350f' }}>
+                  ₹{tierDiffAmount.toLocaleString('en-IN')}
+                </div>
+              </div>
+            )}
 
           {/* New features */}
           {newFeatures.length > 0 && (

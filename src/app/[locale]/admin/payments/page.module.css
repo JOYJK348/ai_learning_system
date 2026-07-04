@@ -924,6 +924,9 @@
 .upgradeButton { background: #fef9c3; color: #854d0e; border-color: #fef08a; }
 .upgradeButton:hover { background: #fef08a; }
 
+.invoiceButton { background: #ecfdf5; color: #065f46; border-color: #a7f3d0; }
+.invoiceButton:hover { background: #d1fae5; }
+
 /* Empty States */
 .emptyState {
   text-align: center;
