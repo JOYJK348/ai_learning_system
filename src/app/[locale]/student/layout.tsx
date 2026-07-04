@@ -42,6 +42,18 @@ export default function StudentLayout({
     }
   }, [user, loading, router]);
 
+  // Prevent back button from leaving the home page
+  useEffect(() => {
+    if (pathname !== `/${locale}/student/Home` && pathname !== '/student/Home') return;
+    // Push a duplicate entry so back press stays here
+    window.history.pushState(null, '', window.location.href);
+    const handlePop = () => {
+      window.history.pushState(null, '', window.location.href);
+    };
+    window.addEventListener('popstate', handlePop);
+    return () => window.removeEventListener('popstate', handlePop);
+  }, [pathname, locale]);
+
   useEffect(() => {
     // Force absolute scroll reset on any internal navigation
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });

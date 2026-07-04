@@ -34,6 +34,17 @@ export default function SchoolAdminLayout({ children }: { children: ReactNode })
     }
   }, [mounted, loading, router, user]);
 
+  // Prevent back button from leaving the school-admin home page
+  useEffect(() => {
+    const isHome = typeof window !== 'undefined' &&
+      (window.location.pathname.endsWith('/school-admin') || window.location.pathname.match(/\/school-admin\/?$/));
+    if (!isHome) return;
+    window.history.pushState(null, '', window.location.href);
+    const handlePop = () => window.history.pushState(null, '', window.location.href);
+    window.addEventListener('popstate', handlePop);
+    return () => window.removeEventListener('popstate', handlePop);
+  }, [mounted]);
+
   if (!mounted || loading || !user) {
     return (
       <div style={{ display: 'grid', placeItems: 'center', minHeight: '100vh', background: '#f8faff', gap: '0.75rem' }}>

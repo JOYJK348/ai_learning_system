@@ -27,6 +27,17 @@ export default function ParentLayout({ children }: { children: ReactNode }) {
     }
   }, [user, loading, router]);
 
+  // Prevent back button from leaving the parent home page
+  useEffect(() => {
+    const isHome = typeof window !== 'undefined' &&
+      (window.location.pathname.endsWith('/parent') || window.location.pathname.match(/\/parent\/?$/));
+    if (!isHome) return;
+    window.history.pushState(null, '', window.location.href);
+    const handlePop = () => window.history.pushState(null, '', window.location.href);
+    window.addEventListener('popstate', handlePop);
+    return () => window.removeEventListener('popstate', handlePop);
+  }, []);
+
   useEffect(() => {
     if (user && user.role === 'parent') {
       // 1. Eager prefetch: parent profile
