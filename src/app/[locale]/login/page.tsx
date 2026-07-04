@@ -180,11 +180,18 @@ export default function LoginPage() {
 
     if (loggedIn) {
       const route = loggedIn.role === 'super_admin' ? 'admin' : loggedIn.role === 'school_admin' ? 'school-admin' : loggedIn.role;
-      router.push(`/${route}`);
+      router.replace(`/${route}`);
     } else {
       setErrorMessage(authError || 'Invalid email or password.');
     }
   };
+
+  useEffect(() => {
+    if (user && !authLoading) {
+      const route = user.role === 'super_admin' ? 'admin' : user.role === 'school_admin' ? 'school-admin' : user.role;
+      router.replace(`/${route}`);
+    }
+  }, [user, authLoading, router]);
 
   const shellStyle: React.CSSProperties = {
     minHeight: '100vh',
