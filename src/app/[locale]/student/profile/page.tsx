@@ -48,7 +48,7 @@ export default function StudentProfile() {
 
   const handleLogout = async () => {
     await logout();
-    router.push(`/${locale}/login`);
+    window.location.replace(`/${locale}/login?session_closed=1`);
   };
 
   if (!mounted || studentLoading) {

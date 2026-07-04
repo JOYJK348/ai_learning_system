@@ -45,7 +45,9 @@ export default function AdminBottomNav() {
   const handleLogout = async () => {
     closeDrawer();
     await logout();
-    router.push(`/${locale}/login`);
+    // Use window.location.replace so the entire Next.js history stack is cleared.
+    // This prevents the back button from returning to the previous user's dashboard.
+    window.location.replace(`/${locale}/login?session_closed=1`);
   };
 
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);

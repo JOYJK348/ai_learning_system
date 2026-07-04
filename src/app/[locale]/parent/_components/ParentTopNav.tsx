@@ -16,7 +16,7 @@ export default function ParentTopNav({ onLogout }: { onLogout?: () => void }) {
       await onLogout();
     } else {
       await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
-      router.push(`/${locale}/login`);
+      window.location.replace(`/${locale}/login?session_closed=1`);
     }
   };
 

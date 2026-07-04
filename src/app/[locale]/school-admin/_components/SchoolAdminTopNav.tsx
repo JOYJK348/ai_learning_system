@@ -26,7 +26,7 @@ export default function SchoolAdminTopNav() {
   const handleLogout = async () => {
     clearSchoolBrandingCache(user?.schoolId);
     await logout();
-    router.push(`/${locale}/login`);
+    window.location.replace(`/${locale}/login?session_closed=1`);
   };
 
   return (

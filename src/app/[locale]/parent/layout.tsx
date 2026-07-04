@@ -68,7 +68,7 @@ export default function ParentLayout({ children }: { children: ReactNode }) {
 
   const handleLogout = async () => {
     await authLogout();
-    router.push('/login');
+    window.location.replace(`/${locale}/login?session_closed=1`);
   };
 
   return (

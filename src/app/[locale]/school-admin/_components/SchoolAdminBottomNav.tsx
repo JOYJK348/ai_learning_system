@@ -42,7 +42,7 @@ export default function SchoolAdminBottomNav() {
     clearSchoolBrandingCache(user?.schoolId);
     closeDrawer();
     await logout();
-    router.push(`/${locale}/login`);
+    window.location.replace(`/${locale}/login?session_closed=1`);
   };
 
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);

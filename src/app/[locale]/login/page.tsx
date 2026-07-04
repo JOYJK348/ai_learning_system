@@ -186,12 +186,15 @@ export default function LoginPage() {
     }
   };
 
+  // If user is already authenticated (after auth check completes), redirect away from login
   useEffect(() => {
-    if (user && !authLoading) {
+    // Only redirect once authLoading is done — avoids stale cache false-positives
+    if (authLoading) return;
+    if (user) {
       const route = user.role === 'super_admin' ? 'admin' : user.role === 'school_admin' ? 'school-admin' : user.role;
       router.replace(`/${route}`);
     }
-  }, [user, authLoading, router]);
+  }, [authLoading, user, router]);
 
   const shellStyle: React.CSSProperties = {
     minHeight: '100vh',
