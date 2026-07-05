@@ -2,6 +2,8 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { KidsTraceCanvas } from './KidsTraceCanvas';
+
 
 type Props = {
   config: { path?: string; color?: string; thickness?: number; tolerance?: number; mode?: string; isTamil?: boolean; borderless?: boolean };
@@ -161,6 +163,29 @@ function BoardLines() {
 }
 
 export default function TraceActivity({ config, onComplete }: Props) {
+  const pathType = (config.path as string) || 'sleeping';
+  const isTamil = config.isTamil;
+
+  // If tracing a letter (e.g. letter-a, letter-b), delegate directly to our new giant KidsTraceCanvas!
+  if (pathType.startsWith('letter-')) {
+    const rawLetter = pathType.replace('letter-', '');
+    // Map code back to actual character representation if Tamil
+    const TAMIL_MAP: Record<string, string> = {
+      a: 'அ', b: 'ஆ', c: 'இ', d: 'ஈ', e: 'உ', f: 'ஊ', g: 'எ', h: 'ஏ', i: 'ஐ', j: 'ஒ', k: 'ஓ', l: 'ஔ', m: 'அஃ'
+    };
+    const targetLetter = isTamil ? (TAMIL_MAP[rawLetter] || rawLetter) : rawLetter.toUpperCase();
+
+    return (
+      <div className="w-full py-2">
+        <KidsTraceCanvas
+          letter={targetLetter}
+          onComplete={() => onComplete({ score: 100, max_score: 100, completion_data: {}, time_taken_seconds: 0 })}
+          language={isTamil ? 'tamil' : 'english'}
+        />
+      </div>
+    );
+  }
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -171,14 +196,13 @@ export default function TraceActivity({ config, onComplete }: Props) {
   const [dottedPath, setDottedPath] = useState<{ x: number; y: number }[]>([]);
   const [dimensions, setDimensions] = useState({ w: 600, h: 200 });
 
-  const pathType = (config.path as string) || 'sleeping';
   const drawColor = config.color || '#f97316';
   const isGuide = (config.mode as string) === 'guide';
   const guideEmoji = GUIDE_EMOJIS[pathType] || '⭐';
   const guideDots = isGuide ? dottedPath.filter((_, i) => i % 4 === 0) : [];
 
   const params = useParams();
-  const isTamil = config.isTamil || params?.locale === 'ta';
+
 
   useEffect(() => {
     const updateSize = () => {

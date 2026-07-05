@@ -1732,9 +1732,17 @@ export default function ActivityPlayer({ lessonId, lessonTitle, onComplete, onCl
     }
   };
 
+  const isTracingType = currentActivity?.activity_type_id === 1 || 
+                        currentActivity?.activity_type_id === 6 || 
+                        currentActivity?.activity_type_id === 8 ||
+                        currentActivity?.activity_type_id === 86;
+
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-2 sm:p-4 bg-slate-900/40 backdrop-blur-md">
-      <div className="relative w-full max-w-lg sm:max-w-2xl max-h-[92vh] flex flex-col overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-1 sm:p-4 bg-slate-900/40 backdrop-blur-md">
+      <div 
+        className={`relative w-full max-w-lg sm:max-w-2xl flex flex-col overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80 transition-all duration-300
+          ${isTracingType ? 'min-h-[85vh] sm:min-h-[90vh]' : 'max-h-[92vh]'}`}
+      >
         {/* Playful background blobs */}
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[50%] bg-sky-100/50 rounded-full blur-[60px] pointer-events-none" />

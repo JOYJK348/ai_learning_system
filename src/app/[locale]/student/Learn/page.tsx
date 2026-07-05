@@ -1320,8 +1320,8 @@ function UltimateLearnEngineInner() {
 
             {/* ─── PRE-WRITING TRACE ROUNDS ─── */}
             {traceRounds && (
-                <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-slate-900/80">
-                    <div className="relative w-full max-w-lg sm:max-w-2xl mx-2 sm:mx-4 my-2 sm:my-4 overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
+                <div className="fixed inset-0 z-[200] flex items-center justify-center p-1 sm:p-4 bg-slate-900/80 backdrop-blur-sm">
+                    <div className="relative w-full max-w-lg sm:max-w-2xl min-h-[85vh] sm:min-h-[90vh] flex flex-col overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#fffdf9] border-4 border-amber-200/80">
                         {/* Playful background blobs */}
                         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[50%] bg-pink-100/50 rounded-full blur-[60px] pointer-events-none" />
                         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[50%] bg-sky-100/50 rounded-full blur-[60px] pointer-events-none" />
@@ -1354,27 +1354,29 @@ function UltimateLearnEngineInner() {
                                         <button onClick={() => { setTraceRounds(null); setActiveLesson(null); }}
                                             className="w-8 h-8 rounded-full bg-amber-100/60 hover:bg-amber-200/80 flex items-center justify-center text-amber-800 text-xl font-bold transition-all border border-amber-200/50 active:scale-90">&times;</button>
                                     </div>
-                                    {isGuide ? (
-                                        <PreWritingVideo key={`${roundIndex}-${path}`}
-                                            config={{ path, color: guideColors[path] || '#8B5CF6', isTamil, borderless: true }}
-                                            onComplete={() => {
-                                                setRoundPassed(prev => [...prev, 100]);
-                                                if (roundIndex < traceRounds.length - 1) setRoundIndex(i => i + 1);
-                                                else setTraceDone(true);
-                                            }}
-                                        />
-                                    ) : (
-                                        <TraceActivity
-                                            key={`${roundIndex}-${path}`}
-                                            config={{ path, isTamil, borderless: true }}
-                                            onComplete={(data) => {
-                                                const acc = Number(data.completion_data?.accuracy) || 0;
-                                                setRoundPassed(prev => [...prev, acc]);
-                                                if (roundIndex < traceRounds.length - 1) setRoundIndex(i => i + 1);
-                                                else setTraceDone(true);
-                                            }}
-                                        />
-                                    )}
+                                    <div className="relative z-10 p-2 sm:p-6 flex-1 flex flex-col justify-start overflow-y-auto w-full h-full">
+                                        {isGuide ? (
+                                            <PreWritingVideo key={`${roundIndex}-${path}`}
+                                                config={{ path, color: guideColors[path] || '#8B5CF6', isTamil, borderless: true }}
+                                                onComplete={() => {
+                                                    setRoundPassed(prev => [...prev, 100]);
+                                                    if (roundIndex < traceRounds.length - 1) setRoundIndex(i => i + 1);
+                                                    else setTraceDone(true);
+                                                }}
+                                            />
+                                        ) : (
+                                            <TraceActivity
+                                                key={`${roundIndex}-${path}`}
+                                                config={{ path, isTamil, borderless: true }}
+                                                onComplete={(data) => {
+                                                    const acc = Number(data.completion_data?.accuracy) || 0;
+                                                    setRoundPassed(prev => [...prev, acc]);
+                                                    if (roundIndex < traceRounds.length - 1) setRoundIndex(i => i + 1);
+                                                    else setTraceDone(true);
+                                                }}
+                                            />
+                                        )}
+                                    </div>
                                 </>
                             );
                         })() : (

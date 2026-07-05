@@ -156,12 +156,17 @@ export default function ReportsAdminPage() {
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedGrade, setSelectedGrade] = useState('');
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (!loading && !user) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!loading && !user && mounted) {
       router.push(`/${locale}/login`);
     }
-  }, [loading, locale, router, user]);
+  }, [loading, locale, router, user, mounted]);
 
   const { data: revenue, isLoading: isRevLoading } = useQuery({
     queryKey: ['reports', 'revenue', dateRange],
@@ -376,7 +381,7 @@ export default function ReportsAdminPage() {
       </div>
 
       {/* Loading */}
-      {isLoading ? (
+      {(!mounted || isLoading) ? (
         <div className={styles.loadingState}>
           <Loader2 size={40} className={styles.spinner} />
           <p>Loading analytics...</p>

@@ -2,7 +2,8 @@
 
 import React, { useState, useRef } from 'react';
 import { CheckCircle } from 'lucide-react';
-import { SimpleTraceCanvas } from './Grade1EnglishGames';
+import { KidsTraceCanvas } from './KidsTraceCanvas';
+
 
 const UYIR_LETTERS = ['அ', 'ஆ', 'இ', 'ஈ', 'உ', 'ஊ', 'எ', 'ஏ', 'ஐ', 'ஒ', 'ஓ', 'ஔ'];
 
@@ -51,12 +52,14 @@ export default function TamilUyirTraceBoard({ onComplete }: Props) {
         </span>
       </div>
       <div className="w-full">
-        <SimpleTraceCanvas
+        <KidsTraceCanvas
           key={currentLetter}
           letter={currentLetter}
           onComplete={handleTraceComplete}
+          language="tamil"
         />
       </div>
+
       {allTraced && (
         <button
           onClick={() => onComplete({

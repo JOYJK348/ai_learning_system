@@ -72,14 +72,14 @@ export function KidsTraceCanvas({ letter, onComplete, language = 'english', labe
     const ctx = off.getContext('2d');
     if (!ctx) return;
 
-    // Giant font scale - 1.45 to counteract regional fonts padding and make it massive
-    const fontSize = Math.round(Math.min(w, h) * 1.45);
+    // Generous font scale - 1.22 to fit comfortably in the taller canvas without clipping
+    const fontSize = Math.round(Math.min(w, h) * 1.22);
     ctx.font = `900 ${fontSize}px ${fontFamily}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = '#ff0000';
-    // Offset baseline downwards so large characters stay centered
-    const yOffset = language === 'tamil' ? h * 0.15 : language === 'hindi' ? h * 0.08 : h * 0.05;
+    // Balanced baseline offset for regional font line heights
+    const yOffset = language === 'tamil' ? h * 0.08 : language === 'hindi' ? h * 0.04 : 0;
     ctx.fillText(letter, w / 2, h / 2 + yOffset);
 
     const img = ctx.getImageData(0, 0, w, h);
@@ -142,11 +142,11 @@ export function KidsTraceCanvas({ letter, onComplete, language = 'english', labe
     const ctx = gc.getContext('2d');
     if (!ctx) return;
 
-    const fontSize = Math.round(Math.min(w, h) * 1.45);
+    const fontSize = Math.round(Math.min(w, h) * 1.22);
     ctx.clearRect(0, 0, w, h);
 
     // Apply adjustments for script baselines
-    const yOffset = language === 'tamil' ? h * 0.15 : language === 'hindi' ? h * 0.08 : h * 0.05;
+    const yOffset = language === 'tamil' ? h * 0.08 : language === 'hindi' ? h * 0.04 : 0;
 
     // Faded fill for guidance
     ctx.font = `900 ${fontSize}px ${fontFamily}`;
@@ -163,44 +163,57 @@ export function KidsTraceCanvas({ letter, onComplete, language = 'english', labe
     ctx.setLineDash([]);
   }, [letter, fontFamily, language]);
 
-  // ─── Canvas setup / resize ──────────────────────────────────────────────────
+  // ─── Canvas setup / resize hook ─────────────────────────────────────────────
   useEffect(() => {
     let active = true;
-    const setup = async () => {
-      const container = containerRef.current;
-      if (!container) return;
+    const container = containerRef.current;
+    if (!container) return;
 
+    const setup = () => {
       const w = container.clientWidth;
       // Absolute height lock for big comfortable display on all devices
-      const h = 440;
+      const h = 480;
       
       if (!active) return;
       setDimensions({ w, h });
 
+      // Direct canvas assignments to bypass React asynchronous render tick delay
       const dc = drawCanvasRef.current;
-      if (dc) { dc.width = w; dc.height = h; }
+      if (dc) {
+        dc.width = w;
+        dc.height = h;
+      }
+      const gc = guideCanvasRef.current;
+      if (gc) {
+        gc.width = w;
+        gc.height = h;
+      }
 
       letterDataRef.current = null;
       templateGridRef.current = null;
       templateGridWideRef.current = null;
 
-      // Crucial: Wait for font metrics to load completely
-      try {
-        await document.fonts.ready;
-      } catch (_) {}
-
-      if (!active) return;
+      // Draw immediately with precise sizes
       drawGuide(w, h);
       buildLetterData(w, h);
     };
 
+    // Use ResizeObserver for instant canvas recalculation on mobile view toggles
+    const observer = new ResizeObserver(() => {
+      setup();
+    });
+    observer.observe(container);
+
+    // Initial run
     setup();
-    window.addEventListener('resize', setup);
+
     return () => {
       active = false;
-      window.removeEventListener('resize', setup);
+      observer.disconnect();
     };
   }, [letter, drawGuide, buildLetterData]);
+
+
 
 
 
@@ -373,7 +386,7 @@ export function KidsTraceCanvas({ letter, onComplete, language = 'english', labe
     : `Trace the letter "${letter}"`;
 
   return (
-    <div className="flex flex-col items-center gap-4 w-full max-w-md mx-auto select-none px-1">
+    <div className="flex flex-col items-center gap-4 w-full max-w-xl mx-auto select-none px-1">
       {/* Instruction / label */}
       <div className="flex flex-col items-center gap-1 w-full text-center">
         {label && (
